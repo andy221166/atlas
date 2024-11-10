@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.persistence.mybatis.report.mapper.OrderMapper">
+
+	<insert id="insertOrder" parameterType="org.atlas.service.report.domain.Order"
+			useGeneratedKeys="true" keyProperty="id">
+		insert into orders (user_id, username, first_name, last_name, amount)
+		values (#{userId}, #{username}, #{firstName}, #{lastName}, #{amount})
+	</insert>
+
+	<insert id="insertOrderItem" parameterType="org.atlas.service.report.domain.OrderItem"
+					useGeneratedKeys="true" keyProperty="id">
+		insert into order_item (order_id, product_id, product_name, product_price, quantity)
+		values (#{orderId}, #{productId}, #{productName}, #{productPrice}, #{quantity})
+	</insert>
+</mapper>

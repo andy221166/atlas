@@ -1,0 +1,86 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.persistence.mybatis.product.mapper.ProductMapper">
+    <resultMap id="ProductMap" type="org.atlas.service.product.domain.Product">
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <association property="category" column="category_id"
+                     javaType="org.atlas.service.product.domain.Category"
+                     resultMap="CategoryMap"/>
+    </resultMap>
+
+    <resultMap id="CategoryMap" type="org.atlas.service.product.domain.Category">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <select id="findByIdIn" parameterType="list" resultMap="ProductMap">
+        select *
+        from product
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="find" parameterType="map" resultMap="ProductMap">
+        select p.*, c.name as category_name
+        from product p
+        left join category c on c.id = p.category_id
+        <include refid="searchWhereClause"/>
+        <if test="command.hasSort()">
+            order by ${command.sort}
+            <if test="command.isSortDescending()">
+                desc
+            </if>
+        </if>
+        <if test="command.hasPaging()">
+            limit #{command.limit}
+            offset #{command.offset}
+        </if>
+    </select>
+
+    <select id="count" parameterType="map" resultType="long">
+        select count(p.id)
+        from product p
+        <include refid="searchWhereClause"/>
+    </select>
+
+    <insert id="insertBatch" parameterType="list">
+        insert into product (name, description, price, quantity, category_id)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{item.description}, #{item.price}, #{item.quantity}, #{item.categoryId})
+        </foreach>
+    </insert>
+
+    <update id="increaseQuantity">
+        update product
+        set quantity = quantity + #{amount}
+        where id = #{id}
+    </update>
+
+    <update id="decreaseQuantity">
+        update product
+        set quantity = quantity - #{amount}
+        where id = #{id}
+          and quantity >= #{amount}
+    </update>
+
+    <sql id="searchWhereClause">
+        <where>
+            <if test="command.keyword != null and command.keyword != ''">
+                and (lower(p.name) like concat('%', lower(#{command.keyword}), '%')
+                or lower(p.description) like concat('%', lower(#{command.keyword}), '%'))
+            </if>
+            <if test="command.categoryId != null">
+                and p.category_id = #{command.categoryId}
+            </if>
+            <if test="command.minPrice != null">
+                and p.price >= #{command.minPrice}
+            </if>
+            <if test="command.maxPrice != null">
+                and p.price &lt;= #{command.maxPrice}
+            </if>
+        </where>
+    </sql>
+</mapper>

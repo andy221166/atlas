@@ -1,0 +1,50 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.persistence.mybatis.user.mapper.UserMapper">
+
+    <resultMap id="UserMap" type="org.atlas.service.user.domain.User">
+        <result column="first_name" property="firstName" />
+        <result column="last_name" property="lastName" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <select id="findByIdIn" parameterType="list" resultMap="UserMap">
+        select u.*
+        from users u
+        where u.id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="findById" resultMap="UserMap">
+        select u.*
+        from users u
+        where u.id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="UserMap">
+        select u.*
+        from users u
+        where u.username = #{username}
+    </select>
+
+    <select id="findByEmail" resultMap="UserMap">
+        select u.*
+        from users u
+        where u.email = #{email}
+    </select>
+
+    <insert id="insert" parameterType="org.atlas.service.user.domain.User">
+        insert into users (email, password, first_name, last_name, phone_number, credit)
+        values (#{email}, #{password}, #{firstName}, #{lastName}, #{phoneNumber}, #{credit})
+    </insert>
+
+    <update id="decreaseCredit">
+        update users u
+        set u.credit = u.credit - #{amount}
+        where u.id = #{id}
+          and u.credit >= #{amount}
+    </update>
+</mapper>
