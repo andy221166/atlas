@@ -1,0 +1,65 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.persistence.mybatis.report.mapper.OrderMapper">
+
+	<resultMap id="OrderMap" type="org.atlas.service.report.contract.model.OrderDto">
+		<result column="user_id" property="userId" />
+		<result column="first_name" property="firstName" />
+		<result column="last_name" property="lastName" />
+		<result column="created_at" property="createdAt" />
+	</resultMap>
+
+	<resultMap id="ProductMap" type="org.atlas.service.report.contract.model.ProductDto">
+		<result column="total_quantity" property="totalQuantity" />
+	</resultMap>
+
+	<resultMap id="UserMap" type="org.atlas.service.report.contract.model.UserDto">
+		<result column="first_name" property="firstName" />
+		<result column="last_name" property="lastName" />
+		<result column="total_amount" property="totalAmount" />
+	</resultMap>
+
+	<select id="findTotalAmount" resultType="java.math.BigDecimal">
+		select sum(o.amount)
+		from o.orders
+		where o.created_at between #{startDate} and #{endDate}
+	</select>
+
+	<select id="findTopHighestAmountOrders" resultMap="OrderMap">
+		select o.id, o.user_id, o.first_name, o.last_name, o.amount, o.created_at
+		from orders o
+		where o.created_at between #{startDate} and #{endDate}
+		order by o.amount desc
+			limit #{limit}
+	</select>
+
+	<select id="findTopBestSoldProducts" resultMap="ProductMap">
+		select oi.product_id, oi.product_name, sum(oi.quantity) as total_quantity
+		from order_item oi
+					 inner join orders o on o.id = oi.order_id
+		where o.created_at between #{startDate} and #{endDate}
+		group by oi.product_id, oi.product_name,
+		order by total_quantity desc
+			limit #{limit}
+	</select>
+
+	<select id="findTopHighestSpentUsers" resultMap="UserMap">
+		select o.user_id, o.first_name, o.last_name, sum(o.amount) as total_amount
+		from orders o
+		where o.created_at between #{startDate} and #{endDate}
+		group by o.user_id, o.first_name, o.last_name
+		order by total_amount desc
+			limit #{limit}
+	</select>
+
+	<insert id="insertOrder" parameterType="org.atlas.service.report.domain.Order"
+			useGeneratedKeys="true" keyProperty="id">
+		insert into orders (user_id, username, first_name, last_name, amount)
+		values (#{userId}, #{username}, #{firstName}, #{lastName}, #{amount})
+	</insert>
+
+	<insert id="insertOrderItem" parameterType="org.atlas.service.report.domain.OrderItem"
+					useGeneratedKeys="true" keyProperty="id">
+		insert into order_item (order_id, product_id, product_name, product_price, quantity)
+		values (#{orderId}, #{productId}, #{productName}, #{productPrice}, #{quantity})
+	</insert>
+</mapper>

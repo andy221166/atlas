@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.persistence.mybatis.outbox.mapper.OutboxMessageMapper">
+
+	<resultMap id="OutboxMessageResultMap" type="org.atlas.platform.outbox.model.OutboxMessage">
+		<id property="id" column="id"/>
+		<result property="eventType" column="event_type"/>
+		<result property="processedAt" column="processed_at"/>
+		<result property="createdAt" column="created_at"/>
+		<result property="updatedAt" column="updated_at"/>
+	</resultMap>
+
+	<select id="findByStatus" parameterType="map" resultMap="OutboxMessageResultMap">
+		select om.id, om.event_type, om.payload, om.status, om.processed_at, om.error, om.retries, om.created_at, om.updated_at
+		from outbox_message om
+		where om.status = #{status}
+	</select>
+
+	<insert id="insert" parameterType="org.atlas.platform.outbox.model.OutboxMessage"
+			useGeneratedKeys="true" keyProperty="id">
+		insert into outbox_message (event_type, payload, status, retries)
+		values (#{eventType}, #{payload}, #{status}, #{retries})
+	</insert>
+
+	<update id="update" parameterType="org.atlas.platform.outbox.model.OutboxMessage">
+		update outbox_message om
+		set om.status = #{status},
+				om.processed_at = #{processedAt},
+				om.error = #{error},
+				om.retries = #{retries}
+		where o.id = #{id}
+	</update>
+</mapper>

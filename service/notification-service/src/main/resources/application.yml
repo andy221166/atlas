@@ -1,0 +1,69 @@
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true # Enable liveness and readiness probe endpoints
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+    mail:
+      enabled: false
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+      connect-timeout: 30s
+      read-timeout: 10s
+  tracing:
+    sampling:
+      # 1.0 represents 100%, meaning all requests will be traced.
+      probability: 1.0
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: notification-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      password: ${REDIS_PASSWORD:123456}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/db_notification?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        # Enable batch inserts
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    show-sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  mail:
+    host: ${MAIL_SERVER_HOST:localhost}
+    port: 25
+
+app:
+  event:
+    kafka:
+      consumer:
+        topics: order_confirmed,order_canceled

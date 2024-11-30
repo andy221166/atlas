@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+    </parent>
+    <groupId>org.atlas</groupId>
+    <artifactId>atlas</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring-tx.version>6.1.6</spring-tx.version>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+    </properties>
+
+    <modules>
+        <module>commons</module>
+
+        <module>platform</module>
+
+        <!-- User Service -->
+        <module>service/user-service/user-domain</module>
+        <module>service/user-service/user-domain-shared</module>
+        <module>service/user-service/user-contract</module>
+        <module>service/user-service/user-application</module>
+
+        <!-- Order Service -->
+        <module>service/order-service/order-domain</module>
+        <module>service/order-service/order-domain-shared</module>
+        <module>service/order-service/order-contract</module>
+        <module>service/order-service/order-application</module>
+
+        <!-- Product Service -->
+        <module>service/product-service/product-domain</module>
+        <module>service/product-service/product-contract</module>
+        <module>service/product-service/product-application</module>
+
+        <!-- Notification Service -->
+        <module>service/notification-service</module>
+
+        <!-- Report Service -->
+        <module>service/report-service/report-domain</module>
+        <module>service/report-service/report-contract</module>
+        <module>service/report-service/report-application</module>
+
+        <!-- Task Service -->
+        <module>service/task-service/task-contract</module>
+        <module>service/task-service/task-application</module>
+
+        <!-- Discovery Server -->
+        <module>edge/discovery-server/eureka-server</module>
+
+        <!-- Gateway Server -->
+        <module>edge/gateway-server</module>
+    </modules>
+
+    <!-- Dependencies are shared between modules -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

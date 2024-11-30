@@ -1,0 +1,86 @@
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true # Enable liveness and readiness probe endpoints
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+      connect-timeout: 30s
+      read-timeout: 10s
+  tracing:
+    sampling:
+      # 1.0 represents 100%, meaning all requests will be traced.
+      probability: 1.0
+
+server:
+  port: 8086
+
+spring:
+  application:
+    name: task-service
+  datasource:
+    order:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${MYSQL_ORDER_URL:jdbc:mysql://localhost:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
+    product:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${MYSQL_PRODUCT_URL:jdbc:mysql://localhost:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
+    user:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${MYSQL_USER_URL:jdbc:mysql://localhost:3306/db_user?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      # This will ensure that only script-based schema generation is performed using schema.sql.
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        # Enable batch inserts
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    show-sql: true
+  # Quartz
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          dataSource:
+            quartz:
+              driver: com.mysql.cj.jdbc.Driver
+              URL: ${MYSQL_QUARTZ_URL:jdbc:mysql://localhost:3306/db_quartz?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+              user: ${MYSQL_USERNAME:root}
+              password: ${MYSQL_PASSWORD:root}
+              provider: hikaricp
+          scheduler:
+            instanceId: AUTO
+            instanceName: DefaultScheduler
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            dataSource: quartz
+            tablePrefix: QRTZ_
+            isClustered: true
+          threadPool:
+            threadCount: 10

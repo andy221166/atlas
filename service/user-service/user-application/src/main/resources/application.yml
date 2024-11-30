@@ -1,0 +1,79 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}
+
+grpc:
+  server:
+    port: 50051
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true # Enable liveness and readiness probe endpoints
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+      connect-timeout: 30s
+      read-timeout: 10s
+  tracing:
+    sampling:
+      # 1.0 represents 100%, meaning all requests will be traced.
+      probability: 1.0
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  autoconfigure:
+    # gRPC server security is auto-configured if exists spring-security in classpath by default
+    exclude: net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      password: ${REDIS_PASSWORD:123456}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/db_user?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        # Enable batch inserts
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    show-sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+springdoc:
+  packages-to-scan: org.atlas.platform.rest.server.user.controller
+
+app:
+  event:
+    kafka:
+      consumer:
+        topics: reserve_credit_request,quantity_reserved

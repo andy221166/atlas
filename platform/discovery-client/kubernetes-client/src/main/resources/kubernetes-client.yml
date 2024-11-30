@@ -1,0 +1,4 @@
+spring:
+  kubernetes:
+    loadbalancer:
+      mode: SERVICE

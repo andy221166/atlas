@@ -1,0 +1,93 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}
+
+grpc:
+  client:
+    user:
+      address: ${GRPC_CLIENT_USER_ADDRESS:'static://127.0.0.1:50051'}
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    product:
+      address: ${GRPC_CLIENT_PRODUCT_ADDRESS:'static://127.0.0.1:50052'}
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+  server:
+    port: 50053
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true # Enable liveness and readiness probe endpoints
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+      connect-timeout: 30s
+      read-timeout: 10s
+  tracing:
+    sampling:
+      # 1.0 represents 100%, meaning all requests will be traced.
+      probability: 1.0
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: order-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      password: ${REDIS_PASSWORD:123456}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        # Enable batch inserts
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    show-sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+springdoc:
+  packages-to-scan: org.atlas.platform.rest.server.order.controller
+
+app:
+  event:
+    kafka:
+      consumer:
+        topics: reserve_quantity_reply,reserve_credit_reply,reserve_quantity_failed,credit_reserved,reserve_credit_failed
+  rest:
+    user:
+      base-url: ${REST_USER_BASE_URL:http://localhost:8081}
+    product:
+      base-url: ${REST_PRODUCT_BASE_URL:http://localhost:8082}
+  saga-mode: orchestration
