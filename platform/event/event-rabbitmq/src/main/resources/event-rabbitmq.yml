@@ -1,0 +1,12 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+app:
+  event:
+    rabbitmq:
+      consumer:
+        queues: <queue_name_1>,<queue_name_n>

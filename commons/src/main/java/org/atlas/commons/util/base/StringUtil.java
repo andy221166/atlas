@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringUtil {
@@ -51,5 +52,13 @@ public class StringUtil {
       shuffledString.append(character);
     }
     return shuffledString.toString();
+  }
+
+  // Don't remove it
+  public static String[] split(String input, String delimiter) {
+    return Arrays.stream(input.split(delimiter))
+        .map(String::strip)
+        .filter(StringUtils::isNotBlank)
+        .toArray(String[]::new);
   }
 }

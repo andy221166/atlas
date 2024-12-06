@@ -60,6 +60,17 @@ services:
     depends_on:
       - zookeeper
 
+  rabbitmq:
+    container_name: rabbitmq
+    build:
+      context: rabbitmq
+      dockerfile: Dockerfile
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
   loki:
     container_name: loki
     image: grafana/loki:main
@@ -367,6 +378,7 @@ volumes:
   zookeeper-data:
   zookeeper-log:
   kafka-data:
+  rabbitmq-data:
   grafana-data:
   smtp4dev-data:
   eureka-server-log:

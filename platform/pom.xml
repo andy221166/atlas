@@ -72,6 +72,7 @@
         <module>event/event-contract</module>
         <module>event/event-core</module>
         <module>event/event-kafka</module>
+        <module>event/event-rabbitmq</module>
 
         <!-- Excel -->
         <module>excel/excel-easyexcel</module>

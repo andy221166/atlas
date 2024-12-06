@@ -58,6 +58,11 @@ spring:
     show-sql: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
   mail:
     host: ${MAIL_SERVER_HOST:localhost}
     port: 25
@@ -66,4 +71,13 @@ app:
   event:
     kafka:
       consumer:
-        topics: order_confirmed,order_canceled
+        topics: >
+          order_confirmed,
+          order_canceled
+    rabbitmq:
+      publisher:
+        order-exchange: order
+      consumer:
+        queues: >
+          order_confirmed.notification,
+          order_canceled.notification

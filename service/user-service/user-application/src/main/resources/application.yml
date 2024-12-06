@@ -68,6 +68,11 @@ spring:
     show-sql: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
 
 springdoc:
   packages-to-scan: org.atlas.platform.rest.server.user.controller
@@ -76,4 +81,11 @@ app:
   event:
     kafka:
       consumer:
-        topics: reserve_credit_request,quantity_reserved
+        topics: >
+          reserve_quantity_success
+    rabbitmq:
+      publisher:
+        order-exchange: order
+      consumer:
+        queues: >
+          reserve_quantity_success.user

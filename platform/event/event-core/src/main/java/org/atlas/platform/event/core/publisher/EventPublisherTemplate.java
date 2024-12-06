@@ -2,6 +2,7 @@ package org.atlas.platform.event.core.publisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.commons.context.CurrentUserContext;
 import org.atlas.commons.util.json.JsonUtil;
 import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.EventTypeMapper;

@@ -19,13 +19,13 @@ public class KafkaEventConsumer {
   private final EventDispatcher eventDispatcher;
 
   @KafkaListener(
-      topics = "#{'${app.event.kafka.consumer.topics}'.split(',')}",
+      topics = "#{T(org.atlas.commons.util.base.StringUtil).split('${app.event.kafka.consumer.topics}',',')}",
       groupId = "${spring.application.name}",
       containerFactory = "defaultContainerFactory"
   )
   // Non-blocking retry
   @RetryableTopic(
-      attempts = "4", // 3 retries
+      attempts = "4", // max retries is 3
       topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // product-retry-0, product-retry-1, product-retry-2, etc.
       backoff = @Backoff(delay = 1000, multiplier = 2, random = true) // Exponential backoff
   )

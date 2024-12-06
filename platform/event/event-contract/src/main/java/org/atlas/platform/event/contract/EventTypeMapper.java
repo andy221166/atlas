@@ -7,15 +7,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.event.contract.order.OrderCanceledEvent;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
-import org.atlas.platform.event.contract.order.choreography.CreditReservedEvent;
-import org.atlas.platform.event.contract.order.choreography.OrderCreatedEvent;
-import org.atlas.platform.event.contract.order.choreography.QuantityReservedEvent;
-import org.atlas.platform.event.contract.order.choreography.ReserveCreditFailedEvent;
-import org.atlas.platform.event.contract.order.choreography.ReserveQuantityFailedEvent;
-import org.atlas.platform.event.contract.order.orchestration.ReserveCreditReplyEvent;
-import org.atlas.platform.event.contract.order.orchestration.ReserveCreditRequestEvent;
-import org.atlas.platform.event.contract.order.orchestration.ReserveQuantityReplyEvent;
-import org.atlas.platform.event.contract.order.orchestration.ReserveQuantityRequestEvent;
+import org.atlas.platform.event.contract.order.ReserveCreditSuccessEvent;
+import org.atlas.platform.event.contract.order.OrderCreatedEvent;
+import org.atlas.platform.event.contract.order.ReserveQuantitySuccessEvent;
+import org.atlas.platform.event.contract.order.ReserveCreditFailedEvent;
+import org.atlas.platform.event.contract.order.ReserveQuantityFailedEvent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventTypeMapper {
@@ -25,18 +21,11 @@ public class EventTypeMapper {
 
   static {
     // Order events
-
     EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CREATED, OrderCreatedEvent.class);
-    EVENT_TYPE_TO_CLASS.put(EventType.QUANTITY_RESERVED, QuantityReservedEvent.class);
+    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_SUCCESS, ReserveQuantitySuccessEvent.class);
     EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_FAILED, ReserveQuantityFailedEvent.class);
-    EVENT_TYPE_TO_CLASS.put(EventType.CREDIT_RESERVED, CreditReservedEvent.class);
+    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_SUCCESS, ReserveCreditSuccessEvent.class);
     EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_FAILED, ReserveCreditFailedEvent.class);
-
-    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_REQUEST, ReserveQuantityRequestEvent.class);
-    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_REPLY, ReserveQuantityReplyEvent.class);
-    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_REQUEST, ReserveCreditRequestEvent.class);
-    EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_REPLY, ReserveCreditReplyEvent.class);
-
     EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CONFIRMED, OrderConfirmedEvent.class);
     EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CANCELED, OrderCanceledEvent.class);
 

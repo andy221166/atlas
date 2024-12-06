@@ -62,9 +62,21 @@ spring:
     show-sql: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
 
 app:
   event:
     kafka:
       consumer:
-        topics: order_confirmed
+        topics: >
+          order_confirmed
+    rabbitmq:
+      publisher:
+        order-exchange: order
+      consumer:
+        queues: >
+          order_confirmed.report

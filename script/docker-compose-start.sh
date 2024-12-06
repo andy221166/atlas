@@ -9,6 +9,29 @@ source "$SCRIPT_DIR/logger.sh" || { echo "Error: logger.sh could not be sourced.
 PROJECT_NAME="atlas"
 REMOVE_VOLUMES=false
 
+# Define the list of services to start
+SERVICES=(
+  "mysql"
+  "redis"
+#  "zookeeper"
+#  "kafka"
+  "rabbitmq"
+  "loki"
+  "promtail"
+  "prometheus"
+  "zipkin"
+  "grafana"
+  "smtp4dev"
+#  "eureka-server"
+#  "user-service"
+#  "product-service"
+#  "order-service"
+#  "notification-service"
+#  "report-service"
+#  "task-service"
+#  "gateway-server"
+)
+
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -35,11 +58,17 @@ while [ "$(docker ps -q -f "name=$PROJECT_NAME")" ]; do
 done
 log "All containers have stopped completely."
 
-log "Starting services..."
-if docker-compose -f docker-compose/docker-compose.yml -p "$PROJECT_NAME" up -d; then
-    log "Services started successfully."
+# Start specified services
+if [ "${#SERVICES[@]}" -eq 0 ]; then
+    log "No services specified to start."
+    exit 1
+fi
+
+log "Starting specified services: ${SERVICES[*]}..."
+if docker-compose -f docker-compose/docker-compose.yml -p "$PROJECT_NAME" up -d "${SERVICES[@]}"; then
+    log "Specified services started successfully."
 else
-    error "Failed to start services." >&2
+    error "Failed to start specified services." >&2
     exit 1
 fi
 
