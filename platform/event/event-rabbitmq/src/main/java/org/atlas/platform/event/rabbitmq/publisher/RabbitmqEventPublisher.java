@@ -2,9 +2,9 @@ package org.atlas.platform.event.rabbitmq.publisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.platform.event.contract.DomainEvent;
-import org.atlas.platform.event.contract.EventType;
-import org.atlas.platform.event.contract.EventTypeMapper;
+import org.atlas.platform.event.contract.order.BaseOrderEvent;
 import org.atlas.platform.event.core.publisher.EventPublisher;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +15,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class RabbitmqEventPublisher implements EventPublisher {
 
-  @Value("${app.event.rabbitmq.publisher.order-exchange}")
+  @Value("${app.event.rabbitmq.order-exchange}")
   private String orderExchange;
 
   private final RabbitTemplate rabbitTemplate;
 
   @Override
   public void publish(DomainEvent event) {
-    EventType eventType = EventTypeMapper.getEventType(event.getClass());
-    // Queue and routing key have the same name
-    String routingKey = eventType.name().toLowerCase();
-    rabbitTemplate.convertAndSend(orderExchange, routingKey, event);
+    if (event instanceof BaseOrderEvent) {
+      // Publish to the fanout exchange for order-related events
+      rabbitTemplate.convertAndSend(orderExchange, StringUtils.EMPTY, event);
+    } else {
+      throw new IllegalArgumentException("Unsupported event type: " + event.getEventType());
+    }
   }
 }

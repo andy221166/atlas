@@ -80,12 +80,7 @@ springdoc:
 app:
   event:
     kafka:
-      consumer:
-        topics: >
-          reserve_quantity_success
+      order-topic: order
     rabbitmq:
-      publisher:
-        order-exchange: order
-      consumer:
-        queues: >
-          reserve_quantity_success.user
+      order-exchange: order
+      order-queue: order.svc.user

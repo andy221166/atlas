@@ -13,23 +13,23 @@ REMOVE_VOLUMES=false
 SERVICES=(
   "mysql"
   "redis"
-#  "zookeeper"
-#  "kafka"
-  "rabbitmq"
+  "zookeeper"
+  "kafka"
+#  "rabbitmq"
   "loki"
   "promtail"
   "prometheus"
   "zipkin"
   "grafana"
   "smtp4dev"
-#  "eureka-server"
-#  "user-service"
-#  "product-service"
-#  "order-service"
-#  "notification-service"
-#  "report-service"
-#  "task-service"
-#  "gateway-server"
+  "eureka-server"
+  "user-service"
+  "product-service"
+  "order-service"
+  "notification-service"
+  "report-service"
+  "task-service"
+  "gateway-server"
 )
 
 # Parse command-line arguments
@@ -43,7 +43,7 @@ done
 
 if [ "$REMOVE_VOLUMES" = true ]; then
     log "Stopping and removing containers..."
-    if docker-compose -f docker-compose/docker-compose.yml -p "$PROJECT_NAME" down -v; then
+    if docker-compose -f deployment/docker-compose/docker-compose.yml -p "$PROJECT_NAME" down -v; then
         log "Containers and volumes stopped and removed successfully."
     else
         error "Failed to stop and remove containers and volumes." >&2
@@ -65,7 +65,7 @@ if [ "${#SERVICES[@]}" -eq 0 ]; then
 fi
 
 log "Starting specified services: ${SERVICES[*]}..."
-if docker-compose -f docker-compose/docker-compose.yml -p "$PROJECT_NAME" up -d "${SERVICES[@]}"; then
+if docker-compose -f deployment/docker-compose/docker-compose.yml -p "$PROJECT_NAME" up -d "${SERVICES[@]}"; then
     log "Specified services started successfully."
 else
     error "Failed to start specified services." >&2

@@ -20,7 +20,7 @@ public class JdbcOutboxMessageRepository {
 
   public List<OutboxMessage> findByStatus(OutboxMessageStatus status) {
     String sql = """
-        select om.id, om.event_type, om.payload, om.status, om.processed_at, om.error, om.retries, om.created_at, om.updated_at
+        select om.id, om.payload, om.status, om.processed_at, om.error, om.retries, om.created_at, om.updated_at
         from outbox_message om
         where om.status = :status
         """;
@@ -32,8 +32,8 @@ public class JdbcOutboxMessageRepository {
 
   public int insert(OutboxMessage outboxMessage) {
     String sql = """
-        insert into outbox_message (event_type, payload, status, retries)
-        values (:eventType, :payload, :status, :retries)
+        insert into outbox_message (payload, status, retries)
+        values (:payload, :status, :retries)
         """;
     MapSqlParameterSource params = toParams(outboxMessage);
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -63,7 +63,6 @@ public class JdbcOutboxMessageRepository {
   private MapSqlParameterSource toParams(OutboxMessage outboxMessage) {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("id", outboxMessage.getId());
-    params.addValue("eventType", outboxMessage.getEventType());
     params.addValue("payload", outboxMessage.getPayload());
     params.addValue("status", outboxMessage.getStatus().name());
     params.addValue("processedAt", outboxMessage.getProcessedAt());

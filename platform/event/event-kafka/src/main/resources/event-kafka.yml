@@ -2,10 +2,9 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: <your-group-id>
+      group-id: <service_name>
 
 app:
   event:
     kafka:
-      consumer:
-        topics: <topic_name_1>,<topic_name_n>
+      order-topic: order

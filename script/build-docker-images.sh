@@ -6,18 +6,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/logger.sh" || { log "Error: logger.sh could not be sourced."; exit 1; }
 
-# Step 1: Build the Maven project
-
-log "Starting Maven build..."
-if mvn clean install; then
-    log "Maven build completed successfully."
-else
-    error "Maven build failed." >&2
-    exit 1
-fi
-
-# Step 2: Build Docker images for each service
-
 log "Building Docker image for user-service..."
 if docker build -t user-service ./service/user-service/user-application; then
     log "Built Docker image for user-service successfully."
@@ -76,9 +64,9 @@ fi
 
 log "Building Docker image for gateway-server..."
 if docker build -t gateway-server ./edge/gateway-server; then
-    error "Built Docker image for gateway-server successfully."
+    log "Built Docker image for gateway-server successfully."
 else
-    log "Failed to build Docker image for gateway-server." >&2
+    error "Failed to build Docker image for gateway-server." >&2
     exit 1
 fi
 

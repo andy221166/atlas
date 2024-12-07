@@ -32,7 +32,6 @@ public class RelayOutboxMessageTask {
   @Scheduled(cron = "0 * * * * *")
   public void run() {
     if (!lockService.acquireLock(lockKey())) {
-      log.info("Outbox messages was already processed");
       return;
     }
 

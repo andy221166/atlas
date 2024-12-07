@@ -71,12 +71,7 @@ spring:
 app:
   event:
     kafka:
-      consumer:
-        topics: >
-          order_confirmed
+      order-topic: order
     rabbitmq:
-      publisher:
-        order-exchange: order
-      consumer:
-        queues: >
-          order_confirmed.report
+      order-exchange: order
+      order-queue: order.svc.report

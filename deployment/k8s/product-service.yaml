@@ -1,34 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service
+  name: product-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: product-service
   template:
     metadata:
       labels:
-        app: order-service
+        app: product-service
     spec:
       containers:
-        - name: order-service
-          image: order-service:latest
+        - name: product-service
+          image: product-service:latest
           imagePullPolicy: Never
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod"
-            - name: GRPC_CLIENT_USER_ADDRESS
-              value: "dns:///user-service:50051"
-            - name: GRPC_CLIENT_PRODUCT_ADDRESS
-              value: "dns:///product-service:50052"
-            - name: REST_USER_BASE_URL
-              value: "http://user-service:8081"
-            - name: REST_PRODUCT_BASE_URL
-              value: "http://product-service:8082"
+              value: "k8s"
             - name: MYSQL_URL
-              value: "jdbc:mysql://mysql:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+              value: "jdbc:mysql://mysql:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
             - name: MYSQL_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -51,12 +43,12 @@ spec:
             - name: ZIPKIN_ENDPOINT
               value: "http://zipkin:9411/api/v2/spans"
           ports:
-            - containerPort: 8083
+            - containerPort: 8082
           # Liveness Probe: Checks if the app is healthy and should restart if not healthy
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8083
+              port: 8082
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
@@ -64,13 +56,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8083
+              port: 8082
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
           volumeMounts:
-            - name: order-service-log
-              mountPath: /var/log/order-service
+            - name: product-service-log
+              mountPath: /var/log/product-service
           resources:
             requests:
               cpu: "0.25"
@@ -79,14 +71,14 @@ spec:
               cpu: "0.50"
               memory: "512Mi"
       volumes:
-        - name: order-service-log
+        - name: product-service-log
           persistentVolumeClaim:
-            claimName: order-service-log
+            claimName: product-service-log
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: order-service-log
+  name: product-service-log
 spec:
   accessModes:
     - ReadWriteOnce
@@ -97,11 +89,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: order-service
+  name: product-service
 spec:
   selector:
-    app: order-service
+    app: product-service
   ports:
-    - port: 8083
-      targetPort: 8083
+    - port: 8082
+      targetPort: 8082
   type: ClusterIP

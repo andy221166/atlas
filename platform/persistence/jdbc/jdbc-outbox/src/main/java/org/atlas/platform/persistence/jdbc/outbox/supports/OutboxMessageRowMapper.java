@@ -15,8 +15,6 @@ public class OutboxMessageRowMapper implements RowMapper<OutboxMessage> {
     NullSafeRowMapper rowMapper = new NullSafeRowMapper(rs);
     OutboxMessage outboxMessage = new OutboxMessage();
     outboxMessage.setId(rowMapper.getLong("id"));
-    outboxMessage.setUserId(rowMapper.getInt("user_id"));
-    outboxMessage.setEventType(EventType.valueOf(rowMapper.getString("event_type")));
     outboxMessage.setPayload(rowMapper.getString("payload"));
     outboxMessage.setStatus(OutboxMessageStatus.valueOf(rowMapper.getString("status")));
     outboxMessage.setProcessedAt(rowMapper.getTimestamp("processed_at"));

@@ -1,24 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway-server
+  name: notification-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway-server
+      app: notification-service
   template:
     metadata:
       labels:
-        app: gateway-server
+        app: notification-service
     spec:
       containers:
-        - name: gateway-server
-          image: gateway-server:latest
+        - name: notification-service
+          image: notification-service:latest
           imagePullPolicy: Never
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod"
+              value: "k8s"
+            - name: MYSQL_URL
+              value: "jdbc:mysql://mysql:3306/db_notification?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+            - name: MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-password
             - name: REDIS_HOST
               value: "redis"
             - name: REDIS_PASSWORD
@@ -26,15 +38,19 @@ spec:
                 secretKeyRef:
                   name: redis-secret
                   key: redis-password
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka:29092"
             - name: ZIPKIN_ENDPOINT
               value: "http://zipkin:9411/api/v2/spans"
+            - name: MAIL_SERVER_HOST
+              value: "smtp4dev"
           ports:
-            - containerPort: 8080
+            - containerPort: 8084
           # Liveness Probe: Checks if the app is healthy and should restart if not healthy
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8080
+              port: 8084
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
@@ -42,13 +58,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8080
+              port: 8084
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
           volumeMounts:
-            - name: gateway-server-log
-              mountPath: /var/log/gateway-server
+            - name: notification-service-log
+              mountPath: /var/log/notification-service
           resources:
             requests:
               cpu: "0.25"
@@ -57,14 +73,14 @@ spec:
               cpu: "0.50"
               memory: "512Mi"
       volumes:
-        - name: gateway-server-log
+        - name: notification-service-log
           persistentVolumeClaim:
-            claimName: gateway-server-log
+            claimName: notification-service-log
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: gateway-server-log
+  name: notification-service-log
 spec:
   accessModes:
     - ReadWriteOnce
@@ -75,11 +91,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gateway-server
+  name: notification-service
 spec:
   selector:
-    app: gateway-server
+    app: notification-service
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 8084
+      targetPort: 8084
   type: ClusterIP

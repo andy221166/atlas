@@ -20,8 +20,8 @@ public class ReserveCreditFailedEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "ReserveCreditFailedEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         ", error='" + error + '\'' +
         '}';

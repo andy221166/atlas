@@ -23,16 +23,16 @@
         </dependency>
 
         <!-- Event -->
-<!--        <dependency>-->
-<!--            <groupId>org.atlas.platform</groupId>-->
-<!--            <artifactId>event-kafka</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.atlas.platform</groupId>
-            <artifactId>event-rabbitmq</artifactId>
+            <artifactId>event-kafka</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.atlas.platform</groupId>-->
+<!--            <artifactId>event-rabbitmq</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <!-- Email -->
         <dependency>
@@ -68,6 +68,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS order_item
 CREATE TABLE IF NOT EXISTS outbox_message
 (
     id           BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    event_type   VARCHAR(255)  NOT NULL,
     payload      TEXT          NOT NULL,
     status       VARCHAR(10)   NOT NULL,
     processed_at DATETIME,

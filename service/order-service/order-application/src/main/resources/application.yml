@@ -88,19 +88,10 @@ springdoc:
 app:
   event:
     kafka:
-      consumer:
-        topics: >
-          reserve_quantity_failed,
-          reserve_credit_success,
-          reserve_credit_failed
+      order-topic: order
     rabbitmq:
-      publisher:
-        order-exchange: order
-      consumer:
-        queues: >
-          reserve_quantity_failed.order,
-          reserve_credit_success.order,
-          reserve_credit_failed.order
+      order-exchange: order
+      order-queue: order.svc.order
   rest:
     user:
       base-url: ${REST_USER_BASE_URL:http://localhost:8081}

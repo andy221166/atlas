@@ -1,36 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-service
+  name: gateway-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: product-service
+      app: gateway-server
   template:
     metadata:
       labels:
-        app: product-service
+        app: gateway-server
     spec:
       containers:
-        - name: product-service
-          image: product-service:latest
+        - name: gateway-server
+          image: gateway-server:latest
           imagePullPolicy: Never
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod"
-            - name: MYSQL_URL
-              value: "jdbc:mysql://mysql:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
-            - name: MYSQL_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: mysql-username
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: mysql-password
+              value: "k8s"
             - name: REDIS_HOST
               value: "redis"
             - name: REDIS_PASSWORD
@@ -38,17 +26,15 @@ spec:
                 secretKeyRef:
                   name: redis-secret
                   key: redis-password
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka:29092"
             - name: ZIPKIN_ENDPOINT
               value: "http://zipkin:9411/api/v2/spans"
           ports:
-            - containerPort: 8082
+            - containerPort: 8080
           # Liveness Probe: Checks if the app is healthy and should restart if not healthy
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8082
+              port: 8080
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
@@ -56,13 +42,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8082
+              port: 8080
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
           volumeMounts:
-            - name: product-service-log
-              mountPath: /var/log/product-service
+            - name: gateway-server-log
+              mountPath: /var/log/gateway-server
           resources:
             requests:
               cpu: "0.25"
@@ -71,14 +57,14 @@ spec:
               cpu: "0.50"
               memory: "512Mi"
       volumes:
-        - name: product-service-log
+        - name: gateway-server-log
           persistentVolumeClaim:
-            claimName: product-service-log
+            claimName: gateway-server-log
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: product-service-log
+  name: gateway-server-log
 spec:
   accessModes:
     - ReadWriteOnce
@@ -89,11 +75,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-service
+  name: gateway-server
 spec:
   selector:
-    app: product-service
+    app: gateway-server
   ports:
-    - port: 8082
-      targetPort: 8082
+    - port: 8080
+      targetPort: 8080
   type: ClusterIP

@@ -17,8 +17,8 @@ public class ReserveQuantitySuccessEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "ReserveQuantitySuccessEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         '}';
   }

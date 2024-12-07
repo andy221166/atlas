@@ -11,7 +11,6 @@ import org.atlas.platform.event.contract.EventType;
 public class OutboxMessage extends Auditable {
 
   private Long id;
-  private EventType eventType;
   private String payload;
   private OutboxMessageStatus status;
   private Date processedAt;

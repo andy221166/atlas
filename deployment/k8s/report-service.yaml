@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notification-service
+  name: report-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: notification-service
+      app: report-service
   template:
     metadata:
       labels:
-        app: notification-service
+        app: report-service
     spec:
       containers:
-        - name: notification-service
-          image: notification-service:latest
+        - name: report-service
+          image: report-service:latest
           imagePullPolicy: Never
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod"
+              value: "k8s"
             - name: MYSQL_URL
-              value: "jdbc:mysql://mysql:3306/db_notification?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+              value: "jdbc:mysql://mysql:3306/db_report?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
             - name: MYSQL_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -42,15 +42,13 @@ spec:
               value: "kafka:29092"
             - name: ZIPKIN_ENDPOINT
               value: "http://zipkin:9411/api/v2/spans"
-            - name: MAIL_SERVER_HOST
-              value: "smtp4dev"
           ports:
-            - containerPort: 8084
+            - containerPort: 8085
           # Liveness Probe: Checks if the app is healthy and should restart if not healthy
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8084
+              port: 8085
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
@@ -58,13 +56,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8084
+              port: 8085
             initialDelaySeconds: 180
             periodSeconds: 30
             failureThreshold: 3
           volumeMounts:
-            - name: notification-service-log
-              mountPath: /var/log/notification-service
+            - name: report-service-log
+              mountPath: /var/log/report-service
           resources:
             requests:
               cpu: "0.25"
@@ -73,14 +71,14 @@ spec:
               cpu: "0.50"
               memory: "512Mi"
       volumes:
-        - name: notification-service-log
+        - name: report-service-log
           persistentVolumeClaim:
-            claimName: notification-service-log
+            claimName: report-service-log
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: notification-service-log
+  name: report-service-log
 spec:
   accessModes:
     - ReadWriteOnce
@@ -91,11 +89,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: notification-service
+  name: report-service
 spec:
   selector:
-    app: notification-service
+    app: report-service
   ports:
-    - port: 8084
-      targetPort: 8084
+    - port: 8085
+      targetPort: 8085
   type: ClusterIP

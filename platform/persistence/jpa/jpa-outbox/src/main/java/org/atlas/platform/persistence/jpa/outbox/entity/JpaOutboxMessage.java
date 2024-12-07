@@ -25,9 +25,6 @@ public class JpaOutboxMessage extends JpaBaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Enumerated(EnumType.STRING)
-  private EventType eventType;
-
   private String payload;
 
   @Enumerated(EnumType.STRING)

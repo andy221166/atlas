@@ -17,8 +17,8 @@ public class OrderConfirmedEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "OrderConfirmedEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         '}';
   }

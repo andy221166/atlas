@@ -1,0 +1,4 @@
+# Disable the Eureka discovery client
+eureka:
+  client:
+    enabled: false

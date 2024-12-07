@@ -20,12 +20,12 @@ manifests=(
 
 # Process each service
 for manifest in "${manifests[@]}"; do
-    log "Applying k8s/$manifest.yaml..."
+    log "Applying deployment/k8s/$manifest.yaml..."
 
     # Delete the existing Kubernetes resource, ignore errors if not found
-    kubectl delete -f k8s/"$manifest".yaml --ignore-not-found=true
+    kubectl delete -f deployment/k8s/"$manifest".yaml --ignore-not-found=true
 
-    kubectl apply -f k8s/"$manifest".yaml || { echo "Failed to apply $manifest"; exit 1; }
+    kubectl apply -f deployment/k8s/"$manifest".yaml || { echo "Failed to apply $manifest"; exit 1; }
 done
 
 log "Done apply manifest files"

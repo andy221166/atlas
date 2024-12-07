@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.EventType;
-import org.atlas.platform.event.contract.EventTypeMapper;
-import org.atlas.platform.event.core.exception.EventHandlerNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,6 +29,10 @@ public class EventDispatcher {
 
   public <E extends DomainEvent> void dispatch(E event) {
     List<EventHandler<E>> eventHandlers = obtainEventHandler(event);
+    if (CollectionUtils.isEmpty(eventHandlers)) {
+      // Ignore if not exist the corresponding handler
+      return;
+    }
     if (!eventIdempotenceService.isNew(event)) {
       log.error("Event has already been processed: {}", event);
     }
@@ -50,13 +52,13 @@ public class EventDispatcher {
 
   @SuppressWarnings("unchecked")
   private <E extends DomainEvent> List<EventHandler<E>> obtainEventHandler(E event) {
-    EventType eventType = EventTypeMapper.getEventType(event.getClass());
+    EventType eventType = event.getEventType();
     List<EventHandler<?>> eventHandlers = eventHandlerMap.get(eventType);
-    if (CollectionUtils.isEmpty(eventHandlers)) {
-      throw new EventHandlerNotFoundException("Not found handler for event " + event.getClass());
+    if (CollectionUtils.isNotEmpty(eventHandlers)) {
+      return eventHandlers.stream()
+          .map(handler -> (EventHandler<E>) handler)
+          .toList();
     }
-    return eventHandlers.stream()
-        .map(handler -> (EventHandler<E>) handler)
-        .toList();
+    return null;
   }
 }

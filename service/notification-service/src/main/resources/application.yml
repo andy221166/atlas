@@ -70,14 +70,7 @@ spring:
 app:
   event:
     kafka:
-      consumer:
-        topics: >
-          order_confirmed,
-          order_canceled
+      order-topic: order
     rabbitmq:
-      publisher:
-        order-exchange: order
-      consumer:
-        queues: >
-          order_confirmed.notification,
-          order_canceled.notification
+      order-exchange: order
+      order-queue: order.svc.notification

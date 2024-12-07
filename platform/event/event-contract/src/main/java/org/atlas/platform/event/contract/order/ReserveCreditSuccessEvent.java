@@ -17,8 +17,8 @@ public class ReserveCreditSuccessEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "ReserveCreditSuccessEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         '}';
   }

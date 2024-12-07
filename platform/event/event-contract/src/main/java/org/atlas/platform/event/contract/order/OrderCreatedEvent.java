@@ -17,8 +17,8 @@ public class OrderCreatedEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "OrderCreatedEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         '}';
   }

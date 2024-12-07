@@ -3,6 +3,7 @@ package org.atlas.platform.event.contract.order;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.atlas.platform.event.contract.EventType;
 import org.atlas.service.order.contract.model.OrderDto;
 
 @Data
@@ -17,8 +18,8 @@ public class OrderCanceledEvent extends BaseOrderEvent {
   @Override
   public String toString() {
     return "OrderCanceledEvent{" +
-        "timestamp=" + timestamp +
-        ", eventId='" + eventId + '\'' +
+        "timestamp=" + getTimestamp() +
+        ", eventId='" + getEventId() + '\'' +
         ", order=" + order +
         '}';
   }
