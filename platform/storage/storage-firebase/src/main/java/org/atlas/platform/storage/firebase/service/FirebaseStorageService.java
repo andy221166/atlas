@@ -5,7 +5,7 @@ import com.google.firebase.cloud.StorageClient;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.atlas.commons.util.function.Callback;
+import org.atlas.commons.function.Callback;
 import org.atlas.platform.storage.contract.StorageService;
 import org.springframework.stereotype.Service;
 

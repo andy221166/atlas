@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.atlas.commons.util.function.Callback;
+import org.atlas.commons.function.Callback;
 import org.atlas.platform.storage.contract.StorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

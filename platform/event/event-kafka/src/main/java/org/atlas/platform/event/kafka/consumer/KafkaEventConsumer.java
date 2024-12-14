@@ -20,7 +20,7 @@ public class KafkaEventConsumer {
   private final EventDispatcher eventDispatcher;
 
   @KafkaListener(
-      topics = "${app.event.kafka.order-topic}",
+      topics = "#{kafkaEventProps.orderTopic}",
       groupId = "${spring.application.name}",
       containerFactory = "defaultContainerFactory"
   )

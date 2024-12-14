@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.exception.AppError;
 import org.atlas.commons.exception.BusinessException;
-import org.atlas.commons.util.security.PasswordUtil;
+import org.atlas.commons.util.crypt.PasswordUtil;
 import org.atlas.platform.cqrs.handler.CommandHandler;
 import org.atlas.service.user.contract.auth.AuthService;
 import org.atlas.service.user.contract.command.SignUpCommand;

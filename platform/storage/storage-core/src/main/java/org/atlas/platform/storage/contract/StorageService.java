@@ -1,7 +1,7 @@
 package org.atlas.platform.storage.contract;
 
 import java.util.Map;
-import org.atlas.commons.util.function.Callback;
+import org.atlas.commons.function.Callback;
 
 public interface StorageService {
 

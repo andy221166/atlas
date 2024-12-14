@@ -26,10 +26,10 @@ public class OutboxMessageService {
   public void process(OutboxMessage outboxMessage) {
     try {
       processor.process(outboxMessage);
-      log.info("Processed outbox message: {}", outboxMessage);
 
       outboxMessage.toBeProcessed();
       repository.update(outboxMessage);
+      log.info("Processed outbox message: {}", outboxMessage);
     } catch (Exception e) {
       log.error("Failed to process outbox message", e);
       outboxMessage.setError(e.getMessage());

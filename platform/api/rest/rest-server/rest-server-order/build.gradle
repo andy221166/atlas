@@ -1,0 +1,4 @@
+dependencies {
+    api project(':order-contract')
+    api project(':rest-server-core')
+}

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-service
+  template:
+    metadata:
+      labels:
+        app: task-service
+    spec:
+      containers:
+        - name: task-service
+          image: task-service:latest
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+            - name: MYSQL_ORDER_URL
+              value: "jdbc:mysql://mysql:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+            - name: MYSQL_PRODUCT_URL
+              value: "jdbc:mysql://mysql:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+            - name: MYSQL_QUARTZ_URL
+              value: "jdbc:mysql://mysql:3306/db_quartz?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+            - name: MYSQL_USER_URL
+              value: "jdbc:mysql://mysql:3306/db_user?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
+            - name: MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-password
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka:29092"
+            - name: ZIPKIN_ENDPOINT
+              value: "http://zipkin:9411/api/v2/spans"
+          ports:
+            - containerPort: 8086
+          # Liveness Probe: Checks if the app is healthy and should restart if not healthy
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8086
+            initialDelaySeconds: 180
+            periodSeconds: 30
+            failureThreshold: 3
+          # Readiness Probe: Checks if the app is ready to receive traffic
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8086
+            initialDelaySeconds: 180
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - name: task-service-log
+              mountPath: /var/log/task-service
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.50"
+              memory: "512Mi"
+      volumes:
+        - name: task-service-log
+          persistentVolumeClaim:
+            claimName: task-service-log
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-service-log
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-service
+spec:
+  selector:
+    app: task-service
+  ports:
+    - port: 8086
+      targetPort: 8086
+  type: ClusterIP

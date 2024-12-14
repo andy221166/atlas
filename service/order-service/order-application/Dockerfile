@@ -1,30 +1,18 @@
-# Builder Stage: Extract application layers
-FROM openjdk:17-slim AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy the application JAR to the container
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-
-# Use Spring Boot's layertools to extract layers
+FROM eclipse-temurin:17-jre-alpine AS builder
+WORKDIR extracted
+ADD ./target/*.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
-# Runtime Stage: Create thin image
-FROM openjdk:17-slim
-
-# Set working directory
-WORKDIR /app
-
-# Copy extracted layers from the builder stage
-COPY --from=builder /app/dependencies/ ./dependencies/
-COPY --from=builder /app/snapshot-dependencies/ ./snapshot-dependencies/
-COPY --from=builder /app/spring-boot-loader/ ./spring-boot-loader/
-COPY --from=builder /app/application/ ./application/
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR app
+COPY --from=builder extracted/dependencies/ ./
+COPY --from=builder extracted/spring-boot-loader/ ./
+COPY --from=builder extracted/snapshot-dependencies/ ./
+COPY --from=builder extracted/application/ ./
 
 # Expose application port
 EXPOSE 8083
 
-# Run the application using Spring Boot loader
-ENTRYPOINT ["java", "-cp", "dependencies/:snapshot-dependencies/:spring-boot-loader/", "org.springframework.boot.loader.JarLauncher"]
+# Since Spring Boot 3.2.0, a new org.springframework.boot.loader.launch.JarLauncher has been introduced
+# instead of org.springframework.boot.loader.JarLauncher
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

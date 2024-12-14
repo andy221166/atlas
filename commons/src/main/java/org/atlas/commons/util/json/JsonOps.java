@@ -9,4 +9,6 @@ public interface JsonOps {
   <T> List<T> toList(String source, Class<T> type);
 
   String toJson(Object source);
+
+  String getNodeValue(String json, String key);
 }

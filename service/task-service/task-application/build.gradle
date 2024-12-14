@@ -1,0 +1,41 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    api project(':task-contract')
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['persistence']) {
+        case 'jdbc':
+            api project(':jdbc-task')
+            break
+        case 'jpa':
+            api project(':jpa-task')
+            break
+        case 'mybatis':
+            api project(':mybatis-task')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['persistence']}")
+    }
+
+    api project(':task-scheduler-quartz')
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}

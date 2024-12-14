@@ -1,0 +1,4 @@
+dependencies {
+    api project(':lock-core')
+    api project(':redis')
+}

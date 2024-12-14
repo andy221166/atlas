@@ -1,0 +1,4 @@
+dependencies {
+    api project(':storage-core')
+    api 'com.google.firebase:firebase-admin:9.4.2'
+}

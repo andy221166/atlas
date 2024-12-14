@@ -1,0 +1,4 @@
+dependencies {
+    api 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+}

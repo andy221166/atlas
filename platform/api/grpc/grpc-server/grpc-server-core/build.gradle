@@ -1,0 +1,6 @@
+dependencies {
+    api project(':commons')
+    api project(':protobuf')
+
+    api 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+}

@@ -15,5 +15,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ProductFeignClient {
 
   @GetMapping("/api/products")
-  ListProductResponse listProduct(@RequestParam List<Integer> ids);
+  ListProductResponse listProduct(@RequestParam("ids") List<Integer> ids);
 }

@@ -1,0 +1,25 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}

@@ -1,0 +1,9 @@
+dependencies {
+    api project(':commons')
+    api project(':order-domain-shared')
+    api project(':user-domain-shared')
+    api project(':i18n')
+
+    api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+}

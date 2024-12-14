@@ -2,7 +2,6 @@ package org.atlas.platform.event.rabbitmq.consumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.order.BaseOrderEvent;
 import org.atlas.platform.event.core.consumer.EventDispatcher;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,7 +17,7 @@ public class RabbitmqEventConsumer {
   private final EventDispatcher eventDispatcher;
 
   @RabbitListener(
-      queues = "${app.event.rabbitmq.order-queue}",
+      queues = "#{rabbitmqEventProps.orderQueue}",
       containerFactory = "customContainerFactory"
   )
   public <E extends BaseOrderEvent> void consumeOrderEvent(Message<E> message) {

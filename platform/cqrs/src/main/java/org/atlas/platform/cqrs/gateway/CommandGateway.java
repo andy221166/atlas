@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.atlas.commons.util.function.Callback;
+import org.atlas.commons.function.Callback;
 import org.atlas.platform.cqrs.exception.CommandExecutorNotFoundException;
 import org.atlas.platform.cqrs.exception.QueryExecutorNotFoundException;
 import org.atlas.platform.cqrs.handler.CommandHandler;

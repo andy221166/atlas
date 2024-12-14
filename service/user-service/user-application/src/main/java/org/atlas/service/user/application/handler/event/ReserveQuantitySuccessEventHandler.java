@@ -2,7 +2,7 @@ package org.atlas.service.user.application.handler.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.commons.util.base.ConcurrencyUtil;
+import org.atlas.commons.util.base.ConcurrentUtil;
 import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.contract.order.ReserveCreditSuccessEvent;
@@ -30,7 +30,7 @@ public class ReserveQuantitySuccessEventHandler implements EventHandler<ReserveQ
   @Override
   @Transactional
   public void handle(ReserveQuantitySuccessEvent reserveQuantitySuccessEvent) {
-    ConcurrencyUtil.sleep(3, 5);
+    ConcurrentUtil.sleep(3, 5);
     OrderDto order = reserveQuantitySuccessEvent.getOrder();
     int reserveCreditResult = customerRepository.decreaseCredit(order.getUser().getId(),
         order.getAmount());

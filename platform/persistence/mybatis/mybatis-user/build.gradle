@@ -1,0 +1,4 @@
+dependencies {
+    api project(':user-contract')
+    api project(':mybatis-core')
+}

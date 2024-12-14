@@ -1,0 +1,5 @@
+dependencies {
+    api project(':rest-client-contract')
+
+    api 'org.apache.httpcomponents.client5:httpclient5:5.4.1'
+}

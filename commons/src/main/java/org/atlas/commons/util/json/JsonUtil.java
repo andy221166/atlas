@@ -20,4 +20,8 @@ public class JsonUtil {
   public static String toJson(Object source) {
     return OPS.toJson(source);
   }
+
+  public static String getNodeValue(String json, String key) {
+    return OPS.getNodeValue(json, key);
+  }
 }

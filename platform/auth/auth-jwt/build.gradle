@@ -1,0 +1,8 @@
+dependencies {
+    api project(':user-contract')
+    api project(':redis')
+    api project(':rest-server-core')
+
+    api 'org.springframework.boot:spring-boot-starter-security'
+    api 'com.auth0:java-jwt:4.4.0'
+}

@@ -1,0 +1,77 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    api project(':report-contract')
+
+    switch (config['api-server']) {
+        case 'rest':
+            api project(':rest-server-report')
+            break
+        case 'grpc':
+            api project(':grpc-server-report')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['api-server']}")
+    }
+
+    switch (config['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':eureka-client')
+            break
+        case 'kubernetes':
+            api project(':kubernetes-client')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+    }
+
+    switch (config['event']) {
+        case 'kafka':
+            api project(':event-kafka')
+            break
+        case 'rabbitmq':
+            api project(':event-rabbitmq')
+            break
+        case 'sns':
+            api project(':event-sns')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['event']}")
+    }
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['persistence']) {
+        case 'jdbc':
+            api project(':jdbc-report')
+            break
+        case 'jpa':
+            api project(':jpa-report')
+            break
+        case 'mybatis':
+            api project(':mybatis-report')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['persistence']}")
+    }
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}

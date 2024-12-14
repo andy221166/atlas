@@ -1,0 +1,5 @@
+dependencies {
+    api project(':order-domain')
+    api project(':product-domain')
+    api project(':user-domain')
+}

@@ -14,15 +14,6 @@ management:
       enabled: true
     readinessstate:
       enabled: true
-  zipkin:
-    tracing:
-      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
-      connect-timeout: 30s
-      read-timeout: 10s
-  tracing:
-    sampling:
-      # 1.0 represents 100%, meaning all requests will be traced.
-      probability: 1.0
 
 server:
   port: 8086
@@ -30,6 +21,8 @@ server:
 spring:
   application:
     name: task-service
+  profiles:
+    active: local-compose
   datasource:
     order:
       driver-class-name: com.mysql.cj.jdbc.Driver

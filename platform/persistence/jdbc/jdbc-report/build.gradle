@@ -1,0 +1,4 @@
+dependencies {
+    api project(':report-contract')
+    api project(':jdbc-core')
+}

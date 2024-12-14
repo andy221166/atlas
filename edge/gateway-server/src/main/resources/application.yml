@@ -1,8 +1,3 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}
-
 management:
   endpoint:
     health:
@@ -19,15 +14,6 @@ management:
       enabled: true
     readinessstate:
       enabled: true
-  zipkin:
-    tracing:
-      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
-      connect-timeout: 30s
-      read-timeout: 10s
-  tracing:
-    sampling:
-      # 1.0 represents 100%, meaning all requests will be traced.
-      probability: 1.0
 
 server:
   port: 8080
@@ -35,11 +21,8 @@ server:
 spring:
   application:
     name: gateway-server
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: 6379
-      password: ${REDIS_PASSWORD:123456}
+  profiles:
+    active: local-compose
   cloud:
     gateway:
       routes:
@@ -65,21 +48,22 @@ spring:
           lower-case-service-id: true
 
 app:
-  authorization-rules:
-    non-secured-paths:
-      - "/api/users/sign-up"
-      - "/api/users/sign-in"
-      - "/actuator/**"
-    secured-paths:
-      - path: "/api/users/profile"
-        roles: [ "CUSTOMER" ]
-      - path: "/api/users/sign-out"
-        roles: [ "CUSTOMER" ]
-      - path: "/api/products/search"
-        roles: [ "CUSTOMER" ]
-      - path: "/api/categories"
-        roles: [ "CUSTOMER" ]
-      - path: "/api/orders/**"
-        roles: [ "CUSTOMER" ]
-      - path: "/api/reports"
-        roles: [ "ADMIN" ]
+  gateway:
+    authorization-rules:
+      non-secured-paths:
+        - "/api/users/sign-up"
+        - "/api/users/sign-in"
+        - "/actuator/**"
+      secured-paths:
+        - path: "/api/users/profile"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/users/sign-out"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/products/search"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/categories"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/orders/**"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/reports"
+          roles: [ "ADMIN" ]

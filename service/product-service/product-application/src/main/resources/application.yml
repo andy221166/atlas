@@ -1,11 +1,8 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}
-
 grpc:
   server:
     port: 50052
+    security:
+      enabled: false
 
 management:
   endpoint:
@@ -23,15 +20,6 @@ management:
       enabled: true
     readinessstate:
       enabled: true
-  zipkin:
-    tracing:
-      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
-      connect-timeout: 30s
-      read-timeout: 10s
-  tracing:
-    sampling:
-      # 1.0 represents 100%, meaning all requests will be traced.
-      probability: 1.0
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
@@ -42,11 +30,8 @@ server:
 spring:
   application:
     name: product-service
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: 6379
-      password: ${REDIS_PASSWORD:123456}
+  profiles:
+    active: local-compose
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_URL:jdbc:mysql://localhost:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
@@ -63,21 +48,6 @@ spring:
           batch_size: 50
         order_inserts: true
     show-sql: true
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
 
 springdoc:
   packages-to-scan: org.atlas.platform.rest.server.product.controller
-
-app:
-  event:
-    kafka:
-      order-topic: order
-    rabbitmq:
-      order-exchange: order
-      order-queue: order.svc.product

@@ -7,4 +7,4 @@ spring:
 app:
   event:
     kafka:
-      order-topic: order
+      order-topic: order_events

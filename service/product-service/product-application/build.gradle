@@ -1,0 +1,96 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    api project(':product-contract')
+
+    switch (config['api-server']) {
+        case 'rest':
+            api project(':rest-server-product')
+            break
+        case 'grpc':
+            api project(':grpc-server-product')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['api-server']}")
+    }
+
+    switch (config['csv']) {
+        case 'opencsv':
+            api project(':csv-opencsv')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['csv']}")
+    }
+
+    switch (config['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':eureka-client')
+            break
+        case 'kubernetes':
+            api project(':kubernetes-client')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+    }
+
+    switch (config['event']) {
+        case 'kafka':
+            api project(':event-kafka')
+            break
+        case 'rabbitmq':
+            api project(':event-rabbitmq')
+            break
+        case 'sns':
+            api project(':event-sns')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['event']}")
+    }
+
+    switch (config['excel']) {
+        case 'easyexcel':
+            api project(':excel-easyexcel')
+            break
+        case 'poi':
+            api project(':excel-poi')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['excel']}")
+    }
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['persistence']) {
+        case 'jdbc':
+            api project(':jdbc-product')
+            break
+        case 'jpa':
+            api project(':jpa-product')
+            break
+        case 'mybatis':
+            api project(':mybatis-product')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['persistence']}")
+    }
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}

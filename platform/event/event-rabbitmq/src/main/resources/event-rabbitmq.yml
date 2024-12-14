@@ -8,5 +8,5 @@ spring:
 app:
   event:
     rabbitmq:
-      order-exchange: order
-      order-queue: order.svc.<service_name>
+      order-exchange: order_events
+      order-queue: order_events.<service_name>

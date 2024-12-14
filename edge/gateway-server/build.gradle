@@ -1,0 +1,41 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    api project(':commons')
+
+    switch (config['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':eureka-client')
+            break
+        case 'kubernetes':
+            api project(':kubernetes-client')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+    }
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+
+    api 'org.springframework.cloud:spring-cloud-starter-gateway'
+    api 'com.auth0:java-jwt:4.4.0'
+}

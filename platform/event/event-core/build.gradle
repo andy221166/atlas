@@ -1,0 +1,5 @@
+dependencies {
+    api project(':event-contract')
+    api project(':lock-redis')
+    api project(':outbox-core')
+}

@@ -2,14 +2,17 @@ package org.atlas.commons.util.json;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GsonOps implements JsonOps {
 
-  private static final com.google.gson.Gson gson;
+  private static final Gson gson;
 
   static {
     GsonBuilder gsonBuilder = new GsonBuilder();
@@ -33,5 +36,11 @@ public class GsonOps implements JsonOps {
   @Override
   public String toJson(Object source) {
     return gson.toJson(source);
+  }
+
+  @Override
+  public String getNodeValue(String json, String key) {
+    JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+    return jsonObject.has(key) ? jsonObject.get(key).getAsString() : null;
   }
 }

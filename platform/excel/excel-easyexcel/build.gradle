@@ -1,0 +1,5 @@
+dependencies {
+    api project(':order-contract')
+    api project(':product-contract')
+    api 'com.alibaba:easyexcel:4.0.3'
+}

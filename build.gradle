@@ -1,0 +1,81 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'idea'
+}
+
+ext {
+	set('springBootVersion', '3.4.0')
+	set('springCloudVersion', '2024.0.0')
+
+	// Externalized profile support
+	profile = System.getProperty('ATLAS_PROFILE') ?: 'local-compose'
+
+	loadModulesConfig = {
+		def configFile = new File("config/${profile}.modules.cfg")
+		if (!configFile.exists()) {
+			throw new GradleException("Config file not found for profile: ${configFile.absolutePath}")
+		}
+		def properties = [:]
+		configFile.eachLine { line ->
+			line = line.trim()
+			if (line && !line.startsWith('#')) { // Skip empty lines and comments
+				def (key, value) = line.split('=').collect { it.trim() }
+				properties[key] = value
+			}
+		}
+		return properties
+	}
+}
+
+subprojects {
+	group = 'org.atlas'
+	version = '0.0.1-SNAPSHOT'
+
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'idea'
+
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_17 as String)
+		}
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+
+	dependencies {
+		implementation('org.springframework.boot:spring-boot-starter') {
+			exclude group: 'commons-logging', module: 'commons-logging'
+		}
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+		}
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+
+	idea {
+		module {
+			downloadJavadoc = true
+			downloadSources = true
+		}
+	}
+}

@@ -2,38 +2,47 @@ package org.atlas.platform.notification.email.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SendEmailRequest {
 
-  private List<String> recipients;
+  private String source;
+  private List<String> destinations;
   private String subject;
   private String body;
   private List<Attachment> attachments;
   private boolean html;
 
-  private SendEmailRequest() {
-  }
-
   public static class Builder {
 
-    private List<String> recipients;
+    private String source;
+    private List<String> destinations;
     private String subject;
     private String body;
     private List<Attachment> attachments;
     private boolean html;
 
-    public Builder setRecipients(List<String> recipients) {
-      this.recipients = recipients;
+    public Builder setSource(String source) {
+      this.source = source;
       return this;
     }
 
-    public Builder addRecipient(String recipient) {
-      if (recipients == null) {
-        recipients = new ArrayList<>();
+    public Builder setDestinations(List<String> destinations) {
+      this.destinations = destinations;
+      return this;
+    }
+
+    public Builder addDestination(String destination) {
+      if (destinations == null) {
+        destinations = new ArrayList<>();
       }
-      this.recipients.add(recipient);
+      this.destinations.add(destination);
       return this;
     }
 
@@ -71,7 +80,8 @@ public class SendEmailRequest {
             "Failed to build SendMailRequest, please check the required fields.");
       }
       SendEmailRequest request = new SendEmailRequest();
-      request.recipients = this.recipients;
+      this.source = request.getSource();
+      request.destinations = this.destinations;
       request.subject = this.subject;
       request.body = this.body;
       request.attachments = this.attachments;
@@ -80,29 +90,10 @@ public class SendEmailRequest {
     }
 
     private boolean validateRequired() {
-      return !CollectionUtils.isEmpty(recipients) &&
-          StringUtils.hasLength(subject) &&
-          StringUtils.hasLength(body);
+      return StringUtils.isNotBlank(this.source) &&
+          CollectionUtils.isNotEmpty(destinations) &&
+          StringUtils.isNotBlank(subject) &&
+          StringUtils.isNotBlank(body);
     }
-  }
-
-  public List<String> getRecipients() {
-    return recipients;
-  }
-
-  public String getSubject() {
-    return subject;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public List<Attachment> getAttachments() {
-    return attachments;
-  }
-
-  public boolean isHtml() {
-    return html;
   }
 }

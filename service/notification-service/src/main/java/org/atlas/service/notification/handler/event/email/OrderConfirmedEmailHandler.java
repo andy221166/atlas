@@ -70,7 +70,7 @@ public class OrderConfirmedEmailHandler implements EventHandler<OrderConfirmedEv
     attachment = new Attachment("coffee.jpg", attachmentFile);
 
     SendEmailRequest request = new SendEmailRequest.Builder()
-        .addRecipient(order.getUser().getEmail())
+        .addDestination(order.getUser().getEmail())
         .setSubject(subject)
         .setBody(body)
         .addAttachment(attachment)

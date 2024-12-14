@@ -20,7 +20,10 @@
 - **Maven**: Dependency management and project building.
 - **Docker**: Containerization for deploying services.
 - **Kubernetes (Optional)**: Orchestrates service deployments in a cluster.
-- **Third-party Services**: Integration with external APIs or tools.
+- **AWS services**: SNS, SQS
+- **Third-party services**: Integration with external APIs or tools.
+
+---
 
 ## Installation
 
@@ -58,6 +61,17 @@ Set up and run the project using Minikube with the following commands:
 # Start the services
 ./scripts/k8s-start.sh
 ```
+
+#### Localstack
+
+Start Localstack supported services (SNS, SQS):
+
+```bash
+./scripts/localstack-start.sh
+./scripts/localstack-event-sns.sh
+```
+
+---
 
 ## Testing
 

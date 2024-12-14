@@ -1,0 +1,90 @@
+def config = rootProject.ext.loadModulesConfig()
+
+dependencies {
+    switch (config['api-server']) {
+        case 'rest':
+            api project(':rest-server-order')
+            break
+        case 'grpc':
+            api project(':grpc-server-order')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['api-server']}")
+    }
+
+    switch (config['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':eureka-client')
+            break
+        case 'kubernetes':
+            api project(':kubernetes-client')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+    }
+
+    switch (config['event']) {
+        case 'kafka':
+            api project(':event-kafka')
+            break
+        case 'rabbitmq':
+            api project(':event-rabbitmq')
+            break
+        case 'sns':
+            api project(':event-sns')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['event']}")
+    }
+
+    switch (config['email']) {
+        case 'spring':
+            api project(':email-spring')
+            break
+        case 'ses':
+            api project(':email-ses')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['email']}")
+    }
+
+    switch (config['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+    }
+
+    api project(':monitoring')
+
+    switch (config['persistence']) {
+        case 'jdbc':
+            api project(':jdbc-order')
+            break
+        case 'jpa':
+            api project(':jpa-order')
+            break
+        case 'mybatis':
+            api project(':mybatis-order')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['persistence']}")
+    }
+
+    api project(':sse')
+
+    switch (config['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+
+    api project(':websocket')
+}

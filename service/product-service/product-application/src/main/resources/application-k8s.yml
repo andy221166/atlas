@@ -1,4 +1,0 @@
-# Disable the Eureka discovery client, and use Kubernetes built-in DNS for service discovery.
-eureka:
-  client:
-    enabled: false
