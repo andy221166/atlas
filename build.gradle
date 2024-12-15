@@ -12,7 +12,7 @@ ext {
 	def profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local-compose'
 
 	loadProfileConfig = {
-		def configFile = new File("config/profiles/${profile}.cfg")
+		def configFile = new File("config/${profile}.cfg")
 		if (!configFile.exists()) {
 			throw new GradleException("Config file not found for profile: ${configFile.absolutePath}")
 		}

@@ -29,10 +29,24 @@
 
 ### Build the Project
 
-To build JAR files and Docker images, run the following command:
+#### Step 1: Build JAR files
 
 ```bash
 ./scripts/build-jar.sh
+```
+
+The default profile is `local-compose`.
+
+If you want to change the profile, you can pass param as below:
+
+```bash
+./scripts/build-jar.sh local-k8s
+./scripts/build-jar.sh aws
+```
+
+#### Step 2: Build Docker images
+
+```bash
 ./scripts/build-docker-image.sh
 ```
 
