@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users
 INSERT INTO users (id, username, password, role, first_name, last_name, email, phone_number)
 VALUES
     (1, 'admin', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE2', 'ADMIN', 'John', 'Doe', 'admin@atlas.org', '0987654321'),
-    (2, 'customer', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE2', 'CUSTOMER', 'John', 'Smith', 'user@atlas.org', '0987321654');
+    (2, 'customer', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE2', 'CUSTOMER', 'John', 'Smith', 'customer@atlas.org', '0987321654');
 
 CREATE TABLE IF NOT EXISTS customer
 (

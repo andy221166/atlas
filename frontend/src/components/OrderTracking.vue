@@ -101,7 +101,7 @@ export default {
         }
       };
 
-      pollingInterval = setInterval(pollOrder, 2000);
+      pollingInterval = setInterval(pollOrder, 3000);
     };
 
     const stopLongPolling = () => {

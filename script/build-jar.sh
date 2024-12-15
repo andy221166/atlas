@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/logger.sh" || { log "Error: logger.sh could not be sourced."
 
 PROFILE=${1:-local-compose}
 
-log "Starting Gradle build with profile: $PROFILE..."
+log "Starting Gradle build with profile '$PROFILE'..."
 if ./gradlew clean build -Pprofile="$PROFILE"; then
     log "Gradle build completed successfully."
 else

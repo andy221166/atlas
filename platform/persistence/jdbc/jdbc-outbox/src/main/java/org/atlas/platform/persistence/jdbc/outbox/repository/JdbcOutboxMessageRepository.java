@@ -2,10 +2,13 @@ package org.atlas.platform.persistence.jdbc.outbox.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.outbox.model.OutboxMessage;
 import org.atlas.platform.outbox.model.OutboxMessageStatus;
 import org.atlas.platform.persistence.jdbc.outbox.supports.OutboxMessageRowMapper;
+import org.atlas.service.user.domain.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,15 +21,29 @@ public class JdbcOutboxMessageRepository {
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  public Optional<OutboxMessage> findById(Long id) {
+    String sql = """
+        select om.id, om.payload, om.status, om.processed_at, om.error, om.retries, om.created_at, om.updated_at
+        from outbox_message om
+        where om.id = :id
+        """;
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("id", id);
+    try {
+      return Optional.ofNullable(
+          namedParameterJdbcTemplate.queryForObject(sql, params, new OutboxMessageRowMapper()));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
   public List<OutboxMessage> findByStatus(OutboxMessageStatus status) {
     String sql = """
         select om.id, om.payload, om.status, om.processed_at, om.error, om.retries, om.created_at, om.updated_at
         from outbox_message om
         where om.status = :status
         """;
-
     Map<String, Object> params = Map.of("status", status.name());
-
     return namedParameterJdbcTemplate.query(sql, params, new OutboxMessageRowMapper());
   }
 

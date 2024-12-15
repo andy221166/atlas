@@ -8,8 +8,6 @@ import org.atlas.platform.outbox.processor.OutboxMessageProcessor;
 import org.atlas.platform.outbox.repository.OutboxMessageRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +20,7 @@ public class OutboxMessageService {
   private final OutboxMessageRepository repository;
   private final OutboxMessageProcessor processor;
 
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void process(OutboxMessage outboxMessage) {
+  public void processOutboxMessage(OutboxMessage outboxMessage) {
     try {
       processor.process(outboxMessage);
 

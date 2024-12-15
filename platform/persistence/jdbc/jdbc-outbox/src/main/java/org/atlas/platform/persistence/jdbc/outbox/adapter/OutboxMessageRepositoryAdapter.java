@@ -1,6 +1,7 @@
 package org.atlas.platform.persistence.jdbc.outbox.adapter;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.outbox.model.OutboxMessage;
 import org.atlas.platform.outbox.model.OutboxMessageStatus;
@@ -13,6 +14,11 @@ import org.springframework.stereotype.Component;
 public class OutboxMessageRepositoryAdapter implements OutboxMessageRepository {
 
   private final JdbcOutboxMessageRepository jdbcOutboxMessageRepository;
+
+  @Override
+  public Optional<OutboxMessage> findById(Long id) {
+    return jdbcOutboxMessageRepository.findById(id);
+  }
 
   @Override
   public List<OutboxMessage> findByStatus(OutboxMessageStatus status) {

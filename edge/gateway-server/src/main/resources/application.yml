@@ -53,6 +53,7 @@ app:
       non-secured-paths:
         - "/api/users/sign-up"
         - "/api/users/sign-in"
+        - "/api/gateway/**"
         - "/actuator/**"
       secured-paths:
         - path: "/api/users/profile"

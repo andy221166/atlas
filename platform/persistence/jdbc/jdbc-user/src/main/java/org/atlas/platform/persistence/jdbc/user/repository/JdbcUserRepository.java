@@ -38,8 +38,8 @@ public class JdbcUserRepository {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("id", id);
     try {
-      User user = namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper());
-      return Optional.ofNullable(user);
+      return Optional.ofNullable(
+          namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper()));
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
@@ -54,8 +54,8 @@ public class JdbcUserRepository {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("username", username);
     try {
-      User user = namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper());
-      return Optional.ofNullable(user);
+      return Optional.ofNullable(
+          namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper()));
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
@@ -70,8 +70,8 @@ public class JdbcUserRepository {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("email", email);
     try {
-      User user = namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper());
-      return Optional.ofNullable(user);
+      return Optional.ofNullable(
+          namedParameterJdbcTemplate.queryForObject(sql, params, new UserRowMapper()));
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }

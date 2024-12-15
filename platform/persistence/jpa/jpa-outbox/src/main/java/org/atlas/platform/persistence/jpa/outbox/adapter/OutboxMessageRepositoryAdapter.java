@@ -1,6 +1,7 @@
 package org.atlas.platform.persistence.jpa.outbox.adapter;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.commons.util.mapping.ModelMapperUtil;
 import org.atlas.platform.outbox.model.OutboxMessage;
@@ -15,6 +16,12 @@ import org.springframework.stereotype.Component;
 public class OutboxMessageRepositoryAdapter implements OutboxMessageRepository {
 
   private final JpaOutboxMessageRepository jpaOutboxMessageRepository;
+
+  @Override
+  public Optional<OutboxMessage> findById(Long id) {
+    return jpaOutboxMessageRepository.findById(id)
+        .map(jpaOutboxMessage -> ModelMapperUtil.map(jpaOutboxMessage, OutboxMessage.class));
+  }
 
   @Override
   public List<OutboxMessage> findByStatus(OutboxMessageStatus status) {

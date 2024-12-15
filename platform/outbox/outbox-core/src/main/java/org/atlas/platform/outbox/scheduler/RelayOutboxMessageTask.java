@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
 @ConditionalOnProperty(name = "app.outbox.strategy", havingValue = "scheduler", matchIfMissing = true)
@@ -19,9 +20,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class RelayOutboxMessageTask {
 
-  private final OutboxMessageRepository repository;
-  private final OutboxMessageService service;
+  private final OutboxMessageRepository outboxMessageRepository;
+  private final OutboxMessageService outboxMessageService;
   private final LockService lockService;
+  private final TransactionTemplate transactionTemplate;
 
   @Value("${spring.application.name}")
   private String applicationName;
@@ -35,13 +37,18 @@ public class RelayOutboxMessageTask {
       return;
     }
 
-    List<OutboxMessage> outboxMessages = repository.findByStatus(OutboxMessageStatus.PENDING);
+    List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatus(
+        OutboxMessageStatus.PENDING);
     log.info("Found {} pending outbox message(s)", outboxMessages.size());
     if (outboxMessages.isEmpty()) {
       return;
     }
 
-    outboxMessages.forEach(service::process);
+    for (OutboxMessage message : outboxMessages) {
+      transactionTemplate.executeWithoutResult(status -> {
+        outboxMessageService.processOutboxMessage(message);
+      });
+    }
   }
 
   private String lockKey() {

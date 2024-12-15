@@ -22,24 +22,24 @@
         </foreach>
     </select>
 
-    <select id="find" parameterType="map" resultMap="ProductMap">
+    <select id="find" resultMap="ProductMap">
         select p.*, c.name as category_name
         from product p
         left join category c on c.id = p.category_id
         <include refid="searchWhereClause"/>
-        <if test="command.hasSort()">
-            order by ${command.sort}
-            <if test="command.isSortDescending()">
+        <if test="query.hasSort()">
+            order by ${query.sort}
+            <if test="query.isSortDescending()">
                 desc
             </if>
         </if>
-        <if test="command.hasPaging()">
-            limit #{command.limit}
-            offset #{command.offset}
+        <if test="query.hasPaging()">
+            limit #{query.limit}
+            offset #{query.offset}
         </if>
     </select>
 
-    <select id="count" parameterType="map" resultType="long">
+    <select id="count" resultType="long">
         select count(p.id)
         from product p
         <include refid="searchWhereClause"/>
@@ -68,18 +68,18 @@
 
     <sql id="searchWhereClause">
         <where>
-            <if test="command.keyword != null and command.keyword != ''">
-                and (lower(p.name) like concat('%', lower(#{command.keyword}), '%')
-                or lower(p.description) like concat('%', lower(#{command.keyword}), '%'))
+            <if test="query.keyword != null and query.keyword != ''">
+                and (lower(p.name) like concat('%', lower(#{query.keyword}), '%')
+                or lower(p.description) like concat('%', lower(#{query.keyword}), '%'))
             </if>
-            <if test="command.categoryId != null">
-                and p.category_id = #{command.categoryId}
+            <if test="query.categoryId != null">
+                and p.category_id = #{query.categoryId}
             </if>
-            <if test="command.minPrice != null">
-                and p.price >= #{command.minPrice}
+            <if test="query.minPrice != null">
+                and p.price >= #{query.minPrice}
             </if>
-            <if test="command.maxPrice != null">
-                and p.price &lt;= #{command.maxPrice}
+            <if test="query.maxPrice != null">
+                and p.price &lt;= #{query.maxPrice}
             </if>
         </where>
     </sql>

@@ -9,6 +9,7 @@ import org.atlas.platform.outbox.model.OutboxMessageStatus;
 import org.atlas.platform.outbox.repository.OutboxMessageRepository;
 import org.atlas.platform.outbox.service.OutboxMessageService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
@@ -19,14 +20,14 @@ public class EventPublisherTemplate {
   private final OutboxMessageRepository outboxMessageRepository;
   private final OutboxMessageService outboxMessageService;
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public <E extends DomainEvent> void publish(E event) {
     OutboxMessage outboxMessage = newOutboxMessage(event);
     outboxMessageRepository.insert(outboxMessage);
 
     // Create new transaction to isolate this action.
     // If occurs exception, a scheduled job will recover it later.
-    outboxMessageService.process(outboxMessage);
+    outboxMessageService.processOutboxMessage(outboxMessage);
   }
 
   private <E extends DomainEvent> OutboxMessage newOutboxMessage(E event) {

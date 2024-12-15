@@ -11,9 +11,9 @@ public interface ProductMapper {
 
   List<Product> findByIdIn(@Param("ids") List<Integer> ids);
 
-  List<Product> find(@Param("command") SearchProductQuery command);
+  List<Product> find(@Param("query") SearchProductQuery query);
 
-  long count(@Param("command") SearchProductQuery command);
+  long count(@Param("query") SearchProductQuery query);
 
   int insertBatch(@Param("products") List<Product> products);
 

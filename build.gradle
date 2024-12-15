@@ -24,7 +24,6 @@ ext {
 				properties[key] = value
 			}
 		}
-		print("Profile config: ${properties}")
 		return properties
 	}
 }

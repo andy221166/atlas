@@ -16,7 +16,7 @@
 		<result property="productPrice" column="product_price"/>
 	</resultMap>
 
-	<select id="findByUserId" parameterType="map" resultMap="OrderResultMap">
+	<select id="findByUserId" resultMap="OrderResultMap">
 		select o.*
 		from orders o
 		where o.user_id = #{userId}
@@ -42,7 +42,7 @@
 		limit 1
 	</select>
 
-	<select id="countByUserId" parameterType="map" resultType="long">
+	<select id="countByUserId" resultType="long">
 		select count(o.id)
 		from orders o
 		where o.user_id = #{userId}
