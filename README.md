@@ -62,15 +62,6 @@ Set up and run the project using Minikube with the following commands:
 ./scripts/k8s-start.sh
 ```
 
-#### Localstack
-
-Start Localstack supported services (SNS, SQS):
-
-```bash
-./scripts/localstack-start.sh
-./scripts/localstack-event-sns.sh
-```
-
 ---
 
 ## Testing

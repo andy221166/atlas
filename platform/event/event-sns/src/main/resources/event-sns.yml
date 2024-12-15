@@ -1,8 +1,8 @@
 app:
   event:
     sns:
-      order-topic-arn: ${ORDER_TOPIC_ARN:arn:aws:sns:us-east-1:000000000000:order_events}
-      order-queue-url: ${ORDER_QUEUE_URL:http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/order_events_<service_name>}
+      order-topic-arn: ${ORDER_TOPIC_ARN}
+      order-queue-url: ${ORDER_QUEUE_URL}
       batch-size: 10
       wait-time-seconds: 20
       visibility-timeout: 30
