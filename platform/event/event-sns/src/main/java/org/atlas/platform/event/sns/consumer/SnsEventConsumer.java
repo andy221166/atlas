@@ -72,10 +72,10 @@ public class SnsEventConsumer {
                   log.debug("Handling message: {}", message.messageId());
                   try {
                     handleMessage(message);
+                    deleteMessage(message, queueUrl);
                   } catch (Exception e) {
                     log.error("Failed to handle message: messageId={}", message.messageId(), e);
                   }
-                  deleteMessage(message, queueUrl);
                 });
               }
             } catch (Exception e) {
