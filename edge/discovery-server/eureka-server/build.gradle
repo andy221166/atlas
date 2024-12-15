@@ -1,4 +1,9 @@
-def config = rootProject.ext.loadModulesConfig()
+plugins {
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.4.0'
+}
+
+def config = rootProject.ext.loadProfileConfig()
 
 dependencies {
     api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
@@ -21,5 +26,18 @@ dependencies {
             break
         default:
             throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
     }
 }

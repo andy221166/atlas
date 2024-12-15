@@ -9,11 +9,10 @@ ext {
 	set('springBootVersion', '3.4.0')
 	set('springCloudVersion', '2024.0.0')
 
-	// Externalized profile support
-	profile = System.getProperty('ATLAS_PROFILE') ?: 'local-compose'
+	def profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local-compose'
 
-	loadModulesConfig = {
-		def configFile = new File("config/${profile}.modules.cfg")
+	loadProfileConfig = {
+		def configFile = new File("config/profiles/${profile}.cfg")
 		if (!configFile.exists()) {
 			throw new GradleException("Config file not found for profile: ${configFile.absolutePath}")
 		}
@@ -25,6 +24,7 @@ ext {
 				properties[key] = value
 			}
 		}
+		print("Profile config: ${properties}")
 		return properties
 	}
 }

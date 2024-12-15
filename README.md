@@ -29,11 +29,11 @@
 
 ### Build the Project
 
-To build Maven modules and Docker images, run the following command:
+To build JAR files and Docker images, run the following command:
 
 ```bash
-./scripts/build-maven.sh
-./scripts/build-docker-images.sh
+./scripts/build-jar.sh
+./scripts/build-docker-image.sh
 ```
 
 ### Running the Project Locally

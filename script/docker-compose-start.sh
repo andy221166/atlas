@@ -22,14 +22,14 @@ SERVICES=(
   "zipkin"
   "grafana"
   "smtp4dev"
-#  "eureka-server"
-#  "user-service"
-#  "product-service"
-#  "order-service"
-#  "notification-service"
-#  "report-service"
-#  "task-service"
-#  "gateway-server"
+  "eureka-server"
+  "user-service"
+  "product-service"
+  "order-service"
+  "notification-service"
+  "report-service"
+  "task-service"
+  "gateway-server"
 )
 
 # Parse command-line arguments

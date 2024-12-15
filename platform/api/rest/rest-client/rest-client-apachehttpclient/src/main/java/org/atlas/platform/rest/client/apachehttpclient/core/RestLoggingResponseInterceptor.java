@@ -27,8 +27,7 @@ public class RestLoggingResponseInterceptor implements HttpResponseInterceptor {
   }
 
   private String getBody(HttpResponse response) throws IOException {
-    if (response instanceof BasicClassicHttpResponse) {
-      BasicClassicHttpResponse castResponse = (BasicClassicHttpResponse) response;
+    if (response instanceof BasicClassicHttpResponse castResponse) {
       HttpEntity httpEntity = castResponse.getEntity();
       if (httpEntity == null) {
         return null;

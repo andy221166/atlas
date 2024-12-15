@@ -1,4 +1,4 @@
-package org.atlas.platform.auth.springsecurity.core;
+package org.atlas.platform.auth.jwt.core;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,4 +1,9 @@
-def config = rootProject.ext.loadModulesConfig()
+plugins {
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.4.0'
+}
+
+def config = rootProject.ext.loadProfileConfig()
 
 dependencies {
     switch (config['api-server']) {
@@ -87,4 +92,17 @@ dependencies {
     }
 
     api project(':websocket')
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
 }

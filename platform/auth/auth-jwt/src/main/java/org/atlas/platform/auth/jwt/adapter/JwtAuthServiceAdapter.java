@@ -1,9 +1,9 @@
-package org.atlas.platform.auth.springsecurity.adapter;
+package org.atlas.platform.auth.jwt.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.auth.springsecurity.core.TokenService;
-import org.atlas.platform.auth.springsecurity.core.UserDetailsImpl;
+import org.atlas.platform.auth.jwt.core.TokenService;
+import org.atlas.platform.auth.jwt.core.UserDetailsImpl;
 import org.atlas.service.user.contract.auth.AuthService;
 import org.atlas.service.user.contract.command.SignInCommand;
 import org.atlas.service.user.contract.command.SignOutCommand;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceAdapter implements AuthService {
+public class JwtAuthServiceAdapter implements AuthService {
 
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;

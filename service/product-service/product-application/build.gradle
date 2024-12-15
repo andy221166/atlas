@@ -1,4 +1,9 @@
-def config = rootProject.ext.loadModulesConfig()
+plugins {
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.4.0'
+}
+
+def config = rootProject.ext.loadProfileConfig()
 
 dependencies {
     api project(':product-contract')
@@ -12,6 +17,20 @@ dependencies {
             break
         default:
             throw new IllegalArgumentException("Unsupported ${config['api-server']}")
+    }
+
+    switch (config['cache']) {
+        case 'caffeine':
+            api project(':cache-caffeine')
+            break
+        case 'ehcache':
+            api project(':cache-ehcache')
+            break
+        case 'redis':
+            api project(':cache-redis')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${config['cache']}")
     }
 
     switch (config['csv']) {
@@ -92,5 +111,18 @@ dependencies {
             break
         default:
             throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
     }
 }

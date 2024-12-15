@@ -1,4 +1,4 @@
-package org.atlas.platform.auth.springsecurity.core;
+package org.atlas.platform.auth.jwt.core;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -6,10 +6,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/logger.sh" || { log "Error: logger.sh could not be sourced."; exit 1; }
 
-log "Starting Maven build..."
-if mvn clean install; then
-    log "Maven build completed successfully."
+PROFILE=${1:-local-compose}
+
+log "Starting Gradle build with profile: $PROFILE..."
+if ./gradlew clean build -Pprofile="$PROFILE"; then
+    log "Gradle build completed successfully."
 else
-    error "Maven build failed." >&2
+    error "Gradle build failed." >&2
     exit 1
 fi

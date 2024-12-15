@@ -1,4 +1,4 @@
-package org.atlas.platform.auth.springsecurity.core;
+package org.atlas.platform.auth.jwt.core;
 
 import java.util.Collection;
 import java.util.List;
