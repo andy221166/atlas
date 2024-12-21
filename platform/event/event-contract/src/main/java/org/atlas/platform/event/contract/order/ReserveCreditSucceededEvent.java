@@ -8,15 +8,15 @@ import org.atlas.service.order.contract.model.OrderDto;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ReserveCreditSuccessEvent extends BaseOrderEvent {
+public class ReserveCreditSucceededEvent extends BaseOrderEvent {
 
-  public ReserveCreditSuccessEvent(OrderDto order) {
+  public ReserveCreditSucceededEvent(OrderDto order) {
     this.order = order;
   }
 
   @Override
   public String toString() {
-    return "ReserveCreditSuccessEvent{" +
+    return "ReserveCreditSucceededEvent{" +
         "timestamp=" + getTimestamp() +
         ", eventId='" + getEventId() + '\'' +
         ", order=" + order +

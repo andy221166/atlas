@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
-import org.atlas.platform.event.contract.order.ReserveCreditSuccessEvent;
+import org.atlas.platform.event.contract.order.ReserveCreditSucceededEvent;
 import org.atlas.platform.event.core.publisher.EventPublisherTemplate;
 import org.atlas.service.order.application.service.OrderService;
 import org.atlas.service.order.contract.model.OrderDto;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class ReserveCreditSuccessEventHandler implements EventHandler<ReserveCreditSuccessEvent> {
+public class ReserveCreditSucceededEventHandler implements EventHandler<ReserveCreditSucceededEvent> {
 
   private final OrderRepository orderRepository;
   private final OrderService orderService;
@@ -24,13 +24,13 @@ public class ReserveCreditSuccessEventHandler implements EventHandler<ReserveCre
 
   @Override
   public EventType supports() {
-    return EventType.RESERVE_CREDIT_SUCCESS;
+    return EventType.RESERVE_CREDIT_SUCCEEDED;
   }
 
   @Override
   @Transactional
-  public void handle(ReserveCreditSuccessEvent reserveCreditSuccessEvent) {
-    OrderDto orderDto = reserveCreditSuccessEvent.getOrder();
+  public void handle(ReserveCreditSucceededEvent reserveCreditSucceededEvent) {
+    OrderDto orderDto = reserveCreditSucceededEvent.getOrder();
     Order order = orderService.findProcessingOrder(orderDto.getId());
     order.setStatus(OrderStatus.CONFIRMED);
     orderRepository.update(order);

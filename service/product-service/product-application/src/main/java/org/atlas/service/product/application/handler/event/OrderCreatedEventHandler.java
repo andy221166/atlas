@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.base.ConcurrentUtil;
 import org.atlas.platform.event.contract.EventType;
+import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
 import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
-import org.atlas.platform.event.contract.order.ReserveQuantitySuccessEvent;
 import org.atlas.platform.event.contract.order.ReserveQuantityFailedEvent;
 import org.atlas.platform.event.core.publisher.EventPublisherTemplate;
 import org.atlas.service.order.contract.model.OrderDto;
@@ -48,8 +48,8 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
               orderItem.getProduct().getId()));
         }
       });
-      ReserveQuantitySuccessEvent reserveQuantitySuccessEvent = new ReserveQuantitySuccessEvent(order);
-      eventPublisherTemplate.publish(reserveQuantitySuccessEvent);
+      ReserveQuantitySucceededEvent reserveQuantitySucceededEvent = new ReserveQuantitySucceededEvent(order);
+      eventPublisherTemplate.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
       ReserveQuantityFailedEvent reserveQuantityFailedEvent = new ReserveQuantityFailedEvent(order,
           e.getMessage());

@@ -6,9 +6,9 @@ public enum EventType {
   // -----------------------------------------------------------------------------------------------------------------
 
   ORDER_CREATED,
-  RESERVE_QUANTITY_SUCCESS,
+  RESERVE_QUANTITY_SUCCEEDED,
   RESERVE_QUANTITY_FAILED,
-  RESERVE_CREDIT_SUCCESS,
+  RESERVE_CREDIT_SUCCEEDED,
   RESERVE_CREDIT_FAILED,
   ORDER_CONFIRMED,
   ORDER_CANCELED,
