@@ -3,12 +3,13 @@ plugins {
     id 'org.springframework.boot' version '3.4.0'
 }
 
-def config = rootProject.ext.loadProfileConfig()
+def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    api project(':config-loader')
     api project(':commons')
 
-    switch (config['discovery-client']) {
+    switch (modules['discovery-client']) {
         case 'none':
             break
         case 'eureka':
@@ -18,27 +19,27 @@ dependencies {
             api project(':kubernetes-client')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
 
-    switch (config['logging']) {
+    switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
     api project(':monitoring')
 
-    switch (config['tracing']) {
+    switch (modules['tracing']) {
         case 'none':
             break
         case 'zipkin':
             api project(':tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
 
     api 'org.springframework.cloud:spring-cloud-starter-gateway'

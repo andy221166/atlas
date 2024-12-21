@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceClient implements IUserServiceClient {
 
-  @Value("${app.rest.user.base-url:http://localhost:8081}")
+  @Value("${app.rest-client.user.base-url:http://localhost:8081}")
   private String baseUrl;
 
   private final HttpClientService service;

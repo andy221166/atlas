@@ -1,5 +1,0 @@
-app:
-  storage:
-    firebase:
-      credentials: /path/to/credentials.json
-      bucket: test

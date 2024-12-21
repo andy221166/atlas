@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
     name = "user-service",
-    url = "${app.rest.user.base-url:http://localhost:8081}",
+    url = "${app.rest-client.user.base-url:http://localhost:8081}",
     configuration = FeignConfig.class
 )
 public interface UserFeignClient {

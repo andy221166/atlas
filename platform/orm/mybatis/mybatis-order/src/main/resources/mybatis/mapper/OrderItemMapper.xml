@@ -1,0 +1,8 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.orm.mybatis.order.mapper.OrderItemMapper">
+
+	<insert id="insert" parameterType="org.atlas.service.order.domain.OrderItem">
+		insert into order_item (order_id, product_id, product_price, quantity)
+		values (#{orderId}, #{productId}, #{productPrice}, #{quantity})
+	</insert>
+</mapper>

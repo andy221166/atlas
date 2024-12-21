@@ -1,7 +1,8 @@
 package org.atlas.service.order.application;
 
-import org.springframework.boot.SpringApplication;
+import org.atlas.platform.configloader.ConfigLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication(scanBasePackages = {
     "org.atlas.service.order",
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OrderServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(OrderServiceApplication.class, args);
+    new SpringApplicationBuilder(OrderServiceApplication.class)
+        .initializers(new ConfigLoader()).run(args);
   }
-
 }

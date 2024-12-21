@@ -1,7 +1,8 @@
 package org.atlas.service.notification;
 
-import org.springframework.boot.SpringApplication;
+import org.atlas.platform.configloader.ConfigLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication(scanBasePackages = {
     "org.atlas.service.notification",
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NotificationServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(NotificationServiceApplication.class, args);
+    new SpringApplicationBuilder(NotificationServiceApplication.class)
+        .initializers(new ConfigLoader()).run(args);
   }
-
 }

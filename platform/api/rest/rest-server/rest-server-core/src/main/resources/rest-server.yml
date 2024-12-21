@@ -1,2 +1,0 @@
-springdoc:
-  packages-to-scan: <your-controller-package-fully-qualified-path>

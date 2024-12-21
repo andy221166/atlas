@@ -3,29 +3,31 @@ plugins {
     id 'org.springframework.boot' version '3.4.0'
 }
 
-def config = rootProject.ext.loadProfileConfig()
+def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    api project(':config-loader')
+
     api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
-    switch (config['logging']) {
+    switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
     api project(':monitoring')
 
-    switch (config['tracing']) {
+    switch (modules['tracing']) {
         case 'none':
             break
         case 'zipkin':
             api project(':tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
 }
 

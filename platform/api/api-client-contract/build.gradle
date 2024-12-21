@@ -3,5 +3,3 @@ dependencies {
     api project(':product-contract')
     api project(':user-contract')
 }
-
-description = "api-client-contract"

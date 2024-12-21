@@ -9,22 +9,22 @@ ext {
 	set('springBootVersion', '3.4.0')
 	set('springCloudVersion', '2024.0.0')
 
-	def profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local-compose'
+	def stack = project.hasProperty('stack') ? project.getProperty('stack') : 'local-compose'
 
-	loadProfileConfig = {
-		def configFile = new File("config/${profile}.cfg")
+	loadStackConfig = {
+		def configFile = new File("config/stack/${stack}.cfg")
 		if (!configFile.exists()) {
-			throw new GradleException("Config file not found for profile: ${configFile.absolutePath}")
+			throw new GradleException("Config file not found for stack: ${configFile.absolutePath}")
 		}
-		def properties = [:]
+		def modules = [:]
 		configFile.eachLine { line ->
 			line = line.trim()
 			if (line && !line.startsWith('#')) { // Skip empty lines and comments
 				def (key, value) = line.split('=').collect { it.trim() }
-				properties[key] = value
+				modules[key] = value
 			}
 		}
-		return properties
+		return modules
 	}
 }
 

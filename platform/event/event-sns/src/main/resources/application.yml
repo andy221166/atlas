@@ -1,0 +1,8 @@
+app:
+  event:
+    sns:
+      visibility-timeout: 30
+      order-topic-arn: ${ORDER_TOPIC_ARN}
+      order-queue-url: ${ORDER_QUEUE_URL}
+      wait-time-seconds: 20
+      batch-size: 10

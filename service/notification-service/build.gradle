@@ -3,10 +3,12 @@ plugins {
     id 'org.springframework.boot' version '3.4.0'
 }
 
-def config = rootProject.ext.loadProfileConfig()
+def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
-    switch (config['api-server']) {
+    api project(':config-loader')
+
+    switch (modules['api-server']) {
         case 'rest':
             api project(':rest-server-order')
             break
@@ -14,10 +16,18 @@ dependencies {
             api project(':grpc-server-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['api-server']}")
+            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
 
-    switch (config['discovery-client']) {
+    switch (modules['datasource']) {
+        case 'mysql':
+            api project(':mysql-order')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+    }
+    
+    switch (modules['discovery-client']) {
         case 'none':
             break
         case 'eureka':
@@ -27,10 +37,10 @@ dependencies {
             api project(':kubernetes-client')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
 
-    switch (config['event']) {
+    switch (modules['event']) {
         case 'kafka':
             api project(':event-kafka')
             break
@@ -41,10 +51,10 @@ dependencies {
             api project(':event-sns')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['event']}")
+            throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
 
-    switch (config['email']) {
+    switch (modules['email']) {
         case 'spring':
             api project(':email-spring')
             break
@@ -52,20 +62,20 @@ dependencies {
             api project(':email-ses')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['email']}")
+            throw new IllegalArgumentException("Unsupported ${modules['email']}")
     }
 
-    switch (config['logging']) {
+    switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['logging']}")
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
     api project(':monitoring')
 
-    switch (config['persistence']) {
+    switch (modules['orm']) {
         case 'jdbc':
             api project(':jdbc-order')
             break
@@ -76,19 +86,19 @@ dependencies {
             api project(':mybatis-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['persistence']}")
+            throw new IllegalArgumentException("Unsupported ${modules['orm']}")
     }
 
     api project(':sse')
 
-    switch (config['tracing']) {
+    switch (modules['tracing']) {
         case 'none':
             break
         case 'zipkin':
             api project(':tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${config['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
 
     api project(':websocket')

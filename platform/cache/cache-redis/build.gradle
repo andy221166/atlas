@@ -1,4 +1,16 @@
+def modules = rootProject.ext.loadStackConfig()
+
 dependencies {
+    switch (modules['redis']) {
+        case 'standalone':
+            api project(':redis-standalone')
+            break
+        case 'cluster':
+            api project(':redis-cluster')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['redis']}")
+    }
+
     api 'org.springframework.boot:spring-boot-starter-cache'
-    api project(':redis')
 }

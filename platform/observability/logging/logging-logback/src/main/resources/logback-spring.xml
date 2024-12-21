@@ -33,7 +33,7 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- Persistence::JDBC -->
+    <!-- ORM::JDBC -->
     <logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
@@ -43,7 +43,7 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- Persistence::MyBatis -->
+    <!-- ORM::MyBatis -->
     <logger name="org.mybatis" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>

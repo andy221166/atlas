@@ -1,0 +1,6 @@
+app:
+  rest-client:
+    product:
+      base-url: ${REST_PRODUCT_BASE_URL:http://localhost:8082}
+    user:
+      base-url: ${REST_USER_BASE_URL:http://localhost:8081}

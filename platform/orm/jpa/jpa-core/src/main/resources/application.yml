@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: 'false'
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: 'true'
+    show-sql: 'true'

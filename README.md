@@ -2,7 +2,9 @@
 
 ## Project Overview
 
-**Atlas** is a microservices-based platform designed to manage the business logic of a basic storefront application.
+**Atlas** is a microservices-based platform.
+
+---
 
 ## Architecture
 
@@ -11,17 +13,9 @@
 - **CQRS (Command Query Responsibility Segregation)**: Separation of read and write operations for better performance and scalability.
 - **Cross-Cutting Concerns**: Centralized handling of concerns such as logging, security, and monitoring.
 
-## Technologies Used
+---
 
-- **Java 17**: Core programming language for backend services.
-- **Spring Boot 3.2.5**: Framework for developing robust microservices.
-- **Spring Cloud**: Tools for building and managing distributed systems.
-- **MySQL 8, Redis, Zookeeper, Kafka**: Backend technologies for database and messaging.
-- **Maven**: Dependency management and project building.
-- **Docker**: Containerization for deploying services.
-- **Kubernetes (Optional)**: Orchestrates service deployments in a cluster.
-- **AWS services**: SNS, SQS
-- **Third-party services**: Integration with external APIs or tools.
+## Technical Stack
 
 ---
 

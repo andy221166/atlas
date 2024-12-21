@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ProductServiceClient implements IProductServiceClient {
 
-  @Value("${app.rest.product.base-url:http://localhost:8082}")
+  @Value("${app.rest-client.product.base-url:http://localhost:8082}")
   private String baseUrl;
 
   private final HttpClientService service;
