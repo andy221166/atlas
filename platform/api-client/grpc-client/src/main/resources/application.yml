@@ -1,0 +1,12 @@
+grpc:
+  client:
+    order-service:
+      enableKeepAlive: 'true'
+      negotiationType: plaintext
+      keepAliveWithoutCalls: 'true'
+      address: ${GRPC_CLIENT_ORDER_SERVICE_ADDRESS:'static://127.0.0.1:50051'}
+    product-service:
+      address: ${GRPC_CLIENT_PRODUCT_SERVICE_ADDRESS:'static://127.0.0.1:50052'}
+      enableKeepAlive: 'true'
+      keepAliveWithoutCalls: 'true'
+      negotiationType: plaintext

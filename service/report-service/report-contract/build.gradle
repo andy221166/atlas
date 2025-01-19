@@ -1,4 +1,0 @@
-dependencies {
-    api project(':report-domain')
-    api project(':cqrs')
-}

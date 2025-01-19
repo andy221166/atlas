@@ -1,4 +1,0 @@
-dependencies {
-    api project(':order-contract')
-    api project(':mybatis-core')
-}

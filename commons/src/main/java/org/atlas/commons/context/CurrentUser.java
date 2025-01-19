@@ -1,7 +1,7 @@
 package org.atlas.commons.context;
 
 import lombok.Data;
-import org.atlas.service.user.domain.shared.enums.Role;
+import org.atlas.commons.enums.Role;
 
 @Data
 public class CurrentUser {

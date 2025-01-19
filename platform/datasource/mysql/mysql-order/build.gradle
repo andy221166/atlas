@@ -1,5 +1,0 @@
-dependencies {
-    api project(':commons')
-
-    runtimeOnly 'com.mysql:mysql-connector-j'
-}

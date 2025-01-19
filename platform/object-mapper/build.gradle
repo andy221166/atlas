@@ -1,0 +1,6 @@
+dependencies {
+    api project(':commons')
+
+    // ModelMapper
+    api 'org.modelmapper:modelmapper:3.2.2'
+}

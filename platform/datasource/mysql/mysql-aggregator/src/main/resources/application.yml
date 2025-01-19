@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    aggregator:
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
+      url: ${MYSQL_USER_URL:jdbc:mysql://localhost:3306/db_aggregator?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    order:
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
+      url: ${MYSQL_ORDER_URL:jdbc:mysql://localhost:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    product:
+      url: ${MYSQL_PRODUCT_URL:jdbc:mysql://localhost:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}

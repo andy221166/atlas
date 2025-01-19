@@ -1,0 +1,4 @@
+dependencies {
+    api project(':easyexcel-core')
+    api project(':user-contract')
+}

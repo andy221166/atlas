@@ -1,14 +1,13 @@
 package org.atlas.platform.storage.core.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.atlas.commons.function.Callback;
+import lombok.EqualsAndHashCode;
 
 @Data
-@AllArgsConstructor
-public class DownloadFileRequest {
+@EqualsAndHashCode(callSuper = false)
+public class DownloadFileRequest extends BaseRequest {
 
-  private String bucket;
-  private String fileName;
-  private Callback<byte[]> callback;
+  public DownloadFileRequest(String bucket, String objectKey) {
+    super(bucket, objectKey);
+  }
 }

@@ -1,17 +1,18 @@
 package org.atlas.platform.storage.core.model;
 
 import java.util.Map;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.atlas.commons.function.Callback;
+import lombok.EqualsAndHashCode;
 
 @Data
-@AllArgsConstructor
-public class UploadFileRequest {
+@EqualsAndHashCode(callSuper = false)
+public class UploadFileRequest extends BaseRequest {
 
-  private String bucket;
-  private String fileName;
   private byte[] fileContent;
   private Map<String, String> metadata;
-  private Callback<Void> callback;
+
+  public UploadFileRequest(String bucket, String objectKey, byte[] fileContent) {
+    super(bucket, objectKey);
+    this.fileContent = fileContent;
+  }
 }

@@ -6,10 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/logger.sh" || { log "Error: logger.sh could not be sourced."; exit 1; }
 
-PROFILE=${1:-local-compose}
+STACK=${1:-local-compose}
 
-log "Starting Gradle build with profile '$PROFILE'..."
-if ./gradlew clean build -Pprofile="$PROFILE"; then
+log "Starting Gradle build with stack '$STACK'..."
+if ./gradlew clean build -Pstack="$STACK"; then
     log "Gradle build completed successfully."
 else
     error "Gradle build failed." >&2

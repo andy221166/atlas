@@ -3,7 +3,6 @@ package org.atlas.platform.orm.jpa.user.adapter;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.orm.jpa.user.repository.JpaCustomerRepository;
-import org.atlas.service.user.contract.repository.CustomerRepository;
 import org.springframework.stereotype.Component;
 
 @Component

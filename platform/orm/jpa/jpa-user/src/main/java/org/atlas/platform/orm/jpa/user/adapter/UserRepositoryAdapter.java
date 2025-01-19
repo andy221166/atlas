@@ -7,7 +7,6 @@ import org.atlas.commons.util.mapping.ModelMapperUtil;
 import org.atlas.platform.orm.jpa.user.entity.JpaUser;
 import org.atlas.platform.orm.jpa.user.repository.JpaUserRepository;
 import org.atlas.service.user.contract.repository.UserRepository;
-import org.atlas.service.user.domain.Customer;
 import org.atlas.service.user.domain.User;
 import org.atlas.service.user.domain.shared.enums.Role;
 import org.springframework.stereotype.Component;

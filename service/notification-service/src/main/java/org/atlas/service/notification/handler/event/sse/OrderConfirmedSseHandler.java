@@ -23,6 +23,6 @@ public class OrderConfirmedSseHandler implements EventHandler<OrderConfirmedEven
   @Override
   public void handle(OrderConfirmedEvent event) {
     OrderStatusDto payload = new OrderStatusDto(OrderStatus.CONFIRMED);
-    sseService.notify(event.getOrder().getId(), payload);
+    sseService.notify(event.getOrderPayload().getId(), payload);
   }
 }

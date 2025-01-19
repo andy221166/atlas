@@ -9,15 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.atlas.platform.outbox.model.OutboxMessageStatus;
+import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 import org.atlas.platform.orm.jpa.core.entity.JpaBaseEntity;
+import org.atlas.platform.outbox.model.OutboxMessageStatus;
 
 @Entity
 @Table(name = "outbox_message")
-@Data
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 public class JpaOutboxMessage extends JpaBaseEntity {
 
   @Id
@@ -35,4 +36,21 @@ public class JpaOutboxMessage extends JpaBaseEntity {
   private String error;
 
   private Integer retries;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    JpaOutboxMessage other = (JpaOutboxMessage) o;
+    return id != null && id.equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }

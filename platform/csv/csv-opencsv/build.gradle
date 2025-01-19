@@ -1,6 +1,0 @@
-dependencies {
-    api project(':order-contract')
-    api project(':product-contract')
-
-    api 'com.opencsv:opencsv:5.9'
-}

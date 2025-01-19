@@ -27,5 +27,5 @@
     </cache-template>
 
     <!-- List caches here -->
-    <cache alias="product" uses-template="defaultTemplate"/>
+    <cache alias="aggProduct" uses-template="defaultTemplate"/>
 </config>

@@ -23,6 +23,6 @@ public class OrderConfirmedWsHandler implements EventHandler<OrderConfirmedEvent
   @Override
   public void handle(OrderConfirmedEvent event) {
     OrderStatusDto payload = new OrderStatusDto(OrderStatus.CONFIRMED);
-    wsService.notify(event.getOrder().getId(), payload);
+    wsService.notify(event.getOrderPayload().getId(), payload);
   }
 }

@@ -23,7 +23,7 @@ public class OrderCanceledSseHandler implements EventHandler<OrderCanceledEvent>
   @Override
   public void handle(OrderCanceledEvent event) {
     OrderStatusDto payload = new OrderStatusDto(OrderStatus.CANCELED,
-        event.getOrder().getCanceledReason());
-    sseService.notify(event.getOrder().getId(), payload);
+        event.getOrderPayload().getCanceledReason());
+    sseService.notify(event.getOrderPayload().getId(), payload);
   }
 }

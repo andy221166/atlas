@@ -13,14 +13,15 @@ public enum AppError {
   BAD_REQUEST(1002, "error.common.bad_request"),
   UNAUTHORIZED(1004, "error.common.unauthorized"),
   PERMISSION_DENIED(1005, "error.common.permission_denied"),
+  INTERNAL_SERVER_ERROR(1006, "error.common.internal_server_error"),
 
   // User-related errors
   USER_NOT_FOUND(2000, "error.user.not_found"),
-  USERNAME_ALREADY_REGISTERED(2000, "error.user.username_already_registered"),
-  EMAIL_ALREADY_REGISTERED(2000, "error.user.email_already_registered"),
 
   // Product-related errors
   PRODUCT_NOT_FOUND(3000, "error.product.not_found"),
+  CATEGORY_NOT_FOUND(3001, "error.category.not_found"),
+  IMPORT_PRODUCT_REQUEST_NOT_FOUND(3001, "error.import_product_request.not_found"),
 
   // Order-related errors
   ORDER_NOT_FOUND(4000, "error.order.not_found"),

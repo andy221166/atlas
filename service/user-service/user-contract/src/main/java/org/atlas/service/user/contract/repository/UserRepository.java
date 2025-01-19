@@ -10,9 +10,15 @@ public interface UserRepository {
 
   Optional<User> findById(Integer id);
 
-  Optional<User> findByUsername(String username);
+  int insert(User user);
 
-  Optional<User> findByEmail(String email);
+  int insertAll(List<User> users);
 
-  void insert(User user);
+  int update(User user);
+
+  int updateAll(List<User> users);
+
+  int delete(Integer id);
+
+  int deleteAll(List<Integer> ids);
 }

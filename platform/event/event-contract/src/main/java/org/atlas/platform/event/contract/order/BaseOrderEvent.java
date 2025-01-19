@@ -3,11 +3,11 @@ package org.atlas.platform.event.contract.order;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.atlas.platform.event.contract.DomainEvent;
-import org.atlas.service.order.contract.model.OrderDto;
+import org.atlas.platform.event.contract.order.payload.OrderPayload;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 public abstract class BaseOrderEvent extends DomainEvent {
 
-  protected OrderDto order;
+  protected OrderPayload orderPayload;
 }

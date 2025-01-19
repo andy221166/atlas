@@ -19,16 +19,16 @@ public class FreemarkerTemplateResolver implements TemplateResolver {
 
   @Override
   public String resolve(@Nonnull String templateName) throws TemplateException, IOException {
-    return resolve(templateName, new HashMap<>());
+    return resolve(templateName, Map.of());
   }
 
   /**
    * @param templateName The relative path of template file in resources/templates folder.
    */
   @Override
-  public String resolve(@Nonnull String templateName, @Nonnull Map<String, Object> data)
+  public String resolve(@Nonnull String templateName, Map<String, Object> data)
       throws IOException, TemplateException {
     return FreeMarkerTemplateUtils.processTemplateIntoString(
-        configuration.getTemplate(templateName), data);
+        configuration.getTemplate(templateName + ".ftl"), data);
   }
 }

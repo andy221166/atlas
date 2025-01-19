@@ -3,7 +3,7 @@ package org.atlas.platform.orm.jpa.outbox.adapter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.atlas.commons.util.mapping.ModelMapperUtil;
+import org.atlas.commons.util.mapping.ModelMapperAdapter;
 import org.atlas.platform.outbox.model.OutboxMessage;
 import org.atlas.platform.outbox.model.OutboxMessageStatus;
 import org.atlas.platform.outbox.repository.OutboxMessageRepository;
@@ -20,7 +20,7 @@ public class OutboxMessageRepositoryAdapter implements OutboxMessageRepository {
   @Override
   public Optional<OutboxMessage> findById(Long id) {
     return jpaOutboxMessageRepository.findById(id)
-        .map(jpaOutboxMessage -> ModelMapperUtil.map(jpaOutboxMessage, OutboxMessage.class));
+        .map(jpaOutboxMessage -> ModelMapperAdapter.map(jpaOutboxMessage, OutboxMessage.class));
   }
 
   @Override
@@ -28,20 +28,20 @@ public class OutboxMessageRepositoryAdapter implements OutboxMessageRepository {
     List<JpaOutboxMessage> jpaOutboxMessages = jpaOutboxMessageRepository.findByStatus(
         OutboxMessageStatus.PENDING);
     return jpaOutboxMessages.stream()
-        .map(jpaOutboxMessage -> ModelMapperUtil.map(jpaOutboxMessage, OutboxMessage.class))
+        .map(jpaOutboxMessage -> ModelMapperAdapter.map(jpaOutboxMessage, OutboxMessage.class))
         .toList();
   }
 
   @Override
   public void insert(OutboxMessage outboxMessage) {
-    JpaOutboxMessage jpaOutboxMessage = ModelMapperUtil.map(outboxMessage, JpaOutboxMessage.class);
+    JpaOutboxMessage jpaOutboxMessage = ModelMapperAdapter.map(outboxMessage, JpaOutboxMessage.class);
     jpaOutboxMessageRepository.insert(jpaOutboxMessage);
     outboxMessage.setId(jpaOutboxMessage.getId());
   }
 
   @Override
   public void update(OutboxMessage outboxMessage) {
-    JpaOutboxMessage jpaOutboxMessage = ModelMapperUtil.map(outboxMessage, JpaOutboxMessage.class);
+    JpaOutboxMessage jpaOutboxMessage = ModelMapperAdapter.map(outboxMessage, JpaOutboxMessage.class);
     jpaOutboxMessageRepository.save(jpaOutboxMessage);
   }
 }

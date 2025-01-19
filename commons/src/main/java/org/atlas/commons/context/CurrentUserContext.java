@@ -1,13 +1,16 @@
 package org.atlas.commons.context;
 
 import javax.annotation.Nullable;
+import org.atlas.commons.enums.Role;
+import org.atlas.commons.exception.AppError;
+import org.atlas.commons.exception.BusinessException;
 
 /**
  * Manages user context for the current thread.
  */
 public class CurrentUserContext {
 
-  private static final ThreadLocal<CurrentUser> userContext = new ThreadLocal<>();
+  private static final ThreadLocal<CurrentUser> holder = new ThreadLocal<>();
 
   /**
    * Retrieves the current user for this thread.
@@ -16,16 +19,23 @@ public class CurrentUserContext {
    */
   @Nullable
   public static CurrentUser getCurrentUser() {
-    return userContext.get();
+    return holder.get();
   }
 
-  @Nullable
-  public static Integer getCurrentUserId() {
+  public static Integer getUserId() {
     CurrentUser currentUser = getCurrentUser();
     if (currentUser == null) {
-      return null;
+      throw new BusinessException(AppError.UNAUTHORIZED);
     }
     return currentUser.getUserId();
+  }
+
+  public static Role getRole() {
+    CurrentUser currentUser = getCurrentUser();
+    if (currentUser == null) {
+      throw new BusinessException(AppError.UNAUTHORIZED);
+    }
+    return currentUser.getRole();
   }
 
   /**
@@ -34,7 +44,7 @@ public class CurrentUserContext {
    * @param context The CurrentUser to set.
    */
   public static void setCurrentUser(CurrentUser context) {
-    userContext.set(context);
+    holder.set(context);
   }
 
   /**
@@ -42,6 +52,6 @@ public class CurrentUserContext {
    * longer needed to prevent memory leaks.
    */
   public static void clear() {
-    userContext.remove();
+    holder.remove();
   }
 }

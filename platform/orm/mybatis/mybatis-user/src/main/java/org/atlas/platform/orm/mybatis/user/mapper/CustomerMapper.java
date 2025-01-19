@@ -3,7 +3,6 @@ package org.atlas.platform.orm.mybatis.user.mapper;
 import java.math.BigDecimal;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.atlas.service.user.domain.Customer;
 
 @Mapper
 public interface CustomerMapper {

@@ -1,0 +1,6 @@
+app:
+  rest-client:
+    order-service:
+      base-url: ${REST_CLIENT_ORDER_SERVICE_BASE_URL:http://localhost:8081}
+    product-service:
+      base-url: ${REST_CLIENT_PRODUCT_SERVICE_BASE_URL:http://localhost:8082}

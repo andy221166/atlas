@@ -50,6 +50,8 @@ In the server-side discovery pattern, services will make a request to a single m
 
 ## Event-driven architecture
 
+https://blog.bytebytego.com/p/event-driven-architectural-patterns
+
 ### CQRS
 
 ---
@@ -79,6 +81,12 @@ https://medium.com/swlh/all-you-need-to-know-about-authentication-is-here-25c8d8
 ### Tracing
 
 https://netflixtechblog.com/building-netflixs-distributed-tracing-infrastructure-bb856c319304
+
+---
+
+## Microservices Chassis
+
+![](https://img.shields.io/badge/TODO-gray)
 
 ---
 

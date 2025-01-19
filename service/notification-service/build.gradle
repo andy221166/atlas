@@ -8,20 +8,9 @@ def modules = rootProject.ext.loadStackConfig()
 dependencies {
     api project(':config-loader')
 
-    switch (modules['api-server']) {
-        case 'rest':
-            api project(':rest-server-order')
-            break
-        case 'grpc':
-            api project(':grpc-server-order')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
-    }
-
     switch (modules['datasource']) {
         case 'mysql':
-            api project(':mysql-order')
+            api project(':mysql-notification')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
@@ -73,23 +62,20 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
-    api project(':monitoring')
-
-    switch (modules['orm']) {
-        case 'jdbc':
-            api project(':jdbc-order')
-            break
-        case 'jpa':
-            api project(':jpa-order')
-            break
-        case 'mybatis':
-            api project(':mybatis-order')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${modules['orm']}")
-    }
+    api project(':actuator')
 
     api project(':sse')
+
+    switch (modules['template']) {
+        case 'freemarker':
+            api project(':template-freemarker')
+            break
+        case 'thymeleaf':
+            api project(':template-thymeleaf')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['template']}")
+    }
 
     switch (modules['tracing']) {
         case 'none':

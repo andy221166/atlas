@@ -1,26 +1,6 @@
 dependencies {
-    // Commons lib
     api 'org.apache.commons:commons-lang3:3.17.0'
     api 'org.apache.commons:commons-collections4:4.4'
     api 'commons-io:commons-io:2.18.0'
     api 'com.google.guava:guava:33.3.1-jre'
-
-    // Security
-    api 'org.springframework.security:spring-security-crypto:6.2.4'
-    api 'commons-codec:commons-codec:1.17.1'
-
-    // JSON
-    api 'com.fasterxml.jackson.core:jackson-databind:2.15.4'
-    api 'com.google.code.gson:gson:2.11.0'
-    api 'com.alibaba.fastjson2:fastjson2:2.0.53'
-
-    // Object mapper
-    api 'org.modelmapper:modelmapper:3.2.2'
-
-    // QR code
-    api 'com.google.zxing:core:3.5.3'
-    api 'com.google.zxing:javase:3.5.3'
-
-    // Domain
-    api project(':user-domain-shared')
 }

@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-server
+  profiles:
+    active: local-compose
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**,/api/categories/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+        - id: aggregator-service
+          uri: lb://aggregator-service
+          predicates:
+            - Path=/api/aggregators/**
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+app:
+  gateway:
+    authorization-rules:
+      non-secured-paths:
+        - "/api/gateway/**"
+        - "/actuator/**"
+      secured-paths:
+        - path: "/api/products/search"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/categories"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/orders/**"
+          roles: [ "CUSTOMER" ]
+        - path: "/api/aggregators/orders"
+          roles: [ "CUSTOMER", "ADMIN" ]
+        - path: "/api/aggregators/reports"
+          roles: [ "ADMIN" ]

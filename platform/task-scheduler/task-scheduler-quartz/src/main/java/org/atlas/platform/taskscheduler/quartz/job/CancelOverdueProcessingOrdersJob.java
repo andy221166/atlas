@@ -1,7 +1,7 @@
 package org.atlas.platform.taskscheduler.quartz.job;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.service.task.contract.core.CancelOverdueProcessingOrdersTask;
+import org.atlas.service.task.contract.CancelOverdueProcessingOrdersTask;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

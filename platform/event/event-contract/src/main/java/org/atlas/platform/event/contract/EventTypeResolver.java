@@ -10,8 +10,6 @@ import java.util.Map;
 import org.atlas.platform.event.contract.order.OrderCanceledEvent;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
-import org.atlas.platform.event.contract.order.ReserveCreditFailedEvent;
-import org.atlas.platform.event.contract.order.ReserveCreditSucceededEvent;
 import org.atlas.platform.event.contract.order.ReserveQuantityFailedEvent;
 import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
 
@@ -25,8 +23,6 @@ public class EventTypeResolver extends TypeIdResolverBase {
         EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CREATED, OrderCreatedEvent.class);
         EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_SUCCEEDED, ReserveQuantitySucceededEvent.class);
         EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_QUANTITY_FAILED, ReserveQuantityFailedEvent.class);
-        EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_SUCCEEDED, ReserveCreditSucceededEvent.class);
-        EVENT_TYPE_TO_CLASS.put(EventType.RESERVE_CREDIT_FAILED, ReserveCreditFailedEvent.class);
         EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CONFIRMED, OrderConfirmedEvent.class);
         EVENT_TYPE_TO_CLASS.put(EventType.ORDER_CANCELED, OrderCanceledEvent.class);
 

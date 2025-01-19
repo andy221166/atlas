@@ -6,15 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.commons.util.FileUtil;
 import org.atlas.platform.event.contract.EventType;
-import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
+import org.atlas.platform.event.core.consumer.EventHandler;
+import org.atlas.platform.notification.email.core.config.EmailProps;
 import org.atlas.platform.notification.email.core.model.Attachment;
 import org.atlas.platform.notification.email.core.model.SendEmailRequest;
 import org.atlas.platform.notification.email.core.service.EmailService;
 import org.atlas.platform.template.contract.TemplateResolver;
-import org.atlas.service.order.contract.model.OrderDto;
-import org.springframework.core.io.ClassPathResource;
+import org.atlas.platform.event.contract.order.payload.OrderPayload;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +24,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OrderConfirmedEmailHandler implements EventHandler<OrderConfirmedEvent> {
 
-  private static final String SUBJECT_BASE_DIR = "email/subject";
-  private static final String BODY_BASE_DIR = "email/body";
-  private static final String ATTACHMENT_DIR = "templates/email/attachment";
+  private static final String TEMPLATE_SUBJECT_DIR = "email/subject/";
+  private static final String TEMPLATE_BODY_DIR = "email/body/";
 
   private final TemplateResolver templateResolver;
   private final EmailService emailService;
+  private final EmailProps emailProps;
 
   @Override
   public EventType supports() {
@@ -38,39 +39,41 @@ public class OrderConfirmedEmailHandler implements EventHandler<OrderConfirmedEv
   @Async
   @Override
   public void handle(OrderConfirmedEvent event) {
-    OrderDto order = event.getOrder();
+    OrderPayload orderPayload = event.getOrderPayload();
+
+    // Model
+    Map<String, Object> model = new HashMap<>();
+    model.put("order", orderPayload);
 
     // Subject
     String subject;
     try {
-      subject = templateResolver.resolve(SUBJECT_BASE_DIR + "/order_confirmed.ftl");
+      subject = templateResolver.resolve(TEMPLATE_SUBJECT_DIR + "order_confirmed", model);
     } catch (Exception e) {
       throw new RuntimeException("Could not resolve subject template", e);
     }
 
     // Body
-    Map<String, Object> model = new HashMap<>();
-    model.put("order", order);
     String body;
     try {
-      body = templateResolver.resolve(BODY_BASE_DIR + "/order_confirmed.ftl", model);
+      body = templateResolver.resolve(TEMPLATE_BODY_DIR + "order_confirmed", model);
     } catch (Exception e) {
       throw new RuntimeException("Could not resolve body template", e);
     }
 
     // Attachments (demo)
     Attachment attachment;
-    ClassPathResource attachmentResource = new ClassPathResource(ATTACHMENT_DIR + "/coffee.jpg");
     File attachmentFile;
     try {
-      attachmentFile = attachmentResource.getFile();
+      attachmentFile = FileUtil.readResourceFile("coffee.jpg");
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     attachment = new Attachment("coffee.jpg", attachmentFile);
 
     SendEmailRequest request = new SendEmailRequest.Builder()
-        .addDestination(order.getUser().getEmail())
+        .setSource(emailProps.getSource())
+        .addDestination(orderPayload.getUser().getEmail())
         .setSubject(subject)
         .setBody(body)
         .addAttachment(attachment)

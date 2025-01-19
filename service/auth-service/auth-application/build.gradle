@@ -1,0 +1,129 @@
+plugins {
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.4.0'
+}
+
+def modules = rootProject.ext.loadStackConfig()
+
+dependencies {
+    api project(':auth-contract')
+
+    switch (modules['auth-provider']) {
+        case 'spring-security-jwt':
+            api project(':auth-provider-spring-security-jwt')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['auth-provider']}")
+    }
+
+    api project(':actuator')
+
+    switch (modules['api-server']) {
+        case 'rest':
+            api project(':rest-server-auth')
+            break
+        case 'grpc':
+            api project(':grpc-server-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
+    }
+
+    switch (modules['cache']) {
+        case 'caffeine':
+            api project(':cache-caffeine')
+            break
+        case 'ehcache':
+            api project(':cache-ehcache')
+            break
+        case 'redis':
+            api project(':cache-redis')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['cache']}")
+    }
+
+    api project(':config-loader')
+
+    switch (modules['datasource']) {
+        case 'mysql':
+            api project(':mysql-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+    }
+
+    switch (modules['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':eureka-client')
+            break
+        case 'kubernetes':
+            api project(':kubernetes-client')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+    }
+
+    switch (modules['event']) {
+        case 'kafka':
+            api project(':event-kafka')
+            break
+        case 'rabbitmq':
+            api project(':event-rabbitmq')
+            break
+        case 'sns':
+            api project(':event-sns')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+    }
+
+    switch (modules['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+    }
+
+    api project(':object-mapper')
+
+    switch (modules['orm']) {
+        case 'jdbc':
+            api project(':jdbc-auth')
+            break
+        case 'jpa':
+            api project(':jpa-auth')
+            break
+        case 'mybatis':
+            api project(':mybatis-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['orm']}")
+    }
+
+    switch (modules['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
+}

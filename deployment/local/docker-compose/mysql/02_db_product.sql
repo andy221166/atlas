@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS category
     `updated_at` DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=INNODB;
 
-CREATE TABLE IF NOT EXISTS product
+CREATE TABLE IF NOT EXISTS aggProduct
 (
     `id`          INT           NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`        VARCHAR(255)  NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS product
 INSERT IGNORE INTO category (`id`, `name`)
 VALUES (1, 'ELECTRONICS'), (2, 'CLOTHING'), (3, 'FOOD'), (4, 'TOYS');
 
-INSERT IGNORE INTO product (`id`, `name`, `description`, `category_id`, `price`, `quantity`, `created_at`)
+INSERT IGNORE INTO aggProduct (`id`, `name`, `description`, `category_id`, `price`, `quantity`, `created_at`)
 VALUES
 (1, 'Smartphone', 'A modern smartphone with high-speed performance.', 1, 599.99, 100, '2023-01-15 00:00:00'),
 (2, 'Jeans', 'Comfortable blue jeans.', 2, 49.99, 100, '2023-02-20 01:00:00'),

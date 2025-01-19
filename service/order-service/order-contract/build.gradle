@@ -1,7 +1,0 @@
-dependencies {
-    api project(':order-domain')
-    api project(':user-contract')
-    api project(':product-contract')
-    api project(':cqrs')
-    api 'org.springframework.boot:spring-boot-starter-validation'
-}

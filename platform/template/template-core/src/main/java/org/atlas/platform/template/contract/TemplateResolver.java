@@ -7,5 +7,5 @@ public interface TemplateResolver {
 
   String resolve(@Nonnull String templateName) throws Exception;
 
-  String resolve(@Nonnull String templateName, @Nonnull Map<String, Object> data) throws Exception;
+  String resolve(@Nonnull String templateName, Map<String, Object> data) throws Exception;
 }

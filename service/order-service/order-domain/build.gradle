@@ -1,4 +1,0 @@
-dependencies {
-    api project(':commons')
-    api project(':order-domain-shared')
-}

@@ -80,7 +80,7 @@ public class SendEmailRequest {
             "Failed to build SendMailRequest, please check the required fields.");
       }
       SendEmailRequest request = new SendEmailRequest();
-      this.source = request.getSource();
+      request.source = this.source;
       request.destinations = this.destinations;
       request.subject = this.subject;
       request.body = this.body;

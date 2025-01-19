@@ -1,4 +1,3 @@
 dependencies {
-    api project(':task-contract')
     api 'org.springframework.boot:spring-boot-starter-quartz'
 }

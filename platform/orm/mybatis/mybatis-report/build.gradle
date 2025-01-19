@@ -1,4 +1,0 @@
-dependencies {
-    api project(':report-contract')
-    api project(':mybatis-core')
-}

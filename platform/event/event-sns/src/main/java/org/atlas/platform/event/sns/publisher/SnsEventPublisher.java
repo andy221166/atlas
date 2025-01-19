@@ -7,7 +7,6 @@ import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.order.BaseOrderEvent;
 import org.atlas.platform.event.core.publisher.EventPublisher;
 import org.atlas.platform.event.sns.config.SnsEventProps;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;

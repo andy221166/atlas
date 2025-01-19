@@ -1,0 +1,5 @@
+dependencies {
+    api project(':object-mapper')
+
+    api 'com.opencsv:opencsv:5.9'
+}

@@ -1,0 +1,5 @@
+dependencies {
+    api project(':object-mapper')
+
+    api 'com.alibaba:easyexcel:4.0.3'
+}

@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS db_report;
 
 USE db_report;
 
-CREATE TABLE IF NOT EXISTS orders
+CREATE TABLE IF NOT EXISTS aggOrders
 (
     id           INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id      INT            NOT NULL,

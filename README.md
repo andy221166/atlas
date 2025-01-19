@@ -90,5 +90,5 @@ The web application will then be accessible at http://localhost:9000.
 ## TODO
 
 - [ ] Resiliency patterns
-- [ ] Export orders function on frontend
+- [ ] Export aggOrders function on frontend
 - [ ] Feature Toggle. Ref: https://medium.com/@uptoamir/refresh-configurations-at-runtime-with-spring-cloud-bus-a-practical-guide-38a7f739eca6

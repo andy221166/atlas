@@ -1,0 +1,4 @@
+dependencies {
+    api project(':mybatis-core')
+    api project(':aggregator-contract')
+}

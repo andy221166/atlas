@@ -10,7 +10,6 @@ import org.atlas.platform.cqrs.handler.CommandHandler;
 import org.atlas.service.user.contract.auth.AuthService;
 import org.atlas.service.user.contract.command.SignUpCommand;
 import org.atlas.service.user.contract.repository.UserRepository;
-import org.atlas.service.user.domain.Customer;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,198 +1,301 @@
-include(':api-client-contract')
-include(':auth-jwt')
-include(':cache-caffeine')
-include(':cache-ehcache')
-include(':cache-redis')
+// Commons
 include(':commons')
-include(':config-loader')
-include(':cqrs')
-include(':csv-opencsv')
-include(':email-core')
-include(':email-ses')
-include(':email-spring')
-include(':eureka-client')
-include(':eureka-server')
-include(':event-contract')
-include(':event-core')
-include(':event-kafka')
-include(':event-rabbitmq')
-include(':event-sns')
-include(':excel-easyexcel')
-include(':excel-poi')
-include(':gateway-server')
-include(':grpc-client')
-include(':grpc-server-core')
-include(':grpc-server-product')
-include(':grpc-server-user')
-include(':i18n')
-include(':jdbc-core')
-include(':jdbc-order')
-include(':jdbc-outbox')
-include(':jdbc-product')
-include(':jdbc-report')
-include(':jdbc-task')
-include(':jdbc-user')
-include(':jpa-core')
-include(':jpa-order')
-include(':jpa-outbox')
-include(':jpa-product')
-include(':jpa-report')
-include(':jpa-task')
-include(':jpa-user')
-include(':kubernetes-client')
-include(':lock-core')
-include(':lock-redis')
-include(':logging-logback')
-include(':monitoring')
-include(':mybatis-core')
-include(':mybatis-order')
-include(':mybatis-outbox')
-include(':mybatis-product')
-include(':mybatis-report')
-include(':mybatis-task')
-include(':mybatis-user')
-include(':mysql-notification')
-include(':mysql-order')
-include(':mysql-product')
-include(':mysql-report')
-include(':mysql-task')
-include(':mysql-user')
-include(':notification-service')
-include(':order-application')
-include(':order-contract')
-include(':order-domain')
-include(':order-domain-shared')
-include(':outbox-core')
-include(':outbox-persistence')
-include(':product-application')
-include(':product-contract')
-include(':product-domain')
-include(':protobuf')
-include(':redis-cluster')
-include(':redis-core')
-include(':redis-standalone')
-include(':report-application')
-include(':report-contract')
-include(':report-domain')
-include(':rest-client-apachehttpclient')
-include(':rest-client-contract')
-include(':rest-client-feign')
-include(':rest-client-resttemplate')
-include(':rest-server-core')
-include(':rest-server-order')
-include(':rest-server-product')
-include(':rest-server-report')
-include(':rest-server-user')
-include(':sse')
-include(':storage-core')
-include(':storage-s3')
-include(':task-application')
-include(':task-contract')
-include(':task-scheduler-quartz')
-include(':template-core')
-include(':template-freemarker')
-include(':tracing-zipkin')
-include(':user-application')
-include(':user-contract')
-include(':user-domain')
-include(':user-domain-shared')
-include(':websocket')
+project(':commons').projectDir = file('commons')
 
-project(':api-client-contract').projectDir = file('platform/api/api-client-contract')
-project(':auth-jwt').projectDir = file('platform/auth/auth-jwt')
+// -------------------------------------------------------------------------------------------------
+// Platform
+// -------------------------------------------------------------------------------------------------
+
+// API Client
+include(':api-client-contract')
+project(':api-client-contract').projectDir = file('platform/api-client/api-client-contract')
+
+// API Client::Rest Client
+include(':rest-client-contract')
+project(':rest-client-contract').projectDir = file('platform/api-client/rest-client/rest-client-contract')
+include(':rest-client-apachehttpclient')
+project(':rest-client-apachehttpclient').projectDir = file('platform/api-client/rest-client/rest-client-apachehttpclient')
+include(':rest-client-feign')
+project(':rest-client-feign').projectDir = file('platform/api-client/rest-client/rest-client-feign')
+include(':rest-client-resttemplate')
+project(':rest-client-resttemplate').projectDir = file('platform/api-client/rest-client/rest-client-resttemplate')
+
+// API Client::gRPC Client
+include(':grpc-client')
+project(':grpc-client').projectDir = file('platform/api-client/grpc-client')
+
+// API server
+
+// API Server::Rest server
+include(':rest-server-core')
+project(':rest-server-core').projectDir = file('platform/api-server/rest-server/rest-server-core')
+include(':rest-server-user')
+project(':rest-server-user').projectDir = file('platform/api-server/rest-server/rest-server-user')
+include(':rest-server-auth')
+project(':rest-server-auth').projectDir = file('platform/api-server/rest-server/rest-server-auth')
+include(':rest-server-aggregator')
+project(':rest-server-aggregator').projectDir = file('platform/api-server/rest-server/rest-server-aggregator')
+
+// API Server::gRPC server
+include(':protobuf')
+project(':protobuf').projectDir = file('platform/api-server/grpc-server/protobuf')
+include(':grpc-server-core')
+project(':grpc-server-core').projectDir = file('platform/api-server/grpc-server/grpc-server-core')
+include(':grpc-server-user')
+project(':grpc-server-user').projectDir = file('platform/api-server/grpc-server/grpc-server-user')
+include(':grpc-server-auth')
+project(':grpc-server-auth').projectDir = file('platform/api-server/grpc-server/grpc-server-auth')
+
+// Auth Provider
+include(':auth-provider-core')
+project(':auth-provider-core').projectDir = file('platform/auth-provider/auth-provider-core')
+include(':auth-provider-spring-security-jwt')
+project(':auth-provider-spring-security-jwt').projectDir = file('platform/auth-provider/auth-provider-spring-security-jwt')
+
+// Cache
+include(':cache-caffeine')
 project(':cache-caffeine').projectDir = file('platform/cache/cache-caffeine')
+include(':cache-ehcache')
 project(':cache-ehcache').projectDir = file('platform/cache/cache-ehcache')
+include(':cache-redis')
 project(':cache-redis').projectDir = file('platform/cache/cache-redis')
+
+// Config loader
+include(':config-loader')
 project(':config-loader').projectDir = file('platform/config-loader')
+
+// CQRS
+include(':cqrs')
 project(':cqrs').projectDir = file('platform/cqrs')
-project(':csv-opencsv').projectDir = file('platform/csv/csv-opencsv')
-project(':email-core').projectDir = file('platform/notification/email/email-core')
-project(':email-ses').projectDir = file('platform/notification/email/email-ses')
-project(':email-spring').projectDir = file('platform/notification/email/email-spring')
-project(':eureka-client').projectDir = file('platform/discovery-client/eureka-client')
-project(':eureka-server').projectDir = file('edge/discovery-server/eureka-server')
-project(':event-contract').projectDir = file('platform/event/event-contract')
-project(':event-core').projectDir = file('platform/event/event-core')
-project(':event-kafka').projectDir = file('platform/event/event-kafka')
-project(':event-rabbitmq').projectDir = file('platform/event/event-rabbitmq')
-project(':event-sns').projectDir = file('platform/event/event-sns')
-project(':excel-easyexcel').projectDir = file('platform/excel/excel-easyexcel')
-project(':excel-poi').projectDir = file('platform/excel/excel-poi')
-project(':gateway-server').projectDir = file('edge/gateway-server')
-project(':grpc-client').projectDir = file('platform/api/grpc/grpc-client')
-project(':grpc-server-core').projectDir = file('platform/api/grpc/grpc-server/grpc-server-core')
-project(':grpc-server-product').projectDir = file('platform/api/grpc/grpc-server/grpc-server-product')
-project(':grpc-server-user').projectDir = file('platform/api/grpc/grpc-server/grpc-server-user')
-project(':i18n').projectDir = file('platform/i18n')
-project(':jdbc-core').projectDir = file('platform/orm/jdbc/jdbc-core')
-project(':jdbc-order').projectDir = file('platform/orm/jdbc/jdbc-order')
-project(':jdbc-outbox').projectDir = file('platform/orm/jdbc/jdbc-outbox')
-project(':jdbc-product').projectDir = file('platform/orm/jdbc/jdbc-product')
-project(':jdbc-report').projectDir = file('platform/orm/jdbc/jdbc-report')
-project(':jdbc-task').projectDir = file('platform/orm/jdbc/jdbc-task')
-project(':jdbc-user').projectDir = file('platform/orm/jdbc/jdbc-user')
-project(':jpa-core').projectDir = file('platform/orm/jpa/jpa-core')
-project(':jpa-order').projectDir = file('platform/orm/jpa/jpa-order')
-project(':jpa-outbox').projectDir = file('platform/orm/jpa/jpa-outbox')
-project(':jpa-product').projectDir = file('platform/orm/jpa/jpa-product')
-project(':jpa-report').projectDir = file('platform/orm/jpa/jpa-report')
-project(':jpa-task').projectDir = file('platform/orm/jpa/jpa-task')
-project(':jpa-user').projectDir = file('platform/orm/jpa/jpa-user')
-project(':kubernetes-client').projectDir = file('platform/discovery-client/kubernetes-client')
-project(':lock-core').projectDir = file('platform/lock/lock-core')
-project(':lock-redis').projectDir = file('platform/lock/lock-redis')
-project(':logging-logback').projectDir = file('platform/observability/logging/logging-logback')
-project(':monitoring').projectDir = file('platform/observability/monitoring')
-project(':mybatis-core').projectDir = file('platform/orm/mybatis/mybatis-core')
-project(':mybatis-order').projectDir = file('platform/orm/mybatis/mybatis-order')
-project(':mybatis-outbox').projectDir = file('platform/orm/mybatis/mybatis-outbox')
-project(':mybatis-product').projectDir = file('platform/orm/mybatis/mybatis-product')
-project(':mybatis-report').projectDir = file('platform/orm/mybatis/mybatis-report')
-project(':mybatis-task').projectDir = file('platform/orm/mybatis/mybatis-task')
-project(':mybatis-user').projectDir = file('platform/orm/mybatis/mybatis-user')
-project(':mysql-notification').projectDir = file('platform/datasource/mysql/mysql-notification')
-project(':mysql-order').projectDir = file('platform/datasource/mysql/mysql-order')
-project(':mysql-product').projectDir = file('platform/datasource/mysql/mysql-product')
-project(':mysql-report').projectDir = file('platform/datasource/mysql/mysql-report')
-project(':mysql-task').projectDir = file('platform/datasource/mysql/mysql-task')
+
+// Cryptography
+include(':cryptography')
+project(':cryptography').projectDir = file('platform/cryptography')
+
+// Datasource
+include(':mysql-user')
 project(':mysql-user').projectDir = file('platform/datasource/mysql/mysql-user')
-project(':notification-service').projectDir = file('service/notification-service')
-project(':order-application').projectDir = file('service/order-service/order-application')
-project(':order-contract').projectDir = file('service/order-service/order-contract')
-project(':order-domain').projectDir = file('service/order-service/order-domain')
-project(':order-domain-shared').projectDir = file('service/order-service/order-domain-shared')
-project(':outbox-core').projectDir = file('platform/outbox/outbox-core')
-project(':outbox-persistence').projectDir = file('platform/outbox/outbox-persistence')
-project(':product-application').projectDir = file('service/product-service/product-application')
-project(':product-contract').projectDir = file('service/product-service/product-contract')
-project(':product-domain').projectDir = file('service/product-service/product-domain')
-project(':protobuf').projectDir = file('platform/api/grpc/protobuf')
-project(':redis-cluster').projectDir = file('platform/redis/redis-cluster')
-project(':redis-core').projectDir = file('platform/redis/redis-core')
-project(':redis-standalone').projectDir = file('platform/redis/redis-standalone')
-project(':report-application').projectDir = file('service/report-service/report-application')
-project(':report-contract').projectDir = file('service/report-service/report-contract')
-project(':report-domain').projectDir = file('service/report-service/report-domain')
-project(':rest-client-apachehttpclient').projectDir = file('platform/api/rest/rest-client/rest-client-apachehttpclient')
-project(':rest-client-contract').projectDir = file('platform/api/rest/rest-client/rest-client-contract')
-project(':rest-client-feign').projectDir = file('platform/api/rest/rest-client/rest-client-feign')
-project(':rest-client-resttemplate').projectDir = file('platform/api/rest/rest-client/rest-client-resttemplate')
-project(':rest-server-core').projectDir = file('platform/api/rest/rest-server/rest-server-core')
-project(':rest-server-order').projectDir = file('platform/api/rest/rest-server/rest-server-order')
-project(':rest-server-product').projectDir = file('platform/api/rest/rest-server/rest-server-product')
-project(':rest-server-report').projectDir = file('platform/api/rest/rest-server/rest-server-report')
-project(':rest-server-user').projectDir = file('platform/api/rest/rest-server/rest-server-user')
+include(':mysql-auth')
+project(':mysql-auth').projectDir = file('platform/datasource/mysql/mysql-auth')
+include(':mysql-aggregator')
+project(':mysql-aggregator').projectDir = file('platform/datasource/mysql/mysql-aggregator')
+include(':mysql-notification')
+project(':mysql-notification').projectDir = file('platform/datasource/mysql/mysql-notification')
+
+// Discovery client
+include(':eureka-client')
+project(':eureka-client').projectDir = file('platform/discovery-client/eureka-client')
+include(':kubernetes-client')
+project(':kubernetes-client').projectDir = file('platform/discovery-client/kubernetes-client')
+
+// Event
+include(':event-contract')
+project(':event-contract').projectDir = file('platform/event/event-contract')
+include(':event-core')
+project(':event-core').projectDir = file('platform/event/event-core')
+include(':event-kafka')
+project(':event-kafka').projectDir = file('platform/event/event-kafka')
+include(':event-rabbitmq')
+project(':event-rabbitmq').projectDir = file('platform/event/event-rabbitmq')
+include(':event-sns')
+project(':event-sns').projectDir = file('platform/event/event-sns')
+
+// File
+
+// File::CSV
+include(':opencsv-core')
+project(':opencsv-core').projectDir = file('platform/file/csv/opencsv/opencsv-core')
+include(':opencsv-user')
+project(':opencsv-user').projectDir = file('platform/file/csv/opencsv/opencsv-user')
+
+// File::Excel
+include(':easyexcel-core')
+project(':easyexcel-core').projectDir = file('platform/file/excel/easyexcel/easyexcel-core')
+include(':easyexcel-user')
+project(':easyexcel-user').projectDir = file('platform/file/excel/easyexcel/easyexcel-user')
+include(':poi-core')
+project(':poi-core').projectDir = file('platform/file/excel/poi/poi-core')
+include(':poi-user')
+project(':poi-user').projectDir = file('platform/file/excel/poi/poi-user')
+
+// i18n
+include(':i18n')
+project(':i18n').projectDir = file('platform/i18n')
+
+// JSON
+include(':json')
+project(':json').projectDir = file('platform/json')
+
+// JWT
+include(':jwt-core')
+project(':jwt-core').projectDir = file('platform/jwt/jwt-core')
+include(':jwt-auth0')
+project(':jwt-auth0').projectDir = file('platform/jwt/jwt-auth0')
+
+// Lock
+include(':lock-core')
+project(':lock-core').projectDir = file('platform/lock/lock-core')
+include(':lock-redis')
+project(':lock-redis').projectDir = file('platform/lock/lock-redis')
+
+// Migration
+
+// Notification
+
+// Notification::Email
+include(':email-core')
+project(':email-core').projectDir = file('platform/notification/email/email-core')
+include(':email-spring')
+project(':email-spring').projectDir = file('platform/notification/email/email-spring')
+include(':email-ses')
+project(':email-ses').projectDir = file('platform/notification/email/email-ses')
+
+// Notification::SSE
+include(':sse')
 project(':sse').projectDir = file('platform/notification/sse')
-project(':storage-core').projectDir = file('platform/storage/storage-core')
-project(':storage-s3').projectDir = file('platform/storage/storage-s3')
-project(':task-application').projectDir = file('service/task-service/task-application')
-project(':task-contract').projectDir = file('service/task-service/task-contract')
-project(':task-scheduler-quartz').projectDir = file('platform/task-scheduler/task-scheduler-quartz')
-project(':template-core').projectDir = file('platform/template/template-core')
-project(':template-freemarker').projectDir = file('platform/template/template-freemarker')
-project(':tracing-zipkin').projectDir = file('platform/observability/tracing/tracing-zipkin')
-project(':user-application').projectDir = file('service/user-service/user-application')
-project(':user-contract').projectDir = file('service/user-service/user-contract')
-project(':user-domain').projectDir = file('service/user-service/user-domain')
-project(':user-domain-shared').projectDir = file('service/user-service/user-domain-shared')
+
+// Notification:WebSocket
+include(':websocket')
 project(':websocket').projectDir = file('platform/notification/websocket')
+
+// Object mapper
+include(':object-mapper')
+project(':object-mapper').projectDir = file('platform/object-mapper')
+
+// Observability
+
+// Observability::Metrics
+include(':actuator')
+project(':actuator').projectDir = file('platform/observability/actuator')
+
+// Observability::Logging
+include(':logging-logback')
+project(':logging-logback').projectDir = file('platform/observability/logging/logging-logback')
+
+// Observability::Tracing
+include(':tracing-zipkin')
+project(':tracing-zipkin').projectDir = file('platform/observability/tracing/tracing-zipkin')
+
+// ORM
+
+// ORM::JDBC
+include(':jdbc-core')
+project(':jdbc-core').projectDir = file('platform/orm/jdbc/jdbc-core')
+include(':jdbc-user')
+project(':jdbc-user').projectDir = file('platform/orm/jdbc/jdbc-user')
+include(':jdbc-auth')
+project(':jdbc-auth').projectDir = file('platform/orm/jdbc/jdbc-auth')
+include(':jdbc-aggregator')
+project(':jdbc-aggregator').projectDir = file('platform/orm/jdbc/jdbc-aggregator')
+include(':jdbc-outbox')
+project(':jdbc-outbox').projectDir = file('platform/orm/jdbc/jdbc-outbox')
+
+// ORM::JPA
+include(':jpa-core')
+project(':jpa-core').projectDir = file('platform/orm/jpa/jpa-core')
+include(':jpa-user')
+project(':jpa-user').projectDir = file('platform/orm/jpa/jpa-user')
+include(':jpa-auth')
+project(':jpa-auth').projectDir = file('platform/orm/jpa/jpa-auth')
+include(':jpa-aggregator')
+project(':jpa-aggregator').projectDir = file('platform/orm/jpa/jpa-aggregator')
+include(':jpa-outbox')
+project(':jpa-outbox').projectDir = file('platform/orm/jpa/jpa-outbox')
+
+// ORM::MyBatis
+include(':mybatis-core')
+project(':mybatis-core').projectDir = file('platform/orm/mybatis/mybatis-core')
+include(':mybatis-user')
+project(':mybatis-user').projectDir = file('platform/orm/mybatis/mybatis-user')
+include(':mybatis-auth')
+project(':mybatis-auth').projectDir = file('platform/orm/mybatis/mybatis-auth')
+include(':mybatis-aggregator')
+project(':mybatis-aggregator').projectDir = file('platform/orm/mybatis/mybatis-aggregator')
+include(':mybatis-outbox')
+project(':mybatis-outbox').projectDir = file('platform/orm/mybatis/mybatis-outbox')
+
+// Outbox
+include(':outbox-core')
+project(':outbox-core').projectDir = file('platform/outbox/outbox-core')
+include(':outbox-persistence')
+project(':outbox-persistence').projectDir = file('platform/outbox/outbox-persistence')
+
+// QR generator
+include(':qr-generator')
+project(':qr-generator').projectDir = file('platform/qr-generator')
+
+// Redis
+include(':redis-core')
+project(':redis-core').projectDir = file('platform/redis/redis-core')
+include(':redis-cluster')
+project(':redis-cluster').projectDir = file('platform/redis/redis-cluster')
+include(':redis-standalone')
+project(':redis-standalone').projectDir = file('platform/redis/redis-standalone')
+
+// Storage
+include(':storage-core')
+project(':storage-core').projectDir = file('platform/storage/storage-core')
+include(':storage-filesystem')
+project(':storage-filesystem').projectDir = file('platform/storage/storage-filesystem')
+include(':storage-s3')
+project(':storage-s3').projectDir = file('platform/storage/storage-s3')
+
+// Task scheduler
+include(':task-scheduler-quartz')
+project(':task-scheduler-quartz').projectDir = file('platform/task-scheduler/task-scheduler-quartz')
+
+// Template
+include(':template-core')
+project(':template-core').projectDir = file('platform/template/template-core')
+include(':template-freemarker')
+project(':template-freemarker').projectDir = file('platform/template/template-freemarker')
+include(':template-thymeleaf')
+project(':template-thymeleaf').projectDir = file('platform/template/template-thymeleaf')
+
+// -------------------------------------------------------------------------------------------------
+// Services
+// -------------------------------------------------------------------------------------------------
+
+// User service
+include(':user-domain')
+project(':user-domain').projectDir = file('service/user-service/user-domain')
+include(':user-contract')
+project(':user-contract').projectDir = file('service/user-service/user-contract')
+include(':user-application')
+project(':user-application').projectDir = file('service/user-service/user-application')
+
+// Auth service
+include(':auth-domain')
+project(':auth-domain').projectDir = file('service/auth-service/auth-domain')
+include(':auth-contract')
+project(':auth-contract').projectDir = file('service/auth-service/auth-contract')
+include(':auth-application')
+project(':auth-application').projectDir = file('service/auth-service/auth-application')
+
+// Notification service
+include(':notification-service')
+project(':notification-service').projectDir = file('service/notification-service')
+
+// Aggregator service
+include(':aggregator-domain')
+project(':aggregator-domain').projectDir = file('service/aggregator-service/aggregator-domain')
+include(':aggregator-contract')
+project(':aggregator-contract').projectDir = file('service/aggregator-service/aggregator-contract')
+include(':aggregator-application')
+project(':aggregator-application').projectDir = file('service/aggregator-service/aggregator-application')
+
+// -------------------------------------------------------------------------------------------------
+// Edge
+// -------------------------------------------------------------------------------------------------
+
+// Discovery server
+include(':discovery-server-eureka')
+project(':discovery-server-eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')
+
+// Config server
+include(':config-server-spring-cloud')
+project(':config-server-spring-cloud').projectDir = file('edge/config-server/config-server-spring-cloud')
+
+// Gateway server
+include(':gateway-server-spring-cloud')
+project(':gateway-server-spring-cloud').projectDir = file('edge/gateway-server/gateway-server-spring-cloud')

@@ -2,7 +2,7 @@ package org.atlas.platform.event.rabbitmq.publisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.commons.util.base.StringUtil;
+import org.atlas.commons.util.StringUtil;
 import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.order.BaseOrderEvent;
 import org.atlas.platform.event.core.publisher.EventPublisher;

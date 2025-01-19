@@ -23,7 +23,7 @@ public class OrderCanceledWsHandler implements EventHandler<OrderCanceledEvent> 
   @Override
   public void handle(OrderCanceledEvent event) {
     OrderStatusDto payload = new OrderStatusDto(OrderStatus.CANCELED,
-        event.getOrder().getCanceledReason());
-    wsService.notify(event.getOrder().getId(), payload);
+        event.getOrderPayload().getCanceledReason());
+    wsService.notify(event.getOrderPayload().getId(), payload);
   }
 }

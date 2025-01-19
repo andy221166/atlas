@@ -3,7 +3,6 @@ package org.atlas.platform.orm.jdbc.user.supports;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.atlas.platform.orm.jdbc.core.NullSafeRowMapper;
-import org.atlas.service.user.domain.Customer;
 import org.springframework.jdbc.core.RowMapper;
 
 public class CustomerRowMapper implements RowMapper<Customer> {

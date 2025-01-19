@@ -20,12 +20,12 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
 
-    switch (modules['auth']) {
-        case 'jwt':
-            api project(':auth-jwt')
+    switch (modules['csv']) {
+        case 'opencsv':
+            api project(':opencsv-user')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['auth']}")
+            throw new IllegalArgumentException("Unsupported ${modules['csv']}")
     }
 
     switch (modules['datasource']) {
@@ -63,6 +63,17 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
 
+    switch (modules['excel']) {
+        case 'easyexcel':
+            api project(':easyexcel-user')
+            break
+        case 'poi':
+            api project(':poi-user')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['excel']}")
+    }
+
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -71,7 +82,7 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
-    api project(':monitoring')
+    api project(':actuator')
 
     switch (modules['orm']) {
         case 'jdbc':
@@ -85,6 +96,17 @@ dependencies {
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['orm']}")
+    }
+
+    switch (modules['storage']) {
+        case 'filesystem':
+            api project(':storage-filesystem')
+            break
+        case 's3':
+            api project(':storage-s3')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['storage']}")
     }
 
     switch (modules['tracing']) {

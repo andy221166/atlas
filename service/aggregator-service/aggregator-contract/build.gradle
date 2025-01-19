@@ -1,0 +1,4 @@
+dependencies {
+    api project(':aggregator-domain')
+    api project(':cqrs')
+}

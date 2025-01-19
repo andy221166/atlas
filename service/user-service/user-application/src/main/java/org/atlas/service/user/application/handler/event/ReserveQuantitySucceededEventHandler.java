@@ -10,7 +10,6 @@ import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
 import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.core.publisher.EventPublisherTemplate;
 import org.atlas.service.order.contract.model.OrderDto;
-import org.atlas.service.user.contract.repository.CustomerRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
