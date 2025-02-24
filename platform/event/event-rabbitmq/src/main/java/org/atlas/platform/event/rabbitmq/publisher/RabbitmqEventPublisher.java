@@ -3,9 +3,9 @@ package org.atlas.platform.event.rabbitmq.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.StringUtil;
-import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.order.BaseOrderEvent;
-import org.atlas.platform.event.core.publisher.EventPublisher;
+import org.atlas.platform.event.core.model.DomainEvent;
+import org.atlas.platform.event.core.publisher.ExternalEventPublisher;
 import org.atlas.platform.event.rabbitmq.config.RabbitmqEventProps;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class RabbitmqEventPublisher implements EventPublisher {
+public class RabbitmqEventPublisher implements ExternalEventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
   private final RabbitmqEventProps props;

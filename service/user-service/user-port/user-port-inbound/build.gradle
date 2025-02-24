@@ -1,0 +1,7 @@
+dependencies {
+    // Platform
+    api project(':use-case-port')
+
+    // Service
+    api project(':user-domain')
+}

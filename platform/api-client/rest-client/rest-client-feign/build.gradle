@@ -1,6 +1,0 @@
-dependencies {
-    api project(':rest-client-contract')
-
-    api 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    api 'io.github.openfeign:feign-micrometer'
-}

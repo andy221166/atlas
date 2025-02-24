@@ -1,9 +1,9 @@
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    // Platform
     api project(':lock-core')
 
-    print(modules['redis'])
     switch (modules['redis']) {
         case 'standalone':
             api project(':redis-standalone')

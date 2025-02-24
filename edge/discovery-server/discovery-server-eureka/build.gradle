@@ -6,10 +6,12 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
-    api project(':config-loader')
-
+    // Lib
     api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
+    // Platform
+    api project(':actuator')
+    api project(':config-loader')
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -17,9 +19,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-
-    api project(':actuator')
-
     switch (modules['tracing']) {
         case 'none':
             break

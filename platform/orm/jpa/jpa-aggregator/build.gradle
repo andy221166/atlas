@@ -1,4 +1,0 @@
-dependencies {
-    api project(':jpa-core')
-    api project(':aggregator-contract')
-}

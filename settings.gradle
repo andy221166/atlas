@@ -1,56 +1,30 @@
-// Commons
-include(':commons')
-project(':commons').projectDir = file('commons')
-
 // -------------------------------------------------------------------------------------------------
 // Platform
 // -------------------------------------------------------------------------------------------------
 
-// API Client
-include(':api-client-contract')
-project(':api-client-contract').projectDir = file('platform/api-client/api-client-contract')
-
-// API Client::Rest Client
-include(':rest-client-contract')
-project(':rest-client-contract').projectDir = file('platform/api-client/rest-client/rest-client-contract')
-include(':rest-client-apachehttpclient')
-project(':rest-client-apachehttpclient').projectDir = file('platform/api-client/rest-client/rest-client-apachehttpclient')
-include(':rest-client-feign')
-project(':rest-client-feign').projectDir = file('platform/api-client/rest-client/rest-client-feign')
-include(':rest-client-resttemplate')
-project(':rest-client-resttemplate').projectDir = file('platform/api-client/rest-client/rest-client-resttemplate')
-
-// API Client::gRPC Client
-include(':grpc-client')
-project(':grpc-client').projectDir = file('platform/api-client/grpc-client')
+// API client
+include(':api-client-grpc-netdevh')
+project(':api-client-grpc-netdevh').projectDir = file('platform/api-client/api-client-grpc-netdevh')
+include(':api-client-rest-apachehttpclient')
+project(':api-client-rest-apachehttpclient').projectDir = file('platform/api-client/api-client-rest-apachehttpclient')
+include(':api-client-rest-feign')
+project(':api-client-rest-feign').projectDir = file('platform/api-client/api-client-rest-feign')
+include(':api-client-rest-model')
+project(':api-client-rest-model').projectDir = file('platform/api-client/api-client-rest-model')
+include(':api-client-rest-resttemplate')
+project(':api-client-rest-resttemplate').projectDir = file('platform/api-client/api-client-rest-resttemplate')
 
 // API server
+include(':api-server-grpc-netdevh')
+project(':api-server-grpc-netdevh').projectDir = file('platform/api-server/api-server-grpc-netdevh')
+include(':api-server-grpc-protobuf')
+project(':api-server-grpc-protobuf').projectDir = file('platform/api-server/api-server-grpc-protobuf')
+include(':api-server-rest')
+project(':api-server-rest').projectDir = file('platform/api-server/api-server-rest')
 
-// API Server::Rest server
-include(':rest-server-core')
-project(':rest-server-core').projectDir = file('platform/api-server/rest-server/rest-server-core')
-include(':rest-server-user')
-project(':rest-server-user').projectDir = file('platform/api-server/rest-server/rest-server-user')
-include(':rest-server-auth')
-project(':rest-server-auth').projectDir = file('platform/api-server/rest-server/rest-server-auth')
-include(':rest-server-aggregator')
-project(':rest-server-aggregator').projectDir = file('platform/api-server/rest-server/rest-server-aggregator')
-
-// API Server::gRPC server
-include(':protobuf')
-project(':protobuf').projectDir = file('platform/api-server/grpc-server/protobuf')
-include(':grpc-server-core')
-project(':grpc-server-core').projectDir = file('platform/api-server/grpc-server/grpc-server-core')
-include(':grpc-server-user')
-project(':grpc-server-user').projectDir = file('platform/api-server/grpc-server/grpc-server-user')
-include(':grpc-server-auth')
-project(':grpc-server-auth').projectDir = file('platform/api-server/grpc-server/grpc-server-auth')
-
-// Auth Provider
-include(':auth-provider-core')
-project(':auth-provider-core').projectDir = file('platform/auth-provider/auth-provider-core')
-include(':auth-provider-spring-security-jwt')
-project(':auth-provider-spring-security-jwt').projectDir = file('platform/auth-provider/auth-provider-spring-security-jwt')
+// Auth
+include(':auth-spring-security-jwt')
+project(':auth-spring-security-jwt').projectDir = file('platform/auth/auth-spring-security-jwt')
 
 // Cache
 include(':cache-caffeine')
@@ -60,41 +34,33 @@ project(':cache-ehcache').projectDir = file('platform/cache/cache-ehcache')
 include(':cache-redis')
 project(':cache-redis').projectDir = file('platform/cache/cache-redis')
 
+// Commons
+include(':commons')
+project(':commons').projectDir = file('platform/commons')
+
 // Config loader
 include(':config-loader')
 project(':config-loader').projectDir = file('platform/config-loader')
-
-// CQRS
-include(':cqrs')
-project(':cqrs').projectDir = file('platform/cqrs')
 
 // Cryptography
 include(':cryptography')
 project(':cryptography').projectDir = file('platform/cryptography')
 
-// Datasource
-include(':mysql-user')
-project(':mysql-user').projectDir = file('platform/datasource/mysql/mysql-user')
-include(':mysql-auth')
-project(':mysql-auth').projectDir = file('platform/datasource/mysql/mysql-auth')
-include(':mysql-aggregator')
-project(':mysql-aggregator').projectDir = file('platform/datasource/mysql/mysql-aggregator')
-include(':mysql-notification')
-project(':mysql-notification').projectDir = file('platform/datasource/mysql/mysql-notification')
-
 // Discovery client
-include(':eureka-client')
-project(':eureka-client').projectDir = file('platform/discovery-client/eureka-client')
-include(':kubernetes-client')
-project(':kubernetes-client').projectDir = file('platform/discovery-client/kubernetes-client')
+include(':discovery-client-eureka')
+project(':discovery-client-eureka').projectDir = file('platform/discovery-client/discovery-client-eureka')
+include(':discovery-client-kubernetes')
+project(':discovery-client-kubernetes').projectDir = file('platform/discovery-client/discovery-client-kubernetes')
 
 // Event
 include(':event-contract')
 project(':event-contract').projectDir = file('platform/event/event-contract')
 include(':event-core')
 project(':event-core').projectDir = file('platform/event/event-core')
-include(':event-kafka')
-project(':event-kafka').projectDir = file('platform/event/event-kafka')
+include(':event-consumer-kafka')
+project(':event-consumer-kafka').projectDir = file('platform/event/event-consumer-kafka')
+include(':event-publisher-kafka')
+project(':event-publisher-kafka').projectDir = file('platform/event/event-publisher-kafka')
 include(':event-rabbitmq')
 project(':event-rabbitmq').projectDir = file('platform/event/event-rabbitmq')
 include(':event-sns')
@@ -103,20 +69,14 @@ project(':event-sns').projectDir = file('platform/event/event-sns')
 // File
 
 // File::CSV
-include(':opencsv-core')
-project(':opencsv-core').projectDir = file('platform/file/csv/opencsv/opencsv-core')
-include(':opencsv-user')
-project(':opencsv-user').projectDir = file('platform/file/csv/opencsv/opencsv-user')
+include(':csv-opencsv')
+project(':csv-opencsv').projectDir = file('platform/file/csv/csv-opencsv')
 
 // File::Excel
-include(':easyexcel-core')
-project(':easyexcel-core').projectDir = file('platform/file/excel/easyexcel/easyexcel-core')
-include(':easyexcel-user')
-project(':easyexcel-user').projectDir = file('platform/file/excel/easyexcel/easyexcel-user')
-include(':poi-core')
-project(':poi-core').projectDir = file('platform/file/excel/poi/poi-core')
-include(':poi-user')
-project(':poi-user').projectDir = file('platform/file/excel/poi/poi-user')
+include(':excel-easyexcel')
+project(':excel-easyexcel').projectDir = file('platform/file/excel/excel-easyexcel')
+include(':excel-poi')
+project(':excel-poi').projectDir = file('platform/file/excel/excel-poi')
 
 // i18n
 include(':i18n')
@@ -176,49 +136,15 @@ project(':logging-logback').projectDir = file('platform/observability/logging/lo
 include(':tracing-zipkin')
 project(':tracing-zipkin').projectDir = file('platform/observability/tracing/tracing-zipkin')
 
-// ORM
+// Persistence
 
-// ORM::JDBC
-include(':jdbc-core')
-project(':jdbc-core').projectDir = file('platform/orm/jdbc/jdbc-core')
-include(':jdbc-user')
-project(':jdbc-user').projectDir = file('platform/orm/jdbc/jdbc-user')
-include(':jdbc-auth')
-project(':jdbc-auth').projectDir = file('platform/orm/jdbc/jdbc-auth')
-include(':jdbc-aggregator')
-project(':jdbc-aggregator').projectDir = file('platform/orm/jdbc/jdbc-aggregator')
-include(':jdbc-outbox')
-project(':jdbc-outbox').projectDir = file('platform/orm/jdbc/jdbc-outbox')
+// Persistence::JPA
+include(':persistence-jpa')
+project(':persistence-jpa').projectDir = file('platform/persistence/persistence-jpa')
 
-// ORM::JPA
-include(':jpa-core')
-project(':jpa-core').projectDir = file('platform/orm/jpa/jpa-core')
-include(':jpa-user')
-project(':jpa-user').projectDir = file('platform/orm/jpa/jpa-user')
-include(':jpa-auth')
-project(':jpa-auth').projectDir = file('platform/orm/jpa/jpa-auth')
-include(':jpa-aggregator')
-project(':jpa-aggregator').projectDir = file('platform/orm/jpa/jpa-aggregator')
-include(':jpa-outbox')
-project(':jpa-outbox').projectDir = file('platform/orm/jpa/jpa-outbox')
-
-// ORM::MyBatis
-include(':mybatis-core')
-project(':mybatis-core').projectDir = file('platform/orm/mybatis/mybatis-core')
-include(':mybatis-user')
-project(':mybatis-user').projectDir = file('platform/orm/mybatis/mybatis-user')
-include(':mybatis-auth')
-project(':mybatis-auth').projectDir = file('platform/orm/mybatis/mybatis-auth')
-include(':mybatis-aggregator')
-project(':mybatis-aggregator').projectDir = file('platform/orm/mybatis/mybatis-aggregator')
-include(':mybatis-outbox')
-project(':mybatis-outbox').projectDir = file('platform/orm/mybatis/mybatis-outbox')
-
-// Outbox
-include(':outbox-core')
-project(':outbox-core').projectDir = file('platform/outbox/outbox-core')
-include(':outbox-persistence')
-project(':outbox-persistence').projectDir = file('platform/outbox/outbox-persistence')
+// Persistence::MyBatis
+include(':persistence-mybatis')
+project(':persistence-mybatis').projectDir = file('platform/persistence/persistence-mybatis')
 
 // QR generator
 include(':qr-generator')
@@ -252,37 +178,118 @@ project(':template-freemarker').projectDir = file('platform/template/template-fr
 include(':template-thymeleaf')
 project(':template-thymeleaf').projectDir = file('platform/template/template-thymeleaf')
 
+// Use case
+include(':use-case-port')
+project(':use-case-port').projectDir = file('platform/use-case/use-case-port')
+include(':use-case-application')
+project(':use-case-application').projectDir = file('platform/use-case/use-case-application')
+
 // -------------------------------------------------------------------------------------------------
 // Services
 // -------------------------------------------------------------------------------------------------
 
 // User service
+// User service::Domain
 include(':user-domain')
 project(':user-domain').projectDir = file('service/user-service/user-domain')
-include(':user-contract')
-project(':user-contract').projectDir = file('service/user-service/user-contract')
+// User service::Port
+include(':user-port-inbound')
+project(':user-port-inbound').projectDir = file('service/user-service/user-port/user-port-inbound')
+include(':user-port-outbound')
+project(':user-port-outbound').projectDir = file('service/user-service/user-port/user-port-outbound')
+// User service::Application
 include(':user-application')
 project(':user-application').projectDir = file('service/user-service/user-application')
+// User service::Adapter
+include(':user-api-server-grpc-netdevh')
+project(':user-api-server-grpc-netdevh').projectDir = file('service/user-service/user-adapter/user-api-server-grpc-netdevh')
+include(':user-api-server-rest')
+project(':user-api-server-rest').projectDir = file('service/user-service/user-adapter/user-api-server-rest')
+include(':user-datasource-mysql')
+project(':user-datasource-mysql').projectDir = file('service/user-service/user-adapter/user-datasource-mysql')
+include(':user-event-publisher-kafka')
+project(':user-event-publisher-kafka').projectDir = file('service/user-service/user-adapter/user-event-publisher-kafka')
+include(':user-persistence-jpa')
+project(':user-persistence-jpa').projectDir = file('service/user-service/user-adapter/user-persistence-jpa')
+include(':user-persistence-mybatis')
+project(':user-persistence-mybatis').projectDir = file('service/user-service/user-adapter/user-persistence-mybatis')
+// User service::API client
+include(':user-api-client-contract')
+project(':user-api-client-contract').projectDir = file('service/user-service/user-api-client/user-api-client-contract')
+include(':user-api-client-grpc-netdevh')
+project(':user-api-client-grpc-netdevh').projectDir = file('service/user-service/user-api-client/user-api-client-grpc-netdevh')
+include(':user-api-client-rest-apachehttpclient')
+project(':user-api-client-rest-apachehttpclient').projectDir = file('service/user-service/user-api-client/user-api-client-rest-apachehttpclient')
+include(':user-api-client-rest-feign')
+project(':user-api-client-rest-feign').projectDir = file('service/user-service/user-api-client/user-api-client-rest-feign')
+include(':user-api-client-rest-model')
+project(':user-api-client-rest-model').projectDir = file('service/user-service/user-api-client/user-api-client-rest-model')
+include(':user-api-client-rest-resttemplate')
+project(':user-api-client-rest-resttemplate').projectDir = file('service/user-service/user-api-client/user-api-client-rest-resttemplate')
 
-// Auth service
-include(':auth-domain')
-project(':auth-domain').projectDir = file('service/auth-service/auth-domain')
-include(':auth-contract')
-project(':auth-contract').projectDir = file('service/auth-service/auth-contract')
-include(':auth-application')
-project(':auth-application').projectDir = file('service/auth-service/auth-application')
+// Catalog service
+// Catalog service::Domain
+include(':catalog-domain')
+project(':catalog-domain').projectDir = file('service/catalog-service/catalog-domain')
+// Catalog service::Port
+include(':catalog-port-inbound')
+project(':catalog-port-inbound').projectDir = file('service/catalog-service/catalog-port/catalog-port-inbound')
+include(':catalog-port-outbound')
+project(':catalog-port-outbound').projectDir = file('service/catalog-service/catalog-port/catalog-port-outbound')
+// Catalog service::Application
+include(':catalog-application')
+project(':catalog-application').projectDir = file('service/catalog-service/catalog-application')
+// Catalog service::Adapter
+include(':catalog-api-server-grpc-netdevh')
+project(':catalog-api-server-grpc-netdevh').projectDir = file('service/catalog-service/catalog-adapter/catalog-api-server-grpc-netdevh')
+include(':catalog-api-server-rest')
+project(':catalog-api-server-rest').projectDir = file('service/catalog-service/catalog-adapter/catalog-api-server-rest')
+include(':catalog-datasource-mysql')
+project(':catalog-datasource-mysql').projectDir = file('service/catalog-service/catalog-adapter/catalog-datasource-mysql')
+include(':catalog-event-publisher-kafka')
+project(':catalog-event-publisher-kafka').projectDir = file('service/catalog-service/catalog-adapter/catalog-event-publisher-kafka')
+include(':catalog-persistence-jpa')
+project(':catalog-persistence-jpa').projectDir = file('service/catalog-service/catalog-adapter/catalog-persistence-jpa')
+include(':catalog-persistence-mybatis')
+project(':catalog-persistence-mybatis').projectDir = file('service/catalog-service/catalog-adapter/catalog-persistence-mybatis')
+// Catalog service::API client
+include(':catalog-api-client-contract')
+project(':catalog-api-client-contract').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-contract')
+include(':catalog-api-client-grpc-netdevh')
+project(':catalog-api-client-grpc-netdevh').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-grpc-netdevh')
+include(':catalog-api-client-rest-apachehttpclient')
+project(':catalog-api-client-rest-apachehttpclient').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-rest-apachehttpclient')
+include(':catalog-api-client-rest-feign')
+project(':catalog-api-client-rest-feign').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-rest-feign')
+include(':catalog-api-client-rest-model')
+project(':catalog-api-client-rest-model').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-rest-model')
+include(':catalog-api-client-rest-resttemplate')
+project(':catalog-api-client-rest-resttemplate').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-rest-resttemplate')
 
-// Notification service
-include(':notification-service')
-project(':notification-service').projectDir = file('service/notification-service')
+// Order service
+include(':order-domain')
+project(':order-domain').projectDir = file('service/order-service/order-domain')
+include(':order-domain-shared')
+project(':order-domain-shared').projectDir = file('service/order-service/order-domain-shared')
+include(':order-contract')
+project(':order-contract').projectDir = file('service/order-service/order-contract')
+include(':order-application')
+project(':order-application').projectDir = file('service/order-service/order-application')
+include(':order-api-server-grpc-netdevh')
+project(':order-api-server-grpc-netdevh').projectDir = file('service/order-service/order-infra/order-api-server-grpc-netdevh')
+include(':order-api-server-rest')
+project(':order-api-server-rest').projectDir = file('service/order-service/order-infra/order-api-server-rest')
+include(':order-datasource-mysql')
+project(':order-datasource-mysql').projectDir = file('service/order-service/order-infra/order-datasource-mysql')
+include(':order-persistence-jpa')
+project(':order-persistence-jpa').projectDir = file('service/order-service/order-infra/order-persistence-jpa')
+include(':order-persistence-mybatis')
+project(':order-persistence-mybatis').projectDir = file('service/order-service/order-infra/order-persistence-mybatis')
 
-// Aggregator service
-include(':aggregator-domain')
-project(':aggregator-domain').projectDir = file('service/aggregator-service/aggregator-domain')
-include(':aggregator-contract')
-project(':aggregator-contract').projectDir = file('service/aggregator-service/aggregator-contract')
-include(':aggregator-application')
-project(':aggregator-application').projectDir = file('service/aggregator-service/aggregator-application')
+include(':notification-application')
+project(':notification-application').projectDir = file('service/notification-service/notification-application')
+include(':notification-datasource-mysql')
+project(':notification-datasource-mysql').projectDir = file('service/notification-service/notification-infra/notification-datasource-mysql')
 
 // -------------------------------------------------------------------------------------------------
 // Edge
@@ -295,6 +302,10 @@ project(':discovery-server-eureka').projectDir = file('edge/discovery-server/dis
 // Config server
 include(':config-server-spring-cloud')
 project(':config-server-spring-cloud').projectDir = file('edge/config-server/config-server-spring-cloud')
+
+// Auth server
+include(':auth-server-spring-security-jwt')
+project(':auth-server-spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
 
 // Gateway server
 include(':gateway-server-spring-cloud')

@@ -33,14 +33,15 @@ public abstract class JwtService {
     this.privateKey = loadPrivateKey(keyFactory);
   }
 
-  public abstract String issue(JwtData jwtData);
-  protected abstract JwtData doParse(String jwt, String issuer);
+  public abstract String issueToken(JwtData jwtData);
 
-  public JwtData verify(String jwt, String issuer) {
-    JwtData jwtData = parse(jwt, issuer);
+  protected abstract JwtData doParseToken(String token, String issuer);
+
+  public JwtData verify(String token, String issuer) {
+    JwtData jwtData = parseToken(token, issuer);
 
     // Check blacklist
-    String blacklistRedisKey = getBlacklistRedisKey(jwt);
+    String blacklistRedisKey = getBlacklistRedisKey(token);
     if (redisTemplate.opsForValue().get(blacklistRedisKey) != null) {
       throw new InvalidTokenException("The JWT token was inactivated");
     }
@@ -48,28 +49,28 @@ public abstract class JwtService {
     return jwtData;
   }
 
-  public void revoke(String jwt, String issuer) {
-    JwtData jwtData = parse(jwt, issuer);
+  public void revokeToken(String token, String issuer) {
+    JwtData jwtData = parseToken(token, issuer);
 
     // Calculate TTL
     long remainingTimeMillis = jwtData.getExpiredAt().getTime() - System.currentTimeMillis();
-    String blacklistRedisKey = getBlacklistRedisKey(jwt);
+    String blacklistRedisKey = getBlacklistRedisKey(token);
     redisTemplate.opsForValue()
         .set(blacklistRedisKey, true, remainingTimeMillis, TimeUnit.MILLISECONDS);
-    log.info("The JWT token has been revoked: {}", jwt);
+    log.info("The JWT token has been revoked: {}", token);
   }
 
-  private JwtData parse(String jwt, String issuer) {
+  private JwtData parseToken(String token, String issuer) {
     final String prefix = "Bearer ";
-    if (jwt.startsWith(prefix)) {
-      jwt = jwt.substring(prefix.length());
+    if (token.startsWith(prefix)) {
+      token = token.substring(prefix.length());
     }
-    return doParse(jwt, issuer);
+    return doParseToken(token, issuer);
   }
 
   private RSAPublicKey loadPublicKey(KeyFactory keyFactory)
       throws IOException, InvalidKeySpecException {
-    try (InputStream inputStream = new ClassPathResource("secret/jwt.pub").getInputStream()) {
+    try (InputStream inputStream = new ClassPathResource("jwt.pub").getInputStream()) {
       byte[] publicKeyBytes = inputStream.readAllBytes();
       String publicKeyContent = new String(publicKeyBytes)
           .replace("-----BEGIN PUBLIC KEY-----", "")
@@ -84,7 +85,7 @@ public abstract class JwtService {
 
   private RSAPrivateKey loadPrivateKey(KeyFactory keyFactory)
       throws IOException, InvalidKeySpecException {
-    try (InputStream inputStream = new ClassPathResource("secret/jwt.key").getInputStream()) {
+    try (InputStream inputStream = new ClassPathResource("jwt.key").getInputStream()) {
       byte[] privateKeyBytes = inputStream.readAllBytes();
       String privateKeyContent = new String(privateKeyBytes)
           .replace("-----BEGIN PRIVATE KEY-----", "")

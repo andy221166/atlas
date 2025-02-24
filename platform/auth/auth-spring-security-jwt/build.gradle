@@ -1,0 +1,11 @@
+dependencies {
+    // Lib
+    api 'org.springframework.boot:spring-boot-starter-security'
+
+    // Platform
+    api project(':jwt-auth0')
+    api project(':api-server-rest')
+
+    // Service
+    api project(':user-port-outbound')
+}

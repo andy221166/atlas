@@ -1,0 +1,80 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.orm.mybatis.aggProduct.mapper.ProductMapper">
+    <resultMap id="ProductMap" type="org.atlas.service.aggProduct.domain.Product">
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <association property="categoryEntity" column="category_id"
+                     javaType="org.atlas.service.aggProduct.domain.Category"
+                     resultMap="CategoryMap"/>
+    </resultMap>
+
+    <resultMap id="CategoryMap" type="org.atlas.service.aggProduct.domain.Category">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <select id="findByIdIn" parameterType="list" resultMap="ProductMap">
+        select *
+        from aggProduct
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="find" resultMap="ProductMap">
+        select p.*, c.name as category_name
+        from aggProduct p
+        left join categoryEntity c on c.id = p.category_id
+        <include refid="searchWhereClause"/>
+        <if test="query.hasSort()">
+            orderPayload by ${query.sort}
+            <if test="query.isSortDescending()">
+                desc
+            </if>
+        </if>
+        <if test="query.hasPaging()">
+            limit #{query.limit}
+            offset #{query.offset}
+        </if>
+    </select>
+
+    <select id="count" resultType="long">
+        select count(p.id)
+        from aggProduct p
+        <include refid="searchWhereClause"/>
+    </select>
+
+    <insert id="insertBatch" parameterType="list">
+        insert into aggProduct (name, description, price, quantity, category_id)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{item.description}, #{item.price}, #{item.quantity}, #{item.categoryId})
+        </foreach>
+    </insert>
+
+    <update id="decreaseQuantity">
+        update aggProduct
+        set quantity = quantity - #{amount}
+        where id = #{id}
+          and quantity >= #{amount}
+    </update>
+
+    <sql id="searchWhereClause">
+        <where>
+            <if test="query.keyword != null and query.keyword != ''">
+                and (lower(p.name) like concat('%', lower(#{query.keyword}), '%')
+                or lower(p.description) like concat('%', lower(#{query.keyword}), '%'))
+            </if>
+            <if test="query.categoryId != null">
+                and p.category_id = #{query.categoryId}
+            </if>
+            <if test="query.minPrice != null">
+                and p.price >= #{query.minPrice}
+            </if>
+            <if test="query.maxPrice != null">
+                and p.price &lt;= #{query.maxPrice}
+            </if>
+        </where>
+    </sql>
+</mapper>

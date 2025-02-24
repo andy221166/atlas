@@ -9,6 +9,12 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - RewritePath=/api/users/(?<segment>.*), /api/front/users/$\{segment}
         - id: product-service
           uri: lb://product-service
           predicates:
@@ -17,10 +23,6 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/orders/**
-        - id: aggregator-service
-          uri: lb://aggregator-service
-          predicates:
-            - Path=/api/aggregators/**
       discovery:
         locator:
           enabled: true
@@ -32,14 +34,16 @@ app:
       non-secured-paths:
         - "/api/gateway/**"
         - "/actuator/**"
+        - "/api/users/login"
+        - "/api/users/register"
       secured-paths:
+        - path: "/api/users/profile"
+          roles: [ "USER", "ADMIN" ]
         - path: "/api/products/search"
-          roles: [ "CUSTOMER" ]
+          roles: [ "USER" ]
         - path: "/api/categories"
-          roles: [ "CUSTOMER" ]
+          roles: [ "USER" ]
         - path: "/api/orders/**"
-          roles: [ "CUSTOMER" ]
-        - path: "/api/aggregators/orders"
-          roles: [ "CUSTOMER", "ADMIN" ]
-        - path: "/api/aggregators/reports"
+          roles: [ "USER" ]
+        - path: "/api/admin/*"
           roles: [ "ADMIN" ]

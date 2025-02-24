@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.atlas.commons.constant.Constant;
+import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.json.Json;
 
 public class GsonAdapter implements Json {

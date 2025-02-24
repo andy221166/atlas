@@ -1,4 +1,0 @@
-dependencies {
-    api project(':grpc-server-core')
-    api project(':order-contract')
-}

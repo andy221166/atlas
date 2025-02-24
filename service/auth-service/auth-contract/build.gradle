@@ -1,4 +1,0 @@
-dependencies {
-    api project(':auth-domain')
-    api project(':cqrs')
-}

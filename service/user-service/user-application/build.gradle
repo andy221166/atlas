@@ -6,31 +6,37 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    // Config
     api project(':config-loader')
-    api project(':user-contract')
+
+    // Port
+    api project(':user-port-inbound')
+    api project(':user-port-outbound')
+
+    api project(':actuator')
 
     switch (modules['api-server']) {
         case 'rest':
-            api project(':rest-server-user')
+            api project(':user-api-server-rest')
             break
         case 'grpc':
-            api project(':grpc-server-user')
+            api project(':user-api-server-grpc-netdevh')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
 
-    switch (modules['csv']) {
-        case 'opencsv':
-            api project(':opencsv-user')
+    switch (modules['auth']) {
+        case 'spring-security-jwt':
+            api project(':auth-spring-security-jwt')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['csv']}")
+            throw new IllegalArgumentException("Unsupported ${modules['auth']}")
     }
 
     switch (modules['datasource']) {
         case 'mysql':
-            api project(':mysql-user')
+            api project(':user-datasource-mysql')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
@@ -40,10 +46,10 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':eureka-client')
+            api project(':discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':kubernetes-client')
+            api project(':discovery-client-kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
@@ -51,7 +57,7 @@ dependencies {
 
     switch (modules['event']) {
         case 'kafka':
-            api project(':event-kafka')
+            api project(':user-event-publisher-kafka')
             break
         case 'rabbitmq':
             api project(':event-rabbitmq')
@@ -63,17 +69,6 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
 
-    switch (modules['excel']) {
-        case 'easyexcel':
-            api project(':easyexcel-user')
-            break
-        case 'poi':
-            api project(':poi-user')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${modules['excel']}")
-    }
-
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -82,31 +77,17 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
-    api project(':actuator')
+    api project(':object-mapper')
 
-    switch (modules['orm']) {
-        case 'jdbc':
-            api project(':jdbc-user')
-            break
+    switch (modules['persistence']) {
         case 'jpa':
-            api project(':jpa-user')
+            api project(':user-persistence-jpa')
             break
         case 'mybatis':
-            api project(':mybatis-user')
+            api project(':user-persistence-mybatis')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['orm']}")
-    }
-
-    switch (modules['storage']) {
-        case 'filesystem':
-            api project(':storage-filesystem')
-            break
-        case 's3':
-            api project(':storage-s3')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${modules['storage']}")
+            throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
 
     switch (modules['tracing']) {
@@ -118,6 +99,8 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
+
+    api project(':use-case-application')
 }
 
 jar {

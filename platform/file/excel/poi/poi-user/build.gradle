@@ -1,4 +1,0 @@
-dependencies {
-    api project(':poi-core')
-    api project(':user-contract')
-}

@@ -1,5 +1,0 @@
-dependencies {
-    api project(':rest-client-contract')
-
-    api 'org.springframework.boot:spring-boot-starter-web'
-}

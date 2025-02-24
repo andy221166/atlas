@@ -13,7 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.commons.util.ConcurrentUtil;
 import org.atlas.commons.util.json.JsonUtil;
-import org.atlas.platform.event.contract.DomainEvent;
+import org.atlas.platform.event.core.model.DomainEvent;
 import org.atlas.platform.event.core.consumer.EventDispatcher;
 import org.atlas.platform.event.sns.config.SnsEventProps;
 import org.springframework.stereotype.Component;

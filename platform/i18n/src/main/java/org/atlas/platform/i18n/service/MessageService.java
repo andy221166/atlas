@@ -2,7 +2,7 @@ package org.atlas.platform.i18n.service;
 
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import org.atlas.commons.util.StringUtil;
+import org.atlas.platform.commons.util.StringUtil;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;

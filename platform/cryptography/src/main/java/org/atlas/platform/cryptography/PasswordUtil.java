@@ -3,7 +3,7 @@ package org.atlas.platform.cryptography;
 import java.security.SecureRandom;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.atlas.commons.util.StringUtil;
+import org.atlas.platform.commons.util.StringUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,5 +1,7 @@
 dependencies {
-    api project(':event-contract')
+    // Platform
+    api project(':commons')
+    api project(':json')
     api project(':lock-redis')
-    api project(':outbox-core')
+    api project(':persistence-jpa')
 }

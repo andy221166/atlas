@@ -11,7 +11,7 @@
         </expiry>
         <listeners>
             <listener>
-                <class>org.atlas.platform.cache.ehcache.listener.CacheEventLogger</class>
+                <class>org.atlas.platform.cache.ehcache.CacheEventLogger</class>
                 <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
                 <event-ordering-mode>UNORDERED</event-ordering-mode>
                 <events-to-fire-on>CREATED</events-to-fire-on>

@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.commons.constant.Constant;
-import org.atlas.commons.util.StringUtil;
+import org.atlas.platform.commons.constant.Constant;
+import org.atlas.platform.commons.util.StringUtil;
 import org.atlas.platform.json.Json;
 
 @Slf4j

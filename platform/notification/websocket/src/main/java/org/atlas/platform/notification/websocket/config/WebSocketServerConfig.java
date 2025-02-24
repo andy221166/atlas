@@ -1,6 +1,6 @@
 package org.atlas.platform.notification.websocket.config;
 
-import org.atlas.commons.constant.Constant;
+import org.atlas.platform.commons.constant.Constant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;

@@ -1,4 +1,0 @@
-dependencies {
-    api project(':mybatis-core')
-    api project(':outbox-persistence')
-}

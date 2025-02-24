@@ -1,0 +1,8 @@
+dependencies {
+    // Platform
+    api project(':persistence-jpa')
+    api project(':object-mapper')
+
+    // Service
+    api project(':catalog-port-outbound')
+}

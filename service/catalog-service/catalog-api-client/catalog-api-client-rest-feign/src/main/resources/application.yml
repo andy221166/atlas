@@ -1,0 +1,5 @@
+app:
+  api-client:
+    rest:
+      catalog-service:
+        base-url: ${API_CLIENT_REST_CATALOG_SERVICE_BASE_URL:http://localhost:8082}

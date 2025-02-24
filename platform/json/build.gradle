@@ -1,9 +1,8 @@
 dependencies {
-    // Jackson
-    api 'com.fasterxml.jackson.core:jackson-databind:2.15.4'
+    // Lib
+    api 'org.springframework.boot:spring-boot-starter-json'
+    api 'com.google.code.gson:gson:2.12.1'
 
-    // Gson
-    api 'com.google.code.gson:gson:2.11.0'
-
+    // Platform
     api project(':commons')
 }

@@ -1,0 +1,12 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.atlas.platform.orm.mybatis.aggProduct.mapper.CategoryMapper">
+	<resultMap id="CategoryMap" type="org.atlas.service.aggProduct.domain.Category">
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="updatedAt" />
+	</resultMap>
+
+	<select id="findAll" resultMap="CategoryMap">
+		select *
+		from categoryEntity
+	</select>
+</mapper>

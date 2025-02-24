@@ -1,0 +1,5 @@
+dependencies {
+    api project(':product-domain')
+    api project(':cqrs')
+    api 'org.springframework.boot:spring-boot-starter-validation'
+}

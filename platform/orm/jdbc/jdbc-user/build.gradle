@@ -1,4 +1,0 @@
-dependencies {
-    api project(':user-contract')
-    api project(':jdbc-core')
-}

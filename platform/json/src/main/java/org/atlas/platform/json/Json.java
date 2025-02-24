@@ -10,5 +10,5 @@ public interface Json {
 
   String toJson(Object source);
 
-  String getNodeValue(String json, String key);
+  Object getNodeValue(String json, String key);
 }

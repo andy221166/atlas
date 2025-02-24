@@ -3,9 +3,9 @@ package org.atlas.platform.event.sns.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.json.JsonUtil;
-import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.order.BaseOrderEvent;
-import org.atlas.platform.event.core.publisher.EventPublisher;
+import org.atlas.platform.event.core.model.DomainEvent;
+import org.atlas.platform.event.core.publisher.ExternalEventPublisher;
 import org.atlas.platform.event.sns.config.SnsEventProps;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sns.SnsClient;
@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SnsEventPublisher implements EventPublisher {
+public class SnsEventPublisher implements ExternalEventPublisher {
 
     private final SnsEventProps props;
     private final SnsClient snsClient;

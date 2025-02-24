@@ -41,7 +41,7 @@
 <div class="header">Order Confirmation</div>
 
 <div class="content">
-    <p>Dear ${orderPayload.user.firstName} ${orderPayload.user.lastName},</p>
+    <p>Dear ${orderPayload.userEntity.firstName} ${orderPayload.userEntity.lastName},</p>
 
     <p>Thank you for your orderPayload! Your orderPayload <strong>${orderPayload.id}</strong>, placed on <strong>${orderPayload.createdAt?string("yyyy-MM-dd HH:mm:ss")}</strong>, was confirmed.</p>
 

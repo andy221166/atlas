@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS db_product;
 
 USE db_product;
 
-CREATE TABLE IF NOT EXISTS category
+CREATE TABLE IF NOT EXISTS categoryEntity
 (
     `id`         INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`       VARCHAR(255) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS aggProduct
     `updated_at`  DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = INNODB;
 
-INSERT IGNORE INTO category (`id`, `name`)
+INSERT IGNORE INTO categoryEntity (`id`, `name`)
 VALUES (1, 'ELECTRONICS'), (2, 'CLOTHING'), (3, 'FOOD'), (4, 'TOYS');
 
 INSERT IGNORE INTO aggProduct (`id`, `name`, `description`, `category_id`, `price`, `quantity`, `created_at`)
@@ -41,7 +41,8 @@ VALUES
 CREATE TABLE IF NOT EXISTS outbox_message
 (
     id           BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    payload      TEXT          NOT NULL,
+    event        TEXT          NOT NULL,
+    destination  VARCHAR(255)  NOT NULL,
     status       VARCHAR(10)   NOT NULL,
     processed_at DATETIME,
     error        TEXT,

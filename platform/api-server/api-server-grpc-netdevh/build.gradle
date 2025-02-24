@@ -1,0 +1,7 @@
+dependencies {
+    // Lib
+    api 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+
+    // Platform
+    api project(':commons')
+}

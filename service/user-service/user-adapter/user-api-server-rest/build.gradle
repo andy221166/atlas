@@ -1,0 +1,7 @@
+dependencies {
+    // Platform
+    api project(':api-server-rest')
+
+    // Service
+    api project(':user-port-inbound')
+}

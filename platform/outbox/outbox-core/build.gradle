@@ -1,5 +1,0 @@
-dependencies {
-    api project(':jpa-outbox')
-    api project(':lock-redis')
-    api 'org.springframework:spring-tx:6.2.1'
-}

@@ -26,7 +26,7 @@
 #### Step 1: Build JAR files
 
 ```bash
-./scripts/build-jar.sh
+./script/build-jar.sh
 ```
 
 The default profile is `local-compose`.
@@ -34,14 +34,14 @@ The default profile is `local-compose`.
 If you want to change the profile, you can pass param as below:
 
 ```bash
-./scripts/build-jar.sh local-k8s
-./scripts/build-jar.sh aws
+./script/build-jar.sh local-k8s
+./script/build-jar.sh aws
 ```
 
 #### Step 2: Build Docker images
 
 ```bash
-./scripts/build-docker-image.sh
+./script/build-docker-image.sh
 ```
 
 ### Running the Project Locally
@@ -51,7 +51,7 @@ You have multiple options to start the project locally.
 #### Using Docker Compose
 
 ```bash
-./scripts/docker-compose-start.sh
+./script/docker-compose-start.sh
 ```
 
 #### Using Kubernetes (Minikube)
@@ -60,14 +60,14 @@ Set up and run the project using Minikube with the following commands:
 
 ```bash
 # Setup
-./scripts/k8s-init-minikube-cluster.sh
-./scripts/k8s-init-dashboard.sh
-./scripts/k8s-init-backend.sh
+./script/k8s-init-minikube-cluster.sh
+./script/k8s-init-dashboard.sh
+./script/k8s-init-backend.sh
 # Wait for approximately 5 minutes...
-./scripts/k8s-init-services.sh
+./script/k8s-init-services.sh
 
 # Start the services
-./scripts/k8s-start.sh
+./script/k8s-start.sh
 ```
 
 ---

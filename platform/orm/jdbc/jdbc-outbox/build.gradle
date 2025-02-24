@@ -1,4 +1,0 @@
-dependencies {
-    api project(':jdbc-core')
-    api project(':outbox-persistence')
-}

@@ -1,4 +1,0 @@
-dependencies {
-    api project(':opencsv-core')
-    api project(':user-contract')
-}
