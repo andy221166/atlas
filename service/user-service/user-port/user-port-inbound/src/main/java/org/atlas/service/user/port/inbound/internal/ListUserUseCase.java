@@ -1,7 +1,6 @@
 package org.atlas.service.user.port.inbound.internal;
 
 import jakarta.validation.constraints.NotEmpty;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.platform.usecase.port.input.InternalInput;
+
+import java.util.List;
 
 public interface ListUserUseCase
     extends UseCase<ListUserUseCase.Input, ListUserUseCase.Output> {
@@ -26,7 +27,6 @@ public interface ListUserUseCase
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @EqualsAndHashCode(callSuper = false)
   class Output {
 
     private List<User> users;

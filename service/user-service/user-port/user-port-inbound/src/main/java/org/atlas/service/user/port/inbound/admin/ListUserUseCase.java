@@ -4,34 +4,31 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.enums.Role;
-import org.atlas.platform.commons.paging.PageResult;
-import org.atlas.platform.commons.paging.PageRequest;
+import org.atlas.platform.commons.paging.PagingRequest;
+import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
 
 public interface ListUserUseCase
     extends UseCase<ListUserUseCase.Input, ListUserUseCase.Output> {
 
   @Data
-  @EqualsAndHashCode(callSuper = false)
   class Input {
 
     @NotEmpty
     private String keyword;
 
     @Valid
-    private PageRequest pageRequest;
+    private PagingRequest pagingRequest;
   }
 
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @EqualsAndHashCode(callSuper = false)
   class Output {
 
-    private PageResult<User> users;
+    private PagingResult<User> users;
 
     @Data
     public static class User {

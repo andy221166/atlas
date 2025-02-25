@@ -1,31 +1,31 @@
 package org.atlas.platform.persistence.jpa.core.paging;
 
 import lombok.experimental.UtilityClass;
-import org.atlas.platform.commons.paging.PageResult;
-import org.atlas.platform.commons.paging.PageRequest;
+import org.atlas.platform.commons.paging.PagingResult;
+import org.atlas.platform.commons.paging.PagingRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @UtilityClass
 public class PagingConverter {
 
-  public static Pageable convert(PageRequest pageRequest) {
-    if (pageRequest.hasSort()) {
-      Sort.Direction sortDirection = pageRequest.isSortAscending() ?
+  public static Pageable convert(PagingRequest pagingRequest) {
+    if (pagingRequest.hasSort()) {
+      Sort.Direction sortDirection = pagingRequest.isSortAscending() ?
           Sort.Direction.ASC : Sort.Direction.DESC;
-      Sort sort = Sort.by(sortDirection, pageRequest.getSortBy());
+      Sort sort = Sort.by(sortDirection, pagingRequest.getSortBy());
       return org.springframework.data.domain.PageRequest.of(
-          pageRequest.getPage(), pageRequest.getSize(), sort);
+          pagingRequest.getPage(), pagingRequest.getSize(), sort);
     } else {
       return org.springframework.data.domain.PageRequest.of(
-          pageRequest.getPage(), pageRequest.getSize());
+          pagingRequest.getPage(), pagingRequest.getSize());
     }
   }
 
-  public static <T> PageResult<T> convert(org.springframework.data.domain.Page<T> springPage) {
+  public static <T> PagingResult<T> convert(org.springframework.data.domain.Page<T> springPage) {
     if (springPage.isEmpty()) {
-      return PageResult.empty();
+      return PagingResult.empty();
     }
-    return PageResult.of(springPage.getContent(), springPage.getTotalElements());
+    return PagingResult.of(springPage.getContent(), springPage.getTotalElements());
   }
 }

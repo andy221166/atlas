@@ -21,7 +21,7 @@ public enum AppError {
   EMAIL_ALREADY_EXISTS(2001, "error.user.email_already_exists"),
   PHONE_NUMBER_ALREADY_EXISTS(2001, "error.user.phone_number_already_exists"),
 
-  // Product-related errors
+  // Catalog-related errors
   PRODUCT_NOT_FOUND(3000, "error.product.not_found"),
   CATEGORY_NOT_FOUND(3001, "error.category.not_found"),
   IMPORT_PRODUCT_REQUEST_NOT_FOUND(3001, "error.import_product_request.not_found"),

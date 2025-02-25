@@ -142,10 +142,6 @@ project(':tracing-zipkin').projectDir = file('platform/observability/tracing/tra
 include(':persistence-jpa')
 project(':persistence-jpa').projectDir = file('platform/persistence/persistence-jpa')
 
-// Persistence::MyBatis
-include(':persistence-mybatis')
-project(':persistence-mybatis').projectDir = file('platform/persistence/persistence-mybatis')
-
 // QR generator
 include(':qr-generator')
 project(':qr-generator').projectDir = file('platform/qr-generator')
@@ -211,8 +207,6 @@ include(':user-event-publisher-kafka')
 project(':user-event-publisher-kafka').projectDir = file('service/user-service/user-adapter/user-event-publisher-kafka')
 include(':user-persistence-jpa')
 project(':user-persistence-jpa').projectDir = file('service/user-service/user-adapter/user-persistence-jpa')
-include(':user-persistence-mybatis')
-project(':user-persistence-mybatis').projectDir = file('service/user-service/user-adapter/user-persistence-mybatis')
 // User service::API client
 include(':user-api-client-contract')
 project(':user-api-client-contract').projectDir = file('service/user-service/user-api-client/user-api-client-contract')
@@ -250,8 +244,6 @@ include(':catalog-event-publisher-kafka')
 project(':catalog-event-publisher-kafka').projectDir = file('service/catalog-service/catalog-adapter/catalog-event-publisher-kafka')
 include(':catalog-persistence-jpa')
 project(':catalog-persistence-jpa').projectDir = file('service/catalog-service/catalog-adapter/catalog-persistence-jpa')
-include(':catalog-persistence-mybatis')
-project(':catalog-persistence-mybatis').projectDir = file('service/catalog-service/catalog-adapter/catalog-persistence-mybatis')
 // Catalog service::API client
 include(':catalog-api-client-contract')
 project(':catalog-api-client-contract').projectDir = file('service/catalog-service/catalog-api-client/catalog-api-client-contract')
@@ -283,8 +275,6 @@ include(':order-datasource-mysql')
 project(':order-datasource-mysql').projectDir = file('service/order-service/order-infra/order-datasource-mysql')
 include(':order-persistence-jpa')
 project(':order-persistence-jpa').projectDir = file('service/order-service/order-infra/order-persistence-jpa')
-include(':order-persistence-mybatis')
-project(':order-persistence-mybatis').projectDir = file('service/order-service/order-infra/order-persistence-mybatis')
 
 include(':notification-application')
 project(':notification-application').projectDir = file('service/notification-service/notification-application')

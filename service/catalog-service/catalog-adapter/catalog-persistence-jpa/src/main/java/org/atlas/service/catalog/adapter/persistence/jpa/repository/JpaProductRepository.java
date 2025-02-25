@@ -5,5 +5,5 @@ import org.atlas.service.catalog.adapter.persistence.jpa.entity.JpaProduct;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaProductRepository extends JpaBaseRepository<JpaProduct, Integer> {
+public interface JpaProductRepository extends JpaBaseRepository<JpaProduct, Integer>, CustomJpaProductRepository {
 }

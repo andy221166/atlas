@@ -2,7 +2,7 @@ package org.atlas.platform.objectmapper.springbeanutils;
 
 import java.util.List;
 import java.util.Objects;
-import org.atlas.platform.commons.paging.PageResult;
+import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 
@@ -34,11 +34,11 @@ public class SpringBeanUtilsAdapter implements ObjectMapper {
   }
 
   @Override
-  public <D> PageResult<D> mapPage(PageResult<?> source, Class<D> destinationType) {
+  public <D> PagingResult<D> mapPage(PagingResult<?> source, Class<D> destinationType) {
     if (source.getTotalCount() == 0L) {
-      return PageResult.empty();
+      return PagingResult.empty();
     }
-    return PageResult.of(mapList(source.getResults(), destinationType), source.getTotalCount());
+    return PagingResult.of(mapList(source.getResults(), destinationType), source.getTotalCount());
   }
 
   @Override

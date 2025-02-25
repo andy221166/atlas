@@ -43,12 +43,6 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- ORM::MyBatis -->
-    <logger name="org.mybatis" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-
     <!-- Task Scheduler::Quartz -->
     <logger name="org.quartz.core" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>

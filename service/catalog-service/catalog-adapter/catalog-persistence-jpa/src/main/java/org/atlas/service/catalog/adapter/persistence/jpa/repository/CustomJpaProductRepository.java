@@ -1,12 +1,14 @@
 package org.atlas.service.catalog.adapter.persistence.jpa.repository;
 
-import java.util.List;
+import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.catalog.adapter.persistence.jpa.entity.JpaProduct;
-import org.atlas.service.product.contract.query.SearchProductQuery;
+import org.atlas.service.catalog.port.outbound.repository.FindProductCriteria;
+
+import java.util.List;
 
 public interface CustomJpaProductRepository {
 
-  List<JpaProduct> find(SearchProductQuery command);
+  List<JpaProduct> find(FindProductCriteria criteria, PagingRequest pagingRequest);
 
-  long count(SearchProductQuery command);
+  long count(FindProductCriteria criteria);
 }

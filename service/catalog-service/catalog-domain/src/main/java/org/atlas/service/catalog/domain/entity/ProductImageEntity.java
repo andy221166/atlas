@@ -12,4 +12,5 @@ public class ProductImageEntity extends AuditableEntity implements Serializable 
   @EqualsAndHashCode.Include
   private Integer id;
   private String imageUrl;
+  private Boolean isCover;
 }

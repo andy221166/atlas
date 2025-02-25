@@ -83,9 +83,6 @@ dependencies {
         case 'jpa':
             api project(':user-persistence-jpa')
             break
-        case 'mybatis':
-            api project(':user-persistence-mybatis')
-            break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }

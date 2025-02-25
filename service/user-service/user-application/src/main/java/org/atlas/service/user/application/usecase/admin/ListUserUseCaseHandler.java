@@ -1,10 +1,11 @@
 package org.atlas.service.user.application.usecase.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.commons.paging.PageResult;
+import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.inbound.admin.ListUserUseCase;
+import org.atlas.service.user.port.inbound.admin.ListUserUseCase.Output.User;
 import org.atlas.service.user.port.outbound.repository.FindUserCriteria;
 import org.atlas.service.user.port.outbound.repository.UserRepository;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,9 @@ public class ListUserUseCaseHandler implements ListUserUseCase {
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindUserCriteria criteria = ObjectMapperUtil.getInstance()
-        .map(input, FindUserCriteria.class);
-    PageResult<UserEntity> userEntityPageResult =
-        userRepository.findByCriteria(criteria, input.getPageRequest());
-    PageResult<Output.User> userPageResult = ObjectMapperUtil.getInstance()
-        .mapPage(userEntityPageResult, Output.User.class);
-    return new Output(userPageResult);
+    FindUserCriteria criteria = ObjectMapperUtil.getInstance().map(input, FindUserCriteria.class);
+    PagingResult<UserEntity> userEntityPage = userRepository.findByCriteria(criteria, input.getPagingRequest());
+    PagingResult<User> userPage = ObjectMapperUtil.getInstance().mapPage(userEntityPage, Output.User.class);
+    return new Output(userPage);
   }
 }

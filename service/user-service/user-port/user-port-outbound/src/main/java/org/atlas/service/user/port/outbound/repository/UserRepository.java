@@ -2,15 +2,15 @@ package org.atlas.service.user.port.outbound.repository;
 
 import java.util.List;
 import java.util.Optional;
-import org.atlas.platform.commons.paging.PageResult;
-import org.atlas.platform.commons.paging.PageRequest;
+import org.atlas.platform.commons.paging.PagingResult;
+import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.user.domain.entity.UserEntity;
 
 public interface UserRepository {
 
   List<UserEntity> findByIdIn(List<Integer> ids);
 
-  PageResult<UserEntity> findByCriteria(FindUserCriteria criteria, PageRequest pageRequest);
+  PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria, PagingRequest pagingRequest);
 
   Optional<UserEntity> findById(Integer id);
 

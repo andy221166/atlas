@@ -19,7 +19,7 @@ public class ProductEntity extends AuditableEntity implements Serializable {
   private BigDecimal price;
   private ProductStatus status;
   private Date availableFrom;
-  private Boolean active;
+  private Boolean isActive;
 
   // Associations
   // Many-To-One

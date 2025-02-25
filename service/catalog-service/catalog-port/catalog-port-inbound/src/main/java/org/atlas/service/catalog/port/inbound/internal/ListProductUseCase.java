@@ -1,14 +1,15 @@
 package org.atlas.service.catalog.port.inbound.internal;
 
 import jakarta.validation.constraints.NotEmpty;
-import java.math.BigDecimal;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.platform.usecase.port.input.InternalInput;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface ListProductUseCase
     extends UseCase<ListProductUseCase.Input, ListProductUseCase.Output> {
@@ -26,7 +27,6 @@ public interface ListProductUseCase
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @EqualsAndHashCode(callSuper = false)
   class Output {
 
     private List<Product> products;

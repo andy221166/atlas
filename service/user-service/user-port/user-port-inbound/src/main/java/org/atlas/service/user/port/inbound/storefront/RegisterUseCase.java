@@ -4,7 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.atlas.platform.commons.constant.Patterns;
 import org.atlas.platform.usecase.port.UseCase;
 
@@ -12,7 +11,6 @@ public interface RegisterUseCase
     extends UseCase<RegisterUseCase.Input, Void> {
 
   @Data
-  @EqualsAndHashCode(callSuper = false)
   class Input {
 
     @NotBlank

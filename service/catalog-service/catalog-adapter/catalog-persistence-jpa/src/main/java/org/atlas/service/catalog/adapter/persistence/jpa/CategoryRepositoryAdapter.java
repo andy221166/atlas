@@ -2,10 +2,10 @@ package org.atlas.service.catalog.adapter.persistence.jpa;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.atlas.commons.util.mapping.ModelMapperAdapter;
+import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.catalog.adapter.persistence.jpa.repository.JpaCategoryRepository;
-import org.atlas.service.product.contract.repository.CategoryRepository;
 import org.atlas.service.catalog.domain.entity.CategoryEntity;
+import org.atlas.service.catalog.port.outbound.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ public class CategoryRepositoryAdapter implements CategoryRepository {
   public List<CategoryEntity> findAll() {
     return jpaCategoryRepository.findAll()
         .stream()
-        .map(jpaCategory -> ModelMapperAdapter.map(jpaCategory, CategoryEntity.class))
+        .map(jpaCategory -> ObjectMapperUtil.getInstance().map(jpaCategory, CategoryEntity.class))
         .toList();
   }
 }

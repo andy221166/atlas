@@ -3,8 +3,8 @@ package org.atlas.service.user.adapter.persistence.jpa;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.commons.paging.PageResult;
-import org.atlas.platform.commons.paging.PageRequest;
+import org.atlas.platform.commons.paging.PagingResult;
+import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.persistence.jpa.core.paging.PagingConverter;
 import org.atlas.service.user.adapter.persistence.jpa.entity.JpaUser;
@@ -30,11 +30,11 @@ public class UserRepositoryAdapter implements UserRepository {
   }
 
   @Override
-  public PageResult<UserEntity> findByCriteria(FindUserCriteria criteria, PageRequest pageRequest) {
-    Pageable pageable = PagingConverter.convert(pageRequest);
-    PageResult<JpaUser> jpaUserPageResult = PagingConverter.convert(
+  public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria, PagingRequest pagingRequest) {
+    Pageable pageable = PagingConverter.convert(pagingRequest);
+    PagingResult<JpaUser> jpaUserPage = PagingConverter.convert(
         jpaUserRepository.findByKeyword(criteria.getKeyword(), pageable));
-    return ObjectMapperUtil.getInstance().mapPage(jpaUserPageResult, UserEntity.class);
+    return ObjectMapperUtil.getInstance().mapPage(jpaUserPage, UserEntity.class);
   }
 
   @Override

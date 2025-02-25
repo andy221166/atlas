@@ -46,10 +46,11 @@ public class JpaProduct extends JpaBaseEntity {
 
   private ProductStatus status;
 
-  @Column(name = "AVAILABLE_FROM")
+  @Column(name = "available_from")
   private Date availableFrom;
 
-  private Boolean active;
+  @Column(name = "is_active")
+  private Boolean isActive;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "brand_id")

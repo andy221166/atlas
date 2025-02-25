@@ -87,9 +87,6 @@ dependencies {
         case 'jpa':
             api project(':catalog-persistence-jpa')
             break
-        case 'mybatis':
-            api project(':catalog-persistence-mybatis')
-            break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }

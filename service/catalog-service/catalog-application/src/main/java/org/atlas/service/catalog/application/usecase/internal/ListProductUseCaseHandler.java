@@ -19,9 +19,9 @@ public class ListProductUseCaseHandler implements ListProductUseCase {
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
     List<ProductEntity> productEntities = productRepository.findByIdIn(input.getIds());
-    List<Output.Product> users = productEntities.stream()
-        .map(user -> ObjectMapperUtil.getInstance().map(user, Output.Product.class))
+    List<Output.Product> products = productEntities.stream()
+        .map(product -> ObjectMapperUtil.getInstance().map(product, Output.Product.class))
         .toList();
-    return new Output(users);
+    return new Output(products);
   }
 }

@@ -23,8 +23,7 @@ public class ProductController {
   @PostMapping
   public Response<ListProductUseCase.Output> listUser(@Valid @RequestBody ListProductRequest request)
       throws Exception {
-    ListProductUseCase.Input input = ObjectMapperUtil.getInstance()
-        .map(request, ListProductUseCase.Input.class);
+    ListProductUseCase.Input input = ObjectMapperUtil.getInstance().map(request, ListProductUseCase.Input.class);
     ListProductUseCase.Output output = listProductUseCase.handle(input);
     return Response.success(output);
   }

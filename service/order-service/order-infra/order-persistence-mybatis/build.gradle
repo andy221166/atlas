@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':persistence-mybatis')
-
-    // Service
-    api project(':order-contract')
-}
