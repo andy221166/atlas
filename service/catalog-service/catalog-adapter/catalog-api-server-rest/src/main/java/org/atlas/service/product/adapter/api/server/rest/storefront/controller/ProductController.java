@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.paging.PagingRequest;
-import org.atlas.service.catalog.port.inbound.storefront.SearchProductUseCase;
+import org.atlas.service.catalog.port.inbound.front.SearchProductUseCase;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

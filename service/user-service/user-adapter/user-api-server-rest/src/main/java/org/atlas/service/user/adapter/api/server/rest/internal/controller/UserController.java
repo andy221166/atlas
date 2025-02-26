@@ -20,7 +20,7 @@ public class UserController {
 
   private final ListUserUseCase listUserUseCase;
 
-  @PostMapping
+  @PostMapping("/list")
   public Response<ListUserUseCase.Output> listUser(@Valid @RequestBody ListUserRequest request)
       throws Exception {
     ListUserUseCase.Input input =

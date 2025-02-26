@@ -21,7 +21,7 @@ public class CatalogApiClientImpl implements CatalogApiClient {
 
   @Override
   public ListProductUseCase.Output call(ListProductUseCase.Input input) {
-    String url = String.format("%s/api/internal/products", baseUrl);
+    String url = String.format("%s/api/internal/products/list", baseUrl);
 
     ListProductResponse response =
         service.doPost(url, null, input, ListProductResponse.class);

@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface CatalogFeignClient {
 
-  @PostMapping("/api/internal/products")
+  @PostMapping("/api/internal/products/list")
   ListProductResponse listProduct(@RequestBody ListProductUseCase.Input input);
 }

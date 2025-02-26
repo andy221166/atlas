@@ -21,7 +21,7 @@ public class UserApiClientImpl implements UserApiClient {
 
   @Override
   public ListUserUseCase.Output call(ListUserUseCase.Input input) {
-    String url = String.format("%s/api/internal/users", baseUrl);
+    String url = String.format("%s/api/internal/users/list", baseUrl);
 
     ListUserResponse response =
         service.doPost(url, null, input, ListUserResponse.class);

@@ -15,7 +15,7 @@ import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.service.catalog.domain.entity.ProductStatus;
 
 public interface UpdateProductUseCase
-    extends UseCase<UpdateProductUseCase.Input, UpdateProductUseCase.Output> {
+    extends UseCase<UpdateProductUseCase.Input, Void> {
 
   @Data
   @NoArgsConstructor
@@ -30,7 +30,7 @@ public interface UpdateProductUseCase
 
     @NotNull
     @DecimalMin(value = "0.0")
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal price;
 
     @NotNull
     private ProductStatus status;
@@ -38,7 +38,7 @@ public interface UpdateProductUseCase
     @NotNull
     private Date availableFrom;
 
-    private Boolean isActive = true;
+    private Boolean isActive;
 
     @NotNull
     private Integer brandId;
@@ -63,18 +63,12 @@ public interface UpdateProductUseCase
     @Data
     public static class ProductImage {
 
+      private Integer id;
+
       @NotBlank
       private String imageUrl;
 
       private Boolean isCover = false;
     }
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  class Output {
-
-    private Integer id;
   }
 }

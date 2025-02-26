@@ -7,7 +7,7 @@ import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.usecase.port.input.EmptyInput;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.service.user.port.inbound.storefront.GetProfileUseCase;
+import org.atlas.service.user.port.inbound.front.GetProfileUseCase;
 import org.atlas.service.user.port.outbound.repository.UserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

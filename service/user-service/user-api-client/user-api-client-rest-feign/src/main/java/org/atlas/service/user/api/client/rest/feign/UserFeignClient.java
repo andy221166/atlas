@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface UserFeignClient {
 
-  @PostMapping("/api/internal/users")
+  @PostMapping("/api/internal/users/list")
   ListUserResponse listUser(@RequestBody ListUserUseCase.Input input);
 }

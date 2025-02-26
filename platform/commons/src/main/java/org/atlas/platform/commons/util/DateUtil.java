@@ -1,5 +1,9 @@
 package org.atlas.platform.commons.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -11,9 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtil {
