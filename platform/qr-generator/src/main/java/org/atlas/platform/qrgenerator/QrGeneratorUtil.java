@@ -8,6 +8,7 @@ import org.atlas.platform.qrgenerator.zxing.ZxingAdapter;
 public class QrGeneratorUtil {
 
   private static class JsonHolder {
+
     private static final QrGenerator INSTANCE = new ZxingAdapter();
   }
 

@@ -30,7 +30,8 @@ public class UserRepositoryAdapter implements UserRepository {
   }
 
   @Override
-  public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria, PagingRequest pagingRequest) {
+  public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria,
+      PagingRequest pagingRequest) {
     Pageable pageable = PagingConverter.convert(pagingRequest);
     PagingResult<JpaUser> jpaUserPage = PagingConverter.convert(
         jpaUserRepository.findByKeyword(criteria.getKeyword(), pageable));

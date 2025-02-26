@@ -1,5 +1,6 @@
 package org.atlas.service.catalog.application.usecase.admin;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.exception.AppError;
@@ -17,8 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
@@ -33,7 +32,7 @@ public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
   @Transactional
   public Void handle(Input input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
-            .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
 
     // Update product into DB
     merge(input, productEntity);

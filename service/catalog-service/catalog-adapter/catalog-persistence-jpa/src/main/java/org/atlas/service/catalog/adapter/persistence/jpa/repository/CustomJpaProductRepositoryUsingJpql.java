@@ -60,12 +60,12 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     Map<String, Object> params = new HashMap<>();
     String whereClause = buildWhereClause(criteria, params);
     String countSql = """
-      select count(p.id)
-      from JpaProduct p
-      left join fetch p.brand b
-      left join fetch p.detail d
-      left join fetch p.categories c
-      """ + whereClause;
+        select count(p.id)
+        from JpaProduct p
+        left join fetch p.brand b
+        left join fetch p.detail d
+        left join fetch p.categories c
+        """ + whereClause;
     TypedQuery<Long> countQuery = entityManager.createQuery(countSql, Long.class);
     params.forEach(countQuery::setParameter);
     return countQuery.getSingleResult();
@@ -80,12 +80,12 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     if (StringUtils.hasLength(criteria.getKeyword())) {
       whereClauseBuilder.append(
           """
-          and (
-            lower(p.code) like :keyword
-            or lower(p.name) like :keyword
-            or lower(d.description) like :keyword
-          )
-          """);
+              and (
+                lower(p.code) like :keyword
+                or lower(p.name) like :keyword
+                or lower(d.description) like :keyword
+              )
+              """);
       params.put("keyword", "%" + criteria.getKeyword().toLowerCase() + "%");
     }
     if (criteria.getMinPrice() != null) {

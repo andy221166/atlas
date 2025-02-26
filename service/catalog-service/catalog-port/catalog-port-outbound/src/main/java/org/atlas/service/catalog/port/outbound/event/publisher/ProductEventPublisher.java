@@ -7,6 +7,8 @@ import org.atlas.service.catalog.domain.event.ProductUpdatedEvent;
 public interface ProductEventPublisher {
 
   void publish(ProductCreatedEvent event);
+
   void publish(ProductUpdatedEvent event);
+
   void publish(ProductDeletedEvent event);
 }

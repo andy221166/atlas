@@ -11,15 +11,15 @@ import org.atlas.service.catalog.port.inbound.admin.ImportProductUseCase.Input;
 
 public interface ImportProductUseCase extends UseCase<Input, Void> {
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class Input {
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class Input {
 
-        @NotNull
-        private FileType fileType;
+    @NotNull
+    private FileType fileType;
 
-        @NotEmpty
-        private byte[] fileContent;
-    }
+    @NotEmpty
+    private byte[] fileContent;
+  }
 }

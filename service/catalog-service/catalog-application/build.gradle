@@ -40,6 +40,14 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['cache']}")
     }
 
+    switch (modules['csv']) {
+        case 'opencsv':
+            api project(':csv-opencsv')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['csv']}")
+    }
+
     switch (modules['datasource']) {
         case 'mysql':
             api project(':catalog-datasource-mysql')
@@ -73,6 +81,17 @@ dependencies {
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
+    }
+
+    switch (modules['excel']) {
+        case 'easyexcel':
+            api project(':excel-easyexcel')
+            break
+        case 'poi':
+            api project(':excel-poi')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['excel']}")
     }
 
     switch (modules['logging']) {

@@ -8,6 +8,7 @@ import org.atlas.platform.objectmapper.modelmapper.ModelMapperAdapter;
 public class ObjectMapperUtil {
 
   private static class ObjectMapperHolder {
+
     private static final ObjectMapper INSTANCE = new ModelMapperAdapter();
   }
 

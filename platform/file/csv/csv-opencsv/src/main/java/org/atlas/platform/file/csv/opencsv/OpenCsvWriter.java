@@ -1,4 +1,4 @@
-package org.atlas.platform.file.csv.opencsv.core;
+package org.atlas.platform.file.csv.opencsv;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvBindByName;
@@ -12,10 +12,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class OpenCsvWriter {
 
   public static <T> byte[] write(List<T> records, Class<T> beanClass) throws Exception {

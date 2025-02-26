@@ -9,18 +9,18 @@ import org.atlas.service.catalog.port.inbound.master.ListCategoryUseCase.Output;
 
 public interface ListCategoryUseCase extends UseCase<Void, Output> {
 
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class Output {
+
+    private List<Category> categories;
+
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class Output {
+    public static class Category {
 
-        private List<Category> categories;
-
-        @Data
-        public static class Category {
-
-            private Integer id;
-            private String name;
-        }
+      private Integer id;
+      private String name;
     }
+  }
 }

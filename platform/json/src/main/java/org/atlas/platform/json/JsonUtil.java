@@ -8,6 +8,7 @@ import org.atlas.platform.json.jackson.JacksonAdapter;
 public class JsonUtil {
 
   private static class JsonHolder {
+
     private static final Json INSTANCE = new JacksonAdapter();
   }
 

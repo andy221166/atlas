@@ -9,13 +9,13 @@ import org.atlas.service.catalog.domain.entity.ProductStatus;
 @Data
 public class FindProductCriteria {
 
-    private Integer id;
-    private String keyword;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private ProductStatus status;
-    private Date availableFrom;
-    private Boolean isActive;
-    private Integer brandId;
-    private List<Integer> categoryIds;
+  private Integer id;
+  private String keyword;
+  private BigDecimal minPrice;
+  private BigDecimal maxPrice;
+  private ProductStatus status;
+  private Date availableFrom;
+  private Boolean isActive;
+  private Integer brandId;
+  private List<Integer> categoryIds;
 }

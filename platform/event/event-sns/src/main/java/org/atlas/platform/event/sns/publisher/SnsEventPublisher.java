@@ -17,30 +17,30 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 @Slf4j
 public class SnsEventPublisher implements ExternalEventPublisher {
 
-    private final SnsEventProps props;
-    private final SnsClient snsClient;
+  private final SnsEventProps props;
+  private final SnsClient snsClient;
 
-    @Override
-    public <E extends DomainEvent> void publish(E event) {
-        if (event instanceof BaseOrderEvent) {
-            if (props.getOrderTopicArn() == null) {
-                log.error("No order topic configured");
-                return;
-            }
-            doPublish(event, props.getOrderTopicArn());
-        } else {
-            throw new IllegalArgumentException("Unsupported event type: " + event.getEventType());
-        }
+  @Override
+  public <E extends DomainEvent> void publish(E event) {
+    if (event instanceof BaseOrderEvent) {
+      if (props.getOrderTopicArn() == null) {
+        log.error("No order topic configured");
+        return;
+      }
+      doPublish(event, props.getOrderTopicArn());
+    } else {
+      throw new IllegalArgumentException("Unsupported event type: " + event.getEventType());
     }
+  }
 
-    private void doPublish(DomainEvent event, String topicArn) {
-        String message = JsonUtil.toJson(event);
-        PublishRequest request = PublishRequest.builder()
-            .message(message)
-            .topicArn(topicArn)
-            .build();
-        PublishResponse response = snsClient.publish(request);
-        log.info("Published event: {}\nStatus: {}. Response: {}",
-            event, response.sdkHttpResponse().statusCode(), response);
-    }
+  private void doPublish(DomainEvent event, String topicArn) {
+    String message = JsonUtil.toJson(event);
+    PublishRequest request = PublishRequest.builder()
+        .message(message)
+        .topicArn(topicArn)
+        .build();
+    PublishResponse response = snsClient.publish(request);
+    log.info("Published event: {}\nStatus: {}. Response: {}",
+        event, response.sdkHttpResponse().statusCode(), response);
+  }
 }

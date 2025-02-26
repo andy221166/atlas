@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class SearchProductCriteria {
 
-    private String keyword; // Find by name or description
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
-    private Integer brandId;
-    private List<Integer> categoryIds;
+  private String keyword;
+  private BigDecimal minPrice;
+  private BigDecimal maxPrice;
+  private Integer brandId;
+  private List<Integer> categoryIds;
 }

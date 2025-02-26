@@ -1,9 +1,8 @@
 package org.atlas.platform.commons.constant;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class Constant {
 
   // TODO: Consider to put it into config-server

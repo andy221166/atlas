@@ -1,5 +1,4 @@
 dependencies {
-    api project(':object-mapper')
-
+    // Lib
     api 'com.opencsv:opencsv:5.9'
 }

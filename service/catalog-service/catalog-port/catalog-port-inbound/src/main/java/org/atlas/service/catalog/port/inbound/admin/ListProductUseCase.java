@@ -21,7 +21,7 @@ public interface ListProductUseCase
   class Input {
 
     private Integer id;
-    private String keyword; // Find by name or description
+    private String keyword;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private ProductStatus status;

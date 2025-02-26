@@ -60,7 +60,8 @@ public class OutboxMessageService {
     // Process each outbox message in parallel
     List<CompletableFuture<Void>> futures = outboxMessages.stream()
         .map(outboxMessage ->
-            CompletableFuture.runAsync(() -> processOutboxMessage(outboxMessage), outboxMessageExecutor))
+            CompletableFuture.runAsync(() -> processOutboxMessage(outboxMessage),
+                outboxMessageExecutor))
         .toList();
 
     // Wait for all parallel tasks to complete

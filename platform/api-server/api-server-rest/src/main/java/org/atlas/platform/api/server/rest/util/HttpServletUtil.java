@@ -3,12 +3,11 @@ package org.atlas.platform.api.server.rest.util;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.atlas.platform.json.JsonUtil;
 import org.springframework.http.HttpStatus;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class HttpServletUtil {
 
   public static void respondJson(HttpServletResponse response, Object payload,

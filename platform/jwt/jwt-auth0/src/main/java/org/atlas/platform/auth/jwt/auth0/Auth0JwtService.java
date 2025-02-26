@@ -36,7 +36,7 @@ public class Auth0JwtService extends JwtService {
   public JwtData doParseToken(String jwt, String issuer) {
     DecodedJWT decodedJWT;
     try {
-       decodedJWT = JWT.require(Algorithm.RSA256(publicKey))
+      decodedJWT = JWT.require(Algorithm.RSA256(publicKey))
           .withIssuer(issuer)
           .build()
           .verify(jwt);

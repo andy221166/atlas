@@ -1,11 +1,10 @@
 package org.atlas.platform.cryptography;
 
 import java.nio.charset.StandardCharsets;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.codec.binary.Base64;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class Base64Util {
 
   public static String encode(String input) {

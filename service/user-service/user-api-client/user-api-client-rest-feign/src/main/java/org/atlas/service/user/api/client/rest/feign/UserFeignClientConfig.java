@@ -6,4 +6,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableFeignClients(basePackages = "org.atlas.service.user.infra.api.client.rest.feign")
 public class UserFeignClientConfig {
+
 }

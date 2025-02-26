@@ -15,20 +15,20 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RouteController {
 
-    private final ApplicationEventPublisher applicationEventPublisher;
-    private final RouteLocator routeLocator;
+  private final ApplicationEventPublisher applicationEventPublisher;
+  private final RouteLocator routeLocator;
 
-    @GetMapping
-    public Mono<String> listRoutes() {
-        return routeLocator.getRoutes()
-            .map(route -> route.getId() + ": " + route.getUri())
-            .collectList()
-            .map(routes -> String.join("\n", routes));
-    }
+  @GetMapping
+  public Mono<String> listRoutes() {
+    return routeLocator.getRoutes()
+        .map(route -> route.getId() + ": " + route.getUri())
+        .collectList()
+        .map(routes -> String.join("\n", routes));
+  }
 
-    @PostMapping("/refresh")
-    public Mono<String> refreshRoutes() {
-        applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
-        return Mono.just("Routes refreshed successfully");
-    }
+  @PostMapping("/refresh")
+  public Mono<String> refreshRoutes() {
+    applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
+    return Mono.just("Routes refreshed successfully");
+  }
 }

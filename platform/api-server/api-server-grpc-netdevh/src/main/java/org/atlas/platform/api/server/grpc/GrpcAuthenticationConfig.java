@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrpcAuthenticationConfig {
 
-    @Bean
-    public GrpcAuthenticationReader grpcAuthenticationReader() {
-        return new BasicGrpcAuthenticationReader();
-    }
+  @Bean
+  public GrpcAuthenticationReader grpcAuthenticationReader() {
+    return new BasicGrpcAuthenticationReader();
+  }
 }

@@ -1,9 +1,5 @@
 package org.atlas.platform.commons.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -15,8 +11,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class DateUtil {
 
   private static final ConcurrentMap<String, SimpleDateFormat> simpleDateFormatCache = new ConcurrentHashMap<>();
@@ -56,6 +54,10 @@ public class DateUtil {
 
   public static Date now() {
     return new Date();
+  }
+
+  public static String now(String pattern) {
+    return format(now(), pattern);
   }
 
   public static Date today() {

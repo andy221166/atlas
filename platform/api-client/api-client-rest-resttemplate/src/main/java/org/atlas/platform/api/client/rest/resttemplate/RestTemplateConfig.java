@@ -11,8 +11,8 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
   /**
-   * As the {@link LoggingRequestInterceptor} consumes the response stream, our client
-   * application will see an empty response body. To avoid that, we should use
+   * As the {@link LoggingRequestInterceptor} consumes the response stream, our client application
+   * will see an empty response body. To avoid that, we should use
    * BufferingClientHttpRequestFactory: it buffers stream content into memory. This way, it can be
    * read twice: once by our interceptor, and a second time by our client application.
    */

@@ -21,8 +21,10 @@ public class ListUserUseCaseHandler implements ListUserUseCase {
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
     FindUserCriteria criteria = ObjectMapperUtil.getInstance().map(input, FindUserCriteria.class);
-    PagingResult<UserEntity> userEntityPage = userRepository.findByCriteria(criteria, input.getPagingRequest());
-    PagingResult<User> userPage = ObjectMapperUtil.getInstance().mapPage(userEntityPage, Output.User.class);
+    PagingResult<UserEntity> userEntityPage = userRepository.findByCriteria(criteria,
+        input.getPagingRequest());
+    PagingResult<User> userPage = ObjectMapperUtil.getInstance()
+        .mapPage(userEntityPage, Output.User.class);
     return new Output(userPage);
   }
 }

@@ -6,10 +6,9 @@ import javax.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class QueryFilter {
 
@@ -17,7 +16,7 @@ public class QueryFilter {
   private LogicalOperator logicalOperator;
 
   @Getter
-  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Condition {
 

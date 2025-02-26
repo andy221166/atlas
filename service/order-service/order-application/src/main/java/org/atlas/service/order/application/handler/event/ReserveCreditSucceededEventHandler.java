@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class ReserveCreditSucceededEventHandler implements EventHandler<ReserveCreditSucceededEvent> {
+public class ReserveCreditSucceededEventHandler implements
+    EventHandler<ReserveCreditSucceededEvent> {
 
   private final OrderRepository orderRepository;
   private final OrderService orderService;

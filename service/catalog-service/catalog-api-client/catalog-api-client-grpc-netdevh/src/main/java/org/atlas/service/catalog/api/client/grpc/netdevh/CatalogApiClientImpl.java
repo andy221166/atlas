@@ -39,6 +39,7 @@ public class CatalogApiClientImpl implements CatalogApiClient {
   }
 
   private ListProductUseCase.Output.Product map(ProductProto productProto) {
-    return ObjectMapperUtil.getInstance().map(productProto, ListProductUseCase.Output.Product.class);
+    return ObjectMapperUtil.getInstance()
+        .map(productProto, ListProductUseCase.Output.Product.class);
   }
 }

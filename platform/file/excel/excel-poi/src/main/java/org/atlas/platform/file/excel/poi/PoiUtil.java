@@ -1,12 +1,11 @@
-package org.atlas.platform.file.excel.poi.core.support;
+package org.atlas.platform.file.excel.poi;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class PoiUtil {
 
   public static boolean isNotEmptyRow(Row row) {

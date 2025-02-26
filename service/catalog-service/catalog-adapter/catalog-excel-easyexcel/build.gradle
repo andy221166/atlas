@@ -1,0 +1,8 @@
+dependencies {
+    // Platform
+    api project(':excel-easyexcel')
+    api project(':object-mapper')
+
+    // Service
+    api project(':catalog-port-outbound')
+}

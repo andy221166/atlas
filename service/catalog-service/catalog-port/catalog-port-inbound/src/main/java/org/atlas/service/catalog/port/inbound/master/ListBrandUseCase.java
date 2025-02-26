@@ -9,18 +9,18 @@ import org.atlas.service.catalog.port.inbound.master.ListBrandUseCase.Output;
 
 public interface ListBrandUseCase extends UseCase<Void, Output> {
 
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class Output {
+
+    private List<Output.Brand> brands;
+
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class Output {
+    public static class Brand {
 
-        private List<Output.Brand> brands;
-
-        @Data
-        public static class Brand {
-
-            private Integer id;
-            private String name;
-        }
+      private Integer id;
+      private String name;
     }
+  }
 }

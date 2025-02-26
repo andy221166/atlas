@@ -48,7 +48,8 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
               orderItem.getProduct().getId()));
         }
       });
-      ReserveQuantitySucceededEvent reserveQuantitySucceededEvent = new ReserveQuantitySucceededEvent(order);
+      ReserveQuantitySucceededEvent reserveQuantitySucceededEvent = new ReserveQuantitySucceededEvent(
+          order);
       eventPublisherTemplate.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
       ReserveQuantityFailedEvent reserveQuantityFailedEvent = new ReserveQuantityFailedEvent(order,

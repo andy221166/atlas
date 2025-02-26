@@ -1,10 +1,9 @@
 package org.atlas.platform.commons.util;
 
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class UUIDGenerator {
 
   public static String generate() {

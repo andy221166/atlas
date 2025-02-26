@@ -103,7 +103,8 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     }
     if (criteria.getAvailableFrom() != null) {
       spec.addFilter(
-          QueryFilter.of("availableFrom", criteria.getAvailableFrom(), QueryOperator.GREATER_THAN_EQUAL));
+          QueryFilter.of("availableFrom", criteria.getAvailableFrom(),
+              QueryOperator.GREATER_THAN_EQUAL));
     }
     if (criteria.getIsActive() != null) {
       spec.addFilter(

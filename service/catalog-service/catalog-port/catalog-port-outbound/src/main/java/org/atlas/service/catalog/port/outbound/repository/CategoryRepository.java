@@ -5,5 +5,5 @@ import org.atlas.service.catalog.domain.entity.CategoryEntity;
 
 public interface CategoryRepository {
 
-    List<CategoryEntity> findAll();
+  List<CategoryEntity> findAll();
 }

@@ -2,11 +2,10 @@ package org.atlas.platform.commons.util;
 
 import java.io.File;
 import java.io.IOException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.springframework.core.io.ClassPathResource;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class FileUtil {
 
   public static File readResourceFile(String filePath) throws IOException {

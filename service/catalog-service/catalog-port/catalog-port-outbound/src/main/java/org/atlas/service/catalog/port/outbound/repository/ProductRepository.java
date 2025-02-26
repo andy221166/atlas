@@ -10,19 +10,20 @@ public interface ProductRepository {
 
   List<ProductEntity> findByIdIn(List<Integer> ids);
 
-  PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria, PagingRequest pagingRequest);
+  PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria,
+      PagingRequest pagingRequest);
 
   Optional<ProductEntity> findById(Integer id);
 
-  int insert(ProductEntity productEntity);
+  void insert(ProductEntity productEntity);
 
-  int insertBatch(List<ProductEntity> productEntities);
+  void insertBatch(List<ProductEntity> productEntities);
 
-  int update(ProductEntity productEntity);
+  void update(ProductEntity productEntity);
 
-  int updateBatch(List<ProductEntity> productEntities);
+  void updateBatch(List<ProductEntity> productEntities);
 
-  int delete(ProductEntity productEntity);
+  void delete(ProductEntity productEntity);
 
-  int deleteBatch(List<ProductEntity> productEntities);
+  void deleteBatch(List<ProductEntity> productEntities);
 }

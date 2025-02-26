@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface OutboxMessageRepository extends JpaBaseRepository<OutboxMessage, Long> {
 
   @Query("SELECT o FROM OutboxMessage o WHERE o.status = :status ORDER BY o.createdAt ASC")
-  @Lock(LockModeType.PESSIMISTIC_WRITE) // SELECT FOR UPDATE
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+    // SELECT FOR UPDATE
   List<OutboxMessage> findByStatusWithLock(@Param("status") OutboxMessageStatus status);
 }

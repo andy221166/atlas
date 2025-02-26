@@ -40,7 +40,8 @@ public class UserApiClientImpl implements UserApiClient {
   }
 
   private ListUserUseCase.Output.User map(UserProto userProto) {
-    ListUserUseCase.Output.User user = ObjectMapperUtil.getInstance().map(userProto, ListUserUseCase.Output.User.class);
+    ListUserUseCase.Output.User user = ObjectMapperUtil.getInstance()
+        .map(userProto, ListUserUseCase.Output.User.class);
     user.setRole(Role.valueOf(userProto.getRole()));
     return user;
   }

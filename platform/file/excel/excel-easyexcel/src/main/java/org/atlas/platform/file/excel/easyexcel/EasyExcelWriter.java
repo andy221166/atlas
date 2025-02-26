@@ -1,13 +1,12 @@
-package org.atlas.platform.file.excel.easyexcel.core;
+package org.atlas.platform.file.excel.easyexcel;
 
 import com.alibaba.excel.EasyExcel;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class EasyExcelWriter {
 
   public static <T> byte[] write(List<T> records, String sheetName, Class<T> beanClass)

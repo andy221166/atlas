@@ -30,7 +30,8 @@ public class UseCaseExecutionAspect {
 
     // Retrieve input safely
     Object[] args = joinPoint.getArgs();
-    InternalInput input = (args.length > 0 && args[0] instanceof InternalInput) ? (InternalInput) args[0] : null;
+    InternalInput input =
+        (args.length > 0 && args[0] instanceof InternalInput) ? (InternalInput) args[0] : null;
 
     // Execute pre-handle interceptors
     interceptors.forEach(interceptor -> interceptor.preHandle(useCaseClass, input));
@@ -45,7 +46,8 @@ public class UseCaseExecutionAspect {
       stopWatch.stop();
       long timeElapsed = stopWatch.getTotalTimeMillis();
       if (timeElapsed > acceptedMaxExecutionTime) {
-        log.warn("Finished executing use case {}. Input: {}. Elapsed time: {} ms ===> Exceeded max time, check performance!!!",
+        log.warn(
+            "Finished executing use case {}. Input: {}. Elapsed time: {} ms ===> Exceeded max time, check performance!!!",
             useCaseClass, input, timeElapsed);
       }
     }

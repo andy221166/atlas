@@ -31,6 +31,10 @@ public class PagingRequest {
     return instance;
   }
 
+  public static PagingRequest unpaged() {
+    return of(0, 0);
+  }
+
   public Integer getLimit() {
     return size;
   }

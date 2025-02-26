@@ -20,43 +20,46 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SearchProductUseCaseHandler implements SearchProductUseCase {
 
-    private final SearchService searchService;
-    private final ProductRepository productRepository;
+  private final SearchService searchService;
+  private final ProductRepository productRepository;
 
-    public SearchProductUseCaseHandler(@Nullable SearchService searchService,
-                                       ProductRepository productRepository) {
-        this.searchService = searchService;
-        this.productRepository = productRepository;
-    }
+  public SearchProductUseCaseHandler(@Nullable SearchService searchService,
+      ProductRepository productRepository) {
+    this.searchService = searchService;
+    this.productRepository = productRepository;
+  }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Output handle(Input input) throws Exception {
-      PagingResult<ProductEntity> productEntityPage;
-      if (searchService != null) {
-        SearchProductCriteria criteria = ObjectMapperUtil.getInstance().map(input, SearchProductCriteria.class);
-        productEntityPage = searchService.search(criteria, input.getPagingRequest());
-      } else {
-        FindProductCriteria criteria = ObjectMapperUtil.getInstance().map(input, FindProductCriteria.class);
-        criteria.setStatus(ProductStatus.IN_STOCK);
-        criteria.setIsActive(true);
-        productEntityPage = productRepository.findByCriteria(criteria, input.getPagingRequest());
-      }
-      List<Product> products = productEntityPage.getResults()
-              .stream()
-              .map(this::map)
-              .toList();
-      PagingResult<Product> productPage = PagingResult.of(products, productEntityPage.getTotalCount());
-      return new Output(productPage);
+  @Override
+  @Transactional(readOnly = true)
+  public Output handle(Input input) throws Exception {
+    PagingResult<ProductEntity> productEntityPage;
+    if (searchService != null) {
+      SearchProductCriteria criteria = ObjectMapperUtil.getInstance()
+          .map(input, SearchProductCriteria.class);
+      productEntityPage = searchService.search(criteria, input.getPagingRequest());
+    } else {
+      FindProductCriteria criteria = ObjectMapperUtil.getInstance()
+          .map(input, FindProductCriteria.class);
+      criteria.setStatus(ProductStatus.IN_STOCK);
+      criteria.setIsActive(true);
+      productEntityPage = productRepository.findByCriteria(criteria, input.getPagingRequest());
     }
+    List<Product> products = productEntityPage.getResults()
+        .stream()
+        .map(this::map)
+        .toList();
+    PagingResult<Product> productPage = PagingResult.of(products,
+        productEntityPage.getTotalCount());
+    return new Output(productPage);
+  }
 
-    private Product map(ProductEntity productEntity) {
-      Product product = ObjectMapperUtil.getInstance().map(productEntity, Product.class);
-      product.setDescription(productEntity.getDetail().getDescription().substring(0, 100));
-      List<ProductImageEntity> productImageEntities = productEntity.getImages();
-      if (CollectionUtils.isNotEmpty(productImageEntities)) {
-        product.setImageUrl(productImageEntities.get(0).getImageUrl());
-      }
-      return product;
+  private Product map(ProductEntity productEntity) {
+    Product product = ObjectMapperUtil.getInstance().map(productEntity, Product.class);
+    product.setDescription(productEntity.getDetail().getDescription().substring(0, 100));
+    List<ProductImageEntity> productImageEntities = productEntity.getImages();
+    if (CollectionUtils.isNotEmpty(productImageEntities)) {
+      product.setImageUrl(productImageEntities.get(0).getImageUrl());
     }
+    return product;
+  }
 }

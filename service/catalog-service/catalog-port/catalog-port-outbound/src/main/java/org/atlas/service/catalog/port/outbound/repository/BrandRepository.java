@@ -5,5 +5,5 @@ import org.atlas.service.catalog.domain.entity.BrandEntity;
 
 public interface BrandRepository {
 
-    List<BrandEntity> findAll();
+  List<BrandEntity> findAll();
 }

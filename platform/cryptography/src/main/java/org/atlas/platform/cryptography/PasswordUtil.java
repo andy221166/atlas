@@ -1,13 +1,12 @@
 package org.atlas.platform.cryptography;
 
 import java.security.SecureRandom;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.atlas.platform.commons.util.StringUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class PasswordUtil {
 
   private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

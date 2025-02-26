@@ -10,13 +10,11 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.atlas.platform.commons.util.StringUtil;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+
 @Slf4j
 public class RequestLoggingUtil {
 

@@ -21,7 +21,7 @@ public class GetProductUseCaseHandler implements GetProductUseCase {
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
-            .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
     Product product = ObjectMapperUtil.getInstance().map(productEntity, Product.class);
     return new Output(product);
   }

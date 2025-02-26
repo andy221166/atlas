@@ -29,62 +29,61 @@ public class ProductRepositoryAdapter implements ProductRepository {
   }
 
   @Override
-  public PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria, PagingRequest pagingRequest) {
+  public PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria,
+      PagingRequest pagingRequest) {
     long totalCount = jpaProductRepository.count(criteria);
     if (totalCount == 0L) {
       return PagingResult.empty();
     }
     List<JpaProduct> jpaProducts = jpaProductRepository.find(criteria, pagingRequest);
-    List<ProductEntity> productEntities = ObjectMapperUtil.getInstance().mapList(jpaProducts, ProductEntity.class);
+    List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
+        .mapList(jpaProducts, ProductEntity.class);
     return PagingResult.of(productEntities, totalCount);
   }
 
   @Override
   public Optional<ProductEntity> findById(Integer id) {
     return jpaProductRepository.findById(id)
-            .map(jpaProduct -> ObjectMapperUtil.getInstance().map(jpaProduct, ProductEntity.class));
+        .map(jpaProduct -> ObjectMapperUtil.getInstance().map(jpaProduct, ProductEntity.class));
   }
 
   @Override
-  public int insert(ProductEntity productEntity) {
+  public void insert(ProductEntity productEntity) {
     JpaProduct jpaProduct = ObjectMapperUtil.getInstance().map(productEntity, JpaProduct.class);
     jpaProductRepository.save(jpaProduct);
     productEntity.setId(jpaProduct.getId());
-    return 1;
   }
 
   @Override
-  public int insertBatch(List<ProductEntity> productEntities) {
-    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance().mapList(productEntities, JpaProduct.class);
+  public void insertBatch(List<ProductEntity> productEntities) {
+    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance()
+        .mapList(productEntities, JpaProduct.class);
     jpaProductRepository.saveAll(jpaProducts);
-    return jpaProducts.size();
   }
 
   @Override
-  public int update(ProductEntity productEntity) {
+  public void update(ProductEntity productEntity) {
     JpaProduct jpaProduct = ObjectMapperUtil.getInstance().map(productEntity, JpaProduct.class);
     jpaProductRepository.save(jpaProduct);
-    return 1;
   }
 
   @Override
-  public int updateBatch(List<ProductEntity> productEntities) {
-    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance().mapList(productEntities, JpaProduct.class);
+  public void updateBatch(List<ProductEntity> productEntities) {
+    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance()
+        .mapList(productEntities, JpaProduct.class);
     jpaProductRepository.saveAll(jpaProducts);
-    return jpaProducts.size();
   }
 
   @Override
-  public int delete(ProductEntity productEntity) {
+  public void delete(ProductEntity productEntity) {
     JpaProduct jpaProduct = ObjectMapperUtil.getInstance().map(productEntity, JpaProduct.class);
     jpaProductRepository.delete(jpaProduct);
-    return 1;
   }
 
   @Override
-  public int deleteBatch(List<ProductEntity> productEntities) {
-    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance().mapList(productEntities, JpaProduct.class);
+  public void deleteBatch(List<ProductEntity> productEntities) {
+    List<JpaProduct> jpaProducts = ObjectMapperUtil.getInstance()
+        .mapList(productEntities, JpaProduct.class);
     jpaProductRepository.deleteAll(jpaProducts);
-    return jpaProducts.size();
   }
 }

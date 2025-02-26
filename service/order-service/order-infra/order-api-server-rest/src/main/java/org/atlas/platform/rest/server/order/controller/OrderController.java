@@ -54,22 +54,6 @@ public class OrderController {
     return RestResponse.success(queryGateway.send(query));
   }
 
-  @GetMapping("/export")
-  public ResponseEntity<byte[]> export(@RequestParam("fileType") FileType fileType)
-      throws Exception {
-    ExportOrderCommand command = new ExportOrderCommand();
-    command.setFileType(fileType);
-    byte[] bytes = commandGateway.send(command);
-    HttpHeaders headers = new HttpHeaders();
-    String fileName = "export-order-" + DateUtil.now("yyyyMMddHHmmss") + "." + command.getFileType()
-        .getExtension();
-    headers.add("Content-Disposition", "attachment; filename=" + fileName);
-    return ResponseEntity.ok()
-        .headers(headers)
-        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-        .body(bytes);
-  }
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public RestResponse<Integer> placeOrder(@Valid @RequestBody PlaceOrderCommand command)

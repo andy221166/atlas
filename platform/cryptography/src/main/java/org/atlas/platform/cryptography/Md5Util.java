@@ -1,10 +1,9 @@
 package org.atlas.platform.cryptography;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.codec.digest.DigestUtils;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class Md5Util {
 
   public static String encode(String input) {
