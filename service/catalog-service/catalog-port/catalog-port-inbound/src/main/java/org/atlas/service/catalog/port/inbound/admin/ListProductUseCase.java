@@ -1,6 +1,9 @@
 package org.atlas.service.catalog.port.inbound.admin;
 
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +11,6 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.service.catalog.domain.entity.ProductStatus;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 public interface ListProductUseCase
     extends UseCase<ListProductUseCase.Input, ListProductUseCase.Output> {

@@ -3,6 +3,9 @@ package org.atlas.service.catalog.adapter.persistence.jpa.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.catalog.adapter.persistence.jpa.entity.JpaProduct;
@@ -10,10 +13,6 @@ import org.atlas.service.catalog.port.outbound.repository.FindProductCriteria;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Repository
 @Primary
@@ -79,7 +78,14 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
       params.put("id", criteria.getId());
     }
     if (StringUtils.hasLength(criteria.getKeyword())) {
-      whereClauseBuilder.append(" and (lower(p.name) like :keyword or lower(d.description) like :keyword) ");
+      whereClauseBuilder.append(
+          """
+          and (
+            lower(p.code) like :keyword
+            or lower(p.name) like :keyword
+            or lower(d.description) like :keyword
+          )
+          """);
       params.put("keyword", "%" + criteria.getKeyword().toLowerCase() + "%");
     }
     if (criteria.getMinPrice() != null) {
@@ -98,9 +104,9 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
       whereClauseBuilder.append(" and p.availableFrom >= :availableFrom ");
       params.put("availableFrom", criteria.getAvailableFrom());
     }
-    if (criteria.getActive() != null) {
+    if (criteria.getIsActive() != null) {
       whereClauseBuilder.append(" and p.isActive = :isActive ");
-      params.put("isActive", criteria.getActive());
+      params.put("isActive", criteria.getIsActive());
     }
     if (criteria.getBrandId() != null) {
       whereClauseBuilder.append(" and b.id = :brandId ");

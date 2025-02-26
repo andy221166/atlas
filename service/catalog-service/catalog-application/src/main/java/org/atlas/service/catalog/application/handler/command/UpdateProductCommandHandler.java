@@ -6,10 +6,10 @@ import org.atlas.platform.commons.exception.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.cqrs.command.CommandHandler;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.product.contract.repository.CategoryRepository;
-import org.atlas.service.product.contract.repository.ProductRepository;
 import org.atlas.service.catalog.domain.entity.CategoryEntity;
 import org.atlas.service.catalog.domain.entity.ProductEntity;
+import org.atlas.service.product.contract.repository.CategoryRepository;
+import org.atlas.service.product.contract.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 
 @Component

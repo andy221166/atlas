@@ -1,5 +1,7 @@
 package org.atlas.service.catalog.adapter.persistence.jpa;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
@@ -10,9 +12,6 @@ import org.atlas.service.catalog.domain.entity.ProductEntity;
 import org.atlas.service.catalog.port.outbound.repository.FindProductCriteria;
 import org.atlas.service.catalog.port.outbound.repository.ProductRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

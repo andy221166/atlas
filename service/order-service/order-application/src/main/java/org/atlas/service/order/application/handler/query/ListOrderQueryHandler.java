@@ -2,8 +2,8 @@ package org.atlas.service.order.application.handler.query;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.commons.context.UserContext;
 import org.atlas.commons.util.paging.PageDto;
+import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.cqrs.query.QueryHandler;
 import org.atlas.service.order.application.service.OrderService;
 import org.atlas.service.order.contract.model.OrderDto;

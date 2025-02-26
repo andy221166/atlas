@@ -1,8 +1,8 @@
 package org.atlas.service.user.api.client.rest.feign;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.service.user.api.client.rest.model.ListUserResponse;
 import org.atlas.service.user.api.client.UserApiClient;
+import org.atlas.service.user.api.client.rest.model.ListUserResponse;
 import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
 import org.springframework.stereotype.Component;
 

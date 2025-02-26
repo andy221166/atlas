@@ -1,13 +1,13 @@
-package org.atlas.service.catalog.application.handler.event;
+package org.atlas.service.catalog.application.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.base.ConcurrentUtil;
 import org.atlas.platform.commons.event.EventType;
-import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
-import org.atlas.platform.event.core.EventHandler;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
 import org.atlas.platform.event.contract.order.ReserveQuantityFailedEvent;
+import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
+import org.atlas.platform.event.core.EventHandler;
 import org.atlas.platform.event.core.publisher.DefaultEventPublisher;
 import org.atlas.service.order.contract.model.OrderDto;
 import org.atlas.service.product.contract.repository.ProductRepository;

@@ -2,7 +2,6 @@ package org.atlas.platform.api.client.rest.resttemplate;
 
 import java.io.IOException;
 import org.atlas.commons.context.CurrentUser;
-import org.atlas.commons.context.CurrentUserContext;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS db_order;
 
 USE db_order;
 
-CREATE TABLE IF NOT EXISTS aggOrders
+CREATE TABLE IF NOT EXISTS orders
 (
     id              INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id         INT            NOT NULL,
@@ -21,20 +21,21 @@ CREATE TABLE IF NOT EXISTS order_item
     product_id    INT           NOT NULL,
     product_price DECIMAL(9, 2) NOT NULL,
     quantity      INT           NOT NULL,
-    created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_order_id (order_id)
+    created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_order_id (order_id),
+    INDEX idx_product_id (product_id)
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS outbox_message
 (
-    id           BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    event        TEXT          NOT NULL,
-    destination  VARCHAR(255)  NOT NULL,
-    status       VARCHAR(10)   NOT NULL,
+    id           BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    event        TEXT         NOT NULL,
+    destination  VARCHAR(255) NOT NULL,
+    status       VARCHAR(20)  NOT NULL,
     processed_at DATETIME,
     error        TEXT,
-    retries      TINYINT                DEFAULT 0,
-    created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    retries      TINYINT               DEFAULT 0,
+    created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at   DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = INNODB;

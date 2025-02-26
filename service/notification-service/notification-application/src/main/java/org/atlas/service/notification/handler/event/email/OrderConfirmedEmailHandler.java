@@ -7,15 +7,15 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.FileUtil;
-import org.atlas.platform.event.core.model.EventType;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
+import org.atlas.platform.event.contract.order.payload.OrderPayload;
 import org.atlas.platform.event.core.consumer.EventHandler;
+import org.atlas.platform.event.core.model.EventType;
 import org.atlas.platform.notification.email.core.config.EmailProps;
 import org.atlas.platform.notification.email.core.model.Attachment;
 import org.atlas.platform.notification.email.core.model.SendEmailRequest;
 import org.atlas.platform.notification.email.core.service.EmailService;
 import org.atlas.platform.template.contract.TemplateResolver;
-import org.atlas.platform.event.contract.order.payload.OrderPayload;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 

@@ -1,17 +1,16 @@
 package org.atlas.service.catalog.port.outbound.repository;
 
-import lombok.Data;
-import org.atlas.service.catalog.domain.entity.ProductStatus;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import lombok.Data;
+import org.atlas.service.catalog.domain.entity.ProductStatus;
 
 @Data
 public class FindProductCriteria {
 
     private Integer id;
-    private String keyword; // Find by name or description
+    private String keyword;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private ProductStatus status;

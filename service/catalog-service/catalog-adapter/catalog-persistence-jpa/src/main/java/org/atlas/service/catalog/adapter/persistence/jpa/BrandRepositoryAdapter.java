@@ -1,13 +1,12 @@
 package org.atlas.service.catalog.adapter.persistence.jpa;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.catalog.adapter.persistence.jpa.repository.JpaBrandRepository;
 import org.atlas.service.catalog.domain.entity.BrandEntity;
 import org.atlas.service.catalog.port.outbound.repository.BrandRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

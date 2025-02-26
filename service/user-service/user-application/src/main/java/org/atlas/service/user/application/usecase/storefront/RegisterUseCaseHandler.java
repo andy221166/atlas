@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.commons.exception.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
-import org.atlas.platform.usecase.port.output.EmptyOutput;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.domain.event.UserRegisteredEvent;
@@ -31,7 +30,7 @@ public class RegisterUseCaseHandler implements RegisterUseCase {
 
   @Override
   @Transactional
-  public EmptyOutput handle(Input input) throws Exception {
+  public Void handle(Input input) throws Exception {
     checkValidity(input);
     UserEntity userEntity = createUser(input);
     syncAuth(userEntity);

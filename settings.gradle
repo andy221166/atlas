@@ -154,6 +154,10 @@ project(':redis-cluster').projectDir = file('platform/redis/redis-cluster')
 include(':redis-standalone')
 project(':redis-standalone').projectDir = file('platform/redis/redis-standalone')
 
+// Sequence generator
+include(':sequence-generator')
+project(':sequence-generator').projectDir = file('platform/sequence-generator')
+
 // Storage
 include(':storage-core')
 project(':storage-core').projectDir = file('platform/storage/storage-core')

@@ -1,14 +1,13 @@
 package org.atlas.service.catalog.port.inbound.admin;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.service.catalog.domain.entity.ProductStatus;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 public interface GetProductUseCase
     extends UseCase<GetProductUseCase.Input, GetProductUseCase.Output> {

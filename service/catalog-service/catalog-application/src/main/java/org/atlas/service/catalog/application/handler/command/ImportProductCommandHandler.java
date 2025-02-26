@@ -21,7 +21,7 @@ import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.storage.core.model.DownloadFileRequest;
 import org.atlas.platform.storage.core.model.UploadFileRequest;
 import org.atlas.platform.storage.core.service.StorageService;
-import org.atlas.service.auth.application.Constant;
+import org.atlas.service.catalog.domain.entity.ProductEntity;
 import org.atlas.service.product.contract.file.csv.ProductCsvReader;
 import org.atlas.service.product.contract.file.excel.ProductExcelReader;
 import org.atlas.service.product.contract.repository.ImportProductRequestRepository;
@@ -29,7 +29,6 @@ import org.atlas.service.product.contract.repository.ProductRepository;
 import org.atlas.service.product.domain.ImportProductItem;
 import org.atlas.service.product.domain.ImportProductRequest;
 import org.atlas.service.product.domain.ImportProductRequestStatus;
-import org.atlas.service.catalog.domain.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

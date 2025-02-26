@@ -1,5 +1,6 @@
 package org.atlas.service.catalog.application.usecase.storefront;
 
+import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
@@ -14,8 +15,6 @@ import org.atlas.service.catalog.port.outbound.search.SearchService;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 public class SearchProductUseCaseHandler implements SearchProductUseCase {

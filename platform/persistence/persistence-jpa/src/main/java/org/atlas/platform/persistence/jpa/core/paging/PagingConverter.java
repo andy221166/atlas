@@ -1,8 +1,8 @@
 package org.atlas.platform.persistence.jpa.core.paging;
 
 import lombok.experimental.UtilityClass;
-import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.commons.paging.PagingRequest;
+import org.atlas.platform.commons.paging.PagingResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 

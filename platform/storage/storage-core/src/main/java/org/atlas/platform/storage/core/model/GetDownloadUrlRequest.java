@@ -1,7 +1,6 @@
 package org.atlas.platform.storage.core.model;
 
 import java.time.Duration;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

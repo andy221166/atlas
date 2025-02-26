@@ -5,15 +5,14 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.service.catalog.domain.entity.ProductStatus;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 public interface CreateProductUseCase
     extends UseCase<CreateProductUseCase.Input, CreateProductUseCase.Output> {
