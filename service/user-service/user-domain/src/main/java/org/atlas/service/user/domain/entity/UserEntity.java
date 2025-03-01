@@ -1,14 +1,15 @@
 package org.atlas.service.user.domain.entity;
 
-import java.io.Serializable;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.atlas.platform.commons.enums.Role;
-import org.atlas.platform.commons.model.AuditableEntity;
+import org.atlas.platform.commons.model.DomainEntity;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class UserEntity extends AuditableEntity implements Serializable {
+public class UserEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
   private Integer id;

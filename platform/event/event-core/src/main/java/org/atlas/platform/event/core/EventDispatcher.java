@@ -7,11 +7,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.platform.commons.event.DomainEvent;
-import org.atlas.platform.commons.event.EventType;
+import org.atlas.platform.event.contract.DomainEvent;
+import org.atlas.platform.event.contract.EventType;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings({"rawtypes", "unchecked"})
 @RequiredArgsConstructor
 @Slf4j
 public class EventDispatcher {
@@ -31,7 +32,7 @@ public class EventDispatcher {
     // Obtain handlers
     List<EventHandler> handlersByType = handlerMap.get(event.getEventType());
     if (CollectionUtils.isEmpty(handlersByType)) {
-      // Ignore if not exist the corresponding handler
+      log.warn("No handler found for event type {}", event.getEventType());
       return;
     }
 

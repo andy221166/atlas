@@ -1,0 +1,7 @@
+dependencies {
+    // Platform
+    api project(':event-contract')
+
+    // Service
+    api project(':product-domain')
+}

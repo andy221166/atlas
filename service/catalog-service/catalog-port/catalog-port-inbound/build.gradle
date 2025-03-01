@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':use-case-port')
-
-    // Service
-    api project(':catalog-domain')
-}

@@ -1,8 +1,0 @@
-dependencies {
-    // Platform
-    api project(':api-client-rest-resttemplate')
-
-    // Service
-    api project(':catalog-api-client-contract')
-    api project(':catalog-api-client-rest-model')
-}

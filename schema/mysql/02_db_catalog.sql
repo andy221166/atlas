@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS db_catalog;
+CREATE DATABASE IF NOT EXISTS db_product;
 
-USE db_catalog;
+USE db_product;
 
 CREATE TABLE IF NOT EXISTS brand
 (

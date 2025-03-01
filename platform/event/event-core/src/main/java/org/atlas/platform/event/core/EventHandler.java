@@ -1,11 +1,11 @@
 package org.atlas.platform.event.core;
 
-import org.atlas.platform.commons.event.DomainEvent;
-import org.atlas.platform.commons.event.EventType;
+import org.atlas.platform.event.contract.DomainEvent;
+import org.atlas.platform.event.contract.EventType;
 
-public interface EventHandler {
+public interface EventHandler<T extends DomainEvent> {
 
   EventType supports();
 
-  void handle(DomainEvent event);
+  void handle(T event);
 }

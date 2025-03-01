@@ -1,0 +1,8 @@
+dependencies {
+    // Platform
+    api project(':api-server-grpc-protobuf')
+    api project(':api-server-grpc-netdevh')
+
+    // Service
+    api project(':product-port-inbound')
+}

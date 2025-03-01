@@ -56,13 +56,13 @@
         </tr>
         </thead>
         <tbody>
-        <#list orderPayload.orderItems as orderItemPayload>
+        <#list orderPayload.orderItems as orderItem>
             <tr>
-                <td>${orderItemPayload.aggProduct.id}</td>
-                <td>${orderItemPayload.aggProduct.name}</td>
-                <td>${orderItemPayload.aggProduct.price?string("$#,##0.00")}</td>
-                <td>${orderItemPayload.quantity}</td>
-                <td>${(orderItemPayload.aggProduct.price * orderItemPayload.quantity)?string("$#,##0.00")}</td>
+                <td>${orderItem.aggProduct.id}</td>
+                <td>${orderItem.aggProduct.name}</td>
+                <td>${orderItem.aggProduct.price?string("$#,##0.00")}</td>
+                <td>${orderItem.quantity}</td>
+                <td>${(orderItem.aggProduct.price * orderItem.quantity)?string("$#,##0.00")}</td>
             </tr>
         </#list>
         </tbody>

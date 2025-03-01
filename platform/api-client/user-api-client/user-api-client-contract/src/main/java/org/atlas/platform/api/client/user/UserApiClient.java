@@ -1,0 +1,8 @@
+package org.atlas.platform.api.client.user;
+
+import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+
+public interface UserApiClient {
+
+  ListUserUseCase.Output call(ListUserUseCase.Input input);
+}

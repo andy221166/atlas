@@ -7,7 +7,7 @@ import org.atlas.platform.commons.exception.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.service.user.domain.event.UserRegisteredEvent;
+import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 import org.atlas.service.user.port.inbound.front.RegisterUseCase;
 import org.atlas.service.user.port.outbound.auth.AuthService;
 import org.atlas.service.user.port.outbound.event.publisher.UserEventPublisher;

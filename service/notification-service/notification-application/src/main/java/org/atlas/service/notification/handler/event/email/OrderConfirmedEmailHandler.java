@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.FileUtil;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
-import org.atlas.platform.event.contract.order.payload.OrderPayload;
+import org.atlas.platform.event.contract.order.OrderPayload;
 import org.atlas.platform.event.core.consumer.EventHandler;
 import org.atlas.platform.event.core.model.EventType;
 import org.atlas.platform.notification.email.core.config.EmailProps;

@@ -3,7 +3,7 @@ package org.atlas.platform.event.publisher.kafka;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.atlas.platform.commons.event.DomainEvent;
+import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.core.EventPublisher;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;

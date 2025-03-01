@@ -6,10 +6,35 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    // Config
     api project(':config-loader')
-    api project(':order-contract')
+
+    // Port
+    api project(':order-port-inbound')
+    api project(':order-port-outbound')
 
     api project(':actuator')
+
+    switch (modules['api-client']) {
+        case 'grpc-netdevh':
+            api project(':product-api-client-grpc-netdevh')
+            api project(':user-api-client-grpc-netdevh')
+            break
+        case 'rest-apachehttpclient':
+            api project(':product-api-client-rest-apachehttpclient')
+            api project(':user-api-client-rest-apachehttpclient')
+            break
+        case 'rest-feign':
+            api project(':product-api-client-rest-feign')
+            api project(':user-api-client-rest-feign')
+            break
+        case 'rest-resttemplate':
+            api project(':product-api-client-rest-resttemplate')
+            api project(':user-api-client-rest-resttemplate')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['api-client']}")
+    }
 
     switch (modules['api-server']) {
         case 'rest':
@@ -43,19 +68,13 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
 
-//    switch (modules['event']) {
-//        case 'kafka':
-//            api project(':event-kafka')
-//            break
-//        case 'rabbitmq':
-//            api project(':event-rabbitmq')
-//            break
-//        case 'sns':
-//            api project(':event-sns')
-//            break
-//        default:
-//            throw new IllegalArgumentException("Unsupported ${modules['event']}")
-//    }
+    switch (modules['event']) {
+        case 'kafka':
+            api project(':order-event-publisher-kafka')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+    }
 
     switch (modules['logging']) {
         case 'logback':

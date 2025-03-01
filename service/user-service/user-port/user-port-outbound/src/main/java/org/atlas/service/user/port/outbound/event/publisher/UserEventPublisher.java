@@ -1,6 +1,6 @@
 package org.atlas.service.user.port.outbound.event.publisher;
 
-import org.atlas.service.user.domain.event.UserRegisteredEvent;
+import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 
 public interface UserEventPublisher {
 

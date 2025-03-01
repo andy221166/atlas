@@ -20,5 +20,5 @@ public interface UserRepository {
 
   Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
-  int insert(UserEntity userEntity);
+  void insert(UserEntity userEntity);
 }

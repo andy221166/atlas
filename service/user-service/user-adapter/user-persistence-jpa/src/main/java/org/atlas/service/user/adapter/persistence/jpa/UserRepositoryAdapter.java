@@ -7,7 +7,7 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.persistence.jpa.core.paging.PagingConverter;
-import org.atlas.service.user.adapter.persistence.jpa.entity.JpaUser;
+import org.atlas.service.user.adapter.persistence.jpa.entity.JpaUserEntity;
 import org.atlas.service.user.adapter.persistence.jpa.repository.JpaUserRepository;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.outbound.repository.FindUserCriteria;
@@ -25,7 +25,7 @@ public class UserRepositoryAdapter implements UserRepository {
   public List<UserEntity> findByIdIn(List<Integer> ids) {
     return jpaUserRepository.findAllById(ids)
         .stream()
-        .map(jpaUser -> ObjectMapperUtil.getInstance().map(jpaUser, UserEntity.class))
+        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class))
         .toList();
   }
 
@@ -33,7 +33,7 @@ public class UserRepositoryAdapter implements UserRepository {
   public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria,
       PagingRequest pagingRequest) {
     Pageable pageable = PagingConverter.convert(pagingRequest);
-    PagingResult<JpaUser> jpaUserPage = PagingConverter.convert(
+    PagingResult<JpaUserEntity> jpaUserPage = PagingConverter.convert(
         jpaUserRepository.findByKeyword(criteria.getKeyword(), pageable));
     return ObjectMapperUtil.getInstance().mapPage(jpaUserPage, UserEntity.class);
   }
@@ -41,32 +41,31 @@ public class UserRepositoryAdapter implements UserRepository {
   @Override
   public Optional<UserEntity> findById(Integer id) {
     return jpaUserRepository.findById(id)
-        .map(jpaUser -> ObjectMapperUtil.getInstance().map(jpaUser, UserEntity.class));
+        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 
   @Override
   public Optional<UserEntity> findByUsername(String username) {
     return jpaUserRepository.findByUsername(username)
-        .map(jpaUser -> ObjectMapperUtil.getInstance().map(jpaUser, UserEntity.class));
+        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 
   @Override
   public Optional<UserEntity> findByEmail(String email) {
     return jpaUserRepository.findByEmail(email)
-        .map(jpaUser -> ObjectMapperUtil.getInstance().map(jpaUser, UserEntity.class));
+        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 
   @Override
   public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
     return jpaUserRepository.findByPhoneNumber(phoneNumber)
-        .map(jpaUser -> ObjectMapperUtil.getInstance().map(jpaUser, UserEntity.class));
+        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 
   @Override
-  public int insert(UserEntity userEntity) {
-    JpaUser jpaUser = ObjectMapperUtil.getInstance().map(userEntity, JpaUser.class);
-    jpaUserRepository.save(jpaUser);
-    userEntity.setId(jpaUser.getId());
-    return 1;
+  public void insert(UserEntity userEntity) {
+    JpaUserEntity jpaUserEntity = ObjectMapperUtil.getInstance().map(userEntity, JpaUserEntity.class);
+    jpaUserRepository.save(jpaUserEntity);
+    userEntity.setId(jpaUserEntity.getId());
   }
 }

@@ -66,12 +66,12 @@
         </thead>
         <tbody>
         <!-- Iterate through orderPayload items -->
-        <tr th:each="orderItemPayload : ${orderPayload.orderItems}">
-            <td th:text="${orderItemPayload.aggProduct.id}"></td>
-            <td th:text="${orderItemPayload.aggProduct.name}"></td>
-            <td th:text="${#numbers.formatDecimal(orderItemPayload.aggProduct.price, 2, 'COMMA', 'DOT')}"></td>
-            <td th:text="${orderItemPayload.quantity}"></td>
-            <td th:text="${#numbers.formatDecimal(orderItemPayload.aggProduct.price * orderItemPayload.quantity, 2, 'COMMA', 'DOT')}"></td>
+        <tr th:each="orderItem : ${orderPayload.orderItems}">
+            <td th:text="${orderItem.aggProduct.id}"></td>
+            <td th:text="${orderItem.aggProduct.name}"></td>
+            <td th:text="${#numbers.formatDecimal(orderItem.aggProduct.price, 2, 'COMMA', 'DOT')}"></td>
+            <td th:text="${orderItem.quantity}"></td>
+            <td th:text="${#numbers.formatDecimal(orderItem.aggProduct.price * orderItem.quantity, 2, 'COMMA', 'DOT')}"></td>
         </tr>
         </tbody>
         <tfoot>

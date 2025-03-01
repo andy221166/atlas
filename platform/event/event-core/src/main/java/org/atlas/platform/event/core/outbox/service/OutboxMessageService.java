@@ -3,7 +3,7 @@ package org.atlas.platform.event.core.outbox.service;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.commons.event.DomainEvent;
+import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.core.EventPublisher;
 import org.atlas.platform.event.core.outbox.config.OutboxProps;
 import org.atlas.platform.event.core.outbox.model.OutboxMessage;

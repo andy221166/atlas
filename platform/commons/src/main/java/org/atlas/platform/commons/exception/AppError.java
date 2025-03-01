@@ -21,10 +21,11 @@ public enum AppError {
   EMAIL_ALREADY_EXISTS(2001, "error.user.email_already_exists"),
   PHONE_NUMBER_ALREADY_EXISTS(2001, "error.user.phone_number_already_exists"),
 
-  // Catalog-related errors
+  // Product-related errors
   PRODUCT_NOT_FOUND(3000, "error.product.not_found"),
-  CATEGORY_NOT_FOUND(3001, "error.category.not_found"),
-  IMPORT_PRODUCT_REQUEST_NOT_FOUND(3001, "error.import_product_request.not_found"),
+  PRODUCT_INSUFFICIENT_QUANTITY(3001, "error.product.insufficient_quantity"),
+  BRAND_NOT_FOUND(3002, "error.brand.not_found"),
+  CATEGORY_NOT_FOUND(3003, "error.category.not_found"),
 
   // Order-related errors
   ORDER_NOT_FOUND(4000, "error.order.not_found"),

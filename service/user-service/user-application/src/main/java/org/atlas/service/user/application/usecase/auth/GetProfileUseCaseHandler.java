@@ -5,7 +5,6 @@ import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.commons.exception.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.platform.usecase.port.input.EmptyInput;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.inbound.front.GetProfileUseCase;
 import org.atlas.service.user.port.outbound.repository.UserRepository;
@@ -20,7 +19,7 @@ public class GetProfileUseCaseHandler implements GetProfileUseCase {
 
   @Override
   @Transactional(readOnly = true)
-  public Output handle(EmptyInput input) throws Exception {
+  public Output handle(Void input) throws Exception {
     Integer userId = UserContext.getUserId();
     UserEntity userEntity = userRepository.findById(userId)
         .orElseThrow(() -> new BusinessException(AppError.USER_NOT_FOUND));

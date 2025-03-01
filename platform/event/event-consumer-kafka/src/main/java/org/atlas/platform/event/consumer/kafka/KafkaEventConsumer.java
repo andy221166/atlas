@@ -3,7 +3,7 @@ package org.atlas.platform.event.consumer.kafka;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.atlas.platform.commons.event.DomainEvent;
+import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.core.EventDispatcher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.kafka.annotation.KafkaListener;

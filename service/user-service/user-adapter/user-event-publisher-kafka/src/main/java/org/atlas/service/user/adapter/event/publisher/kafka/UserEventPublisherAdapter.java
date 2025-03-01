@@ -3,7 +3,7 @@ package org.atlas.service.user.adapter.event.publisher.kafka;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.event.core.EventGateway;
 import org.atlas.platform.event.publisher.kafka.KafkaEventPublisherProps;
-import org.atlas.service.user.domain.event.UserRegisteredEvent;
+import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 import org.atlas.service.user.port.outbound.event.publisher.UserEventPublisher;
 import org.springframework.stereotype.Component;
 

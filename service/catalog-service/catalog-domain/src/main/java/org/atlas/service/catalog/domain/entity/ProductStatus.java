@@ -1,8 +1,0 @@
-package org.atlas.service.catalog.domain.entity;
-
-public enum ProductStatus {
-
-  IN_STOCK,
-  OUT_OF_STOCK,
-  DISCONTINUED
-}

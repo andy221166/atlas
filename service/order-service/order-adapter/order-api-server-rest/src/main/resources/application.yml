@@ -1,0 +1,2 @@
+springdoc:
+  packages-to-scan: org.atlas.service.order.adapter.api.server.rest

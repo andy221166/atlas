@@ -1,0 +1,4 @@
+dependencies {
+    // Service
+    api project(':product-port-inbound')
+}
