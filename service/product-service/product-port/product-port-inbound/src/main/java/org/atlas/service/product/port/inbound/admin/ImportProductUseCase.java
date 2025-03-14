@@ -3,6 +3,7 @@ package org.atlas.service.product.port.inbound.admin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.enums.FileType;
@@ -12,6 +13,7 @@ import org.atlas.service.product.port.inbound.admin.ImportProductUseCase.Input;
 public interface ImportProductUseCase extends UseCase<Input, Void> {
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Input {

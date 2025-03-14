@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity;
 import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 @Repository
 @Primary
@@ -73,11 +73,11 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
 
   private String buildWhereClause(FindProductCriteria criteria, Map<String, Object> params) {
     StringBuilder whereClauseBuilder = new StringBuilder("where 1=1 ");
-    if (criteria.getId() != null) {
-      whereClauseBuilder.append(" and p.id >= :id ");
-      params.put("id", criteria.getId());
+    if (StringUtils.isNotBlank(criteria.getCode())) {
+      whereClauseBuilder.append(" and p.code = :code ");
+      params.put("code", criteria.getCode());
     }
-    if (StringUtils.hasLength(criteria.getKeyword())) {
+    if (StringUtils.isNotBlank(criteria.getKeyword())) {
       whereClauseBuilder.append(
           """
               and (

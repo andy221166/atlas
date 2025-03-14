@@ -6,7 +6,6 @@ import org.atlas.service.order.application.service.OrderAggregator;
 import org.atlas.service.order.contract.model.OrderDto;
 import org.atlas.service.order.port.outbound.repository.OrderRepository;
 import org.atlas.service.order.domain.entity.OrderEntity;
-import org.atlas.service.order.domain.entity.OrderStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

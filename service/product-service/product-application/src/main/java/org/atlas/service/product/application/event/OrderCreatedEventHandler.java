@@ -2,13 +2,14 @@ package org.atlas.service.product.application.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.commons.event.EventType;
 import org.atlas.platform.commons.util.ConcurrentUtil;
-import org.atlas.platform.event.core.EventHandler;
+import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
-import org.atlas.service.product.application.enums.DecreaseQuantityStrategy;
 import org.atlas.platform.event.contract.order.ReserveQuantityFailedEvent;
 import org.atlas.platform.event.contract.order.ReserveQuantitySucceededEvent;
+import org.atlas.platform.event.core.EventHandler;
+import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.product.application.enums.DecreaseQuantityStrategy;
 import org.atlas.service.product.port.outbound.event.publisher.ProductEventPublisher;
 import org.atlas.service.product.port.outbound.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,9 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
   private final ProductRepository productRepository;
   private final ProductEventPublisher productEventPublisher;
 
+  @Value("${spring.application.name}")
+  private String applicationName;
+
   @Value("${app.decrease-quantity-strategy:constraint")
   private String decreaseQuantityStrategy;
 
@@ -36,13 +40,16 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
   public void handle(OrderCreatedEvent orderCreatedEvent) {
     try {
       orderCreatedEvent.getOrderItems().forEach(orderItem -> {
-        decreaseQuantity(orderItem.getProductId(), orderItem.getQuantity());
+        decreaseQuantity(orderItem.getProduct().getId(), orderItem.getQuantity());
       });
-      ReserveQuantitySucceededEvent reserveQuantitySucceededEvent = new ReserveQuantitySucceededEvent();
+      ReserveQuantitySucceededEvent reserveQuantitySucceededEvent =
+          new ReserveQuantitySucceededEvent(applicationName);
+      ObjectMapperUtil.getInstance().merge(orderCreatedEvent, reserveQuantitySucceededEvent);
       productEventPublisher.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
-      ReserveQuantityFailedEvent reserveQuantityFailedEvent = new ReserveQuantityFailedEvent(order,
-          e.getMessage());
+      ReserveQuantityFailedEvent reserveQuantityFailedEvent =
+          new ReserveQuantityFailedEvent(applicationName);
+      ObjectMapperUtil.getInstance().merge(orderCreatedEvent, reserveQuantityFailedEvent);
       reserveQuantityFailedEvent.setError(e.getMessage());
       productEventPublisher.publish(reserveQuantityFailedEvent);
     }

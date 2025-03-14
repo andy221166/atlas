@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.paging.PagingRequest;
@@ -15,6 +16,7 @@ public interface SearchProductUseCase
     extends UseCase<SearchProductUseCase.Input, SearchProductUseCase.Output> {
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Input {
@@ -29,6 +31,7 @@ public interface SearchProductUseCase
   }
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Output {
@@ -36,6 +39,9 @@ public interface SearchProductUseCase
     private PagingResult<Product> products;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Product {
 
       private Integer id;

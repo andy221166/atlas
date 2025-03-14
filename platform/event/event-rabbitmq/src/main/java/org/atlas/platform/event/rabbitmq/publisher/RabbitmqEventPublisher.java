@@ -3,7 +3,7 @@ package org.atlas.platform.event.rabbitmq.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.StringUtil;
-import org.atlas.platform.event.contract.order.BaseOrderEvent;
+import org.atlas.platform.event.contract.order.BasePlaceOrderEvent;
 import org.atlas.platform.event.core.model.DomainEvent;
 import org.atlas.platform.event.core.publisher.ExternalEventPublisher;
 import org.atlas.platform.event.rabbitmq.config.RabbitmqEventProps;
@@ -20,7 +20,7 @@ public class RabbitmqEventPublisher implements ExternalEventPublisher {
 
   @Override
   public void publish(DomainEvent event) {
-    if (event instanceof BaseOrderEvent) {
+    if (event instanceof BasePlaceOrderEvent) {
       doPublishToFanoutExchange(event, props.getOrderExchange());
     } else {
       throw new IllegalArgumentException("Unsupported event type: " + event.getEventType());

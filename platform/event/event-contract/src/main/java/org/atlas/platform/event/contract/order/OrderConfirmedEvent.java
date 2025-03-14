@@ -8,7 +8,7 @@ import org.atlas.platform.event.contract.EventType;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OrderConfirmedEvent extends BaseOrderEvent {
+public class OrderConfirmedEvent extends BasePlaceOrderEvent {
 
   public OrderConfirmedEvent(String eventSource) {
     super(eventSource);

@@ -1,4 +1,4 @@
-package org.atlas.service.order.domain.entity;
+package org.atlas.service.order.domain.shared;
 
 public enum OrderStatus {
 

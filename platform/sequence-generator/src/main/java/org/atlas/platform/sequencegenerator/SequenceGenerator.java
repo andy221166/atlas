@@ -12,7 +12,7 @@ public class SequenceGenerator {
   private JdbcTemplate jdbcTemplate;
 
   @Transactional
-  public String generate(String sequenceName, String prefix, int padding) {
+  public String generate(SequenceType sequenceType) {
     // Step 1: Atomic update and get new sequence in one query
     jdbcTemplate.update(
         """
@@ -20,14 +20,14 @@ public class SequenceGenerator {
             SET seq_value = LAST_INSERT_ID(seq_value + 1) 
             WHERE seq_name = ?
             """,
-        sequenceName
+        sequenceType.getName()
     );
 
     // Step 2: Fetch the new sequence value using LAST_INSERT_ID()
     Long sequence = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
 
     // Step 3: Format and return the generated code
-    return generateFormattedString(prefix, sequence, padding);
+    return generateFormattedString(sequenceType.getPrefix(), sequence, sequenceType.getPadding());
   }
 
   private String generateFormattedString(String prefix, Long sequence, int padding) {

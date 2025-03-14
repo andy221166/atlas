@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
@@ -18,6 +19,7 @@ public interface UpdateProductUseCase
     extends UseCase<UpdateProductUseCase.Input, Void> {
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Input {
@@ -54,6 +56,9 @@ public interface UpdateProductUseCase
     private List<Integer> categoryIds;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ProductDetail {
 
       @NotBlank
@@ -61,6 +66,9 @@ public interface UpdateProductUseCase
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ProductImage {
 
       private Integer id;

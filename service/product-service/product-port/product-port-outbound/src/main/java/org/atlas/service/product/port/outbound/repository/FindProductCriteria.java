@@ -9,7 +9,7 @@ import org.atlas.service.product.domain.entity.ProductStatus;
 @Data
 public class FindProductCriteria {
 
-  private Integer id;
+  private String code;
   private String keyword;
   private BigDecimal minPrice;
   private BigDecimal maxPrice;

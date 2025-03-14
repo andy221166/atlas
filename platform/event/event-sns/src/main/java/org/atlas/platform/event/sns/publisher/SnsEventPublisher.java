@@ -3,7 +3,7 @@ package org.atlas.platform.event.sns.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.commons.util.json.JsonUtil;
-import org.atlas.platform.event.contract.order.BaseOrderEvent;
+import org.atlas.platform.event.contract.order.BasePlaceOrderEvent;
 import org.atlas.platform.event.core.model.DomainEvent;
 import org.atlas.platform.event.core.publisher.ExternalEventPublisher;
 import org.atlas.platform.event.sns.config.SnsEventProps;
@@ -22,7 +22,7 @@ public class SnsEventPublisher implements ExternalEventPublisher {
 
   @Override
   public <E extends DomainEvent> void publish(E event) {
-    if (event instanceof BaseOrderEvent) {
+    if (event instanceof BasePlaceOrderEvent) {
       if (props.getOrderTopicArn() == null) {
         log.error("No order topic configured");
         return;

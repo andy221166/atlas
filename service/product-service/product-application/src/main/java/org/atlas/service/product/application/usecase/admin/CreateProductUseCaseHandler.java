@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.sequencegenerator.SequenceGenerator;
+import org.atlas.platform.sequencegenerator.SequenceType;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.domain.entity.ProductDetailEntity;
@@ -34,7 +35,7 @@ public class CreateProductUseCaseHandler implements CreateProductUseCase {
   public Output handle(Input input) throws Exception {
     // Insert product into DB
     ProductEntity productEntity = map(input);
-    productEntity.setCode(sequenceGenerator.generate("product", "PRD", 7));
+    productEntity.setCode(sequenceGenerator.generate(SequenceType.PRODUCT));
     productRepository.insert(productEntity);
 
     // Publish event

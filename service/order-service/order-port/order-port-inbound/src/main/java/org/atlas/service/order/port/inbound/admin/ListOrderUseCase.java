@@ -5,32 +5,29 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
-import org.atlas.service.order.domain.entity.OrderStatus;
+import org.atlas.service.order.domain.shared.OrderStatus;
 
 public interface ListOrderUseCase
     extends UseCase<ListOrderUseCase.Input, ListOrderUseCase.Output> {
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Input {
 
-    private Integer orderId;
-    private Integer userId;
-    private Integer productId;
-    private OrderStatus status;
-    private Date startDate;
-    private Date endDate;
     @Valid
     private PagingRequest pagingRequest;
   }
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Output {
@@ -38,6 +35,9 @@ public interface ListOrderUseCase
     private PagingResult<Order> orders;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Order {
 
       private Integer id;
@@ -50,6 +50,9 @@ public interface ListOrderUseCase
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class OrderItem {
 
       private Product product;
@@ -57,6 +60,9 @@ public interface ListOrderUseCase
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class User {
 
       private Integer id;
@@ -65,6 +71,9 @@ public interface ListOrderUseCase
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Product {
 
       private Integer id;

@@ -3,6 +3,7 @@ package org.atlas.service.user.port.inbound.admin;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.enums.Role;
@@ -14,6 +15,9 @@ public interface ListUserUseCase
     extends UseCase<ListUserUseCase.Input, ListUserUseCase.Output> {
 
   @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   class Input {
 
     @NotEmpty
@@ -24,6 +28,7 @@ public interface ListUserUseCase
   }
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
   class Output {
@@ -31,6 +36,9 @@ public interface ListUserUseCase
     private PagingResult<User> users;
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class User {
 
       private Integer id;

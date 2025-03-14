@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.model.DomainEntity;
+import org.atlas.service.order.domain.shared.OrderStatus;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class OrderEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
   private Integer id;
+  private String code;
   private Integer userId;
   private List<OrderItemEntity> orderItems;
   private BigDecimal amount;

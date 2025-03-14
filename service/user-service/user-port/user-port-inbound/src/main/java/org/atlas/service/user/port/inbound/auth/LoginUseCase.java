@@ -1,13 +1,19 @@
 package org.atlas.service.user.port.inbound.auth;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
 
 public interface LoginUseCase
     extends UseCase<LoginUseCase.Input, LoginUseCase.Output> {
 
   @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   class Input {
 
     @NotBlank
@@ -18,6 +24,9 @@ public interface LoginUseCase
   }
 
   @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   class Output {
 
     private String accessToken;

@@ -92,6 +92,8 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
 
+    api project(':sequence-generator')
+
     switch (modules['tracing']) {
         case 'none':
             break

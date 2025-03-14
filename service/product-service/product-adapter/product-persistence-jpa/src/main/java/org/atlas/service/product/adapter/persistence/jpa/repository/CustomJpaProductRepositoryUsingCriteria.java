@@ -10,6 +10,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.persistence.jpa.core.specification.QueryFilter;
 import org.atlas.platform.persistence.jpa.core.specification.QueryOperator;
@@ -18,7 +19,6 @@ import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity
 import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 @Repository
 public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProductRepository {
@@ -78,11 +78,11 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
 
   private Specification<JpaProductEntity> buildSpec(FindProductCriteria criteria) {
     QuerySpecification<JpaProductEntity> spec = new QuerySpecification<>();
-    if (criteria.getId() != null) {
+    if (StringUtils.isNotBlank(criteria.getCode())) {
       spec.addFilter(
-          QueryFilter.of("id", criteria.getId(), QueryOperator.EQUAL));
+          QueryFilter.of("code", criteria.getCode(), QueryOperator.EQUAL));
     }
-    if (StringUtils.hasLength(criteria.getKeyword())) {
+    if (StringUtils.isNotBlank(criteria.getKeyword())) {
       spec.addFilter(QueryFilter.or(
           QueryFilter.Condition.of("code", criteria.getKeyword(), QueryOperator.LIKE),
           QueryFilter.Condition.of("name", criteria.getKeyword(), QueryOperator.LIKE),

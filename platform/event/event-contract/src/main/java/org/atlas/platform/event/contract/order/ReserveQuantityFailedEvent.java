@@ -8,7 +8,7 @@ import org.atlas.platform.event.contract.EventType;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ReserveQuantityFailedEvent extends BaseOrderEvent {
+public class ReserveQuantityFailedEvent extends BasePlaceOrderEvent {
 
   private String error;
 

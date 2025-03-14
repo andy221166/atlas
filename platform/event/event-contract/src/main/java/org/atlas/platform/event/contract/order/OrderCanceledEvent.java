@@ -8,7 +8,7 @@ import org.atlas.platform.event.contract.EventType;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OrderCanceledEvent extends BaseOrderEvent {
+public class OrderCanceledEvent extends BasePlaceOrderEvent {
 
   private String canceledReason;
 
