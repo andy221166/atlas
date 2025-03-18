@@ -6,15 +6,10 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
-    // Config
-    api project(':config-loader')
-
-    // Port
     api project(':product-port-inbound')
     api project(':product-port-outbound')
 
     api project(':actuator')
-
     switch (modules['api-server']) {
         case 'rest':
             api project(':product-api-server-rest')
@@ -25,7 +20,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
-
     switch (modules['cache']) {
         case 'caffeine':
             api project(':cache-caffeine')
@@ -39,7 +33,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['cache']}")
     }
-
+    api project(':config')
     switch (modules['csv']) {
         case 'opencsv':
             api project(':product-csv-opencsv')
@@ -47,7 +41,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['csv']}")
     }
-
     switch (modules['datasource']) {
         case 'mysql':
             api project(':product-datasource-mysql')
@@ -55,7 +48,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
     }
-
     switch (modules['discovery-client']) {
         case 'none':
             break
@@ -68,7 +60,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
-
     switch (modules['event']) {
         case 'kafka':
             api project(':product-event-kafka')
@@ -76,7 +67,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
-
     switch (modules['excel']) {
         case 'easyexcel':
             api project(':product-excel-easyexcel')
@@ -87,7 +77,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['excel']}")
     }
-
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -95,7 +84,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-
     switch (modules['persistence']) {
         case 'jpa':
             api project(':product-persistence-jpa')
@@ -103,9 +91,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
-
-    api project(':sequence-generator')
-
     switch (modules['storage']) {
         case 'filesystem':
             api project(':storage-filesystem')
@@ -116,7 +101,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['storage']}")
     }
-
     switch (modules['tracing']) {
         case 'none':
             break
@@ -126,7 +110,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-
     api project(':use-case-application')
 }
 

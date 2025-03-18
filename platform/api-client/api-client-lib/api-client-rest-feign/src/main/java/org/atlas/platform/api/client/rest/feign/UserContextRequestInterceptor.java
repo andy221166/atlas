@@ -2,8 +2,9 @@ package org.atlas.platform.api.client.rest.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import org.atlas.commons.context.CurrentUser;
-import org.atlas.commons.context.CurrentUserContext;
+import org.atlas.platform.commons.context.CurrentUser;
+import org.atlas.platform.commons.context.UserContext;
+import org.atlas.platform.commons.enums.CustomClaim;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,10 +12,12 @@ public class UserContextRequestInterceptor implements RequestInterceptor {
 
   @Override
   public void apply(RequestTemplate requestTemplate) {
-    CurrentUser currentUser = CurrentUserContext.getCurrentUser();
+    CurrentUser currentUser = UserContext.get();
     if (currentUser != null) {
-      requestTemplate.header(CustomHeaders.USER_ID, String.valueOf(currentUser.getUserId()));
-      requestTemplate.header(CustomHeaders.USER_ROLE, currentUser.getRole().name());
+      requestTemplate.header(CustomClaim.USER_ID.getHeader(),
+          String.valueOf(currentUser.getUserId()));
+      requestTemplate.header(CustomClaim.USER_ROLE.getHeader(),
+          currentUser.getRole().name());
     }
   }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
+import org.atlas.platform.config.ApplicationConfigService;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
@@ -23,10 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
 
   private final ProductRepository productRepository;
+  private final ApplicationConfigService applicationConfigService;
   private final ProductEventPublisher productEventPublisher;
-
-  @Value("${spring.application.name}")
-  private String applicationName;
 
   @Override
   @Transactional
@@ -76,7 +75,8 @@ public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
   }
 
   private void publishEvent(ProductEntity productEntity) {
-    ProductUpdatedEvent event = new ProductUpdatedEvent(applicationName);
+    ProductUpdatedEvent event = new ProductUpdatedEvent(
+        applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(productEntity, event);
     productEventPublisher.publish(event);
   }

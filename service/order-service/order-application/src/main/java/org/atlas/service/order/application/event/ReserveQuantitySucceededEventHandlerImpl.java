@@ -1,6 +1,7 @@
 package org.atlas.service.order.application.event;
 
 import lombok.RequiredArgsConstructor;
+import org.atlas.platform.config.ApplicationConfigService;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
@@ -20,6 +21,7 @@ public class ReserveQuantitySucceededEventHandlerImpl implements
 
   private final OrderRepository orderRepository;
   private final OrderService orderService;
+  private final ApplicationConfigService applicationConfigService;
   private final OrderEventPublisher orderEventPublisher;
 
   @Override
@@ -30,8 +32,9 @@ public class ReserveQuantitySucceededEventHandlerImpl implements
     orderEntity.setStatus(OrderStatus.CONFIRMED);
     orderRepository.update(orderEntity);
 
-    OrderConfirmedEvent orderConfirmedEvent = ObjectMapperUtil.getInstance()
-        .map(orderEntity, OrderConfirmedEvent.class);
+    OrderConfirmedEvent orderConfirmedEvent = new OrderConfirmedEvent(
+        applicationConfigService.getApplicationName());
+    ObjectMapperUtil.getInstance().merge(reserveQuantitySucceededEvent, orderConfirmedEvent);
     orderEventPublisher.publish(orderConfirmedEvent);
   }
 }

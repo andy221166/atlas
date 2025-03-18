@@ -1,4 +1,4 @@
-package org.atlas.platform.configloader;
+package org.atlas.platform.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import org.yaml.snakeyaml.Yaml;
  */
 @Configuration
 @Slf4j
-public class ConfigLoader implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class YamlConfigLoader implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
   private static final String YAML_PATTERN = "classpath*:/application.yaml";
   private static final String YML_PATTERN = "classpath*:/application.yml";

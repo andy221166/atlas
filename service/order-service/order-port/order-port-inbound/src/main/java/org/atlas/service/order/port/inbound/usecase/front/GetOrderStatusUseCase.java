@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.usecase.port.UseCase;
+import org.atlas.service.order.domain.shared.OrderStatus;
 
 public interface GetOrderStatusUseCase
     extends UseCase<GetOrderStatusUseCase.Input, GetOrderStatusUseCase.Output> {

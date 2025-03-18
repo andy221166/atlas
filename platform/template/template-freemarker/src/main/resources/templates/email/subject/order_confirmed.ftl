@@ -1,1 +1,1 @@
-Order #${orderPayload.id} was confirmed
+Order #${order.orderId} was confirmed

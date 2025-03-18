@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * project.
  */
 @Configuration
-@EntityScan(basePackages = "org.atlas.platform.event.core.outbox.model")
+@EntityScan(basePackages = "org.atlas.platform.event.gateway.outbox.model")
 @EnableJpaRepositories(
     basePackages = "org.atlas.platform.event.gateway.outbox.repository",
     repositoryBaseClass = JpaBaseRepositoryImpl.class

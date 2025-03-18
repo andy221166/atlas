@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.commons.util.ConcurrentUtil;
+import org.atlas.platform.config.ApplicationConfigService;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantitySucceededEvent;
@@ -23,10 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderCreatedEventHandlerImpl implements OrderCreatedEventHandler {
 
   private final ProductRepository productRepository;
+  private final ApplicationConfigService applicationConfigService;
   private final ProductEventPublisher productEventPublisher;
-
-  @Value("${spring.application.name}")
-  private String applicationName;
 
   @Value("${app.decrease-quantity-strategy:constraint")
   private String decreaseQuantityStrategy;
@@ -39,12 +38,12 @@ public class OrderCreatedEventHandlerImpl implements OrderCreatedEventHandler {
         decreaseQuantity(orderItem.getProduct().getId(), orderItem.getQuantity());
       });
       ReserveQuantitySucceededEvent reserveQuantitySucceededEvent =
-          new ReserveQuantitySucceededEvent(applicationName);
+          new ReserveQuantitySucceededEvent(applicationConfigService.getApplicationName());
       ObjectMapperUtil.getInstance().merge(orderCreatedEvent, reserveQuantitySucceededEvent);
       productEventPublisher.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
       ReserveQuantityFailedEvent reserveQuantityFailedEvent =
-          new ReserveQuantityFailedEvent(applicationName);
+          new ReserveQuantityFailedEvent(applicationConfigService.getApplicationName());
       ObjectMapperUtil.getInstance().merge(orderCreatedEvent, reserveQuantityFailedEvent);
       reserveQuantityFailedEvent.setError(e.getMessage());
       productEventPublisher.publish(reserveQuantityFailedEvent);

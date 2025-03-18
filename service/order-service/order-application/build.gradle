@@ -6,15 +6,10 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
-    // Config
-    api project(':config-loader')
-
-    // Port
     api project(':order-port-inbound')
     api project(':order-port-outbound')
 
     api project(':actuator')
-
     switch (modules['api-client']) {
         case 'grpc-netdevh':
             api project(':product-api-client-grpc-netdevh')
@@ -35,7 +30,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-client']}")
     }
-
     switch (modules['api-server']) {
         case 'rest':
             api project(':order-api-server-rest')
@@ -46,7 +40,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
-
+    api project(':config')
     switch (modules['datasource']) {
         case 'mysql':
             api project(':order-datasource-mysql')
@@ -54,7 +48,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
     }
-
     switch (modules['discovery-client']) {
         case 'none':
             break
@@ -75,7 +68,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
-
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -83,7 +75,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-
     switch (modules['persistence']) {
         case 'jpa':
             api project(':order-persistence-jpa')
@@ -91,9 +82,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
-
     api project(':sequence-generator')
-
     switch (modules['tracing']) {
         case 'none':
             break

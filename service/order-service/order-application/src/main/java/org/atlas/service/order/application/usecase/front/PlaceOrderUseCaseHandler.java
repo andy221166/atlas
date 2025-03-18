@@ -13,6 +13,7 @@ import org.atlas.platform.api.client.user.UserApiClient;
 import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
+import org.atlas.platform.config.ApplicationConfigService;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
 import org.atlas.platform.event.contract.order.model.OrderItem;
 import org.atlas.platform.event.contract.order.model.User;
@@ -27,7 +28,6 @@ import org.atlas.service.order.port.outbound.event.OrderEventPublisher;
 import org.atlas.service.order.port.outbound.repository.OrderRepository;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +40,8 @@ public class PlaceOrderUseCaseHandler implements PlaceOrderUseCase {
   private final OrderRepository orderRepository;
   private final UserApiClient userApiClient;
   private final ProductApiClient productApiClient;
+  private final ApplicationConfigService applicationConfigService;
   private final OrderEventPublisher orderEventPublisher;
-
-  @Value("${spring.application.name}")
-  private String applicationName;
 
   @Override
   @Transactional
@@ -114,7 +112,7 @@ public class PlaceOrderUseCaseHandler implements PlaceOrderUseCase {
   private void publishEvent(OrderEntity orderEntity,
       ListUserUseCase.Output.User user,
       Map<Integer, ListProductUseCase.Output.Product> products) {
-    OrderCreatedEvent event = new OrderCreatedEvent(applicationName);
+    OrderCreatedEvent event = new OrderCreatedEvent(applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(orderEntity, event);
     event.setOrderId(orderEntity.getId());
     event.setUser(ObjectMapperUtil.getInstance().map(user, User.class));

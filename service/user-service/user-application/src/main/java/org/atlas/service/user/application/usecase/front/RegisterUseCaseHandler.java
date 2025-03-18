@@ -2,17 +2,17 @@ package org.atlas.service.user.application.usecase.front;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.commons.enums.AppError;
+import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.commons.exception.BusinessException;
+import org.atlas.platform.config.ApplicationConfigService;
+import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 import org.atlas.service.user.port.inbound.usecase.front.RegisterUseCase;
 import org.atlas.service.user.port.outbound.auth.AuthService;
 import org.atlas.service.user.port.outbound.event.UserEventPublisher;
 import org.atlas.service.user.port.outbound.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +23,8 @@ public class RegisterUseCaseHandler implements RegisterUseCase {
 
   private final UserRepository userRepository;
   private final AuthService authService;
+  private final ApplicationConfigService applicationConfigService;
   private final UserEventPublisher userEventPublisher;
-
-  @Value("${spring.application.name}")
-  private String applicationName;
 
   @Override
   @Transactional
@@ -62,7 +60,8 @@ public class RegisterUseCaseHandler implements RegisterUseCase {
   }
 
   private void publishEvent(UserEntity userEntity) {
-    UserRegisteredEvent event = new UserRegisteredEvent(applicationName);
+    UserRegisteredEvent event = new UserRegisteredEvent(
+        applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(userEntity, event);
     userEventPublisher.publish(event);
   }

@@ -3,19 +3,17 @@ package org.atlas.service.product.application.usecase.admin;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.atlas.platform.config.ApplicationConfigService;
+import org.atlas.platform.event.contract.product.ProductCreatedEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.platform.sequencegenerator.SequenceGenerator;
-import org.atlas.platform.sequencegenerator.SequenceType;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.domain.entity.ProductDetailEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.domain.entity.ProductImageEntity;
-import org.atlas.platform.event.contract.product.ProductCreatedEvent;
 import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
 import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
 import org.atlas.service.product.port.outbound.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateProductUseCaseHandler implements CreateProductUseCase {
 
-  private final SequenceGenerator sequenceGenerator;
   private final ProductRepository productRepository;
+  private final ApplicationConfigService applicationConfigService;
   private final ProductEventPublisher productEventPublisher;
-
-  @Value("${spring.application.name}")
-  private String applicationName;
 
   @Override
   @Transactional
   public Output handle(Input input) throws Exception {
     // Insert product into DB
     ProductEntity productEntity = map(input);
-    productEntity.setCode(sequenceGenerator.generate(SequenceType.PRODUCT));
     productRepository.insert(productEntity);
 
     // Publish event
@@ -81,7 +75,8 @@ public class CreateProductUseCaseHandler implements CreateProductUseCase {
   }
 
   private void publishEvent(ProductEntity productEntity) {
-    ProductCreatedEvent event = new ProductCreatedEvent(applicationName);
+    ProductCreatedEvent event = new ProductCreatedEvent(
+        applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(productEntity, event);
     productEventPublisher.publish(event);
   }

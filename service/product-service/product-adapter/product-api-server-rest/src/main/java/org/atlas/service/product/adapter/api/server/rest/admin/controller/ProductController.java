@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
+@RestController("adminProductController")
 @RequestMapping("api/admin/products")
 @Validated
 @RequiredArgsConstructor
@@ -124,7 +124,7 @@ public class ProductController {
       @RequestParam(name = "is_active", required = false) Boolean isActive,
       @RequestParam(name = "brand_id", required = false) Integer brandId,
       @RequestParam(name = "category_ids", required = false) List<Integer> categoryIds,
-      @RequestParam(name = "fileType") FileType fileType)
+      @RequestParam(name = "file_type") FileType fileType)
       throws Exception {
     ExportProductUseCase.Input input = new ExportProductUseCase.Input();
     input.setId(id);

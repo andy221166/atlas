@@ -56,9 +56,17 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
   @Override
   public void insert(ProductEntity productEntity) {
-    JpaProductEntity jpaProductEntity = ObjectMapperUtil.getInstance().map(productEntity, JpaProductEntity.class);
+    JpaProductEntity jpaProductEntity = ObjectMapperUtil.getInstance()
+        .map(productEntity, JpaProductEntity.class);
     jpaProductRepository.save(jpaProductEntity);
     productEntity.setId(jpaProductEntity.getId());
+  }
+
+  @Override
+  public void update(ProductEntity productEntity) {
+    JpaProductEntity jpaProductEntity = ObjectMapperUtil.getInstance()
+        .map(productEntity, JpaProductEntity.class);
+    jpaProductRepository.save(jpaProductEntity);
   }
 
   @Override

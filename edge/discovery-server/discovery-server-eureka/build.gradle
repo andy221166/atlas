@@ -11,7 +11,7 @@ dependencies {
 
     // Platform
     api project(':actuator')
-    api project(':config-loader')
+    api project(':config')
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')

@@ -24,7 +24,6 @@ public class OrderEventsConsumer extends BaseKafkaEventConsumer {
   @Override
   @KafkaListener(
       topics = "#{topicsProps.orderEvents}",
-      groupId = "${spring.application.name}",
       containerFactory = "defaultContainerFactory"
   )
   // Non-blocking retry

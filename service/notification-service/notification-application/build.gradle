@@ -6,14 +6,11 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
-    // Config
-    api project(':config-loader')
-
-    // Port
     api project(':notification-port-inbound')
+    api project(':order-domain-shared')
 
     api project(':actuator')
-
+    api project(':config')
     switch (modules['datasource']) {
         case 'mysql':
             api project(':notification-datasource-mysql')
@@ -21,7 +18,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
     }
-
     switch (modules['event']) {
         case 'kafka':
             api project(':event-kafka')
@@ -29,7 +25,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
-
     switch (modules['email']) {
         case 'spring':
             api project(':email-spring')
@@ -40,7 +35,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['email']}")
     }
-
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -48,11 +42,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-
-    api project(':order-domain-shared')
-
     api project(':sse')
-
     switch (modules['template']) {
         case 'freemarker':
             api project(':template-freemarker')
@@ -63,7 +53,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['template']}")
     }
-
     switch (modules['tracing']) {
         case 'none':
             break
@@ -73,7 +62,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-
     api project(':websocket')
 }
 

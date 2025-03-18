@@ -1,19 +1,19 @@
-package org.atlas.service.notification.model;
+package org.atlas.service.notification.application.event.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.atlas.service.order.domain.shared.enums.OrderStatus;
+import org.atlas.service.order.domain.shared.OrderStatus;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderStatusDto {
+public class OrderStatusOutput {
 
   private OrderStatus orderStatus;
   private String canceledReason;
 
-  public OrderStatusDto(OrderStatus orderStatus) {
+  public OrderStatusOutput(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
   }
 }

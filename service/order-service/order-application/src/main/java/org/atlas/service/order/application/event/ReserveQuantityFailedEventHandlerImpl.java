@@ -1,6 +1,7 @@
 package org.atlas.service.order.application.event;
 
 import lombok.RequiredArgsConstructor;
+import org.atlas.platform.config.ApplicationConfigService;
 import org.atlas.platform.event.contract.order.OrderCanceledEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
@@ -19,6 +20,7 @@ public class ReserveQuantityFailedEventHandlerImpl implements ReserveQuantityFai
 
   private final OrderRepository orderRepository;
   private final OrderService orderService;
+  private final ApplicationConfigService applicationConfigService;
   private final OrderEventPublisher orderEventPublisher;
 
   @Override
@@ -30,8 +32,10 @@ public class ReserveQuantityFailedEventHandlerImpl implements ReserveQuantityFai
     orderEntity.setCanceledReason(reserveQuantityFailedEvent.getError());
     orderRepository.update(orderEntity);
 
-    OrderCanceledEvent orderCanceledEvent = ObjectMapperUtil.getInstance()
-        .map(orderEntity, OrderCanceledEvent.class);
+    OrderCanceledEvent orderCanceledEvent = new OrderCanceledEvent(
+        applicationConfigService.getApplicationName());
+    ObjectMapperUtil.getInstance().merge(reserveQuantityFailedEvent, orderCanceledEvent);
+    orderCanceledEvent.setCanceledReason(orderEntity.getCanceledReason());
     orderEventPublisher.publish(orderCanceledEvent);
   }
 }

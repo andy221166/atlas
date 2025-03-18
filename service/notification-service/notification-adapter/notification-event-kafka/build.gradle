@@ -3,6 +3,5 @@ dependencies {
     api project(':event-kafka')
 
     // Service
-    api project(':order-port-inbound')
-    api project(':order-port-outbound')
+    api project(':notification-port-inbound')
 }

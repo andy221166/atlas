@@ -17,6 +17,8 @@ public interface ProductRepository {
 
   void insert(ProductEntity productEntity);
 
+  void update(ProductEntity productEntity);
+
   void decreaseQuantityWithConstraint(Integer id, Integer decrement);
 
   void decreaseQuantityWithPessimisticLock(Integer id, Integer decrement);

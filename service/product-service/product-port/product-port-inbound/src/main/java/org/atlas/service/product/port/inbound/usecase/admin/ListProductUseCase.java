@@ -22,7 +22,7 @@ public interface ListProductUseCase
   @AllArgsConstructor
   class Input {
 
-    private String code;
+    private Integer id;
     private String keyword;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;

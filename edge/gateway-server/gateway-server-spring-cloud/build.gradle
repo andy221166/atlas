@@ -12,7 +12,7 @@ dependencies {
     // Platform
     api project(':actuator')
     api project(':commons')
-    api project(':config-loader')
+    api project(':config')
     switch (modules['discovery-client']) {
         case 'none':
             break

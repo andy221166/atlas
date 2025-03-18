@@ -1,6 +1,7 @@
 package org.atlas.platform.event.contract.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
@@ -29,5 +30,12 @@ public class OrderCreatedEvent extends DomainEvent {
   @Override
   public EventType getEventType() {
     return EventType.ORDER_CREATED;
+  }
+
+  public void addOrderItem(OrderItem orderItem) {
+    if (orderItems == null) {
+      orderItems = new ArrayList<>();
+    }
+    orderItems.add(orderItem);
   }
 }

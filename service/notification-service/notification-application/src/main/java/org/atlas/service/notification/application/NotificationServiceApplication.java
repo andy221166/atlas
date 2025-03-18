@@ -1,6 +1,6 @@
 package org.atlas.service.notification.application;
 
-import org.atlas.platform.configloader.ConfigLoader;
+import org.atlas.platform.config.YamlConfigLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -12,6 +12,6 @@ public class NotificationServiceApplication {
 
   public static void main(String[] args) {
     new SpringApplicationBuilder(NotificationServiceApplication.class)
-        .initializers(new ConfigLoader()).run(args);
+        .initializers(new YamlConfigLoader()).run(args);
   }
 }

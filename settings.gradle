@@ -66,8 +66,8 @@ include(':commons')
 project(':commons').projectDir = file('platform/commons')
 
 // Config loader
-include(':config-loader')
-project(':config-loader').projectDir = file('platform/config-loader')
+include(':config')
+project(':config').projectDir = file('platform/config')
 
 // Cryptography
 include(':cryptography')

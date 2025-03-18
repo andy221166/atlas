@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 public enum SequenceType {
 
-  PRODUCT("product", "PRD", 4),
   ORDER("order", "ORD", 4);
 
   private final String name;
