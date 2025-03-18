@@ -1,7 +1,7 @@
 package org.atlas.service.user.application.usecase.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.service.user.port.inbound.auth.LogoutUseCase;
+import org.atlas.service.user.port.inbound.usecase.auth.LogoutUseCase;
 import org.atlas.service.user.port.outbound.auth.AuthService;
 import org.springframework.stereotype.Component;
 

@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.CategoryEntity;
-import org.atlas.service.product.port.inbound.master.ListCategoryUseCase;
+import org.atlas.service.product.port.inbound.usecase.master.ListCategoryUseCase;
 import org.atlas.service.product.port.outbound.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

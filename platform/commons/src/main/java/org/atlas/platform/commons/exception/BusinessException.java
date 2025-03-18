@@ -1,6 +1,7 @@
 package org.atlas.platform.commons.exception;
 
 import lombok.Getter;
+import org.atlas.platform.commons.enums.AppError;
 
 @Getter
 public class BusinessException extends RuntimeException {

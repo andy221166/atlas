@@ -8,7 +8,7 @@ import org.atlas.platform.api.server.grpc.protobuf.product.ListProductRequestPro
 import org.atlas.platform.api.server.grpc.protobuf.product.ListProductResponseProto;
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductProto;
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductServiceGrpc;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 
 @GrpcService
 @RequiredArgsConstructor

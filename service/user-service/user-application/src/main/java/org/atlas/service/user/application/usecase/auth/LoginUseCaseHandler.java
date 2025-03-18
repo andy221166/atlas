@@ -2,7 +2,7 @@ package org.atlas.service.user.application.usecase.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.user.port.inbound.auth.LoginUseCase;
+import org.atlas.service.user.port.inbound.usecase.auth.LoginUseCase;
 import org.atlas.service.user.port.outbound.auth.AuthService;
 import org.atlas.service.user.port.outbound.auth.LoginRequest;
 import org.atlas.service.user.port.outbound.auth.LoginResponse;

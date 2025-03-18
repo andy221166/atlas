@@ -1,12 +1,12 @@
 package org.atlas.service.product.application.usecase.admin;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.commons.exception.AppError;
+import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.platform.event.contract.product.ProductDeletedEvent;
-import org.atlas.service.product.port.inbound.admin.DeleteProductUseCase;
-import org.atlas.service.product.port.outbound.event.publisher.ProductEventPublisher;
+import org.atlas.service.product.port.inbound.usecase.admin.DeleteProductUseCase;
+import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
 import org.atlas.service.product.port.outbound.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

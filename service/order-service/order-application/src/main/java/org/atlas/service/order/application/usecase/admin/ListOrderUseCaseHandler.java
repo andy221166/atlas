@@ -11,14 +11,14 @@ import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.entity.OrderItemEntity;
-import org.atlas.service.order.port.inbound.admin.ListOrderUseCase;
-import org.atlas.service.order.port.inbound.admin.ListOrderUseCase.Output.Order;
-import org.atlas.service.order.port.inbound.admin.ListOrderUseCase.Output.OrderItem;
+import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase;
+import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase.Output.Order;
+import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase.Output.OrderItem;
 import org.atlas.service.order.port.outbound.repository.OrderRepository;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.Output.Product;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.Output.User;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase.Output.Product;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase.Output.User;
 import org.springframework.stereotype.Component;
 
 @Component("adminListOrderUseCaseHandler")

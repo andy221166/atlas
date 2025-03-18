@@ -70,7 +70,7 @@ dependencies {
 
     switch (modules['event']) {
         case 'kafka':
-            api project(':order-event-publisher-kafka')
+            api project(':order-event-kafka')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")

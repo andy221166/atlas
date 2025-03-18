@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.atlas.service.product.adapter.api.server.rest.internal.model.ListProductRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

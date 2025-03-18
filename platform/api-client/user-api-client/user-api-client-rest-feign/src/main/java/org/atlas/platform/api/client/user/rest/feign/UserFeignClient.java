@@ -2,7 +2,7 @@ package org.atlas.platform.api.client.user.rest.feign;
 
 import org.atlas.platform.api.client.rest.feign.FeignConfig;
 import org.atlas.platform.api.client.user.rest.model.ListUserResponse;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

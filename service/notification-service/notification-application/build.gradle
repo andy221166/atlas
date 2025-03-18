@@ -6,7 +6,13 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    // Config
     api project(':config-loader')
+
+    // Port
+    api project(':notification-port-inbound')
+
+    api project(':actuator')
 
     switch (modules['datasource']) {
         case 'mysql':
@@ -16,32 +22,13 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
     }
 
-    switch (modules['discovery-client']) {
-        case 'none':
-            break
-        case 'eureka':
-            api project(':discovery-client-eureka')
-            break
-        case 'kubernetes':
-            api project(':discovery-client-kubernetes')
+    switch (modules['event']) {
+        case 'kafka':
+            api project(':event-kafka')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
-
-//    switch (modules['event']) {
-//        case 'kafka':
-//            api project(':event-kafka')
-//            break
-//        case 'rabbitmq':
-//            api project(':event-rabbitmq')
-//            break
-//        case 'sns':
-//            api project(':event-sns')
-//            break
-//        default:
-//            throw new IllegalArgumentException("Unsupported ${modules['event']}")
-//    }
 
     switch (modules['email']) {
         case 'spring':
@@ -62,7 +49,7 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
 
-    api project(':actuator')
+    api project(':order-domain-shared')
 
     api project(':sse')
 

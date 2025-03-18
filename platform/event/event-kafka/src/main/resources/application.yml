@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    consumer:
+      group-id: ${spring.application.name}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+app:
+  event:
+    kafka:
+      topics:
+        user_events: user_events
+        product_events: product_events
+        order_events: order_events

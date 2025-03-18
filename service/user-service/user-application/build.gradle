@@ -57,13 +57,7 @@ dependencies {
 
     switch (modules['event']) {
         case 'kafka':
-            api project(':user-event-publisher-kafka')
-            break
-        case 'rabbitmq':
-            api project(':event-rabbitmq')
-            break
-        case 'sns':
-            api project(':event-sns')
+            api project(':user-event-kafka')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")

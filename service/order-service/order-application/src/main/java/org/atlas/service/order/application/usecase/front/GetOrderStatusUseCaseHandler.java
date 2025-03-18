@@ -1,10 +1,10 @@
 package org.atlas.service.order.application.usecase.front;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.commons.exception.AppError;
+import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.order.domain.entity.OrderEntity;
-import org.atlas.service.order.port.inbound.front.GetOrderStatusUseCase;
+import org.atlas.service.order.port.inbound.usecase.front.GetOrderStatusUseCase;
 import org.atlas.service.order.port.outbound.repository.OrderRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

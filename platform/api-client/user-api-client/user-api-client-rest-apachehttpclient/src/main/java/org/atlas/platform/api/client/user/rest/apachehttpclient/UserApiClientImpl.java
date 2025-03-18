@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.client.rest.apachehttpclient.HttpClientService;
 import org.atlas.platform.api.client.user.UserApiClient;
 import org.atlas.platform.api.client.user.rest.model.ListUserResponse;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

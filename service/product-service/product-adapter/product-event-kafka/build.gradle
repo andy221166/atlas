@@ -1,0 +1,8 @@
+dependencies {
+    // Platform
+    api project(':event-kafka')
+
+    // Service
+    api project(':product-port-inbound')
+    api project(':product-port-outbound')
+}

@@ -3,7 +3,7 @@ package org.atlas.platform.api.server.rest.error;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.api.server.rest.response.Response;
-import org.atlas.platform.commons.exception.AppError;
+import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.i18n.service.MessageService;
 import org.springframework.http.HttpStatus;

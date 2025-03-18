@@ -2,7 +2,7 @@ package org.atlas.platform.api.client.product.rest.feign;
 
 import org.atlas.platform.api.client.rest.feign.FeignConfig;
 import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

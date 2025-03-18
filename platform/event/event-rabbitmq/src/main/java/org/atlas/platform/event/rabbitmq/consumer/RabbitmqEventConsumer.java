@@ -2,8 +2,7 @@ package org.atlas.platform.event.rabbitmq.consumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.event.contract.order.BasePlaceOrderEvent;
-import org.atlas.platform.event.core.consumer.EventDispatcher;
+import org.atlas.platform.event.gateway.consumer.EventDispatcher;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;

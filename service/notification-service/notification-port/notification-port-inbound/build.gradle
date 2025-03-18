@@ -1,0 +1,5 @@
+dependencies {
+    // Platform
+    api project(':event-contract')
+    api project(':use-case-port')
+}

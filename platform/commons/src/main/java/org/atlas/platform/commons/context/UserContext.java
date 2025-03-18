@@ -2,7 +2,7 @@ package org.atlas.platform.commons.context;
 
 import javax.annotation.Nullable;
 import org.atlas.platform.commons.enums.Role;
-import org.atlas.platform.commons.exception.AppError;
+import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 
 /**

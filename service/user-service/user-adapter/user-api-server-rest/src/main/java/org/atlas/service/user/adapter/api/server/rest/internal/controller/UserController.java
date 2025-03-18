@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.adapter.api.server.rest.internal.model.ListUserRequest;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

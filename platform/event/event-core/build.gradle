@@ -1,8 +1,0 @@
-dependencies {
-    // Platform
-    api project(':commons')
-    api project(':event-contract')
-    api project(':json')
-    api project(':lock-redis')
-    api project(':persistence-jpa')
-}

@@ -1,0 +1,7 @@
+dependencies {
+    // Platform
+    api project(':commons')
+    api project(':event-contract')
+    api project(':json')
+    api project(':persistence-jpa')
+}

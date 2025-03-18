@@ -6,7 +6,7 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.port.inbound.admin.ExportProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.admin.ExportProductUseCase;
 import org.atlas.service.product.port.outbound.file.csv.ProductCsvWriter;
 import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriter;
 import org.atlas.service.product.port.outbound.file.model.write.ProductRow;

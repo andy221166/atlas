@@ -6,7 +6,7 @@ import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.order.adapter.api.server.rest.front.model.PlaceOrderRequest;
 import org.atlas.service.order.domain.entity.OrderEntity;
-import org.atlas.service.order.port.inbound.front.PlaceOrderUseCase;
+import org.atlas.service.order.port.inbound.usecase.front.PlaceOrderUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

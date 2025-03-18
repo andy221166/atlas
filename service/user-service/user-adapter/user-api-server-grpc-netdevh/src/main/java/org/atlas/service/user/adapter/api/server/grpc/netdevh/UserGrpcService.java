@@ -8,7 +8,7 @@ import org.atlas.platform.api.server.grpc.protobuf.user.ListUserRequestProto;
 import org.atlas.platform.api.server.grpc.protobuf.user.ListUserResponseProto;
 import org.atlas.platform.api.server.grpc.protobuf.user.UserProto;
 import org.atlas.platform.api.server.grpc.protobuf.user.UserServiceGrpc;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 
 @GrpcService
 @RequiredArgsConstructor

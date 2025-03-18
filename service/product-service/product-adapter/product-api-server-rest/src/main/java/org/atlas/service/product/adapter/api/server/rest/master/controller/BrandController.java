@@ -2,7 +2,7 @@ package org.atlas.service.product.adapter.api.server.rest.master.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
-import org.atlas.service.product.port.inbound.master.ListBrandUseCase;
+import org.atlas.service.product.port.inbound.usecase.master.ListBrandUseCase;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

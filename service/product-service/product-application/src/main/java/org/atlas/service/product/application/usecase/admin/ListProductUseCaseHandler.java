@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.port.inbound.admin.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase;
 import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.atlas.service.product.port.outbound.repository.ProductRepository;
 import org.springframework.stereotype.Component;

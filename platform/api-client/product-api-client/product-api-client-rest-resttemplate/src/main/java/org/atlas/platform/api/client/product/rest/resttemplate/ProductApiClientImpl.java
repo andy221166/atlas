@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.api.client.rest.resttemplate.RestTemplateService;
 import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
 import org.atlas.platform.api.client.product.ProductApiClient;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

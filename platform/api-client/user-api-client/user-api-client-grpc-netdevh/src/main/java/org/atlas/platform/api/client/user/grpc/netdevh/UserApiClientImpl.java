@@ -9,7 +9,7 @@ import org.atlas.platform.api.server.grpc.protobuf.user.UserServiceGrpc;
 import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.platform.api.client.user.UserApiClient;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase;
+import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 import org.springframework.stereotype.Component;
 
 @Component

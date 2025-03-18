@@ -2,11 +2,11 @@ package org.atlas.service.user.application.usecase.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.commons.context.UserContext;
-import org.atlas.platform.commons.exception.AppError;
+import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.service.user.port.inbound.front.GetProfileUseCase;
+import org.atlas.service.user.port.inbound.usecase.front.GetProfileUseCase;
 import org.atlas.service.user.port.outbound.repository.UserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
