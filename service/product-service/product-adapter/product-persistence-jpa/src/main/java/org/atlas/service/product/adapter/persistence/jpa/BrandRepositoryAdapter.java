@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaBrandRepository;
 import org.atlas.service.product.domain.entity.BrandEntity;
-import org.atlas.service.product.port.outbound.repository.BrandRepository;
+import org.atlas.service.product.port.outbound.repository.BrandRepositoryPort;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BrandRepositoryAdapter implements BrandRepository {
+public class BrandRepositoryAdapter implements BrandRepositoryPort {
 
   private final JpaBrandRepository jpaBrandRepository;
 

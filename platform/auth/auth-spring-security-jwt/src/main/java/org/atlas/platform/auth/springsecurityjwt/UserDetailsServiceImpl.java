@@ -3,7 +3,7 @@ package org.atlas.platform.auth.springsecurityjwt;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.service.user.port.outbound.repository.UserRepository;
+import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final UserRepository userRepository;
+  private final UserRepositoryPort userRepository;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

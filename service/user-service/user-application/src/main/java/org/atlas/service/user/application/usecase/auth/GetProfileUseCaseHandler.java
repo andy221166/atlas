@@ -7,7 +7,7 @@ import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.inbound.usecase.front.GetProfileUseCase;
-import org.atlas.service.user.port.outbound.repository.UserRepository;
+import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GetProfileUseCaseHandler implements GetProfileUseCase {
 
-  private final UserRepository userRepository;
+  private final UserRepositoryPort userRepository;
 
   @Override
   @Transactional(readOnly = true)

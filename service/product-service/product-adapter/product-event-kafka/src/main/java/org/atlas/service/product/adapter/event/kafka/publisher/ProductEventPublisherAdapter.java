@@ -8,12 +8,12 @@ import org.atlas.platform.event.contract.product.ProductDeletedEvent;
 import org.atlas.platform.event.contract.product.ProductUpdatedEvent;
 import org.atlas.platform.event.gateway.EventGateway;
 import org.atlas.platform.event.kafka.TopicsProps;
-import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
+import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ProductEventPublisherAdapter implements ProductEventPublisher {
+public class ProductEventPublisherAdapter implements ProductEventPublisherPort {
 
   private final EventGateway eventGateway;
   private final TopicsProps topicsProps;

@@ -9,10 +9,10 @@ import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.service.product.domain.entity.ProductStatus;
 import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase.Output.Product;
-import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
-import org.atlas.service.product.port.outbound.repository.ProductRepository;
-import org.atlas.service.product.port.outbound.search.SearchProductCriteria;
-import org.atlas.service.product.port.outbound.search.SearchService;
+import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
+import org.atlas.service.product.port.outbound.search.SearchParams;
+import org.atlas.service.product.port.outbound.search.SearchPort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,29 +20,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SearchProductUseCaseHandler implements SearchProductUseCase {
 
-  private final SearchService searchService;
-  private final ProductRepository productRepository;
+  private final SearchPort searchPort;
+  private final ProductRepositoryPort productRepositoryPort;
 
-  public SearchProductUseCaseHandler(@Nullable SearchService searchService,
-      ProductRepository productRepository) {
-    this.searchService = searchService;
-    this.productRepository = productRepository;
+  public SearchProductUseCaseHandler(@Nullable SearchPort searchPort,
+      ProductRepositoryPort productRepositoryPort) {
+    this.searchPort = searchPort;
+    this.productRepositoryPort = productRepositoryPort;
   }
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
     PagingResult<ProductEntity> productEntityPage;
-    if (searchService != null) {
-      SearchProductCriteria criteria = ObjectMapperUtil.getInstance()
-          .map(input, SearchProductCriteria.class);
-      productEntityPage = searchService.search(criteria, input.getPagingRequest());
+    if (searchPort != null) {
+      SearchParams params = ObjectMapperUtil.getInstance()
+          .map(input, SearchParams.class);
+      productEntityPage = searchPort.search(params, input.getPagingRequest());
     } else {
-      FindProductCriteria criteria = ObjectMapperUtil.getInstance()
-          .map(input, FindProductCriteria.class);
+      FindProductParams criteria = ObjectMapperUtil.getInstance()
+          .map(input, FindProductParams.class);
       criteria.setStatus(ProductStatus.IN_STOCK);
       criteria.setIsActive(true);
-      productEntityPage = productRepository.findByCriteria(criteria, input.getPagingRequest());
+      productEntityPage = productRepositoryPort.findByCriteria(criteria, input.getPagingRequest());
     }
     List<Product> products = productEntityPage.getResults()
         .stream()

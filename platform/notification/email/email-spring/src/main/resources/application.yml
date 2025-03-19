@@ -1,4 +1,0 @@
-spring:
-  mail:
-    host: ${MAIL_SERVER_HOST:localhost}
-    port: 25

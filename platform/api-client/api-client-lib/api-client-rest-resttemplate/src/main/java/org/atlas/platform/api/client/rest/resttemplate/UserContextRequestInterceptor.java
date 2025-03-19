@@ -1,7 +1,9 @@
 package org.atlas.platform.api.client.rest.resttemplate;
 
 import java.io.IOException;
-import org.atlas.commons.context.CurrentUser;
+import org.atlas.platform.commons.context.CurrentUser;
+import org.atlas.platform.commons.context.UserContext;
+import org.atlas.platform.commons.enums.CustomClaim;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -12,10 +14,12 @@ public class UserContextRequestInterceptor implements ClientHttpRequestIntercept
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body,
       ClientHttpRequestExecution execution) throws IOException {
-    CurrentUser currentUser = UserCon.getCurrentUser();
+    CurrentUser currentUser = UserContext.get();
     if (currentUser != null) {
-      request.getHeaders().add(CustomHeaders.USER_ID, String.valueOf(currentUser.getUserId()));
-      request.getHeaders().add(CustomHeaders.USER_ROLE, currentUser.getRole().name());
+      request.getHeaders().add(CustomClaim.USER_ID.getHeader(),
+          String.valueOf(currentUser.getUserId()));
+      request.getHeaders().add(CustomClaim.USER_ROLE.getHeader(),
+          currentUser.getRole().name());
     }
     return execution.execute(request, body);
   }

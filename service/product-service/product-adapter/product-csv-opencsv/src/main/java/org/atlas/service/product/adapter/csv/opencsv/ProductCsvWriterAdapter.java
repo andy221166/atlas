@@ -9,12 +9,12 @@ import lombok.Data;
 import org.atlas.platform.file.csv.opencsv.OpenCsvWriter;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.outbound.file.csv.ProductCsvWriter;
+import org.atlas.service.product.port.outbound.file.csv.ProductCsvWriterPort;
 import org.atlas.service.product.port.outbound.file.model.write.ProductRow;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductCsvWriterAdapter implements ProductCsvWriter {
+public class ProductCsvWriterAdapter implements ProductCsvWriterPort {
 
   @Override
   public byte[] write(List<ProductRow> productRows) throws Exception {

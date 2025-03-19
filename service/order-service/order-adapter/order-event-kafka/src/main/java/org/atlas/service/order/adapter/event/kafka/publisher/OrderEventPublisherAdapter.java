@@ -5,29 +5,29 @@ import org.atlas.platform.event.contract.order.OrderCanceledEvent;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.platform.event.contract.order.OrderCreatedEvent;
 import org.atlas.platform.event.gateway.EventGateway;
-import org.atlas.platform.event.publisher.kafka.KafkaEventPublisherProps;
-import org.atlas.service.order.port.outbound.event.OrderEventPublisher;
+import org.atlas.platform.event.kafka.TopicsProps;
+import org.atlas.service.order.port.outbound.event.OrderEventPublisherPort;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OrderEventPublisherAdapter implements OrderEventPublisher {
+public class OrderEventPublisherAdapter implements OrderEventPublisherPort {
 
   private final EventGateway eventGateway;
-  private final KafkaEventPublisherProps kafkaEventPublisherProps;
+  private final TopicsProps topicsProps;
 
   @Override
   public void publish(OrderCreatedEvent event) {
-    eventGateway.send(event, kafkaEventPublisherProps.getTopics().getOrderEvents());
+    eventGateway.send(event, topicsProps.getOrderEvents());
   }
 
   @Override
   public void publish(OrderConfirmedEvent event) {
-
+    eventGateway.send(event, topicsProps.getOrderEvents());
   }
 
   @Override
   public void publish(OrderCanceledEvent event) {
-
+    eventGateway.send(event, topicsProps.getOrderEvents());
   }
 }

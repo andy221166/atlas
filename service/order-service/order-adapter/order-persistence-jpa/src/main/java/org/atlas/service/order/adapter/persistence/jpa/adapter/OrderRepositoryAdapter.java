@@ -8,7 +8,7 @@ import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.order.adapter.persistence.jpa.entity.JpaOrderEntity;
 import org.atlas.service.order.adapter.persistence.jpa.repository.JpaOrderRepository;
 import org.atlas.service.order.domain.entity.OrderEntity;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OrderRepositoryAdapter implements OrderRepository {
+public class OrderRepositoryAdapter implements OrderRepositoryPort {
 
   private final JpaOrderRepository jpaOrderRepository;
 

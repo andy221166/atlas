@@ -5,7 +5,7 @@ import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.shared.OrderStatus;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderService {
 
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
 
   @Transactional(readOnly = true)
   public OrderEntity findProcessingOrder(Integer orderId) {
-    OrderEntity orderEntity = orderRepository.findById(orderId)
+    OrderEntity orderEntity = orderRepositoryPort.findById(orderId)
         .orElseThrow(() -> new BusinessException(AppError.ORDER_NOT_FOUND));
     if (orderEntity.getStatus() != OrderStatus.PROCESSING) {
       throw new BusinessException(AppError.ORDER_INVALID_STATUS);

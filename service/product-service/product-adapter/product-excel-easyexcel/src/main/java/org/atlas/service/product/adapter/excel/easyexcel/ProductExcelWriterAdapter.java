@@ -8,12 +8,12 @@ import lombok.Data;
 import org.atlas.platform.file.excel.easyexcel.EasyExcelWriter;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriter;
+import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriterPort;
 import org.atlas.service.product.port.outbound.file.model.write.ProductRow;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductExcelWriterAdapter implements ProductExcelWriter {
+public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
 
   @Override
   public byte[] write(List<ProductRow> productRows) throws Exception {

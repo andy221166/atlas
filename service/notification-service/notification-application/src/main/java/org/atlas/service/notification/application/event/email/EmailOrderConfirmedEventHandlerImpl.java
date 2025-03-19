@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.commons.util.FileUtil;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
-import org.atlas.platform.notification.email.core.config.EmailProps;
-import org.atlas.platform.notification.email.core.model.Attachment;
-import org.atlas.platform.notification.email.core.model.SendEmailRequest;
-import org.atlas.platform.notification.email.core.service.EmailService;
-import org.atlas.platform.template.contract.TemplateResolver;
+import org.atlas.service.notification.application.config.EmailProps;
 import org.atlas.service.notification.port.inbound.event.OrderConfirmedEventHandler;
+import org.atlas.service.notification.port.outbound.email.Attachment;
+import org.atlas.service.notification.port.outbound.email.EmailPort;
+import org.atlas.service.notification.port.outbound.email.SendEmailRequest;
+import org.atlas.service.notification.port.outbound.template.TemplatePort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +25,8 @@ public class EmailOrderConfirmedEventHandlerImpl implements OrderConfirmedEventH
   private static final String TEMPLATE_SUBJECT_DIR = "email/subject/";
   private static final String TEMPLATE_BODY_DIR = "email/body/";
 
-  private final TemplateResolver templateResolver;
-  private final EmailService emailService;
+  private final TemplatePort templateResolver;
+  private final EmailPort emailPort;
   private final EmailProps emailProps;
 
   @Async
@@ -63,14 +63,14 @@ public class EmailOrderConfirmedEventHandlerImpl implements OrderConfirmedEventH
     attachment = new Attachment("coffee.jpg", attachmentFile);
 
     SendEmailRequest request = new SendEmailRequest.Builder()
-        .setSource(emailProps.getSource())
-        .addDestination(event.getUser().getEmail())
+        .setSender(emailProps.getSender())
+        .addRecipient(event.getUser().getEmail())
         .setSubject(subject)
         .setBody(body)
         .addAttachment(attachment)
         .setHtml(true)
         .build();
-    emailService.send(request);
+    emailPort.send(request);
     log.info("Sent email: event={}", event);
   }
 }

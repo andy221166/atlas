@@ -21,11 +21,11 @@ import org.atlas.service.product.domain.entity.ProductDetailEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.service.product.port.inbound.usecase.admin.ImportProductUseCase;
-import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
-import org.atlas.service.product.port.outbound.file.csv.ProductCsvReader;
-import org.atlas.service.product.port.outbound.file.excel.ProductExcelReader;
+import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
+import org.atlas.service.product.port.outbound.file.csv.ProductCsvReaderPort;
+import org.atlas.service.product.port.outbound.file.excel.ProductExcelReaderPort;
 import org.atlas.service.product.port.outbound.file.model.read.ProductRow;
-import org.atlas.service.product.port.outbound.repository.ProductRepository;
+import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -37,13 +37,13 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
 
   private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
-  private final ProductRepository productRepository;
+  private final ProductRepositoryPort productRepositoryPort;
   private final StorageService storageService;
-  private final ProductCsvReader productCsvReader;
-  private final ProductExcelReader productExcelReader;
+  private final ProductCsvReaderPort productCsvReaderPort;
+  private final ProductExcelReaderPort productExcelReaderPort;
   private final TransactionTemplate transactionTemplate;
   private final ApplicationConfigService applicationConfigService;
-  private final ProductEventPublisher productEventPublisher;
+  private final ProductEventPublisherPort productEventPublisherPort;
 
   @Value("${app.storage.bucket}")
   private String bucket;
@@ -64,8 +64,8 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
         // Read rows from file content
         List<ProductRow> rows;
         switch (input.getFileType()) {
-          case CSV -> rows = productCsvReader.read(fileContent);
-          case EXCEL -> rows = productExcelReader.read(fileContent);
+          case CSV -> rows = productCsvReaderPort.read(fileContent);
+          case EXCEL -> rows = productExcelReaderPort.read(fileContent);
           default -> throw new UnsupportedOperationException(
               "Unsupported file type: " + input.getFileType());
         }
@@ -79,12 +79,12 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
           List<ProductEntity> productEntities = rows.stream()
               .map(this::newProductEntity)
               .toList();
-          productRepository.insertBatch(productEntities);
+          productRepositoryPort.insertBatch(productEntities);
           productEntities.forEach(productEntity -> {
             ProductCreatedEvent event = new ProductCreatedEvent(
                 applicationConfigService.getApplicationName());
             ObjectMapperUtil.getInstance().merge(productEntity, event);
-            productEventPublisher.publish(event);
+            productEventPublisherPort.publish(event);
           });
         });
         log.info("Inserted {} products", rows.size());

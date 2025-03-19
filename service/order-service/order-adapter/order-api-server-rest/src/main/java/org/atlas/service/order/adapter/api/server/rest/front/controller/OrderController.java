@@ -1,12 +1,15 @@
 package org.atlas.service.order.adapter.api.server.rest.front.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
+import org.atlas.platform.commons.constant.Constant;
+import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.order.adapter.api.server.rest.front.model.PlaceOrderRequest;
-import org.atlas.service.order.domain.entity.OrderEntity;
+import org.atlas.service.order.port.inbound.usecase.front.GetOrderStatusUseCase;
+import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase;
 import org.atlas.service.order.port.inbound.usecase.front.PlaceOrderUseCase;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,27 +23,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/front/orders")
-@RequiredArgsConstructor
 @Validated
 public class OrderController {
 
-  private PlaceOrderUseCase placeOrderUseCase;
+  private final ListOrderUseCase listOrderUseCase;
+  private final GetOrderStatusUseCase getOrderStatusUseCase;
+  private final PlaceOrderUseCase placeOrderUseCase;
 
-  @GetMapping
-  public Response<PageDto<OrderDto>> listOrder(
-      @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-      @RequestParam(name = "size", required = false, defaultValue = "20") Integer size
-  ) throws Exception {
-    ListOrderQuery query = new ListOrderQuery();
-    query.setPage(page - 1);
-    query.setSize(size);
-    return Response.success(queryGateway.send(query));
+  public OrderController(
+      @Qualifier("frontListOrderUseCaseHandler") ListOrderUseCase listOrderUseCase,
+      GetOrderStatusUseCase getOrderStatusUseCase,
+      PlaceOrderUseCase placeOrderUseCase) {
+    this.listOrderUseCase = listOrderUseCase;
+    this.getOrderStatusUseCase = getOrderStatusUseCase;
+    this.placeOrderUseCase = placeOrderUseCase;
   }
 
-  @GetMapping("/{id}")
-  public Response<OrderEntity> getOrderStatus(@PathVariable("id") Integer id) throws Exception {
-    GetOrderQuery query = new GetOrderQuery(id);
-    return Response.success(queryGateway.send(query));
+  @GetMapping
+  public Response<ListOrderUseCase.Output> listOrder(
+      @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+      @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
+  ) throws Exception {
+    ListOrderUseCase.Input input = ListOrderUseCase.Input.builder()
+        .pagingRequest(PagingRequest.of(page - 1, size))
+        .build();
+    ListOrderUseCase.Output output = listOrderUseCase.handle(input);
+    return Response.success(output);
+  }
+
+  @GetMapping("/{orderId}")
+  public Response<GetOrderStatusUseCase.Output> getOrderStatus(
+      @PathVariable("orderId") Integer orderId) throws Exception {
+    GetOrderStatusUseCase.Input input = GetOrderStatusUseCase.Input.builder()
+        .orderId(orderId)
+        .build();
+    GetOrderStatusUseCase.Output output = getOrderStatusUseCase.handle(input);
+    return Response.success(output);
   }
 
   @PostMapping("/place")

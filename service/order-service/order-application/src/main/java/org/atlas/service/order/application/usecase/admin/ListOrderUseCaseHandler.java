@@ -14,7 +14,7 @@ import org.atlas.service.order.domain.entity.OrderItemEntity;
 import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase;
 import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase.Output.Order;
 import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase.Output.OrderItem;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase.Output.Product;
 import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
@@ -25,14 +25,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ListOrderUseCaseHandler implements ListOrderUseCase {
 
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
   private final UserApiClient userApiClient;
   private final ProductApiClient productApiClient;
 
   @Override
   public Output handle(Input input) throws Exception {
     // Query order
-    PagingResult<OrderEntity> orderEntityPage = orderRepository.findAll(input.getPagingRequest());
+    PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findAll(input.getPagingRequest());
     if (orderEntityPage.isEmpty()) {
       return new Output(PagingResult.empty());
     }

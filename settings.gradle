@@ -65,7 +65,7 @@ project(':cache-redis').projectDir = file('platform/cache/cache-redis')
 include(':commons')
 project(':commons').projectDir = file('platform/commons')
 
-// Config loader
+// Config
 include(':config')
 project(':config').projectDir = file('platform/config')
 
@@ -127,14 +127,6 @@ project(':lock-redis').projectDir = file('platform/lock/lock-redis')
 
 // Notification
 
-// Notification::Email
-include(':email-core')
-project(':email-core').projectDir = file('platform/notification/email/email-core')
-include(':email-spring')
-project(':email-spring').projectDir = file('platform/notification/email/email-spring')
-include(':email-ses')
-project(':email-ses').projectDir = file('platform/notification/email/email-ses')
-
 // Notification::SSE
 include(':sse')
 project(':sse').projectDir = file('platform/notification/sse')
@@ -194,14 +186,6 @@ project(':storage-s3').projectDir = file('platform/storage/storage-s3')
 // Task scheduler
 include(':task-scheduler-quartz')
 project(':task-scheduler-quartz').projectDir = file('platform/task-scheduler/task-scheduler-quartz')
-
-// Template
-include(':template-core')
-project(':template-core').projectDir = file('platform/template/template-core')
-include(':template-freemarker')
-project(':template-freemarker').projectDir = file('platform/template/template-freemarker')
-include(':template-thymeleaf')
-project(':template-thymeleaf').projectDir = file('platform/template/template-thymeleaf')
 
 // Use case
 include(':use-case-port')
@@ -298,11 +282,21 @@ project(':notification-application').projectDir = file('service/notification-ser
 // Notification service::Port
 include(':notification-port-inbound')
 project(':notification-port-inbound').projectDir = file('service/notification-service/notification-port/notification-port-inbound')
+include(':notification-port-outbound')
+project(':notification-port-outbound').projectDir = file('service/notification-service/notification-port/notification-port-outbound')
 // Notification service::Adapter
 include(':notification-datasource-mysql')
 project(':notification-datasource-mysql').projectDir = file('service/notification-service/notification-adapter/notification-datasource-mysql')
+include(':notification-email-spring')
+project(':notification-email-spring').projectDir = file('service/notification-service/notification-adapter/notification-email-spring')
+include(':notification-email-ses')
+project(':notification-email-ses').projectDir = file('service/notification-service/notification-adapter/notification-email-ses')
 include(':notification-event-kafka')
 project(':notification-event-kafka').projectDir = file('service/notification-service/notification-adapter/notification-event-kafka')
+include(':notification-template-freemarker')
+project(':notification-template-freemarker').projectDir = file('service/notification-service/notification-adapter/notification-template-freemarker')
+include(':notification-template-thymeleaf')
+project(':notification-template-thymeleaf').projectDir = file('service/notification-service/notification-adapter/notification-template-thymeleaf')
 
 // -------------------------------------------------------------------------------------------------
 // Edge

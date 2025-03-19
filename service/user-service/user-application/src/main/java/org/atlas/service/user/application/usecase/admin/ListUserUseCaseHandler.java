@@ -6,8 +6,7 @@ import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.inbound.usecase.admin.ListUserUseCase;
 import org.atlas.service.user.port.inbound.usecase.admin.ListUserUseCase.Output.User;
-import org.atlas.service.user.port.outbound.repository.FindUserCriteria;
-import org.atlas.service.user.port.outbound.repository.UserRepository;
+import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ListUserUseCaseHandler implements ListUserUseCase {
 
-  private final UserRepository userRepository;
+  private final UserRepositoryPort userRepository;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindUserCriteria criteria = ObjectMapperUtil.getInstance().map(input, FindUserCriteria.class);
+    FindUserParams criteria = ObjectMapperUtil.getInstance().map(input, FindUserParams.class);
     PagingResult<UserEntity> userEntityPage = userRepository.findByCriteria(criteria,
         input.getPagingRequest());
     PagingResult<User> userPage = ObjectMapperUtil.getInstance()

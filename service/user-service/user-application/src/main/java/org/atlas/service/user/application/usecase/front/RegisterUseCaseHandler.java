@@ -10,9 +10,9 @@ import org.atlas.platform.event.contract.user.UserRegisteredEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.inbound.usecase.front.RegisterUseCase;
-import org.atlas.service.user.port.outbound.auth.AuthService;
-import org.atlas.service.user.port.outbound.event.UserEventPublisher;
-import org.atlas.service.user.port.outbound.repository.UserRepository;
+import org.atlas.service.user.port.outbound.auth.AuthPort;
+import org.atlas.service.user.port.outbound.event.UserEventPublisherPort;
+import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class RegisterUseCaseHandler implements RegisterUseCase {
 
-  private final UserRepository userRepository;
-  private final AuthService authService;
+  private final UserRepositoryPort userRepositoryPort;
+  private final AuthPort authPort;
+  private final UserEventPublisherPort userEventPublisherPort;
   private final ApplicationConfigService applicationConfigService;
-  private final UserEventPublisher userEventPublisher;
 
   @Override
   @Transactional
@@ -37,13 +37,13 @@ public class RegisterUseCaseHandler implements RegisterUseCase {
   }
 
   private void checkValidity(Input input) {
-    if (userRepository.findByUsername(input.getUsername()).isPresent()) {
+    if (userRepositoryPort.findByUsername(input.getUsername()).isPresent()) {
       throw new BusinessException(AppError.USERNAME_ALREADY_EXISTS);
     }
-    if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+    if (userRepositoryPort.findByEmail(input.getEmail()).isPresent()) {
       throw new BusinessException(AppError.EMAIL_ALREADY_EXISTS);
     }
-    if (userRepository.findByPhoneNumber(input.getPhoneNumber()).isPresent()) {
+    if (userRepositoryPort.findByPhoneNumber(input.getPhoneNumber()).isPresent()) {
       throw new BusinessException(AppError.PHONE_NUMBER_ALREADY_EXISTS);
     }
   }
@@ -51,18 +51,18 @@ public class RegisterUseCaseHandler implements RegisterUseCase {
   private UserEntity createUser(Input input) {
     UserEntity userEntity = ObjectMapperUtil.getInstance().map(input, UserEntity.class);
     userEntity.setRole(Role.USER);
-    userRepository.insert(userEntity);
+    userRepositoryPort.insert(userEntity);
     return userEntity;
   }
 
   private void syncAuth(UserEntity userEntity) {
-    authService.register(userEntity);
+    authPort.register(userEntity);
   }
 
   private void publishEvent(UserEntity userEntity) {
     UserRegisteredEvent event = new UserRegisteredEvent(
         applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(userEntity, event);
-    userEventPublisher.publish(event);
+    userEventPublisherPort.publish(event);
   }
 }

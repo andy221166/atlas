@@ -1,6 +1,0 @@
-dependencies {
-    api project(':email-core')
-
-    implementation 'software.amazon.awssdk:sesv2:2.29.33'
-    implementation 'jakarta.mail:jakarta.mail-api:2.1.3'
-}

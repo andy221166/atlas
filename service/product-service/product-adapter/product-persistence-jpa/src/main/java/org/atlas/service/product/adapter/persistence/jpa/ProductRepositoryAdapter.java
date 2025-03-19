@@ -13,18 +13,31 @@ import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaProductOptimisticRepository;
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaProductRepository;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
-import org.atlas.service.product.port.outbound.repository.ProductRepository;
+import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ProductRepositoryAdapter implements ProductRepository {
+public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
   private final JpaProductRepository jpaProductRepository;
   private final JpaProductOptimisticRepository jpaProductOptimisticRepository;
+
+  @Override
+  public PagingResult<ProductEntity> findAll(FindProductParams params,
+      PagingRequest pagingRequest) {
+    long totalCount = jpaProductRepository.count(params);
+    if (totalCount == 0L) {
+      return PagingResult.empty();
+    }
+    List<JpaProductEntity> jpaProductEntities = jpaProductRepository.find(params, pagingRequest);
+    List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
+        .mapList(jpaProductEntities, ProductEntity.class);
+    return PagingResult.of(productEntities, totalCount);
+  }
 
   @Override
   public List<ProductEntity> findByIdIn(List<Integer> ids) {
@@ -33,19 +46,6 @@ public class ProductRepositoryAdapter implements ProductRepository {
         .map(jpaProduct ->
             ObjectMapperUtil.getInstance().map(jpaProduct, ProductEntity.class))
         .toList();
-  }
-
-  @Override
-  public PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria,
-      PagingRequest pagingRequest) {
-    long totalCount = jpaProductRepository.count(criteria);
-    if (totalCount == 0L) {
-      return PagingResult.empty();
-    }
-    List<JpaProductEntity> jpaProductEntities = jpaProductRepository.find(criteria, pagingRequest);
-    List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
-        .mapList(jpaProductEntities, ProductEntity.class);
-    return PagingResult.of(productEntities, totalCount);
   }
 
   @Override

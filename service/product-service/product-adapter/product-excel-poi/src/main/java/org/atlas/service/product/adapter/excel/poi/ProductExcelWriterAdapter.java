@@ -12,12 +12,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.util.DateUtil;
-import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriter;
+import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriterPort;
 import org.atlas.service.product.port.outbound.file.model.write.ProductRow;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductExcelWriterAdapter implements ProductExcelWriter {
+public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
 
   @Override
   public byte[] write(List<ProductRow> productRows) throws Exception {

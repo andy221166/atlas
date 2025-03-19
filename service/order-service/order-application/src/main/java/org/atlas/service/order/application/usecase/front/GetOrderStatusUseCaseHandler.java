@@ -5,7 +5,7 @@ import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.port.inbound.usecase.front.GetOrderStatusUseCase;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GetOrderStatusUseCaseHandler implements GetOrderStatusUseCase {
 
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    OrderEntity orderEntity = orderRepository.findById(input.getOrderId())
+    OrderEntity orderEntity = orderRepositoryPort.findById(input.getOrderId())
         .orElseThrow(() -> new BusinessException(AppError.ORDER_NOT_FOUND));
     return new Output(orderEntity.getStatus());
   }

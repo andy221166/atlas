@@ -10,12 +10,12 @@ import lombok.Data;
 import org.atlas.platform.file.csv.opencsv.OpenCsvReader;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.outbound.file.csv.ProductCsvReader;
+import org.atlas.service.product.port.outbound.file.csv.ProductCsvReaderPort;
 import org.atlas.service.product.port.outbound.file.model.read.ProductRow;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductCsvReaderAdapter implements ProductCsvReader {
+public class ProductCsvReaderAdapter implements ProductCsvReaderPort {
 
   @Override
   public List<ProductRow> read(byte[] fileContent) throws IOException {

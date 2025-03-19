@@ -6,7 +6,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.client.product.ProductApiClient;
-import org.atlas.platform.api.client.user.UserApiClient;
 import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
@@ -15,7 +14,7 @@ import org.atlas.service.order.domain.entity.OrderItemEntity;
 import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase;
 import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase.Output.Order;
 import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase.Output.OrderItem;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase.Output.Product;
 import org.springframework.stereotype.Component;
@@ -24,15 +23,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ListOrderUseCaseHandler implements ListOrderUseCase {
 
-  private final OrderRepository orderRepository;
-  private final UserApiClient userApiClient;
+  private final OrderRepositoryPort orderRepositoryPort;
   private final ProductApiClient productApiClient;
 
   @Override
   public Output handle(Input input) throws Exception {
     // Query order
     Integer userId = UserContext.getUserId();
-    PagingResult<OrderEntity> orderEntityPage = orderRepository.findByUserId(userId,
+    PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findByUserId(userId,
         input.getPagingRequest());
     if (orderEntityPage.isEmpty()) {
       return new Output(PagingResult.empty());

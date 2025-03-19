@@ -9,8 +9,8 @@ import org.atlas.service.order.application.service.OrderService;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.shared.OrderStatus;
 import org.atlas.service.order.port.inbound.event.ReserveQuantityFailedEventHandler;
-import org.atlas.service.order.port.outbound.event.OrderEventPublisher;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.event.OrderEventPublisherPort;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReserveQuantityFailedEventHandlerImpl implements ReserveQuantityFailedEventHandler {
 
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
   private final OrderService orderService;
   private final ApplicationConfigService applicationConfigService;
-  private final OrderEventPublisher orderEventPublisher;
+  private final OrderEventPublisherPort orderEventPublisherPort;
 
   @Override
   @Transactional
@@ -30,12 +30,12 @@ public class ReserveQuantityFailedEventHandlerImpl implements ReserveQuantityFai
         reserveQuantityFailedEvent.getOrderId());
     orderEntity.setStatus(OrderStatus.CANCELED);
     orderEntity.setCanceledReason(reserveQuantityFailedEvent.getError());
-    orderRepository.update(orderEntity);
+    orderRepositoryPort.update(orderEntity);
 
     OrderCanceledEvent orderCanceledEvent = new OrderCanceledEvent(
         applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(reserveQuantityFailedEvent, orderCanceledEvent);
     orderCanceledEvent.setCanceledReason(orderEntity.getCanceledReason());
-    orderEventPublisher.publish(orderCanceledEvent);
+    orderEventPublisherPort.publish(orderCanceledEvent);
   }
 }

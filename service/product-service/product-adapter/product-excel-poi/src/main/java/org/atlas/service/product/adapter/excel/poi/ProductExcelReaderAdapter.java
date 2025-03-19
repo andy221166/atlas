@@ -14,12 +14,12 @@ import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.util.DateUtil;
 import org.atlas.platform.file.excel.poi.PoiUtil;
 import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.outbound.file.excel.ProductExcelReader;
+import org.atlas.service.product.port.outbound.file.excel.ProductExcelReaderPort;
 import org.atlas.service.product.port.outbound.file.model.read.ProductRow;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductExcelReaderAdapter implements ProductExcelReader {
+public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
 
   private static final int BATCH_SIZE = 100;
 

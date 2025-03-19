@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.port.inbound.usecase.master.ListBrandUseCase;
-import org.atlas.service.product.port.outbound.repository.BrandRepository;
+import org.atlas.service.product.port.outbound.repository.BrandRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ListBrandUseCaseHandler implements ListBrandUseCase {
 
-  private final BrandRepository brandRepository;
+  private final BrandRepositoryPort brandRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Void input) throws Exception {
-    List<BrandEntity> brandEntities = brandRepository.findAll();
+    List<BrandEntity> brandEntities = brandRepositoryPort.findAll();
     List<Output.Brand> brands = brandEntities.stream()
         .map(brand -> ObjectMapperUtil.getInstance().map(brand, Output.Brand.class))
         .toList();

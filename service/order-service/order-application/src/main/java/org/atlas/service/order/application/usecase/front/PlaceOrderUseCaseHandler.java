@@ -24,8 +24,8 @@ import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.entity.OrderItemEntity;
 import org.atlas.service.order.domain.shared.OrderStatus;
 import org.atlas.service.order.port.inbound.usecase.front.PlaceOrderUseCase;
-import org.atlas.service.order.port.outbound.event.OrderEventPublisher;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.event.OrderEventPublisherPort;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
 import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
 import org.springframework.stereotype.Component;
@@ -37,11 +37,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceOrderUseCaseHandler implements PlaceOrderUseCase {
 
   private final SequenceGenerator sequenceGenerator;
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
+  private final OrderEventPublisherPort orderEventPublisherPort;
   private final UserApiClient userApiClient;
   private final ProductApiClient productApiClient;
   private final ApplicationConfigService applicationConfigService;
-  private final OrderEventPublisher orderEventPublisher;
 
   @Override
   @Transactional
@@ -68,7 +68,7 @@ public class PlaceOrderUseCaseHandler implements PlaceOrderUseCase {
     orderEntity.calculateOrderAmount();
 
     // Save into DB
-    orderRepository.insert(orderEntity);
+    orderRepositoryPort.insert(orderEntity);
 
     // Publish event
     publishEvent(orderEntity, user, products);
@@ -119,6 +119,6 @@ public class PlaceOrderUseCaseHandler implements PlaceOrderUseCase {
     orderEntity.getOrderItems().forEach(orderItemEntity -> event.addOrderItem(
         ObjectMapperUtil.getInstance()
             .map(products.get(orderItemEntity.getProductId()), OrderItem.class)));
-    orderEventPublisher.publish(event);
+    orderEventPublisherPort.publish(event);
   }
 }

@@ -13,9 +13,8 @@ import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.platform.event.contract.product.ProductUpdatedEvent;
 import org.atlas.service.product.port.inbound.usecase.admin.UpdateProductUseCase;
-import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
-import org.atlas.service.product.port.outbound.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Value;
+import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
+import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +22,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
 
-  private final ProductRepository productRepository;
+  private final ProductRepositoryPort productRepositoryPort;
   private final ApplicationConfigService applicationConfigService;
-  private final ProductEventPublisher productEventPublisher;
+  private final ProductEventPublisherPort productEventPublisherPort;
 
   @Override
   @Transactional
   public Void handle(Input input) throws Exception {
-    ProductEntity productEntity = productRepository.findById(input.getId())
+    ProductEntity productEntity = productRepositoryPort.findById(input.getId())
         .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
 
     // Update product into DB
     merge(input, productEntity);
-    productRepository.update(productEntity);
+    productRepositoryPort.update(productEntity);
 
     // Publish event
     publishEvent(productEntity);
@@ -78,6 +77,6 @@ public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
     ProductUpdatedEvent event = new ProductUpdatedEvent(
         applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(productEntity, event);
-    productEventPublisher.publish(event);
+    productEventPublisherPort.publish(event);
   }
 }

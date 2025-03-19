@@ -10,7 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity;
-import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
+import org.atlas.service.product.port.outbound.repository.FindProductParams;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +22,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
   private EntityManager entityManager;
 
   @Override
-  public List<JpaProductEntity> find(FindProductCriteria criteria, PagingRequest pagingRequest) {
+  public List<JpaProductEntity> find(FindProductParams params, PagingRequest pagingRequest) {
     StringBuilder sqlBuilder = new StringBuilder("""
         select p
         from JpaProduct p
@@ -31,8 +31,8 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
         left join fetch p.categories
         """);
 
-    Map<String, Object> params = new HashMap<>();
-    sqlBuilder.append(buildWhereClause(criteria, params));
+    Map<String, Object> queryParams = new HashMap<>();
+    sqlBuilder.append(buildWhereClause(params, queryParams));
 
     // Sorting
     if (pagingRequest.hasSort()) {
@@ -44,7 +44,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
 
     String sql = sqlBuilder.toString();
     TypedQuery<JpaProductEntity> query = entityManager.createQuery(sql, JpaProductEntity.class);
-    params.forEach(query::setParameter);
+    queryParams.forEach(query::setParameter);
 
     // Paging
     if (pagingRequest.hasPaging()) {
@@ -56,7 +56,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
   }
 
   @Override
-  public long count(FindProductCriteria criteria) {
+  public long count(FindProductParams criteria) {
     Map<String, Object> params = new HashMap<>();
     String whereClause = buildWhereClause(criteria, params);
     String countSql = """
@@ -71,13 +71,13 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     return countQuery.getSingleResult();
   }
 
-  private String buildWhereClause(FindProductCriteria criteria, Map<String, Object> params) {
+  private String buildWhereClause(FindProductParams params, Map<String, Object> queryParams) {
     StringBuilder whereClauseBuilder = new StringBuilder("where 1=1 ");
-    if (StringUtils.isNotBlank(criteria.getCode())) {
-      whereClauseBuilder.append(" and p.code = :code ");
-      params.put("code", criteria.getCode());
+    if (params.getId() != null) {
+      whereClauseBuilder.append(" and p.id = :id ");
+      queryParams.put("id", params.getId());
     }
-    if (StringUtils.isNotBlank(criteria.getKeyword())) {
+    if (StringUtils.isNotBlank(params.getKeyword())) {
       whereClauseBuilder.append(
           """
               and (
@@ -86,35 +86,35 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
                 or lower(d.description) like :keyword
               )
               """);
-      params.put("keyword", "%" + criteria.getKeyword().toLowerCase() + "%");
+      queryParams.put("keyword", "%" + params.getKeyword().toLowerCase() + "%");
     }
-    if (criteria.getMinPrice() != null) {
+    if (params.getMinPrice() != null) {
       whereClauseBuilder.append(" and p.price >= :minPrice ");
-      params.put("minPrice", criteria.getMinPrice());
+      queryParams.put("minPrice", params.getMinPrice());
     }
-    if (criteria.getMaxPrice() != null) {
+    if (params.getMaxPrice() != null) {
       whereClauseBuilder.append(" and p.price <= :maxPrice ");
-      params.put("maxPrice", criteria.getMaxPrice());
+      queryParams.put("maxPrice", params.getMaxPrice());
     }
-    if (criteria.getStatus() != null) {
+    if (params.getStatus() != null) {
       whereClauseBuilder.append(" and p.status = :status ");
-      params.put("status", criteria.getStatus());
+      queryParams.put("status", params.getStatus());
     }
-    if (criteria.getAvailableFrom() != null) {
+    if (params.getAvailableFrom() != null) {
       whereClauseBuilder.append(" and p.availableFrom >= :availableFrom ");
-      params.put("availableFrom", criteria.getAvailableFrom());
+      queryParams.put("availableFrom", params.getAvailableFrom());
     }
-    if (criteria.getIsActive() != null) {
+    if (params.getIsActive() != null) {
       whereClauseBuilder.append(" and p.isActive = :isActive ");
-      params.put("isActive", criteria.getIsActive());
+      queryParams.put("isActive", params.getIsActive());
     }
-    if (criteria.getBrandId() != null) {
+    if (params.getBrandId() != null) {
       whereClauseBuilder.append(" and b.id = :brandId ");
-      params.put("brandId", criteria.getBrandId());
+      queryParams.put("brandId", params.getBrandId());
     }
-    if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
+    if (CollectionUtils.isNotEmpty(params.getCategoryIds())) {
       whereClauseBuilder.append(" and c.id IN (:categoryIds) ");
-      params.put("categoryIds", criteria.getCategoryIds());
+      queryParams.put("categoryIds", params.getCategoryIds());
     }
     return whereClauseBuilder.toString();
   }

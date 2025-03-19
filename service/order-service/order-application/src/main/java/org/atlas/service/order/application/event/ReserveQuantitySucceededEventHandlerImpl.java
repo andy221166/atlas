@@ -9,8 +9,8 @@ import org.atlas.service.order.application.service.OrderService;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.shared.OrderStatus;
 import org.atlas.service.order.port.inbound.event.ReserveQuantitySucceededEventHandler;
-import org.atlas.service.order.port.outbound.event.OrderEventPublisher;
-import org.atlas.service.order.port.outbound.repository.OrderRepository;
+import org.atlas.service.order.port.outbound.event.OrderEventPublisherPort;
+import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReserveQuantitySucceededEventHandlerImpl implements
     ReserveQuantitySucceededEventHandler {
 
-  private final OrderRepository orderRepository;
+  private final OrderRepositoryPort orderRepositoryPort;
+  private final OrderEventPublisherPort orderEventPublisherPort;
   private final OrderService orderService;
   private final ApplicationConfigService applicationConfigService;
-  private final OrderEventPublisher orderEventPublisher;
 
   @Override
   @Transactional
@@ -30,11 +30,11 @@ public class ReserveQuantitySucceededEventHandlerImpl implements
     OrderEntity orderEntity = orderService.findProcessingOrder(
         reserveQuantitySucceededEvent.getOrderId());
     orderEntity.setStatus(OrderStatus.CONFIRMED);
-    orderRepository.update(orderEntity);
+    orderRepositoryPort.update(orderEntity);
 
     OrderConfirmedEvent orderConfirmedEvent = new OrderConfirmedEvent(
         applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(reserveQuantitySucceededEvent, orderConfirmedEvent);
-    orderEventPublisher.publish(orderConfirmedEvent);
+    orderEventPublisherPort.publish(orderConfirmedEvent);
   }
 }

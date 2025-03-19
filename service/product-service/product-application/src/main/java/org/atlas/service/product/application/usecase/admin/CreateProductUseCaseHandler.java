@@ -12,8 +12,8 @@ import org.atlas.service.product.domain.entity.ProductDetailEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
-import org.atlas.service.product.port.outbound.event.ProductEventPublisher;
-import org.atlas.service.product.port.outbound.repository.ProductRepository;
+import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
+import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateProductUseCaseHandler implements CreateProductUseCase {
 
-  private final ProductRepository productRepository;
+  private final ProductRepositoryPort productRepositoryPort;
   private final ApplicationConfigService applicationConfigService;
-  private final ProductEventPublisher productEventPublisher;
+  private final ProductEventPublisherPort productEventPublisherPort;
 
   @Override
   @Transactional
   public Output handle(Input input) throws Exception {
     // Insert product into DB
     ProductEntity productEntity = map(input);
-    productRepository.insert(productEntity);
+    productRepositoryPort.insert(productEntity);
 
     // Publish event
     publishEvent(productEntity);
@@ -78,6 +78,6 @@ public class CreateProductUseCaseHandler implements CreateProductUseCase {
     ProductCreatedEvent event = new ProductCreatedEvent(
         applicationConfigService.getApplicationName());
     ObjectMapperUtil.getInstance().merge(productEntity, event);
-    productEventPublisher.publish(event);
+    productEventPublisherPort.publish(event);
   }
 }

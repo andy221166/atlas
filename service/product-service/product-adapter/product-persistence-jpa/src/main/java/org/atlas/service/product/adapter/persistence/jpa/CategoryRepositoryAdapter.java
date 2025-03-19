@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaCategoryRepository;
 import org.atlas.service.product.domain.entity.CategoryEntity;
-import org.atlas.service.product.port.outbound.repository.CategoryRepository;
+import org.atlas.service.product.port.outbound.repository.CategoryRepositoryPort;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryRepositoryAdapter implements CategoryRepository {
+public class CategoryRepositoryAdapter implements CategoryRepositoryPort {
 
   private final JpaCategoryRepository jpaCategoryRepository;
 

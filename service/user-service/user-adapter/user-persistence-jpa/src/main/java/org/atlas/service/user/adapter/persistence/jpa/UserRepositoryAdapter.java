@@ -10,16 +10,23 @@ import org.atlas.platform.persistence.jpa.core.paging.PagingConverter;
 import org.atlas.service.user.adapter.persistence.jpa.entity.JpaUserEntity;
 import org.atlas.service.user.adapter.persistence.jpa.repository.JpaUserRepository;
 import org.atlas.service.user.domain.entity.UserEntity;
-import org.atlas.service.user.port.outbound.repository.FindUserCriteria;
-import org.atlas.service.user.port.outbound.repository.UserRepository;
+import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserRepositoryAdapter implements UserRepository {
+public class UserRepositoryAdapter implements UserRepositoryPort {
 
   private final JpaUserRepository jpaUserRepository;
+
+  @Override
+  public PagingResult<UserEntity> findAll(PagingRequest pagingRequest) {
+    Pageable pageable = PagingConverter.convert(pagingRequest);
+    PagingResult<JpaUserEntity> jpaUserPage = PagingConverter.convert(
+        jpaUserRepository.findAll(pageable));
+    return ObjectMapperUtil.getInstance().mapPage(jpaUserPage, UserEntity.class);
+  }
 
   @Override
   public List<UserEntity> findByIdIn(List<Integer> ids) {
@@ -27,15 +34,6 @@ public class UserRepositoryAdapter implements UserRepository {
         .stream()
         .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class))
         .toList();
-  }
-
-  @Override
-  public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria,
-      PagingRequest pagingRequest) {
-    Pageable pageable = PagingConverter.convert(pagingRequest);
-    PagingResult<JpaUserEntity> jpaUserPage = PagingConverter.convert(
-        jpaUserRepository.findByKeyword(criteria.getKeyword(), pageable));
-    return ObjectMapperUtil.getInstance().mapPage(jpaUserPage, UserEntity.class);
   }
 
   @Override
@@ -64,7 +62,8 @@ public class UserRepositoryAdapter implements UserRepository {
 
   @Override
   public void insert(UserEntity userEntity) {
-    JpaUserEntity jpaUserEntity = ObjectMapperUtil.getInstance().map(userEntity, JpaUserEntity.class);
+    JpaUserEntity jpaUserEntity = ObjectMapperUtil.getInstance()
+        .map(userEntity, JpaUserEntity.class);
     jpaUserRepository.save(jpaUserEntity);
     userEntity.setId(jpaUserEntity.getId());
   }

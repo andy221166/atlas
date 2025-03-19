@@ -7,6 +7,7 @@ def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
     api project(':notification-port-inbound')
+    api project(':notification-port-outbound')
     api project(':order-domain-shared')
 
     api project(':actuator')
@@ -27,10 +28,10 @@ dependencies {
     }
     switch (modules['email']) {
         case 'spring':
-            api project(':email-spring')
+            api project(':notification-email-spring')
             break
         case 'ses':
-            api project(':email-ses')
+            api project(':notification-email-ses')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['email']}")
@@ -45,10 +46,10 @@ dependencies {
     api project(':sse')
     switch (modules['template']) {
         case 'freemarker':
-            api project(':template-freemarker')
+            api project(':notification-template-freemarker')
             break
         case 'thymeleaf':
-            api project(':template-thymeleaf')
+            api project(':notification-template-thymeleaf')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['template']}")

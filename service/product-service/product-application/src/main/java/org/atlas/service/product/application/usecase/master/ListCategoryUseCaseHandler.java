@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.port.inbound.usecase.master.ListCategoryUseCase;
-import org.atlas.service.product.port.outbound.repository.CategoryRepository;
+import org.atlas.service.product.port.outbound.repository.CategoryRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ListCategoryUseCaseHandler implements ListCategoryUseCase {
 
-  private final CategoryRepository categoryRepository;
+  private final CategoryRepositoryPort categoryRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Void input) throws Exception {
-    List<CategoryEntity> categoryEntities = categoryRepository.findAll();
+    List<CategoryEntity> categoryEntities = categoryRepositoryPort.findAll();
     List<Output.Category> categories = categoryEntities.stream()
         .map(brand -> ObjectMapperUtil.getInstance().map(brand, Output.Category.class))
         .toList();

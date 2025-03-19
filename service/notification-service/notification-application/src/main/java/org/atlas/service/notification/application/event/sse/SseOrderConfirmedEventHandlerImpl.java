@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.platform.notification.sse.order.OrderStatusNotificationSseService;
 import org.atlas.service.notification.application.event.model.OrderStatusOutput;
-import org.atlas.service.notification.port.inbound.event.OrderConfirmedEventHandler;
 import org.atlas.service.order.domain.shared.OrderStatus;
 import org.springframework.stereotype.Component;
 
