@@ -46,7 +46,7 @@ public class S3StorageService implements StorageService {
   }
 
   private boolean shouldUseMultipartUpload(UploadFileRequest request) {
-    return request.getContent().length / 1024 >= 100; // 100 MB
+    return request.getFileContent().length / 1024 >= 100; // 100 MB
   }
 
   private void doGeneralUpload(UploadFileRequest request) {
@@ -55,7 +55,7 @@ public class S3StorageService implements StorageService {
         .key(request.getObjectKey())
         .metadata(request.getMetadata())
         .build();
-    s3Client.putObject(s3Request, RequestBody.fromBytes(request.getContent()));
+    s3Client.putObject(s3Request, RequestBody.fromBytes(request.getFileContent()));
   }
 
   private void doMultipartUpload(UploadFileRequest request) throws IOException {
@@ -73,7 +73,7 @@ public class S3StorageService implements StorageService {
     List<CompletedPart> completedParts = new ArrayList<>();
     ByteBuffer byteBuffer = ByteBuffer.allocate(1024 * 1024 * 5); // 5 MB byte buffer
 
-    try (ByteArrayInputStream inputStream = new ByteArrayInputStream(request.getContent())) {
+    try (ByteArrayInputStream inputStream = new ByteArrayInputStream(request.getFileContent())) {
       int bytesRead;
       while ((bytesRead = inputStream.read(byteBuffer.array())) != -1) {
         byteBuffer.limit(bytesRead);

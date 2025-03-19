@@ -14,14 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ListUserUseCaseHandler implements ListUserUseCase {
 
-  private final UserRepositoryPort userRepository;
+  private final UserRepositoryPort userRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindUserParams criteria = ObjectMapperUtil.getInstance().map(input, FindUserParams.class);
-    PagingResult<UserEntity> userEntityPage = userRepository.findByCriteria(criteria,
-        input.getPagingRequest());
+    PagingResult<UserEntity> userEntityPage = userRepositoryPort.findAll(input.getPagingRequest());
     PagingResult<User> userPage = ObjectMapperUtil.getInstance()
         .mapPage(userEntityPage, Output.User.class);
     return new Output(userPage);

@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ListUserUseCaseHandler implements ListUserUseCase {
 
-  private final UserRepositoryPort userRepository;
+  private final UserRepositoryPort userRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    List<UserEntity> userEntities = userRepository.findByIdIn(input.getIds());
+    List<UserEntity> userEntities = userRepositoryPort.findByIdIn(input.getIds());
     List<Output.User> users = userEntities.stream()
         .map(user -> ObjectMapperUtil.getInstance().map(user, Output.User.class))
         .toList();

@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GetProfileUseCaseHandler implements GetProfileUseCase {
 
-  private final UserRepositoryPort userRepository;
+  private final UserRepositoryPort userRepositoryPort;
 
   @Override
   @Transactional(readOnly = true)
   public Output handle(Void input) throws Exception {
     Integer userId = UserContext.getUserId();
-    UserEntity userEntity = userRepository.findById(userId)
+    UserEntity userEntity = userRepositoryPort.findById(userId)
         .orElseThrow(() -> new BusinessException(AppError.USER_NOT_FOUND));
     return ObjectMapperUtil.getInstance().map(userEntity, Output.class);
   }

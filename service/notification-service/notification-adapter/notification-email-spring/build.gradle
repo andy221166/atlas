@@ -1,6 +1,20 @@
+def modules = rootProject.ext.loadStackConfig()
+
 dependencies {
     // Lib
     api 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Platform
+    switch (modules['template']) {
+        case 'freemarker':
+            api project(':template-freemarker')
+            break
+        case 'thymeleaf':
+            api project(':template-thymeleaf')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['template']}")
+    }
 
     // Service
     api project(':notification-port-outbound')

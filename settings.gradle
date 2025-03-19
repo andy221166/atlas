@@ -123,18 +123,6 @@ project(':lock-core').projectDir = file('platform/lock/lock-core')
 include(':lock-redis')
 project(':lock-redis').projectDir = file('platform/lock/lock-redis')
 
-// Migration
-
-// Notification
-
-// Notification::SSE
-include(':sse')
-project(':sse').projectDir = file('platform/notification/sse')
-
-// Notification:WebSocket
-include(':websocket')
-project(':websocket').projectDir = file('platform/notification/websocket')
-
 // Object mapper
 include(':object-mapper')
 project(':object-mapper').projectDir = file('platform/object-mapper')
@@ -182,6 +170,14 @@ include(':storage-filesystem')
 project(':storage-filesystem').projectDir = file('platform/storage/storage-filesystem')
 include(':storage-s3')
 project(':storage-s3').projectDir = file('platform/storage/storage-s3')
+
+// Template
+include(':template-core')
+project(':template-core').projectDir = file('platform/template/template-core')
+include(':template-freemarker')
+project(':template-freemarker').projectDir = file('platform/template/template-freemarker')
+include(':template-thymeleaf')
+project(':template-thymeleaf').projectDir = file('platform/template/template-thymeleaf')
 
 // Task scheduler
 include(':task-scheduler-quartz')
@@ -293,10 +289,10 @@ include(':notification-email-ses')
 project(':notification-email-ses').projectDir = file('service/notification-service/notification-adapter/notification-email-ses')
 include(':notification-event-kafka')
 project(':notification-event-kafka').projectDir = file('service/notification-service/notification-adapter/notification-event-kafka')
-include(':notification-template-freemarker')
-project(':notification-template-freemarker').projectDir = file('service/notification-service/notification-adapter/notification-template-freemarker')
-include(':notification-template-thymeleaf')
-project(':notification-template-thymeleaf').projectDir = file('service/notification-service/notification-adapter/notification-template-thymeleaf')
+include(':notification-sse')
+project(':notification-sse').projectDir = file('service/notification-service/notification-adapter/notification-sse')
+include(':notification-websocket')
+project(':notification-websocket').projectDir = file('service/notification-service/notification-adapter/notification-websocket')
 
 // -------------------------------------------------------------------------------------------------
 // Edge

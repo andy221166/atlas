@@ -1,7 +1,0 @@
-dependencies {
-    // Lib
-    api 'org.springframework.boot:spring-boot-starter-web'
-
-    // Platform
-    api project(':commons')
-}
