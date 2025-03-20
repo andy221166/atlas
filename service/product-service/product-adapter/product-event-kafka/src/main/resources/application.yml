@@ -1,6 +1,0 @@
-app:
-  event:
-    consumer:
-      kafka:
-        topics:
-          - order_events

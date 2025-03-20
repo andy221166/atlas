@@ -29,6 +29,7 @@ public interface CreateProductUseCase
 
     @NotNull
     @DecimalMin(value = "0.0")
+    @Builder.Default
     private BigDecimal price = BigDecimal.ZERO;
 
     @NotNull
@@ -71,6 +72,7 @@ public interface CreateProductUseCase
       @NotBlank
       private String imageUrl;
 
+      @Builder.Default
       private Boolean isCover = false;
     }
   }

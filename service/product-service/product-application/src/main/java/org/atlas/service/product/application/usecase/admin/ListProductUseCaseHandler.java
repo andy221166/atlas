@@ -19,9 +19,9 @@ public class ListProductUseCaseHandler implements ListProductUseCase {
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindProductParams criteria = ObjectMapperUtil.getInstance()
+    FindProductParams params = ObjectMapperUtil.getInstance()
         .map(input, FindProductParams.class);
-    PagingResult<ProductEntity> productEntities = productRepositoryPort.findByCriteria(criteria,
+    PagingResult<ProductEntity> productEntities = productRepositoryPort.findAll(params,
         input.getPagingRequest());
     PagingResult<Output.Product> products = ObjectMapperUtil.getInstance()
         .mapPage(productEntities, Output.Product.class);

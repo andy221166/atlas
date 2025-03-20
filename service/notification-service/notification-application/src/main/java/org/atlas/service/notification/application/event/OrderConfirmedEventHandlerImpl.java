@@ -11,11 +11,15 @@ import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.service.notification.application.config.EmailProps;
 import org.atlas.service.notification.port.inbound.event.OrderConfirmedEventHandler;
 import org.atlas.service.notification.port.outbound.email.Attachment;
+import org.atlas.service.notification.port.outbound.email.EmailNotification;
 import org.atlas.service.notification.port.outbound.email.EmailPort;
-import org.atlas.service.notification.port.outbound.email.SendEmailRequest;
-import org.atlas.service.notification.port.outbound.sse.SsePort;
+import org.atlas.service.notification.port.outbound.realtime.enums.RealtimeNotificationType;
+import org.atlas.service.notification.port.outbound.realtime.model.OrderStatusChangedPayload;
+import org.atlas.service.notification.port.outbound.realtime.sse.SseNotification;
+import org.atlas.service.notification.port.outbound.realtime.sse.SsePort;
+import org.atlas.service.notification.port.outbound.realtime.websocket.WebSocketNotification;
+import org.atlas.service.notification.port.outbound.realtime.websocket.WebSocketPort;
 import org.atlas.service.notification.port.outbound.template.EmailTemplatePort;
-import org.atlas.service.notification.port.outbound.websocket.OrderWebSocketPort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,8 +30,8 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
   private final EmailPort emailPort;
   private final EmailProps emailProps;
   private final EmailTemplatePort emailTemplatePort;
-  private final SsePort ssePort;
-  private final OrderWebSocketPort orderWebSocketPort;
+  private final SsePort<Integer> ssePort;
+  private final WebSocketPort webSocketPort;
 
   @Override
   public void handle(OrderConfirmedEvent event) {
@@ -67,7 +71,7 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     }
     attachment = new Attachment("email/attachment/coffee.jpg", attachmentFile);
 
-    SendEmailRequest request = new SendEmailRequest.Builder()
+    EmailNotification notification = new EmailNotification.Builder()
         .setSender(emailProps.getSender())
         .addRecipient(event.getUser().getEmail())
         .setSubject(subject)
@@ -75,16 +79,21 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
         .addAttachment(attachment)
         .setHtml(true)
         .build();
-    emailPort.send(request);
+    emailPort.notify(notification);
     log.info("Sent email: event={}", event);
   }
 
   private void notifySse(OrderConfirmedEvent event) {
-    log.info("Notifying OrderConfirmedEvent: orderId={}", event.getOrderId());
-
+    OrderStatusChangedPayload payload = OrderStatusChangedPayload.from(event);
+    SseNotification<Integer> notification = new SseNotification<>(
+        RealtimeNotificationType.ORDER_STATUS_CHANGED, event.getOrderId(), payload);
+    ssePort.notify(notification);
   }
 
   private void notifyWebSocket(OrderConfirmedEvent event) {
-
+    OrderStatusChangedPayload payload = OrderStatusChangedPayload.from(event);
+    WebSocketNotification notification = new WebSocketNotification(
+        RealtimeNotificationType.ORDER_STATUS_CHANGED, payload);
+    webSocketPort.notify(notification);
   }
 }

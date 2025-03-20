@@ -7,7 +7,7 @@ import io.grpc.ServerInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 import org.apache.commons.lang3.StringUtils;
-import org.atlas.platform.commons.context.CurrentUser;
+import org.atlas.platform.commons.context.UserInfo;
 import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.commons.enums.CustomClaim;
 import org.atlas.platform.commons.enums.Role;
@@ -28,10 +28,10 @@ public class UserContextGrpcInterceptor implements ServerInterceptor {
     String userId = metadata.get(USER_ID_HEADER);
     String userRole = metadata.get(USER_ROLE_HEADER);
     if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userRole)) {
-      CurrentUser currentUser = new CurrentUser();
-      currentUser.setUserId(Integer.valueOf(userId));
-      currentUser.setRole(Role.valueOf(userRole));
-      UserContext.set(currentUser);
+      UserInfo userInfo = new UserInfo();
+      userInfo.setUserId(Integer.valueOf(userId));
+      userInfo.setRole(Role.valueOf(userRole));
+      UserContext.set(userInfo);
     }
     return serverCallHandler.startCall(serverCall, metadata);
   }

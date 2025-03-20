@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.service.notification.port.outbound.email.Attachment;
+import org.atlas.service.notification.port.outbound.email.EmailNotification;
 import org.atlas.service.notification.port.outbound.email.EmailPort;
 import org.atlas.service.notification.port.outbound.email.SendEmailException;
-import org.atlas.service.notification.port.outbound.email.SendEmailRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -22,18 +22,18 @@ public class EmailAdapter implements EmailPort {
   private final JavaMailSender mailSender;
 
   @Override
-  public void send(SendEmailRequest request) throws SendEmailException {
+  public void notify(EmailNotification notification) throws SendEmailException {
     try {
-      MimeMessage mimeMessage = createMimeMessage(request);
+      MimeMessage mimeMessage = createMimeMessage(notification);
       mailSender.send(mimeMessage);
-      log.info("Sent email successfully: recipients={}", request.getRecipients());
+      log.info("Sent email successfully: recipients={}", notification.getRecipients());
     } catch (MessagingException e) {
-      log.error("Failed to send email: recipients={}", request.getRecipients(), e);
+      log.error("Failed to send email: recipients={}", notification.getRecipients(), e);
       throw new SendEmailException(e);
     }
   }
 
-  private MimeMessage createMimeMessage(SendEmailRequest request) throws MessagingException {
+  private MimeMessage createMimeMessage(EmailNotification request) throws MessagingException {
     MimeMessage mimeMessage = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true,
         StandardCharsets.UTF_8.name());

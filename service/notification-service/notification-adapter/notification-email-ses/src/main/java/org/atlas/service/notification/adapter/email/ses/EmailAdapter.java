@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.service.notification.port.outbound.email.Attachment;
+import org.atlas.service.notification.port.outbound.email.EmailNotification;
 import org.atlas.service.notification.port.outbound.email.EmailPort;
 import org.atlas.service.notification.port.outbound.email.SendEmailException;
-import org.atlas.service.notification.port.outbound.email.SendEmailRequest;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.sesv2.SesV2Client;
@@ -35,35 +35,35 @@ public class EmailAdapter implements EmailPort {
 
   private final SesV2Client sesClient;
 
-  public void send(SendEmailRequest request) {
+  public void notify(EmailNotification notification) {
     try {
       SendEmailResponse response;
-      if (CollectionUtils.isNotEmpty(request.getAttachments())) {
-        response = sendEmailWithAttachments(request);
+      if (CollectionUtils.isNotEmpty(notification.getAttachments())) {
+        response = sendEmailWithAttachments(notification);
       } else {
-        response = sendSimpleEmail(request);
+        response = sendSimpleEmail(notification);
       }
       log.info("Sent email successfully: messageId={}, recipients={}", response.messageId(),
           response.messageId());
     } catch (Exception e) {
-      log.error("Failed to send email: recipients={}", request.getRecipients(), e);
+      log.error("Failed to send email: recipients={}", notification.getRecipients(), e);
       throw new SendEmailException(e);
     }
   }
 
-  private SendEmailResponse sendSimpleEmail(SendEmailRequest request) {
+  private SendEmailResponse sendSimpleEmail(EmailNotification notification) {
     Destination destination = Destination.builder()
-        .toAddresses(request.getRecipients())
+        .toAddresses(notification.getRecipients())
         .build();
 
     Content subject = Content.builder()
-        .data(request.getSubject())
+        .data(notification.getSubject())
         .build();
     Content content = Content.builder()
-        .data(request.getBody())
+        .data(notification.getBody())
         .build();
     Body body;
-    if (request.isHtml()) {
+    if (notification.isHtml()) {
       body = Body.builder()
           .html(content)
           .build();
@@ -86,13 +86,13 @@ public class EmailAdapter implements EmailPort {
         software.amazon.awssdk.services.sesv2.model.SendEmailRequest.builder()
             .destination(destination)
             .content(emailContent)
-            .fromEmailAddress(request.getSender())
+            .fromEmailAddress(notification.getSender())
             .build();
 
     return sesClient.sendEmail(emailRequest);
   }
 
-  private SendEmailResponse sendEmailWithAttachments(SendEmailRequest request)
+  private SendEmailResponse sendEmailWithAttachments(EmailNotification request)
       throws MessagingException, IOException {
     MimeMessage mimeMessage = createMimeMessage(request);
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -108,7 +108,7 @@ public class EmailAdapter implements EmailPort {
     return sesClient.sendEmail(awsSendEmailRequest);
   }
 
-  private MimeMessage createMimeMessage(SendEmailRequest request)
+  private MimeMessage createMimeMessage(EmailNotification request)
       throws MessagingException, IOException {
     Session session = Session.getDefaultInstance(System.getProperties());
     MimeMessage mimeMessage = new MimeMessage(session);

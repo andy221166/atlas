@@ -7,7 +7,7 @@ import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantitySucceededEvent;
-import org.atlas.platform.event.kafka.BaseKafkaEventConsumer;
+import org.atlas.platform.event.kafka.KafkaEventConsumer;
 import org.atlas.service.order.port.inbound.event.ReserveQuantityFailedEventHandler;
 import org.atlas.service.order.port.inbound.event.ReserveQuantitySucceededEventHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderEventsConsumer extends BaseKafkaEventConsumer {
+public class OrderEventsConsumer extends KafkaEventConsumer {
 
   private final ReserveQuantitySucceededEventHandler reserveQuantitySucceededEventHandler;
   private final ReserveQuantityFailedEventHandler reserveQuantityFailedEventHandler;
 
   @Override
   @KafkaListener(
-      topics = "#{topicsProps.orderEvents}",
+      topics = "#{kafkaEventProps.topic.orderEvents}",
       containerFactory = "defaultContainerFactory"
   )
   // Non-blocking retry
@@ -35,12 +35,12 @@ public class OrderEventsConsumer extends BaseKafkaEventConsumer {
       topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-retry-0, order-retry-1, order-retry-2, etc.
       backoff = @Backoff(delay = 1000, multiplier = 2, random = true) // Exponential backoff
   )
-  public void consume(ConsumerRecord<String, DomainEvent> record) {
-    super.consume(record);
+  public void consumeMessage(ConsumerRecord<String, DomainEvent> record) {
+    super.consumeMessage(record);
   }
 
   @Override
-  protected void handle(DomainEvent event) {
+  protected void handleEvent(DomainEvent event) {
     if (event.getEventType().equals(EventType.RESERVE_QUANTITY_SUCCEEDED)) {
       reserveQuantitySucceededEventHandler.handle((ReserveQuantitySucceededEvent) event);
     } else if (event.getEventType().equals(EventType.RESERVE_QUANTITY_FAILED)) {

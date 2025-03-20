@@ -38,11 +38,11 @@ public class SearchProductUseCaseHandler implements SearchProductUseCase {
           .map(input, SearchParams.class);
       productEntityPage = searchPort.search(params, input.getPagingRequest());
     } else {
-      FindProductParams criteria = ObjectMapperUtil.getInstance()
+      FindProductParams params = ObjectMapperUtil.getInstance()
           .map(input, FindProductParams.class);
-      criteria.setStatus(ProductStatus.IN_STOCK);
-      criteria.setIsActive(true);
-      productEntityPage = productRepositoryPort.findByCriteria(criteria, input.getPagingRequest());
+      params.setStatus(ProductStatus.IN_STOCK);
+      params.setIsActive(true);
+      productEntityPage = productRepositoryPort.findAll(params, input.getPagingRequest());
     }
     List<Product> products = productEntityPage.getResults()
         .stream()

@@ -6,52 +6,48 @@ import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 
 /**
- * Manages user context for the current thread.
+ * Manages user info context for the current thread.
  */
 public class UserContext {
 
-  private static final ThreadLocal<CurrentUser> holder = new ThreadLocal<>();
+  private static final ThreadLocal<UserInfo> userInfoHolder = new ThreadLocal<>();
 
   /**
-   * Retrieves the current user for this thread.
-   *
-   * @return The current user.
+   * Retrieves the user info for this thread.
    */
   @Nullable
-  public static CurrentUser get() {
-    return holder.get();
+  public static UserInfo get() {
+    return userInfoHolder.get();
   }
 
   public static Integer getUserId() {
-    CurrentUser currentUser = get();
-    if (currentUser == null) {
+    UserInfo userInfo = get();
+    if (userInfo == null) {
       throw new BusinessException(AppError.UNAUTHORIZED);
     }
-    return currentUser.getUserId();
+    return userInfo.getUserId();
   }
 
   public static Role getRole() {
-    CurrentUser currentUser = get();
-    if (currentUser == null) {
+    UserInfo userInfo = get();
+    if (userInfo == null) {
       throw new BusinessException(AppError.UNAUTHORIZED);
     }
-    return currentUser.getRole();
+    return userInfo.getRole();
   }
 
   /**
-   * Sets the current user for this thread.
-   *
-   * @param context The CurrentUser to set.
+   * Sets the user info for this thread.
    */
-  public static void set(CurrentUser context) {
-    holder.set(context);
+  public static void set(UserInfo userInfo) {
+    userInfoHolder.set(userInfo);
   }
 
   /**
-   * Clears the current user context for this thread. This should be called when the context is no
+   * Clears the user info context for this thread. This should be called when the context is no
    * longer needed to prevent memory leaks.
    */
   public static void clear() {
-    holder.remove();
+    userInfoHolder.remove();
   }
 }

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
-import org.atlas.platform.commons.context.CurrentUser;
+import org.atlas.platform.commons.context.UserInfo;
 import org.atlas.platform.commons.context.UserContext;
 import org.atlas.platform.commons.enums.CustomClaim;
 import org.atlas.platform.commons.enums.Role;
@@ -22,10 +22,10 @@ public class UserContextFilter extends OncePerRequestFilter {
     String userRole = request.getHeader(CustomClaim.USER_ROLE.getHeader());
 
     if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userRole)) {
-      CurrentUser currentUser = new CurrentUser();
-      currentUser.setUserId(Integer.valueOf(userId));
-      currentUser.setRole(Role.valueOf(userRole));
-      UserContext.set(currentUser);
+      UserInfo userInfo = new UserInfo();
+      userInfo.setUserId(Integer.valueOf(userId));
+      userInfo.setRole(Role.valueOf(userRole));
+      UserContext.set(userInfo);
     }
 
     try {

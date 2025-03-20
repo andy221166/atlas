@@ -26,9 +26,9 @@ public class ExportProductUseCaseHandler implements ExportProductUseCase {
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindProductParams criteria = ObjectMapperUtil.getInstance()
+    FindProductParams params = ObjectMapperUtil.getInstance()
         .map(input, FindProductParams.class);
-    PagingResult<ProductEntity> productEntities = productRepositoryPort.findByCriteria(criteria,
+    PagingResult<ProductEntity> productEntities = productRepositoryPort.findAll(params,
         PagingRequest.unpaged());
     List<ProductRow> productRows = ObjectMapperUtil.getInstance().mapList(
         productEntities.getResults(), ProductRow.class);

@@ -1,54 +1,60 @@
 package org.atlas.service.notification.adapter.sse;
 
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.event.contract.order.OrderCanceledEvent;
-import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
-import org.atlas.service.notification.adapter.sse.core.SseEmitterKeyFactory;
-import org.atlas.service.notification.adapter.sse.core.SseEmitterService;
-import org.atlas.service.notification.adapter.sse.core.SseEvent;
-import org.atlas.service.notification.port.outbound.model.OrderStatusChangedPayload;
-import org.atlas.service.notification.port.outbound.sse.SsePort;
-import org.atlas.service.order.domain.shared.OrderStatus;
+import org.atlas.platform.commons.util.UUIDGenerator;
+import org.atlas.service.notification.adapter.sse.controller.SseController;
+import org.atlas.service.notification.port.outbound.realtime.enums.RealtimeNotificationType;
+import org.atlas.service.notification.port.outbound.realtime.sse.SseNotification;
+import org.atlas.service.notification.port.outbound.realtime.sse.SsePort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j(topic = "SSE")
-public class SseAdapter implements SsePort {
+public class SseAdapter<K> implements SsePort<K> {
 
-  private final SseEmitterService sseEmitterService;
+  private final List<SseController<K>> sseControllers;
+  private Map<RealtimeNotificationType, SseController<K>> sseControllersCache;
 
-  @Override
-  public void notify(OrderConfirmedEvent event) {
-
+  @PostConstruct
+  public void init() {
+    sseControllersCache = sseControllers.stream()
+        .collect(Collectors.toMap(SseController::getEventType, Function.identity()));
   }
 
   @Override
-  public void notify(OrderCanceledEvent event) {
-    log.info("Notifying OrderCanceledEvent: orderId={}", event.getOrderId());
-    String sseEmitterKey = SseEmitterKeyFactory.orderStatusChanged(event.getOrderId());
-    SseEmitter sseEmitter = sseEmitterService.get(sseEmitterKey);
-    if (sseEmitter != null) {
-      try {
-        OrderStatusChangedPayload payload = OrderStatusChangedPayload.builder()
-            .orderId(event.getOrderId())
-            .orderStatus(OrderStatus.CANCELED)
-            .canceledReason(event.getCanceledReason())
-            .build();
-        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
-            .name(SseEvent.ORDER_STATUS_CHANGED)
-            .data(payload);
-        sseEmitter.send(eventBuilder);
-      } catch (IOException e) {
-        log.error("Failed to notify OrderCanceledEvent: orderId={}", event.getOrderId(), e);
-        sseEmitter.completeWithError(e);
-      }
-    } else {
-      log.error("Failed to notify OrderCanceledEvent due to not found SseEmitter: orderId={}",
-          event.getOrderId());
+  public void notify(SseNotification<K> notification) {
+    log.info("Notifying {}", notification);
+
+    SseController<K> sseController = sseControllersCache.get(notification.getType());
+    if (sseController == null) {
+      throw new IllegalStateException(
+          "No SseController found for notification type: " + notification.getType());
+    }
+
+    SseEmitter sseEmitter = sseController.getSseEmitter(notification.getKey());
+    if (sseEmitter == null) {
+      throw new IllegalStateException("Not found SseEmitter for key {}" + notification.getKey());
+    }
+
+    try {
+      SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
+          .id(UUIDGenerator.generate())
+          .name(notification.getType().name())
+          .data(notification.getPayload());
+      sseEmitter.send(eventBuilder);
+      log.info("Notified {}", notification);
+    } catch (IOException e) {
+      log.error("Failed to notify {}", notification, e);
+      sseEmitter.completeWithError(e);
     }
   }
 }

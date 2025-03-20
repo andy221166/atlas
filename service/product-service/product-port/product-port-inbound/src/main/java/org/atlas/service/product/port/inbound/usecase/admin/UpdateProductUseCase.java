@@ -76,6 +76,7 @@ public interface UpdateProductUseCase
       @NotBlank
       private String imageUrl;
 
+      @Builder.Default
       private Boolean isCover = false;
     }
   }

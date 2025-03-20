@@ -7,7 +7,7 @@ spring:
 app:
   event:
     kafka:
-      topics:
-        user_events: user_events
-        product_events: product_events
-        order_events: order_events
+      topic:
+        user-events: user_events
+        product-events: product_events
+        order-events: order_events
