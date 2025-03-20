@@ -44,6 +44,16 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
     api project(':notification-sse')
+    switch (modules['template']) {
+        case 'freemarker':
+            api project(':notification-template-freemarker')
+            break
+        case 'thymeleaf':
+            api project(':notification-template-thymeleaf')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['template']}")
+    }
     switch (modules['tracing']) {
         case 'none':
             break

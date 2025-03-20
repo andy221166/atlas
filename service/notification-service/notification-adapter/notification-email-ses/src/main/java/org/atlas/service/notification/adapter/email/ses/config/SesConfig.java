@@ -1,4 +1,4 @@
-package org.atlas.platform.notification.email.ses.config;
+package org.atlas.service.notification.adapter.email.ses.config;
 
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;

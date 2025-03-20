@@ -1,0 +1,42 @@
+package org.atlas.service.notification.adapter.template.freemarker;
+
+import jakarta.annotation.Nonnull;
+import java.nio.file.Paths;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.atlas.service.notification.port.outbound.template.EmailTemplatePort;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class EmailTemplateAdapter implements EmailTemplatePort {
+
+  public static final String TEMPLATE_SUBJECT_DIR = "email/subject";
+  public static final String TEMPLATE_BODY_DIR = "email/body";
+
+  private final FreemarkerTemplateResolver freemarkerTemplateResolver;
+
+  @Override
+  public String resolveSubject(@Nonnull String templateName) throws Exception {
+    return resolveSubject(templateName, Map.of());
+  }
+
+  @Override
+  public String resolveSubject(@Nonnull String templateName, Map<String, Object> data)
+      throws Exception {
+    String path = Paths.get(TEMPLATE_SUBJECT_DIR, templateName).toString();
+    return freemarkerTemplateResolver.resolve(path, data);
+  }
+
+  @Override
+  public String resolveBody(@Nonnull String templateName) throws Exception {
+    return resolveBody(templateName, Map.of());
+  }
+
+  @Override
+  public String resolveBody(@Nonnull String templateName, Map<String, Object> data)
+      throws Exception {
+    String path = Paths.get(TEMPLATE_BODY_DIR, templateName).toString();
+    return freemarkerTemplateResolver.resolve(path, data);
+  }
+}

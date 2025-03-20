@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: notification-service
+
+app:
+  email:
+    sender: test@atlas.org
