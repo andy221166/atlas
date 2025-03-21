@@ -12,7 +12,8 @@ public class Constant {
 
   public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-  public static final String JWT_ISSUER = "atlas";
+  public static final String JWT_ISSUER = "atlas.platform.auth";
+  public static final String JWT_AUDIENCE = "atlas";
   public static final long JWT_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
   public static final String DEFAULT_PAGE_SIZE = "20";

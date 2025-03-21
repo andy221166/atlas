@@ -1,14 +1,14 @@
 <template>
   <div class="container mt-5 d-flex justify-content-center">
     <div class="form-container">
-      <h4 class="text-center mb-2">Sign In</h4>
+      <h4 class="text-center mb-2">Login</h4>
       <Alert v-if="errorMessage" :message="errorMessage" type="danger" />
-      <form @submit.prevent="signIn">
+      <form @submit.prevent="login">
         <FormField label="Username" v-model="username" type="text" />
         <FormField label="Password" v-model="password" type="password" />
         <div class="mt-3">
-          <button type="submit" class="btn btn-primary">Sign In</button>
-          <button type="button" class="btn btn-outline-primary ms-2" @click="goToSignUp">Sign Up</button>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-outline-primary ms-2" @click="goToRegister">Register</button>
         </div>
       </form>
     </div>
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import {signInApi} from '@/api/user';
+import {loginApi} from '@/api/auth';
 import Alert from '@/components/Alert.vue';
 import FormField from '@/components/FormField.vue';
 
 export default {
-  name: 'SignIn',
+  name: 'Login',
   components: { Alert, FormField },
   data() {
     return {
@@ -31,9 +31,9 @@ export default {
     }
   },
   methods: {
-    async signIn() {
+    async login() {
       try {
-        const { data } = await signInApi(this.username, this.password);
+        const { data } = await loginApi(this.username, this.password);
         if (data.success) {
           localStorage.setItem('accessToken', data.data.accessToken);
           this.$router.push('/storefront');
@@ -52,8 +52,8 @@ export default {
         }
       }
     },
-    goToSignUp() {
-      this.$router.push('/sign-up');
+    goToRegister() {
+      this.$router.push('/register');
     },
     setError(code, message) {
       if (code) {

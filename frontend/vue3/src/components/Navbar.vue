@@ -19,7 +19,7 @@
             <span class="nav-link">Credit: ${{ profile?.credit }}</span>
           </li>
           <li class="nav-item">
-            <button class="btn btn-sm btn-danger" @click="signOut">Sign Out</button>
+            <button class="btn btn-sm btn-danger" @click="logout">Logout</button>
           </li>
         </ul>
       </div>
@@ -30,16 +30,16 @@
 <script>
 import {useStore} from 'vuex';
 import {computed} from 'vue';
-import {signOutApi} from '@/api/user';
+import {logoutApi} from '@/api/auth';
 
 export default {
   setup() {
     const store = useStore();
     const profile = computed(() => store.state.profile);
 
-    const signOut = async () => {
+    const logout = async () => {
       try {
-        await signOutApi();
+        await logoutApi();
         localStorage.removeItem('accessToken');
         window.location.href = '/storefront';
       } catch (error) {
@@ -49,7 +49,7 @@ export default {
 
     return {
       profile,
-      signOut,
+      logout,
     };
   },
 };

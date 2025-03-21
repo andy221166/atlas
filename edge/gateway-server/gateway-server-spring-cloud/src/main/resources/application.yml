@@ -4,46 +4,60 @@ server:
 spring:
   application:
     name: gateway-server
-  profiles:
-    active: local-compose
   cloud:
     gateway:
       routes:
-        - id: user-service
+        # User Service Routes
+        - id: user-service-auth
           uri: lb://user-service
           predicates:
-            - Path=/api/users/**
-          filters:
-            - RewritePath=/api/users/(?<segment>.*), /api/front/users/$\{segment}
-        - id: product-service
+            - Path=/api/auth/**
+        - id: user-service-admin
+          uri: lb://user-service
+          predicates:
+            - Path=/api/admin/users/**
+        - id: user-service-front
+          uri: lb://user-service
+          predicates:
+            - Path=/api/front/users/**
+        # Product Service Routes
+        - id: product-service-admin
           uri: lb://product-service
           predicates:
-            - Path=/api/products/**,/api/categories/**
-        - id: order-service
+            - Path=/api/admin/products/**
+        - id: product-service-front
+          uri: lb://product-service
+          predicates:
+            - Path=/api/front/products/**
+        - id: product-service-master
+          uri: lb://product-service
+          predicates:
+            - Path=/api/master/brands/**,/api/master/categories/**
+        # Order Service Routes
+        - id: order-service-admin
           uri: lb://order-service
           predicates:
-            - Path=/api/orders/**
+            - Path=/api/admin/orders/**
+        - id: order-service-front
+          uri: lb://order-service
+          predicates:
+            - Path=/api/front/orders/**
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-
 app:
   gateway:
     authorization-rules:
       non-secured-paths:
         - "/api/gateway/**"
         - "/actuator/**"
-        - "/api/users/login"
-        - "/api/users/register"
+        - "/api/auth/login"
+        - "/api/front/users/register"
       secured-paths:
-        - path: "/api/users/profile"
+        - path: "/api/master/**"
           roles: [ "USER", "ADMIN" ]
-        - path: "/api/products/search"
+        - path: "/api/front/**"
           roles: [ "USER" ]
-        - path: "/api/categories"
-          roles: [ "USER" ]
-        - path: "/api/orders/**"
-          roles: [ "USER" ]
-        - path: "/api/admin/*"
+        - path: "/api/admin/**"
           roles: [ "ADMIN" ]

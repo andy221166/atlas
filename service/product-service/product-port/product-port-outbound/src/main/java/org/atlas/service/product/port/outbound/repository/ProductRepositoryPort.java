@@ -23,8 +23,6 @@ public interface ProductRepositoryPort {
 
   void decreaseQuantityWithPessimisticLock(Integer id, Integer decrement);
 
-  void decreaseQuantityWithOptimisticLock(Integer id, Integer decrement);
-
   void insertBatch(List<ProductEntity> productEntities);
 
   void delete(Integer id);

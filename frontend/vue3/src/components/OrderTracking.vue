@@ -1,5 +1,5 @@
 <template>
-  <div v-if="orderId" class="orderPayload-tracking card shadow-sm mt-3">
+  <div v-if="orderId" class="order-tracking card shadow-sm mt-3">
     <div class="card-body">
       <h6 class="card-title text-center text-primary mb-3">Order Tracking</h6>
 
@@ -61,7 +61,7 @@ import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
 import {useStore} from "vuex";
 import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {getOrderApi} from "@/api/orderPayload";
+import {getOrderApi} from "@/api/order";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
 
 const NOTIFICATION_BASE_URL = process.env.VUE_APP_NOTIFICATION_BASE_URL;
@@ -97,7 +97,7 @@ export default {
             stopLongPolling();
           }
         } catch (error) {
-          console.error("Error fetching orderPayload:", error);
+          console.error("Error fetching order:", error);
         }
       };
 
@@ -117,7 +117,7 @@ export default {
       const socket = new SockJS(`${NOTIFICATION_BASE_URL}/notification/ws`);
       stompClient = Stomp.over(socket);
       stompClient.connect({}, () => {
-        stompClient.subscribe(`/topic/orderPayload/${orderId}`, (message) => {
+        stompClient.subscribe(`/topic/order/${orderId}`, (message) => {
           const { orderStatus, canceledReason } = JSON.parse(message.body);
           wsOrderStatus.value = orderStatus;
           wsCanceledReason.value = canceledReason || null;

@@ -2,8 +2,8 @@ package org.atlas.edge.gateway.server.springcloud.security;
 
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.platform.auth.jwt.core.JwtData;
-import org.atlas.platform.auth.jwt.core.JwtService;
+import org.atlas.platform.jwt.core.JwtData;
+import org.atlas.platform.jwt.core.JwtService;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

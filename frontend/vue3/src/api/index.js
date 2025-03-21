@@ -24,7 +24,7 @@ apiClient.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('accessToken'); // Optional: clear token if unauthorized
-      router.push('/sign-in'); // Redirect to sign-in page
+      router.push('/login'); // Redirect to Login page
     }
     return Promise.reject(error);
   }

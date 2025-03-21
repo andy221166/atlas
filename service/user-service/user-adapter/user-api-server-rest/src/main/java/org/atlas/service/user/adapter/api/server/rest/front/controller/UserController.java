@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("frontUserController")
-@RequestMapping("api/storefront/users")
+@RequestMapping("api/front/users")
 @Validated
 @RequiredArgsConstructor
 public class UserController {

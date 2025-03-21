@@ -1,5 +1,5 @@
 <template>
-  <div class="search-aggProduct px-3 mb-3">
+  <div class="search-product px-3 mb-3">
     <div class="card p-4 shadow-sm">
       <h5 class="card-title mb-3 text-center">Product Search</h5>
       <form @submit.prevent="fetchProducts">
@@ -49,21 +49,21 @@
       </form>
     </div>
 
-    <div v-if="productEntities.length" class="mt-4 row g-3">
-      <div v-for="aggProduct in productEntities" :key="aggProduct.id" class="col-md-4">
+    <div v-if="products.length" class="mt-4 row g-3">
+      <div v-for="product in products" :key="product.id" class="col-md-4">
         <div class="card h-100 shadow-sm">
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ aggProduct.name }}</h5>
+            <h5 class="card-title">{{ product.name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">
-              ${{ aggProduct.price.toFixed(2) }}
+              ${{ product.price.toFixed(2) }}
             </h6>
             <p
               class="card-text text-truncate"
               style="max-height: 3.6em; overflow: hidden"
             >
-              {{ aggProduct.description }}
+              {{ product.description }}
             </p>
-            <button @click="addToCart(aggProduct)" class="btn btn-primary mt-auto">
+            <button @click="addToCart(product)" class="btn btn-primary mt-auto">
               Add to Cart
             </button>
           </div>
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <p v-else class="text-center text-muted mt-3">No productEntities found.</p>
+    <p v-else class="text-center text-muted mt-3">No products found.</p>
 
     <div
       v-if="totalPages > 1"
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import {listCategoryApi, searchProductApi} from "@/api/aggProduct";
+import {listCategoryApi, searchProductApi} from "@/api/product";
 import {onMounted, ref} from "vue";
 
 export default {
@@ -107,7 +107,7 @@ export default {
     const categoryId = ref("");
     const minPrice = ref(null);
     const maxPrice = ref(null);
-    const productEntities = ref([]);
+    const products = ref([]);
     const categories = ref([]);
     const currentPage = ref(1);
     const pageSize = 9;
@@ -134,16 +134,16 @@ export default {
         };
         const { data } = await searchProductApi(params);
         if (data.success) {
-          productEntities.value = data.data.records;
+          products.value = data.data.records;
           totalPages.value = data.data.totalPages;
         }
       } catch (error) {
-        console.error("Failed to fetch productEntities:", error);
+        console.error("Failed to fetch products:", error);
       }
     };
 
-    const addToCart = (aggProduct) => {
-      emit("addToCart", { ...aggProduct, quantity: 1 });
+    const addToCart = (product) => {
+      emit("addToCart", { ...product, quantity: 1 });
     };
 
     const changePage = (page) => {
@@ -163,7 +163,7 @@ export default {
       categoryId,
       minPrice,
       maxPrice,
-      productEntities,
+      products,
       categories,
       currentPage,
       totalPages,

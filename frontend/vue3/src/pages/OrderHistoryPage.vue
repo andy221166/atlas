@@ -8,26 +8,26 @@
       <h3 class="my-4">Order History</h3>
 
       <ul class="list-group mb-4">
-        <li v-for="orderPayload in orders" :key="orderPayload.id" class="list-group-item">
+        <li v-for="order in orders" :key="order.id" class="list-group-item">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <p><strong>Order #{{ orderPayload.id }}</strong> - {{ formatDate(orderPayload.createdAt) }}</p>
-              <p><strong>Amount:</strong> ${{ orderPayload.amount.toFixed(2) }}</p>
+              <p><strong>Order #{{ order.id }}</strong> - {{ formatDate(order.createdAt) }}</p>
+              <p><strong>Amount:</strong> ${{ order.amount.toFixed(2) }}</p>
               <p>
                 <strong class="me-1">Status:</strong>
-                <span :class="applyBadgeClass(orderPayload.status)">{{ orderPayload.status }}</span>
+                <span :class="applyBadgeClass(order.status)">{{ order.status }}</span>
               </p>
-              <div v-if="orderPayload.status === 'CANCELED' && orderPayload.canceledReason" class="mt-3">
-                <p><strong>Cancellation Reason:</strong> <span class="text-danger">{{ orderPayload.canceledReason }}</span></p>
+              <div v-if="order.status === 'CANCELED' && order.canceledReason" class="mt-3">
+                <p><strong>Cancellation Reason:</strong> <span class="text-danger">{{ order.canceledReason }}</span></p>
               </div>
             </div>
-            <button @click="toggleDetails(orderPayload)" class="btn btn-outline-secondary btn-sm">
-              {{ isOrderSelected(orderPayload) ? "Hide Details" : "View Details" }}
+            <button @click="toggleDetails(order)" class="btn btn-outline-secondary btn-sm">
+              {{ isOrderSelected(order) ? "Hide Details" : "View Details" }}
             </button>
           </div>
 
           <!-- Order Details (visible when selected) -->
-          <div v-if="isOrderSelected(orderPayload)" class="mt-3">
+          <div v-if="isOrderSelected(order)" class="mt-3">
             <table class="table table-bordered mt-3">
               <thead>
                 <tr>
@@ -39,7 +39,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in orderPayload.orderItems" :key="item.aggProduct.id">
+                <tr v-for="item in order.orderItems" :key="item.aggProduct.id">
                   <td>{{ item.aggProduct.id }}</td>
                   <td>{{ item.aggProduct.name }}</td>
                   <td>${{ item.aggProduct.price.toFixed(2) }}</td>
@@ -68,7 +68,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {listOrderApi} from "@/api/orderPayload";
+import {listOrderApi} from "@/api/order";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
 import Navbar from "@/components/Navbar.vue";
 
@@ -101,11 +101,11 @@ export default {
       }
     };
 
-    const toggleDetails = (orderPayload) => {
-      selectedOrderId.value = selectedOrderId.value === orderPayload.id ? null : orderPayload.id;
+    const toggleDetails = (order) => {
+      selectedOrderId.value = selectedOrderId.value === order.id ? null : order.id;
     };
 
-    const isOrderSelected = (orderPayload) => selectedOrderId.value === orderPayload.id;
+    const isOrderSelected = (order) => selectedOrderId.value === order.id;
     const formatDate = (date) => new Date(date).toLocaleString();
 
     onMounted(fetchOrders);

@@ -2,24 +2,24 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Storefront from "@/pages/StorefrontPage.vue";
 import OrderHistoryPage from "@/pages/OrderHistoryPage.vue";
-import SignUpPage from "@/pages/SignUpPage.vue";
-import SignInPage from "@/pages/SignInPage.vue";
+import RegisterPage from "@/pages/RegisterPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
 
 const routes = [
   {
     path: "/",
     redirect: () => {
       const accessToken = localStorage.getItem("accessToken");
-      return accessToken ? "/storefront" : "/sign-in";
+      return accessToken ? "/storefront" : "/login";
     },
   },
   {
-    path: "/sign-in",
-    component: SignInPage,
+    path: "/login",
+    component: LoginPage,
   },
   {
-    path: "/sign-up",
-    component: SignUpPage,
+    path: "/register",
+    component: RegisterPage,
   },
   {
     path: "/storefront",
@@ -43,14 +43,14 @@ router.beforeEach((to, from, next) => {
   const accessToken = localStorage.getItem("accessToken");
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // Redirect to sign-in if the route requires auth and token is missing or invalid
+    // Redirect to login if the route requires auth and token is missing or invalid
     if (!accessToken || accessToken === "undefined") {
-      return next("/sign-in");
+      return next("/login");
     }
   }
 
-  // If user is logged in and tries to access the sign-in page, redirect to storefront
-  if (to.path === "/sign-in" && accessToken) {
+  // If user is logged in and tries to access the login page, redirect to storefront
+  if (to.path === "/login" && accessToken) {
     return next("/storefront");
   }
 

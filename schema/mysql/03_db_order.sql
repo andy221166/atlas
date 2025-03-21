@@ -27,6 +27,12 @@ CREATE TABLE IF NOT EXISTS order_item
     INDEX idx_product_id (product_id)
 ) ENGINE = INNODB;
 
+CREATE TABLE sequence_generator
+(
+    seq_name  VARCHAR(50) PRIMARY KEY,
+    seq_value INT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS outbox_message
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,

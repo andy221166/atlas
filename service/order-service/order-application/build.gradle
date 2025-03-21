@@ -65,6 +65,9 @@ dependencies {
         case 'kafka':
             api project(':order-event-kafka')
             break
+        case 'sns':
+            api project(':order-event-sns')
+            break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }

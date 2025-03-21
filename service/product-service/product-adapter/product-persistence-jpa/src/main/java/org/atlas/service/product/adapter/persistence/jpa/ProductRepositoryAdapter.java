@@ -10,7 +10,7 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity;
-import org.atlas.service.product.adapter.persistence.jpa.repository.JpaProductOptimisticRepository;
+import org.atlas.service.product.adapter.persistence.jpa.repository.CustomJpaProductRepository;
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaProductRepository;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.port.outbound.repository.FindProductParams;
@@ -24,16 +24,16 @@ import org.springframework.stereotype.Component;
 public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
   private final JpaProductRepository jpaProductRepository;
-  private final JpaProductOptimisticRepository jpaProductOptimisticRepository;
+  private final CustomJpaProductRepository customJpaProductRepository;
 
   @Override
   public PagingResult<ProductEntity> findAll(FindProductParams params,
       PagingRequest pagingRequest) {
-    long totalCount = jpaProductRepository.count(params);
+    long totalCount = customJpaProductRepository.count(params);
     if (totalCount == 0L) {
       return PagingResult.empty();
     }
-    List<JpaProductEntity> jpaProductEntities = jpaProductRepository.find(params, pagingRequest);
+    List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.find(params, pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
         .mapList(jpaProductEntities, ProductEntity.class);
     return PagingResult.of(productEntities, totalCount);
@@ -90,23 +90,6 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
     } catch (Exception e) {
       throw new RuntimeException(
           String.format("Error while decreasing quantity: id=%d, decrement=%d",
-              id, decrement), e);
-    }
-  }
-
-  @Override
-  public void decreaseQuantityWithOptimisticLock(Integer id, Integer decrement) {
-    JpaProductEntity product = jpaProductRepository.findById(id)
-        .get();
-    if (product.getQuantity() < decrement) {
-      throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
-    }
-    product.setQuantity(product.getQuantity() - decrement);
-    try {
-      jpaProductRepository.save(product);
-    } catch (OptimisticLockingFailureException e) {
-      throw new RuntimeException(
-          String.format("Concurrent modification detected, please retry: id=%d, decrement=%d",
               id, decrement), e);
     }
   }

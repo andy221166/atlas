@@ -7,3 +7,5 @@ spring:
 
 app:
   decrease-quantity-strategy: constraint
+  storage:
+    bucket: product

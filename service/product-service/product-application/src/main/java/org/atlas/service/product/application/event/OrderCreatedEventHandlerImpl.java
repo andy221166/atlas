@@ -27,7 +27,7 @@ public class OrderCreatedEventHandlerImpl implements OrderCreatedEventHandler {
   private final ApplicationConfigService applicationConfigService;
   private final ProductEventPublisherPort productEventPublisherPort;
 
-  @Value("${app.decrease-quantity-strategy:constraint")
+  @Value("${app.decrease-quantity-strategy:constraint}")
   private String decreaseQuantityStrategy;
 
   @Override
@@ -59,9 +59,6 @@ public class OrderCreatedEventHandlerImpl implements OrderCreatedEventHandler {
     } else if (DecreaseQuantityStrategy.PESSIMISTIC_LOCKING.getValue()
         .equals(decreaseQuantityStrategy)) {
       productRepositoryPort.decreaseQuantityWithPessimisticLock(productId, quantity);
-    } else if (DecreaseQuantityStrategy.OPTIMISTIC_LOCKING.getValue()
-        .equals(decreaseQuantityStrategy)) {
-      productRepositoryPort.decreaseQuantityWithOptimisticLock(productId, quantity);
     } else {
       throw new IllegalStateException(
           "Unsupported decrease quantity strategy: " + decreaseQuantityStrategy);

@@ -1,4 +1,4 @@
-package org.atlas.platform.auth.jwt.core;
+package org.atlas.platform.jwt.core;
 
 public class InvalidTokenException extends RuntimeException {
 

@@ -11,15 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity, Integer>,
-    CustomJpaProductRepository {
+public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity, Integer>{
 
   @Query("""
         select p from JpaProductEntity p
         where p.id = :id
       """)
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-    // Enables pessimistic locking
   Optional<JpaProductEntity> findByIdWithLock(@Param("id") Integer id);
 
   @Modifying

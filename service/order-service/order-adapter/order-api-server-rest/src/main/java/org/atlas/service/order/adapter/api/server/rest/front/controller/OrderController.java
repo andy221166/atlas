@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("frontOrderController")
 @RequestMapping("api/front/orders")
 @Validated
 public class OrderController {

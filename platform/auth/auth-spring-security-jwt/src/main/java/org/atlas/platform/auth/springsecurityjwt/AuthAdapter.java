@@ -2,8 +2,8 @@ package org.atlas.platform.auth.springsecurityjwt;
 
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.auth.jwt.core.JwtData;
-import org.atlas.platform.auth.jwt.core.JwtService;
+import org.atlas.platform.jwt.core.JwtData;
+import org.atlas.platform.jwt.core.JwtService;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.outbound.auth.AuthPort;
@@ -41,7 +41,9 @@ public class AuthAdapter implements AuthPort {
         .issuer(Constant.JWT_ISSUER)
         .issuedAt(issuedAt)
         .subject(String.valueOf(userDetails.getUserId()))
+        .audience(Constant.JWT_AUDIENCE)
         .expiredAt(expiresAt)
+        .userId(userDetails.getUserId())
         .userRole(userDetails.getRole())
         .build();
     final String accessToken = jwtService.issueToken(jwtData);

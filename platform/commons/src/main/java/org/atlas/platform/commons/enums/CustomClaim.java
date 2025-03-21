@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public enum CustomClaim {
 
-  USER_ID("user-id", "X-User-Id"),
-  USER_ROLE("user-role", "X-User-Role");
+  USER_ID("user_id", "X-User-Id"),
+  USER_ROLE("user_role", "X-User-Role");
 
   private final String name;
   private final String header;

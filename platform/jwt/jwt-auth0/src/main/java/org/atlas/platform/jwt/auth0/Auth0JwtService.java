@@ -1,11 +1,11 @@
-package org.atlas.platform.auth.jwt.auth0;
+package org.atlas.platform.jwt.auth0;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.atlas.platform.auth.jwt.core.JwtData;
-import org.atlas.platform.auth.jwt.core.JwtService;
+import org.atlas.platform.jwt.core.JwtData;
+import org.atlas.platform.jwt.core.JwtService;
 import org.atlas.platform.commons.enums.CustomClaim;
 import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.commons.util.UUIDGenerator;
@@ -28,6 +28,7 @@ public class Auth0JwtService extends JwtService {
         .withSubject(jwtData.getSubject())
         .withAudience(jwtData.getAudience())
         .withExpiresAt(jwtData.getExpiredAt())
+        .withClaim(CustomClaim.USER_ID.value(), jwtData.getUserId())
         .withClaim(CustomClaim.USER_ROLE.value(), jwtData.getUserRole().name())
         .sign(Algorithm.RSA256(publicKey, privateKey));
   }
@@ -50,6 +51,7 @@ public class Auth0JwtService extends JwtService {
         .subject(decodedJWT.getSubject())
         .audience(decodedJWT.getAudience().get(0))
         .expiredAt(decodedJWT.getExpiresAt())
+        .userId(decodedJWT.getClaim(CustomClaim.USER_ID.value()).asInt())
         .userRole(Role.valueOf(decodedJWT.getClaim(CustomClaim.USER_ROLE.value()).asString()))
         .build();
   }

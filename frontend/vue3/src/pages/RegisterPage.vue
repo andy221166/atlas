@@ -1,10 +1,10 @@
 <template>
   <div class="container mt-5 d-flex justify-content-center">
     <div class="form-container">
-      <h4 class="text-center mb-2">Sign Up</h4>
+      <h4 class="text-center mb-2">Register</h4>
       <Alert v-if="successMessage" :message="successMessage" type="success" />
       <Alert v-if="errorMessage" :message="errorMessage" type="danger" />
-      <form @submit.prevent="signUp">
+      <form @submit.prevent="register">
         <FormField label="Username" v-model="username" type="text" required />
         <FormField label="First Name" v-model="firstName" type="text" required />
         <FormField label="Last Name" v-model="lastName" type="text" required />
@@ -13,8 +13,8 @@
         <FormField label="Password" v-model="password" type="password" required />
         <FormField label="Confirm Password" v-model="confirmPassword" type="password" required />
         <div class="mt-3">
-          <button type="submit" class="btn btn-primary">Sign Up</button>
-          <button type="button" class="btn btn-outline-primary ms-2" @click="goToSignIn">Sign In</button>
+          <button type="submit" class="btn btn-primary">Register</button>
+          <button type="button" class="btn btn-outline-primary ms-2" @click="goToLogin">Login</button>
         </div>
       </form>
     </div>
@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import {signUpApi} from '@/api/user';
+import {registerApi} from '@/api/user';
 import Alert from '@/components/Alert.vue';
 import FormField from '@/components/FormField.vue';
 
 export default {
-  name: 'SignUp',
+  name: 'Register',
   components: { Alert, FormField },
   data() {
     return {
@@ -43,18 +43,18 @@ export default {
     }
   },
   methods: {
-    async signUp() {
+    async register() {
       if (this.password !== this.confirmPassword) {
         this.errorMessage = 'Passwords do not match';
         return;
       }
 
       try {
-        const { data } = await signUpApi(this.username, this.password, this.firstName, this.lastName, this.email, this.phoneNumber);
+        const { data } = await registerApi(this.username, this.password, this.firstName, this.lastName, this.email, this.phoneNumber);
         if (data.success) {
-          this.successMessage = 'You signed up successfully';
+          this.successMessage = 'You registered successfully';
           this.resetForm();
-          setTimeout(this.goToSignIn, 1000);
+          setTimeout(this.goToLogin, 1000);
         } else {
           this.setError(data.code, data.message);
         }
@@ -72,8 +72,8 @@ export default {
         }
       }
     },
-    goToSignIn() {
-      this.$router.push('/sign-in');
+    goToLogin() {
+      this.$router.push('/login');
     },
     resetForm() {
       this.username = '';
