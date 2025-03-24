@@ -6,11 +6,13 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
 import org.atlas.service.product.domain.entity.ProductStatus;
+import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase.Output.Product;
 
 public interface SearchProductUseCase
     extends UseCase<SearchProductUseCase.Input, SearchProductUseCase.Output> {
@@ -31,12 +33,14 @@ public interface SearchProductUseCase
   }
 
   @Data
-  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  class Output {
+  @EqualsAndHashCode(callSuper = false)
+  class Output extends PagingResult<Product> {
 
-    private PagingResult<Product> products;
+    public Output(List<Product> results, long totalCount) {
+      super(results, totalCount);
+    }
 
     @Data
     @Builder

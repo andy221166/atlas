@@ -42,18 +42,8 @@ public class SearchProductUseCaseHandler implements SearchProductUseCase {
       params.setIsActive(true);
       productEntityPage = productRepositoryPort.findAll(params, input.getPagingRequest());
     }
-    List<Product> products = productEntityPage.getResults()
-        .stream()
-        .map(this::map)
-        .toList();
-    PagingResult<Product> productPage = PagingResult.of(products,
-        productEntityPage.getTotalCount());
-    return new Output(productPage);
-  }
-
-  private Product map(ProductEntity productEntity) {
-    Product product = ObjectMapperUtil.getInstance().map(productEntity, Product.class);
-    product.setDescription(productEntity.getDetail().getDescription().substring(0, 100));
-    return product;
+    List<Product> products = ObjectMapperUtil.getInstance()
+        .mapList(productEntityPage.getResults(), Product.class);
+    return new Output(products, productEntityPage.getTotalCount());
   }
 }
