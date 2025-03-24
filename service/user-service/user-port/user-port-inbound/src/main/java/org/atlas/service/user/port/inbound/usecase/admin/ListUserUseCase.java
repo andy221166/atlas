@@ -33,7 +33,7 @@ public interface ListUserUseCase
   @AllArgsConstructor
   class Output {
 
-    private PagingResult<User> users;
+    private PagingResult<User> userPage;
 
     @Data
     @Builder

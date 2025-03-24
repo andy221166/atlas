@@ -5,7 +5,8 @@ import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase;
-import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase.Output.Product;
+import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +20,12 @@ public class ListProductUseCaseHandler implements ListProductUseCase {
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindProductParams params = ObjectMapperUtil.getInstance()
-        .map(input, FindProductParams.class);
-    PagingResult<ProductEntity> productEntities = productRepositoryPort.findAll(params,
+    FindProductCriteria params = ObjectMapperUtil.getInstance()
+        .map(input, FindProductCriteria.class);
+    PagingResult<ProductEntity> productEntityPage = productRepositoryPort.findByCriteria(params,
         input.getPagingRequest());
-    PagingResult<Output.Product> products = ObjectMapperUtil.getInstance()
-        .mapPage(productEntities, Output.Product.class);
-    return new Output(products);
+    PagingResult<Product> productPage = ObjectMapperUtil.getInstance()
+        .mapPage(productEntityPage, Product.class);
+    return new Output(productPage);
   }
 }

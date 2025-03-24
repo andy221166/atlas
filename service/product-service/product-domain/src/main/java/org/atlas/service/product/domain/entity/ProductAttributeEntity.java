@@ -8,10 +8,11 @@ import org.atlas.platform.commons.model.DomainEntity;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class ProductImageEntity extends DomainEntity {
+public class ProductAttributeEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
   private Integer id;
-  private String imageUrl;
-  private Boolean isCover;
+  private Integer productId;
+  private String attributeName;
+  private String attributeValue;
 }

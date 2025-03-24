@@ -39,12 +39,14 @@ public interface GetProductUseCase
       private Integer id;
       private String name;
       private BigDecimal price;
+      private String imageUrl;
+      private Integer quantity;
       private ProductStatus status;
       private Date availableFrom;
       private Boolean isActive;
       private Brand brand;
       private ProductDetail detail;
-      private List<ProductImage> images;
+      private List<ProductAttribute> attributes;
       private List<Category> categories;
     }
 
@@ -71,11 +73,11 @@ public interface GetProductUseCase
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProductImage {
+    public static class ProductAttribute {
 
       private Integer id;
-      private String imageUrl;
-      private Boolean isCover;
+      private String attributeName;
+      private String attributeValue;
     }
 
     @Data

@@ -33,14 +33,12 @@ public interface SearchProductUseCase
   }
 
   @Data
+  @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  @EqualsAndHashCode(callSuper = false)
-  class Output extends PagingResult<Product> {
+  class Output {
 
-    public Output(List<Product> results, long totalCount) {
-      super(results, totalCount);
-    }
+    private PagingResult<Product> productPage;
 
     @Data
     @Builder

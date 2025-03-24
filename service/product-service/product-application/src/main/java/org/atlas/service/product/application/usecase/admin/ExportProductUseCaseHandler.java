@@ -10,7 +10,7 @@ import org.atlas.service.product.port.inbound.usecase.admin.ExportProductUseCase
 import org.atlas.service.product.port.outbound.file.csv.ProductCsvWriterPort;
 import org.atlas.service.product.port.outbound.file.excel.ProductExcelWriterPort;
 import org.atlas.service.product.port.outbound.file.model.write.ProductRow;
-import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +26,9 @@ public class ExportProductUseCaseHandler implements ExportProductUseCase {
   @Override
   @Transactional(readOnly = true)
   public Output handle(Input input) throws Exception {
-    FindProductParams params = ObjectMapperUtil.getInstance()
-        .map(input, FindProductParams.class);
-    PagingResult<ProductEntity> productEntities = productRepositoryPort.findAll(params,
+    FindProductCriteria criteria = ObjectMapperUtil.getInstance()
+        .map(input, FindProductCriteria.class);
+    PagingResult<ProductEntity> productEntities = productRepositoryPort.findByCriteria(criteria,
         PagingRequest.unpaged());
     List<ProductRow> productRows = ObjectMapperUtil.getInstance().mapList(
         productEntities.getResults(), ProductRow.class);

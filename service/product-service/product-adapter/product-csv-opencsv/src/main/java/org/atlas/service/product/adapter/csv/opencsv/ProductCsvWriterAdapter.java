@@ -30,17 +30,17 @@ public class ProductCsvWriterAdapter implements ProductCsvWriterPort {
     @CsvBindByPosition(position = 0)
     private Integer id;
 
-    @CsvBindByName(column = "Code")
-    @CsvBindByPosition(position = 1)
-    private String code;
-
     @CsvBindByName(column = "Name")
-    @CsvBindByPosition(position = 2)
+    @CsvBindByPosition(position = 1)
     private String name;
 
     @CsvBindByName(column = "Price")
-    @CsvBindByPosition(position = 3)
+    @CsvBindByPosition(position = 2)
     private BigDecimal price;
+
+    @CsvBindByName(column = "Image URL")
+    @CsvBindByPosition(position = 3)
+    private String imageUrl;
 
     @CsvBindByName(column = "Quantity")
     @CsvBindByPosition(position = 4)
@@ -58,20 +58,40 @@ public class ProductCsvWriterAdapter implements ProductCsvWriterPort {
     @CsvBindByPosition(position = 7)
     private Boolean isActive;
 
-    @CsvBindByName(column = "Branch ID")
-    @CsvBindByPosition(position = 8)
-    private Integer brandId;
-
     @CsvBindByName(column = "Description")
-    @CsvBindByPosition(position = 9)
+    @CsvBindByPosition(position = 8)
     private String description;
 
-    @CsvBindByName(column = "Image URL")
+    @CsvBindByName(column = "Attribute Name 1")
+    @CsvBindByPosition(position = 9)
+    private String attributeName1;
+
+    @CsvBindByName(column = "Attribute Value 1")
     @CsvBindByPosition(position = 10)
-    private String imageUrl;
+    private String attributeValue1;
+
+    @CsvBindByName(column = "Attribute Name 1")
+    @CsvBindByPosition(position = 11)
+    private String attributeName2;
+
+    @CsvBindByName(column = "Attribute Value 2")
+    @CsvBindByPosition(position = 12)
+    private String attributeValue2;
+
+    @CsvBindByName(column = "Attribute Name 3")
+    @CsvBindByPosition(position = 13)
+    private String attributeName3;
+
+    @CsvBindByName(column = "Attribute Value 3")
+    @CsvBindByPosition(position = 14)
+    private String attributeValue3;
+
+    @CsvBindByName(column = "Branch ID")
+    @CsvBindByPosition(position = 15)
+    private Integer brandId;
 
     @CsvBindByName(column = "Category IDs")
-    @CsvBindByPosition(position = 11)
+    @CsvBindByPosition(position = 16)
     private List<Integer> categoryIds;
   }
 }

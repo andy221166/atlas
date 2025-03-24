@@ -10,7 +10,7 @@ import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.domain.entity.ProductImageEntity;
+import org.atlas.service.product.domain.entity.ProductAttributeEntity;
 import org.atlas.platform.event.contract.product.ProductUpdatedEvent;
 import org.atlas.service.product.port.inbound.usecase.admin.UpdateProductUseCase;
 import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
@@ -46,6 +46,16 @@ public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
     // Product
     ObjectMapperUtil.getInstance().merge(input, productEntity);
 
+    // Product detail
+    ObjectMapperUtil.getInstance().merge(input.getDetail(), productEntity.getDetail());
+
+    // Product attributes
+    if (CollectionUtils.isNotEmpty(input.getAttributes())) {
+      List<ProductAttributeEntity> productAttributeEntities = ObjectMapperUtil.getInstance()
+          .mapList(input.getAttributes(), ProductAttributeEntity.class);
+      productEntity.setAttributes(productAttributeEntities);
+    }
+
     // Brand
     BrandEntity brandEntity = new BrandEntity();
     brandEntity.setId(input.getBrandId());
@@ -61,16 +71,6 @@ public class UpdateProductUseCaseHandler implements UpdateProductUseCase {
         })
         .toList();
     productEntity.setCategories(categoryEntities);
-
-    // Product detail
-    ObjectMapperUtil.getInstance().merge(input.getDetail(), productEntity.getDetail());
-
-    // Product images
-    if (CollectionUtils.isNotEmpty(input.getImages())) {
-      List<ProductImageEntity> productImageEntities = ObjectMapperUtil.getInstance()
-          .mapList(input.getImages(), ProductImageEntity.class);
-      productEntity.setImages(productImageEntities);
-    }
   }
 
   private void publishEvent(ProductEntity productEntity) {

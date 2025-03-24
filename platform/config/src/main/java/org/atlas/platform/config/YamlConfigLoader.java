@@ -53,13 +53,13 @@ public class YamlConfigLoader implements ApplicationContextInitializer<Configura
 
     for (Resource resource : allResources) {
       String sourceName = resource.getURI().toString();
-      PropertySource<?> propertySource = loadYaml(resource, sourceName);
+      PropertySource<?> propertySource = parseYaml(resource, sourceName);
       propertySources.addLast(propertySource);
       log.info("Loaded config: {}", sourceName);
     }
   }
 
-  private PropertySource<?> loadYaml(Resource resource, String sourceName) throws IOException {
+  private PropertySource<?> parseYaml(Resource resource, String sourceName) throws IOException {
     try (InputStream inputStream = resource.getInputStream()) {
       Yaml yaml = new Yaml();
       Map<String, Object> yamlMap = yaml.load(inputStream);

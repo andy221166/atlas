@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class SearchParams {
+public class SearchCriteria {
 
   private String keyword;
   private BigDecimal minPrice;

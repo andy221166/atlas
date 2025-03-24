@@ -3,6 +3,7 @@ package org.atlas.service.product.adapter.api.server.rest.front.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
@@ -25,7 +26,7 @@ public class ProductController {
   private final GetProductUseCase getProductUseCase;
 
   @GetMapping
-  public Response<SearchProductUseCase.Output> searchProduct(
+  public PagingResponse<SearchProductUseCase.Output.Product> searchProduct(
       @RequestParam(name = "keyword", required = false) String keyword,
       @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
       @RequestParam(name = "max_price", required = false) BigDecimal maxPrice,
@@ -43,7 +44,7 @@ public class ProductController {
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
     SearchProductUseCase.Output output = searchProductUseCase.handle(input);
-    return Response.success(output);
+    return PagingResponse.success(output.getProductPage());
   }
 
   @GetMapping("/{id}")

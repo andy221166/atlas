@@ -27,14 +27,14 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
     @ExcelProperty(value = "ID")
     private Integer id;
 
-    @ExcelProperty(value = "Code")
-    private String code;
-
     @ExcelProperty(value = "Name")
     private String name;
 
     @ExcelProperty(value = "Price")
     private BigDecimal price;
+
+    @ExcelProperty(value = "Image URL")
+    private String imageUrl;
 
     @ExcelProperty(value = "ID")
     private Integer quantity;
@@ -48,14 +48,29 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
     @ExcelProperty(value = "Active")
     private Boolean isActive;
 
-    @ExcelProperty(value = "Branch ID")
-    private Integer brandId;
-
     @ExcelProperty(value = "Description")
     private String description;
 
-    @ExcelProperty(value = "Image URL")
-    private String imageUrl;
+    @ExcelProperty(value = "Attribute Name 1")
+    private String attributeName1;
+
+    @ExcelProperty(value = "Attribute Value 1")
+    private String attributeValue1;
+
+    @ExcelProperty(value = "Attribute Name 2")
+    private String attributeName2;
+
+    @ExcelProperty(value = "Attribute Value 2")
+    private String attributeValue2;
+
+    @ExcelProperty(value = "Attribute Name 3")
+    private String attributeName3;
+
+    @ExcelProperty(value = "Attribute Value 3")
+    private String attributeValue3;
+
+    @ExcelProperty(value = "Branch ID")
+    private Integer brandId;
 
     @ExcelProperty(value = "Category IDs")
     private List<Integer> categoryIds;

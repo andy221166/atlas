@@ -48,17 +48,23 @@ public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
 
   private ProductRow readRow(Row row) {
     ProductRow productRow = new ProductRow();
-    productRow.setName(row.getCell(1).getStringCellValue());
-    productRow.setPrice(BigDecimal.valueOf(row.getCell(2).getNumericCellValue()));
-    productRow.setQuantity((int) row.getCell(0).getNumericCellValue());
-    productRow.setStatus(ProductStatus.valueOf(row.getCell(3).getStringCellValue()));
-    productRow.setAvailableFrom(DateUtil.parse(row.getCell(4).getStringCellValue(),
+    productRow.setName(row.getCell(0).getStringCellValue());
+    productRow.setPrice(BigDecimal.valueOf(row.getCell(1).getNumericCellValue()));
+    productRow.setImageUrl(row.getCell(2).getStringCellValue());
+    productRow.setQuantity((int) row.getCell(3).getNumericCellValue());
+    productRow.setStatus(ProductStatus.valueOf(row.getCell(4).getStringCellValue()));
+    productRow.setAvailableFrom(DateUtil.parse(row.getCell(5).getStringCellValue(),
         Constant.DATE_TIME_FORMAT));
-    productRow.setIsActive(row.getCell(5).getBooleanCellValue());
-    productRow.setBrandId((int) row.getCell(6).getNumericCellValue());
+    productRow.setIsActive(row.getCell(6).getBooleanCellValue());
     productRow.setDescription(row.getCell(7).getStringCellValue());
-    productRow.setImageUrl(row.getCell(8).getStringCellValue());
-    productRow.setCategoryIds(Arrays.stream(row.getCell(9).getStringCellValue().split(","))
+    productRow.setAttributeName1(row.getCell(8).getStringCellValue());
+    productRow.setAttributeValue1(row.getCell(9).getStringCellValue());
+    productRow.setAttributeName2(row.getCell(10).getStringCellValue());
+    productRow.setAttributeValue2(row.getCell(11).getStringCellValue());
+    productRow.setAttributeName3(row.getCell(12).getStringCellValue());
+    productRow.setAttributeValue3(row.getCell(13).getStringCellValue());
+    productRow.setBrandId((int) row.getCell(14).getNumericCellValue());
+    productRow.setCategoryIds(Arrays.stream(row.getCell(15).getStringCellValue().split(","))
         .map(Integer::parseInt)
         .toList());
     return productRow;

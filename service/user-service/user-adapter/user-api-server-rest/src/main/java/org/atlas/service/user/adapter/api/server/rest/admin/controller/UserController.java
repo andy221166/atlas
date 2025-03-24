@@ -1,7 +1,7 @@
 package org.atlas.service.user.adapter.api.server.rest.admin.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.api.server.rest.response.Response;
+import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.user.port.inbound.usecase.admin.ListUserUseCase;
@@ -20,7 +20,7 @@ public class UserController {
   private final ListUserUseCase listUserUseCase;
 
   @GetMapping
-  public Response<ListUserUseCase.Output> listUser(
+  public PagingResponse<ListUserUseCase.Output.User> listUser(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
       @RequestParam(value = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size)
@@ -29,6 +29,6 @@ public class UserController {
     input.setKeyword(keyword);
     input.setPagingRequest(PagingRequest.of(page, size));
     ListUserUseCase.Output output = listUserUseCase.handle(input);
-    return Response.success(output);
+    return PagingResponse.success(output.getUserPage());
   }
 }

@@ -41,7 +41,7 @@ public interface ListProductUseCase
   @AllArgsConstructor
   class Output {
 
-    private PagingResult<Product> products;
+    private PagingResult<Product> productPage;
 
     @Data
     public static class Product {

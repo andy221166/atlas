@@ -5,12 +5,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.enums.FileType;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.util.DateUtil;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.product.adapter.api.server.rest.admin.model.CreateProductRequest;
+import org.atlas.service.product.adapter.api.server.rest.admin.model.UpdateProductRequest;
 import org.atlas.service.product.domain.entity.ProductStatus;
 import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.DeleteProductUseCase;
@@ -19,8 +22,6 @@ import org.atlas.service.product.port.inbound.usecase.admin.GetProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.ImportProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.UpdateProductUseCase;
-import org.atlas.service.product.adapter.api.server.rest.admin.model.CreateProductRequest;
-import org.atlas.service.product.adapter.api.server.rest.admin.model.UpdateProductRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class ProductController {
   private final ExportProductUseCase exportProductUseCase;
 
   @GetMapping
-  public Response<ListProductUseCase.Output> listProduct(
+  public PagingResponse<ListProductUseCase.Output.Product> listProduct(
       @RequestParam(name = "id", required = false) Integer id,
       @RequestParam(name = "keyword", required = false) String keyword,
       @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
@@ -76,7 +77,7 @@ public class ProductController {
     input.setCategoryIds(categoryIds);
     input.setPagingRequest(PagingRequest.of(page - 1, size));
     ListProductUseCase.Output output = listProductUseCase.handle(input);
-    return Response.success(output);
+    return PagingResponse.success(output.getProductPage());
   }
 
   @GetMapping("/{id}")

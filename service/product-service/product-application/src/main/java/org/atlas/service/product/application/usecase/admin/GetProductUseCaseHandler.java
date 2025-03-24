@@ -11,7 +11,7 @@ import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Component("adminGetProductUseCaseHandler")
 @RequiredArgsConstructor
 public class GetProductUseCaseHandler implements GetProductUseCase {
 

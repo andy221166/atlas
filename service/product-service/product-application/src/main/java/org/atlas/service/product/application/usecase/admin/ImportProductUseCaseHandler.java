@@ -19,7 +19,7 @@ import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.domain.entity.ProductDetailEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.domain.entity.ProductImageEntity;
+import org.atlas.service.product.domain.entity.ProductAttributeEntity;
 import org.atlas.service.product.port.inbound.usecase.admin.ImportProductUseCase;
 import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
 import org.atlas.service.product.port.outbound.file.csv.ProductCsvReaderPort;
@@ -116,6 +116,27 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
     // Product
     ProductEntity productEntity = ObjectMapperUtil.getInstance().map(row, ProductEntity.class);
 
+    // Product detail
+    ProductDetailEntity productDetailEntity = new ProductDetailEntity();
+    productDetailEntity.setDescription(row.getDescription());
+    productEntity.setDetail(productDetailEntity);
+
+    // Product attributes
+    ProductAttributeEntity productAttributeEntity1 = new ProductAttributeEntity();
+    productAttributeEntity1.setAttributeName(row.getAttributeName1());
+    productAttributeEntity1.setAttributeValue(row.getAttributeValue1());
+    productEntity.addAttribute(productAttributeEntity1);
+
+    ProductAttributeEntity productAttributeEntity2 = new ProductAttributeEntity();
+    productAttributeEntity2.setAttributeName(row.getAttributeName2());
+    productAttributeEntity2.setAttributeValue(row.getAttributeValue2());
+    productEntity.addAttribute(productAttributeEntity2);
+
+    ProductAttributeEntity productAttributeEntity3 = new ProductAttributeEntity();
+    productAttributeEntity3.setAttributeName(row.getAttributeName3());
+    productAttributeEntity3.setAttributeValue(row.getAttributeValue3());
+    productEntity.addAttribute(productAttributeEntity3);
+
     // Brand
     BrandEntity brandEntity = new BrandEntity();
     brandEntity.setId(row.getBrandId());
@@ -131,17 +152,6 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
         })
         .toList();
     productEntity.setCategories(categoryEntities);
-
-    // Product detail
-    ProductDetailEntity productDetailEntity = new ProductDetailEntity();
-    productDetailEntity.setDescription(row.getDescription());
-    productEntity.setDetail(productDetailEntity);
-
-    // Product images
-    ProductImageEntity productImageEntity = new ProductImageEntity();
-    productImageEntity.setImageUrl(row.getImageUrl());
-    productImageEntity.setIsCover(true);
-    productEntity.setImages(Collections.singletonList(productImageEntity));
 
     return productEntity;
   }

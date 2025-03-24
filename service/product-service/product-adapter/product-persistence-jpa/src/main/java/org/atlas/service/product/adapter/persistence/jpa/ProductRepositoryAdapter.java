@@ -13,9 +13,8 @@ import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity
 import org.atlas.service.product.adapter.persistence.jpa.repository.CustomJpaProductRepository;
 import org.atlas.service.product.adapter.persistence.jpa.repository.JpaProductRepository;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,13 +26,14 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
   private final CustomJpaProductRepository customJpaProductRepository;
 
   @Override
-  public PagingResult<ProductEntity> findAll(FindProductParams params,
+  public PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria,
       PagingRequest pagingRequest) {
-    long totalCount = customJpaProductRepository.count(params);
+    long totalCount = customJpaProductRepository.countByCriteria(criteria);
     if (totalCount == 0L) {
       return PagingResult.empty();
     }
-    List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.find(params, pagingRequest);
+    List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.findByCriteria(criteria,
+        pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
         .mapList(jpaProductEntities, ProductEntity.class);
     return PagingResult.of(productEntities, totalCount);
@@ -50,7 +50,7 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
   @Override
   public Optional<ProductEntity> findById(Integer id) {
-    return jpaProductRepository.findById(id)
+    return jpaProductRepository.findByIdWithAssociations(id)
         .map(jpaProduct -> ObjectMapperUtil.getInstance().map(jpaProduct, ProductEntity.class));
   }
 
@@ -80,8 +80,8 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
   @Override
   public void decreaseQuantityWithPessimisticLock(Integer id, Integer decrement) {
     try {
-      JpaProductEntity product = jpaProductRepository.findByIdWithLock(id)
-          .get();
+      JpaProductEntity product = jpaProductRepository.findByIdWithAssociationsAndLock(id)
+          .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
       if (product.getQuantity() < decrement) {
         throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
       }

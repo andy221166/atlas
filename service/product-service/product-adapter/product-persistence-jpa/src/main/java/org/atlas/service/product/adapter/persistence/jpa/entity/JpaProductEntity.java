@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -30,6 +32,15 @@ import org.atlas.service.product.domain.entity.ProductStatus;
 
 @Entity
 @Table(name = "product")
+@NamedEntityGraph(
+    name = "JpaProductEntity.findByCriteria",
+    attributeNodes = {
+        @NamedAttributeNode("id"),
+        @NamedAttributeNode("name"),
+        @NamedAttributeNode("price"),
+        @NamedAttributeNode("imageUrl")
+    }
+)
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -40,11 +51,12 @@ public class JpaProductEntity extends JpaBaseEntity {
   @EqualsAndHashCode.Include
   private Integer id;
 
-  private String code;
-
   private String name;
 
   private BigDecimal price;
+
+  @Column(name = "image_url")
+  private String imageUrl;
 
   private Integer quantity;
 
@@ -66,7 +78,7 @@ public class JpaProductEntity extends JpaBaseEntity {
   private JpaProductDetailEntity detail;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
-  private List<JpaProductImageEntity> images = new ArrayList<>();
+  private List<JpaProductAttributeEntity> attributes = new ArrayList<>();
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(

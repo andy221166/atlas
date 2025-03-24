@@ -8,9 +8,9 @@ import org.atlas.platform.event.contract.product.ProductCreatedEvent;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.BrandEntity;
 import org.atlas.service.product.domain.entity.CategoryEntity;
+import org.atlas.service.product.domain.entity.ProductAttributeEntity;
 import org.atlas.service.product.domain.entity.ProductDetailEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
 import org.atlas.service.product.port.outbound.event.ProductEventPublisherPort;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
@@ -43,10 +43,17 @@ public class CreateProductUseCaseHandler implements CreateProductUseCase {
     // Product
     ProductEntity productEntity = ObjectMapperUtil.getInstance().map(input, ProductEntity.class);
 
-    // Brand
-    BrandEntity brandEntity = new BrandEntity();
-    brandEntity.setId(input.getBrandId());
-    productEntity.setBrand(brandEntity);
+    // Product detail
+    ProductDetailEntity productDetailEntity = ObjectMapperUtil.getInstance()
+        .map(input.getDetail(), ProductDetailEntity.class);
+    productEntity.setDetail(productDetailEntity);
+
+    // Product attributes
+    if (CollectionUtils.isNotEmpty(input.getAttributes())) {
+      List<ProductAttributeEntity> productAttributeEntities = ObjectMapperUtil.getInstance()
+          .mapList(input.getAttributes(), ProductAttributeEntity.class);
+      productEntity.setAttributes(productAttributeEntities);
+    }
 
     // Categories
     List<CategoryEntity> categoryEntities = input.getCategoryIds()
@@ -59,17 +66,10 @@ public class CreateProductUseCaseHandler implements CreateProductUseCase {
         .toList();
     productEntity.setCategories(categoryEntities);
 
-    // Product detail
-    ProductDetailEntity productDetailEntity = ObjectMapperUtil.getInstance()
-        .map(input.getDetail(), ProductDetailEntity.class);
-    productEntity.setDetail(productDetailEntity);
-
-    // Product images
-    if (CollectionUtils.isNotEmpty(input.getImages())) {
-      List<ProductImageEntity> productImageEntities = ObjectMapperUtil.getInstance()
-          .mapList(input.getImages(), ProductImageEntity.class);
-      productEntity.setImages(productImageEntities);
-    }
+    // Brand
+    BrandEntity brandEntity = new BrandEntity();
+    brandEntity.setId(input.getBrandId());
+    productEntity.setBrand(brandEntity);
 
     return productEntity;
   }

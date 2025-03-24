@@ -1,19 +1,20 @@
 package org.atlas.service.product.application.usecase.front;
 
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.product.domain.entity.CategoryEntity;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.domain.entity.ProductImageEntity;
+import org.atlas.service.product.domain.entity.ProductAttributeEntity;
 import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase.Output.Product;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Component("frontGetProductUseCaseHandler")
 @RequiredArgsConstructor
 public class GetProductUseCaseHandler implements GetProductUseCase {
 
@@ -33,16 +34,16 @@ public class GetProductUseCaseHandler implements GetProductUseCase {
     product.setId(productEntity.getId());
     product.setName(productEntity.getName());
     product.setPrice(productEntity.getPrice());
-    product.setBrand(productEntity.getBrand() != null ?
-        productEntity.getBrand().getName() : null);
     product.setDescription(productEntity.getDetail() != null ?
         productEntity.getDetail().getDescription() : null);
-    if (CollectionUtils.isNotEmpty(productEntity.getImages())) {
-      product.setImageUrls(productEntity.getImages()
+    if (CollectionUtils.isNotEmpty(productEntity.getAttributes())) {
+      product.setAttributes(productEntity.getAttributes()
           .stream()
-          .map(ProductImageEntity::getImageUrl)
-          .toList());
+          .collect(Collectors.toMap(ProductAttributeEntity::getAttributeName,
+              ProductAttributeEntity::getAttributeValue)));
     }
+    product.setBrand(productEntity.getBrand() != null ?
+        productEntity.getBrand().getName() : null);
     if (CollectionUtils.isNotEmpty(productEntity.getCategories())) {
       product.setCategories(productEntity.getCategories()
           .stream()

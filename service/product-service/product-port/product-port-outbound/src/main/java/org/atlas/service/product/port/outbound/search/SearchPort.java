@@ -6,5 +6,5 @@ import org.atlas.service.product.domain.entity.ProductEntity;
 
 public interface SearchPort {
 
-  PagingResult<ProductEntity> search(SearchParams params, PagingRequest pagingRequest);
+  PagingResult<ProductEntity> search(SearchCriteria criteria, PagingRequest pagingRequest);
 }

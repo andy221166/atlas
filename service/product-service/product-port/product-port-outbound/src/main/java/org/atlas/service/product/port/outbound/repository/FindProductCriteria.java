@@ -7,7 +7,7 @@ import lombok.Data;
 import org.atlas.service.product.domain.entity.ProductStatus;
 
 @Data
-public class FindProductParams {
+public class FindProductCriteria {
 
   private Integer id;
   private String keyword;

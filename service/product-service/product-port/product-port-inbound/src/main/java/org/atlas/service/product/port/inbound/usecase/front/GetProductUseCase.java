@@ -2,6 +2,7 @@ package org.atlas.service.product.port.inbound.usecase.front;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,9 +38,10 @@ public interface GetProductUseCase
       private Integer id;
       private String name;
       private BigDecimal price;
-      private String brand;
+      private String imageUrl;
       private String description;
-      private List<String> imageUrls;
+      private Map<String, String> attributes;
+      private String brand;
       private List<String> categories;
     }
   }

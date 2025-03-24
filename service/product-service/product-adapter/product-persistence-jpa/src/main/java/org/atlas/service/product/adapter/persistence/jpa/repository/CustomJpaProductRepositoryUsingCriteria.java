@@ -1,10 +1,12 @@
 package org.atlas.service.product.adapter.persistence.jpa.repository;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -15,8 +17,9 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.persistence.jpa.core.specification.QueryFilter;
 import org.atlas.platform.persistence.jpa.core.specification.QueryOperator;
 import org.atlas.platform.persistence.jpa.core.specification.QuerySpecification;
+import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductAttributeEntity;
 import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity;
-import org.atlas.service.product.port.outbound.repository.FindProductParams;
+import org.atlas.service.product.port.outbound.repository.FindProductCriteria;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
@@ -27,18 +30,17 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
   private EntityManager entityManager;
 
   @Override
-  public List<JpaProductEntity> find(FindProductParams params, PagingRequest pagingRequest) {
+  public List<JpaProductEntity> findByCriteria(FindProductCriteria criteria, PagingRequest pagingRequest) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<JpaProductEntity> criteriaQuery = criteriaBuilder.createQuery(JpaProductEntity.class);
     Root<JpaProductEntity> root = criteriaQuery.from(JpaProductEntity.class);
 
-    // Fetch joins
-    root.fetch("brand", JoinType.LEFT);
-    root.fetch("detail", JoinType.LEFT);
-    root.fetch("images", JoinType.LEFT);
-    root.fetch("categories", JoinType.LEFT);
+    root.join("detail", JoinType.LEFT);
+    root.join("attributes", JoinType.LEFT);
+    root.join("brand", JoinType.LEFT);
+    root.join("categories", JoinType.LEFT);
 
-    Specification<JpaProductEntity> spec = buildSpec(params);
+    Specification<JpaProductEntity> spec = buildSpec(criteria);
     Predicate predicate = spec.toPredicate(root, criteriaQuery, criteriaBuilder);
     criteriaQuery.where(predicate);
 
@@ -51,29 +53,33 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
       }
     }
 
-    TypedQuery<JpaProductEntity> typedQuery = entityManager.createQuery(criteriaQuery);
+    TypedQuery<JpaProductEntity> query = entityManager.createQuery(criteriaQuery);
+
+    // Apply Entity Graph to restrict selected attributes
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph("JpaProductEntity.findByCriteria");
+    query.setHint("jakarta.persistence.loadgraph", entityGraph);
 
     // Paging
     if (pagingRequest.hasPaging()) {
-      typedQuery.setFirstResult(pagingRequest.getOffset());
-      typedQuery.setMaxResults(pagingRequest.getLimit());
+      query.setFirstResult(pagingRequest.getOffset());
+      query.setMaxResults(pagingRequest.getLimit());
     }
 
-    return typedQuery.getResultList();
+    return query.getResultList();
   }
 
   @Override
-  public long count(FindProductParams params) {
+  public long countByCriteria(FindProductCriteria params) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
     Root<JpaProductEntity> root = query.from(JpaProductEntity.class);
 
-    // Joins
-    root.join("brand", JoinType.LEFT);
     root.join("detail", JoinType.LEFT);
+    root.join("attributes", JoinType.LEFT);
+    root.join("brand", JoinType.LEFT);
     root.join("categories", JoinType.LEFT);
 
-    query.select(criteriaBuilder.count(root.get("id")));
+    query.select(criteriaBuilder.countDistinct(root.get("id")));
 
     Specification<JpaProductEntity> spec = buildSpec(params);
     Predicate predicate = spec.toPredicate(root, query, criteriaBuilder);
@@ -82,48 +88,40 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     return entityManager.createQuery(query).getSingleResult();
   }
 
-  private Specification<JpaProductEntity> buildSpec(FindProductParams params) {
+  private Specification<JpaProductEntity> buildSpec(FindProductCriteria criteria) {
     QuerySpecification<JpaProductEntity> spec = new QuerySpecification<>();
-    if (params.getId() != null) {
-      spec.addFilter(
-          QueryFilter.of("id", params.getId(), QueryOperator.EQUAL));
+    if (criteria.getId() != null) {
+      spec.addFilter(QueryFilter.of("id", criteria.getId(), QueryOperator.EQUAL));
     }
-    if (StringUtils.isNotBlank(params.getKeyword())) {
+    if (StringUtils.isNotBlank(criteria.getKeyword())) {
       spec.addFilter(QueryFilter.or(
-          QueryFilter.Condition.of("code", params.getKeyword(), QueryOperator.LIKE),
-          QueryFilter.Condition.of("name", params.getKeyword(), QueryOperator.LIKE),
-          QueryFilter.Condition.of("detail.description", params.getKeyword(), QueryOperator.LIKE)
-      ));
+          QueryFilter.Condition.of("code", criteria.getKeyword(), QueryOperator.LIKE),
+          QueryFilter.Condition.of("name", criteria.getKeyword(), QueryOperator.LIKE),
+          QueryFilter.Condition.of("detail.description", criteria.getKeyword(), QueryOperator.LIKE),
+          QueryFilter.Condition.of("attributes.value", criteria.getKeyword(), QueryOperator.LIKE)));
     }
-    if (params.getMinPrice() != null) {
-      spec.addFilter(
-          QueryFilter.of("price", params.getMinPrice(), QueryOperator.GREATER_THAN_EQUAL));
+    if (criteria.getMinPrice() != null) {
+      spec.addFilter(QueryFilter.of("price", criteria.getMinPrice(), QueryOperator.GREATER_THAN_EQUAL));
     }
-    if (params.getMaxPrice() != null) {
-      spec.addFilter(
-          QueryFilter.of("price", params.getMaxPrice(), QueryOperator.LESS_THAN_EQUAL));
+    if (criteria.getMaxPrice() != null) {
+      spec.addFilter(QueryFilter.of("price", criteria.getMaxPrice(), QueryOperator.LESS_THAN_EQUAL));
     }
-    if (params.getStatus() != null) {
-      spec.addFilter(
-          QueryFilter.of("status", params.getStatus(), QueryOperator.EQUAL));
+    if (criteria.getStatus() != null) {
+      spec.addFilter(QueryFilter.of("status", criteria.getStatus(), QueryOperator.EQUAL));
     }
-    if (params.getAvailableFrom() != null) {
-      spec.addFilter(
-          QueryFilter.of("availableFrom", params.getAvailableFrom(),
-              QueryOperator.GREATER_THAN_EQUAL));
+    if (criteria.getAvailableFrom() != null) {
+      spec.addFilter(QueryFilter.of("availableFrom", criteria.getAvailableFrom(), QueryOperator.GREATER_THAN_EQUAL));
     }
-    if (params.getIsActive() != null) {
-      spec.addFilter(
-          QueryFilter.of("isActive", params.getIsActive(), QueryOperator.EQUAL));
+    if (criteria.getIsActive() != null) {
+      spec.addFilter(QueryFilter.of("isActive", criteria.getIsActive(), QueryOperator.EQUAL));
     }
-    if (params.getBrandId() != null) {
-      spec.addFilter(
-          QueryFilter.of("brand.id", params.getBrandId(), QueryOperator.EQUAL));
+    if (criteria.getBrandId() != null) {
+      spec.addFilter(QueryFilter.of("brand.id", criteria.getBrandId(), QueryOperator.EQUAL));
     }
-    if (CollectionUtils.isNotEmpty(params.getCategoryIds())) {
-      spec.addFilter(
-          QueryFilter.of("categories.id", params.getCategoryIds(), QueryOperator.IN));
+    if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
+      spec.addFilter(QueryFilter.of("categories.id", criteria.getCategoryIds(), QueryOperator.IN));
     }
+
     return spec;
   }
 }

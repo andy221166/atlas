@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +30,13 @@ public interface CreateProductUseCase
 
     @NotNull
     @DecimalMin(value = "0.0")
-    @Builder.Default
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal price;
+
+    private String imageUrl;
+
+    @NotNull
+    @PositiveOrZero
+    private Integer quantity;
 
     @NotNull
     private ProductStatus status;
@@ -48,15 +54,12 @@ public interface CreateProductUseCase
     private ProductDetail detail;
 
     @Valid
-    private List<ProductImage> images;
+    private List<ProductAttribute> attributes;
 
     @NotEmpty
     private List<Integer> categoryIds;
 
     @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class ProductDetail {
 
       @NotBlank
@@ -64,16 +67,13 @@ public interface CreateProductUseCase
     }
 
     @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ProductImage {
+    public static class ProductAttribute {
 
       @NotBlank
-      private String imageUrl;
+      private String attributeName;
 
-      @Builder.Default
-      private Boolean isCover = false;
+      @NotBlank
+      private String attributeValue;
     }
   }
 

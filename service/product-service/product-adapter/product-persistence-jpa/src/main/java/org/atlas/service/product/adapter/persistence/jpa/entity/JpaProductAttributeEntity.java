@@ -1,6 +1,5 @@
 package org.atlas.service.product.adapter.persistence.jpa.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,19 +14,20 @@ import lombok.Setter;
 import org.atlas.platform.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity
-@Table(name = "product_image")
+@Table(name = "product_attribute")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class JpaProductImageEntity extends JpaBaseEntity {
+public class JpaProductAttributeEntity extends JpaBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   private Integer id;
 
-  @Column(name = "image_url")
-  private String imageUrl;
+  private String name;
+
+  private String value;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id")

@@ -14,11 +14,22 @@ import org.springframework.stereotype.Repository;
 public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity, Integer>{
 
   @Query("""
+        select p
+        from JpaProductEntity p
+        left join fetch p.detail
+        left join fetch p.attributes
+        left join fetch p.brand
+        left join fetch p.categories
+        where p.id = :id
+      """)
+  Optional<JpaProductEntity> findByIdWithAssociations(@Param("id") Integer id);
+
+  @Query("""
         select p from JpaProductEntity p
         where p.id = :id
       """)
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  Optional<JpaProductEntity> findByIdWithLock(@Param("id") Integer id);
+  Optional<JpaProductEntity> findByIdWithAssociationsAndLock(@Param("id") Integer id);
 
   @Modifying
   @Query("""

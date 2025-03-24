@@ -10,15 +10,20 @@ import org.atlas.service.product.domain.entity.ProductStatus;
 public class ProductRow {
 
   private Integer id;
-  private String code;
   private String name;
   private BigDecimal price;
+  private String imageUrl;
   private Integer quantity;
   private ProductStatus status;
   private Date availableFrom;
   private Boolean isActive;
-  private Integer brandId;
   private String description;
-  private String imageUrl;
+  private String attributeName1;
+  private String attributeValue1;
+  private String attributeName2;
+  private String attributeValue2;
+  private String attributeName3;
+  private String attributeValue3;
+  private Integer brandId;
   private List<Integer> categoryIds;
 }

@@ -8,7 +8,7 @@ import org.atlas.service.product.domain.entity.ProductEntity;
 
 public interface ProductRepositoryPort {
 
-  PagingResult<ProductEntity> findAll(FindProductParams params,
+  PagingResult<ProductEntity> findByCriteria(FindProductCriteria criteria,
       PagingRequest pagingRequest);
 
   List<ProductEntity> findByIdIn(List<Integer> ids);
