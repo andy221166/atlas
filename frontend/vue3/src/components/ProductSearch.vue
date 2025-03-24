@@ -10,21 +10,35 @@
           placeholder="Enter keyword"
         />
 
-        <div class="row g-2">
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <select v-model="brandId" class="form-select">
+              <option value="" disabled>Select Brand</option>
+              <option
+                v-for="brand in brands"
+                :key="brand.id"
+                :value="brand.id"
+              >
+                {{ brand.name }}
+              </option>
+            </select>
+          </div>
           <div class="col-md-6">
             <select v-model="categoryId" class="form-select">
               <option value="" disabled>Select Category</option>
               <option
-                v-for="categoryEntity in categories"
-                :key="categoryEntity.id"
-                :value="categoryEntity.id"
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.id"
               >
-                {{ categoryEntity.name }}
+                {{ category.name }}
               </option>
             </select>
           </div>
+        </div>
 
-          <div class="col-md-3">
+        <div class="row g-2">
+          <div class="col-md-6">
             <input
               v-model.number="minPrice"
               type="number"
@@ -33,7 +47,7 @@
             />
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-6">
             <input
               v-model.number="maxPrice"
               type="number"
@@ -52,17 +66,17 @@
     <div v-if="products.length" class="mt-4 row g-3">
       <div v-for="product in products" :key="product.id" class="col-md-4">
         <div class="card h-100 shadow-sm">
+          <img 
+            :src="product.imageUrl" 
+            class="card-img-top product-image" 
+            :alt="product.name"
+            @error="handleImageError"
+          />
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{ product.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
+            <h6 class="card-subtitle mb-3 text-muted">
               ${{ product.price.toFixed(2) }}
             </h6>
-            <p
-              class="card-text text-truncate"
-              style="max-height: 3.6em; overflow: hidden"
-            >
-              {{ product.description }}
-            </p>
             <button @click="addToCart(product)" class="btn btn-primary mt-auto">
               Add to Cart
             </button>
@@ -97,7 +111,7 @@
 </template>
 
 <script>
-import {listCategoryApi, searchProductApi} from "@/api/product";
+import {listCategoryApi, searchProductApi, listBrandApi} from "@/api/product";
 import {onMounted, ref} from "vue";
 
 export default {
@@ -105,10 +119,12 @@ export default {
   setup(_, { emit }) {
     const keyword = ref("");
     const categoryId = ref("");
+    const brandId = ref("");
     const minPrice = ref(null);
     const maxPrice = ref(null);
     const products = ref([]);
     const categories = ref([]);
+    const brands = ref([]);
     const currentPage = ref(1);
     const pageSize = 9;
     const totalPages = ref(1);
@@ -116,9 +132,18 @@ export default {
     const fetchCategories = async () => {
       try {
         const { data } = await listCategoryApi();
-        if (data.success) categories.value = data.data;
+        if (data.success) categories.value = data.data.categories;
       } catch (error) {
         console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    const fetchBrands = async () => {
+      try {
+        const { data } = await listBrandApi();
+        if (data.success) brands.value = data.data.brands;
+      } catch (error) {
+        console.error("Failed to fetch brands:", error);
       }
     };
 
@@ -127,6 +152,7 @@ export default {
         const params = {
           keyword: keyword.value || undefined,
           category_id: categoryId.value || undefined,
+          brand_id: brandId.value || undefined,
           min_price: minPrice.value || undefined,
           max_price: maxPrice.value || undefined,
           page: currentPage.value,
@@ -134,8 +160,8 @@ export default {
         };
         const { data } = await searchProductApi(params);
         if (data.success) {
-          products.value = data.data.records;
-          totalPages.value = data.data.totalPages;
+          products.value = data.data.products.results;
+          totalPages.value = data.data.products.totalPages;
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -153,24 +179,58 @@ export default {
       }
     };
 
+    const handleImageError = (event) => {
+      event.target.src = require("@/assets/placeholder.png");
+    };
+
     onMounted(() => {
       fetchCategories();
+      fetchBrands();
       fetchProducts();
     });
 
     return {
       keyword,
       categoryId,
+      brandId,
       minPrice,
       maxPrice,
       products,
       categories,
+      brands,
       currentPage,
       totalPages,
       fetchProducts,
       addToCart,
       changePage,
+      handleImageError,
     };
   },
 };
 </script>
+
+<style scoped>
+.product-image {
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  height: 2.4rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+</style>

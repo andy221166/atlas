@@ -33,7 +33,7 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
   public Output handle(Input input) throws Exception {
     // Query order
     PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findAll(input.getPagingRequest());
-    if (orderEntityPage.isEmpty()) {
+    if (orderEntityPage.getTotalCount() == 0L) {
       return new Output(PagingResult.empty());
     }
 

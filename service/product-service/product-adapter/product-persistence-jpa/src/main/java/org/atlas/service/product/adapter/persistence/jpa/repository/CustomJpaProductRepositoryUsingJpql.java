@@ -24,10 +24,11 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
   @Override
   public List<JpaProductEntity> find(FindProductParams params, PagingRequest pagingRequest) {
     StringBuilder sqlBuilder = new StringBuilder("""
-        select p
-        from JpaProduct p
+        select distinct p
+        from JpaProductEntity p
         left join fetch p.brand
         left join fetch p.detail
+        left join fetch p.images
         left join fetch p.categories
         """);
 
@@ -59,12 +60,13 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
   public long count(FindProductParams criteria) {
     Map<String, Object> params = new HashMap<>();
     String whereClause = buildWhereClause(criteria, params);
+    // For count SQL, no need to fetch associations
     String countSql = """
-        select count(p.id)
+        select count(distinct p.id)
         from JpaProductEntity p
-        left join fetch p.brand b
-        left join fetch p.detail d
-        left join fetch p.categories c
+        left join p.brand b
+        left join p.detail d
+        left join p.categories c
         """ + whereClause;
     TypedQuery<Long> countQuery = entityManager.createQuery(countSql, Long.class);
     params.forEach(countQuery::setParameter);

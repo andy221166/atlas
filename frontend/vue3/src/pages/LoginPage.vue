@@ -36,7 +36,7 @@ export default {
         const { data } = await loginApi(this.username, this.password);
         if (data.success) {
           localStorage.setItem('accessToken', data.data.accessToken);
-          this.$router.push('/storefront');
+          this.$router.push('/');
         } else {
           this.setError(data.code, data.message); // Handle known error format from server response
         }

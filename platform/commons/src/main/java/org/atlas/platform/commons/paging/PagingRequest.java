@@ -44,7 +44,7 @@ public class PagingRequest {
   }
 
   public boolean hasPaging() {
-    return page > 0 && size > 0;
+    return page >= 0 && size > 0;
   }
 
   public boolean hasSort() {

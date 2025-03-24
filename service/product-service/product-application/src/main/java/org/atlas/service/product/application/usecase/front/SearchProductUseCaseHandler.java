@@ -1,11 +1,9 @@
 package org.atlas.service.product.application.usecase.front;
 
 import java.util.List;
-import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.domain.entity.ProductEntity;
-import org.atlas.service.product.domain.entity.ProductImageEntity;
 import org.atlas.service.product.domain.entity.ProductStatus;
 import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase.Output.Product;
@@ -56,10 +54,6 @@ public class SearchProductUseCaseHandler implements SearchProductUseCase {
   private Product map(ProductEntity productEntity) {
     Product product = ObjectMapperUtil.getInstance().map(productEntity, Product.class);
     product.setDescription(productEntity.getDetail().getDescription().substring(0, 100));
-    List<ProductImageEntity> productImageEntities = productEntity.getImages();
-    if (CollectionUtils.isNotEmpty(productImageEntities)) {
-      product.setImageUrl(productImageEntities.get(0).getImageUrl());
-    }
     return product;
   }
 }

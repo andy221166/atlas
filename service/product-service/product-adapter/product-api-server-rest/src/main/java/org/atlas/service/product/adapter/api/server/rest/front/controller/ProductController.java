@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
+import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
   private final SearchProductUseCase searchProductUseCase;
+  private final GetProductUseCase getProductUseCase;
 
   @GetMapping
   public Response<SearchProductUseCase.Output> searchProduct(
@@ -40,6 +43,13 @@ public class ProductController {
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
     SearchProductUseCase.Output output = searchProductUseCase.handle(input);
+    return Response.success(output);
+  }
+
+  @GetMapping("/{id}")
+  public Response<GetProductUseCase.Output> getProduct(@PathVariable Integer id) throws Exception {
+    GetProductUseCase.Input input = new GetProductUseCase.Input(id);
+    GetProductUseCase.Output output = getProductUseCase.handle(input);
     return Response.success(output);
   }
 }

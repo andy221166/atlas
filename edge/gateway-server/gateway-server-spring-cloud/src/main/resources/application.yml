@@ -53,6 +53,7 @@ app:
         - "/api/gateway/**"
         - "/actuator/**"
         - "/api/auth/login"
+        - "/api/auth/logout"
         - "/api/front/users/register"
       secured-paths:
         - path: "/api/master/**"

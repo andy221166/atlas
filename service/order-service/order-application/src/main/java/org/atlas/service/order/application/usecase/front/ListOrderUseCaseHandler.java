@@ -32,7 +32,7 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
     Integer userId = UserContext.getUserId();
     PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findByUserId(userId,
         input.getPagingRequest());
-    if (orderEntityPage.isEmpty()) {
+    if (orderEntityPage.getTotalCount() == 0L) {
       return new Output(PagingResult.empty());
     }
 

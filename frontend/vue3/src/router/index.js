@@ -4,32 +4,42 @@ import Storefront from "@/pages/StorefrontPage.vue";
 import OrderHistoryPage from "@/pages/OrderHistoryPage.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import LoginPage from "@/pages/LoginPage.vue";
+import CheckoutPage from "@/pages/CheckoutPage.vue";
 
 const routes = [
   {
     path: "/",
-    redirect: () => {
+    name: "Storefront",
+    component: Storefront,
+    beforeEnter: (to, from, next) => {
       const accessToken = localStorage.getItem("accessToken");
-      return accessToken ? "/storefront" : "/login";
+      if (!accessToken || accessToken === "undefined") {
+        next("/login");
+      } else {
+        next();
+      }
     },
   },
   {
     path: "/login",
+    name: "Login",
     component: LoginPage,
   },
   {
     path: "/register",
+    name: "Register",
     component: RegisterPage,
-  },
-  {
-    path: "/storefront",
-    component: Storefront,
-    meta: { requiresAuth: true },
   },
   {
     path: "/order-history",
     name: "OrderHistory",
     component: OrderHistoryPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/checkout",
+    name: "Checkout",
+    component: CheckoutPage,
     meta: { requiresAuth: true },
   },
 ];

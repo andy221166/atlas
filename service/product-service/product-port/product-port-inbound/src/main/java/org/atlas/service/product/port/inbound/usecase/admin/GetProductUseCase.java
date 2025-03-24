@@ -37,7 +37,6 @@ public interface GetProductUseCase
     public static class Product {
 
       private Integer id;
-      private String code;
       private String name;
       private BigDecimal price;
       private ProductStatus status;

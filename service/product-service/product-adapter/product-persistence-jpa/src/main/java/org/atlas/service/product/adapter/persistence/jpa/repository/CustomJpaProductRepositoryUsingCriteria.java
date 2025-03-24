@@ -32,9 +32,10 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     CriteriaQuery<JpaProductEntity> criteriaQuery = criteriaBuilder.createQuery(JpaProductEntity.class);
     Root<JpaProductEntity> root = criteriaQuery.from(JpaProductEntity.class);
 
-    // Joins
+    // Fetch joins
     root.fetch("brand", JoinType.LEFT);
     root.fetch("detail", JoinType.LEFT);
+    root.fetch("images", JoinType.LEFT);
     root.fetch("categories", JoinType.LEFT);
 
     Specification<JpaProductEntity> spec = buildSpec(params);
@@ -66,6 +67,11 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
     Root<JpaProductEntity> root = query.from(JpaProductEntity.class);
+
+    // Joins
+    root.join("brand", JoinType.LEFT);
+    root.join("detail", JoinType.LEFT);
+    root.join("categories", JoinType.LEFT);
 
     query.select(criteriaBuilder.count(root.get("id")));
 

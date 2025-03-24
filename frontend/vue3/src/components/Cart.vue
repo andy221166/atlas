@@ -5,23 +5,23 @@
     <ul v-if="cart.length" class="list-group mb-3">
       <li
         v-for="item in cart"
-        :key="item.aggProduct.id"
+        :key="item.product.id"
         class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom py-2"
       >
         <div>
-          <strong>{{ item.aggProduct.name }}</strong>
+          <strong>{{ item.product.name }}</strong>
           <small class="text-muted d-block"
             >Quantity: {{ item.quantity }}</small
           >
           <button
-            @click="removeFromCart(item.aggProduct.id)"
+            @click="removeFromCart(item.product.id)"
             class="btn btn-sm btn-outline-danger mt-1"
           >
             Remove
           </button>
         </div>
         <span class="fw-bold"
-          >${{ (item.aggProduct.price * item.quantity).toFixed(2) }}</span
+          >${{ (item.product.price * item.quantity).toFixed(2) }}</span
         >
       </li>
     </ul>
@@ -59,19 +59,19 @@ export default {
       if (!store.state.cart.length) return;
 
       const orderItems = store.state.cart.map((item) => ({
-        productId: item.aggProduct.id,
+        productId: item.product.id,
         quantity: item.quantity,
       }));
 
       try {
         const response = await store.dispatch("placeOrder", orderItems);
         if (response.success) {
-          emit("orderPlaced"); // Emit event after successful orderPayload
+          emit("orderPlaced"); // Emit event after successful order
         } else {
-          alert(`Failed to place orderPayload: ${response.message}`);
+          alert(`Failed to place order: ${response.message}`);
         }
       } catch (error) {
-        alert("An unexpected error occurred while placing the orderPayload.");
+        alert("An unexpected error occurred while placing the order.");
       }
     };
 

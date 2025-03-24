@@ -15,6 +15,7 @@ import org.atlas.service.product.domain.entity.ProductStatus;
 import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.DeleteProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.ExportProductUseCase;
+import org.atlas.service.product.port.inbound.usecase.admin.GetProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.ImportProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase;
 import org.atlas.service.product.port.inbound.usecase.admin.UpdateProductUseCase;
@@ -42,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 
   private final ListProductUseCase listProductUseCase;
+  private final GetProductUseCase getProductUseCase;
   private final CreateProductUseCase createProductUseCase;
   private final UpdateProductUseCase updateProductUseCase;
   private final DeleteProductUseCase deleteProductUseCase;
@@ -74,6 +76,13 @@ public class ProductController {
     input.setCategoryIds(categoryIds);
     input.setPagingRequest(PagingRequest.of(page - 1, size));
     ListProductUseCase.Output output = listProductUseCase.handle(input);
+    return Response.success(output);
+  }
+
+  @GetMapping("/{id}")
+  public Response<GetProductUseCase.Output> getProduct(@PathVariable Integer id) throws Exception {
+    GetProductUseCase.Input input = new GetProductUseCase.Input(id);
+    GetProductUseCase.Output output = getProductUseCase.handle(input);
     return Response.success(output);
   }
 

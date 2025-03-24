@@ -39,12 +39,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in order.orderItems" :key="item.aggProduct.id">
-                  <td>{{ item.aggProduct.id }}</td>
-                  <td>{{ item.aggProduct.name }}</td>
-                  <td>${{ item.aggProduct.price.toFixed(2) }}</td>
+                <tr v-for="item in order.orderItems" :key="item.product.id">
+                  <td>{{ item.product.id }}</td>
+                  <td>{{ item.product.name }}</td>
+                  <td>${{ item.product.price.toFixed(2) }}</td>
                   <td>{{ item.quantity }}</td>
-                  <td>${{ (item.aggProduct.price * item.quantity).toFixed(2) }}</td>
+                  <td>${{ (item.product.price * item.quantity).toFixed(2) }}</td>
                 </tr>
               </tbody>
             </table>

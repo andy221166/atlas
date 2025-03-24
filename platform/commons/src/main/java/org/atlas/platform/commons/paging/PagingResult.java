@@ -24,10 +24,6 @@ public class PagingResult<T> {
     return new PagingResult<>(results, totalCount);
   }
 
-  public boolean isEmpty() {
-    return totalCount == 0L;
-  }
-
   public <U> PagingResult<U> map(Function<? super T, ? extends U> mapper) {
     List<U> mappedResults = results.stream()
         .map(mapper)
