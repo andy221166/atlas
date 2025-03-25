@@ -95,7 +95,6 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     }
     if (StringUtils.isNotBlank(criteria.getKeyword())) {
       spec.addFilter(QueryFilter.or(
-          QueryFilter.Condition.of("code", criteria.getKeyword(), QueryOperator.LIKE),
           QueryFilter.Condition.of("name", criteria.getKeyword(), QueryOperator.LIKE),
           QueryFilter.Condition.of("detail.description", criteria.getKeyword(), QueryOperator.LIKE),
           QueryFilter.Condition.of("attributes.value", criteria.getKeyword(), QueryOperator.LIKE)));

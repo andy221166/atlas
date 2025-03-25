@@ -1,10 +1,7 @@
 package org.atlas.platform.api.server.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.util.List;
-import java.util.Map;
 import lombok.Data;
-import org.atlas.platform.commons.paging.PagingResult;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -12,7 +9,6 @@ public class Response<T> {
 
   private boolean success;
   private T data;
-  private Map<String, Object> metadata;
   private Integer code;
   private String message;
 

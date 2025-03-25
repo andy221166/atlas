@@ -32,35 +32,35 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
     Integer userId = UserContext.getUserId();
     PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findByUserId(userId,
         input.getPagingRequest());
-    if (orderEntityPage.getTotalCount() == 0L) {
+    if (orderEntityPage.isEmpty()) {
       return new Output(PagingResult.empty());
     }
 
     // Fetch products
-    Map<Integer, Product> products = fetchProducts(orderEntityPage.getResults());
+    Map<Integer, Product> products = fetchProducts(orderEntityPage.getData());
 
     PagingResult<Order> orderPage = orderEntityPage.map(orderEntity -> {
-          Order order = ObjectMapperUtil.getInstance().map(orderEntity, Order.class);
+      Order order = ObjectMapperUtil.getInstance().map(orderEntity, Order.class);
 
-          List<OrderItem> orderItems = orderEntity.getOrderItems()
-              .stream()
-              .map(orderItemEntity -> {
-                OrderItem orderItem = ObjectMapperUtil.getInstance()
-                    .map(orderItemEntity, OrderItem.class);
+      List<OrderItem> orderItems = orderEntity.getOrderItems()
+          .stream()
+          .map(orderItemEntity -> {
+            OrderItem orderItem = ObjectMapperUtil.getInstance()
+                .map(orderItemEntity, OrderItem.class);
 
-                Product product = products.get(orderItemEntity.getProductId());
-                if (product != null) {
-                  orderItem.setProduct(
-                      ObjectMapperUtil.getInstance().map(product, Output.Product.class));
-                }
+            Product product = products.get(orderItemEntity.getProductId());
+            if (product != null) {
+              orderItem.setProduct(
+                  ObjectMapperUtil.getInstance().map(product, Output.Product.class));
+            }
 
-                return orderItem;
-              })
-              .toList();
-          order.setOrderItems(orderItems);
+            return orderItem;
+          })
+          .toList();
+      order.setOrderItems(orderItems);
 
-          return order;
-        });
+      return order;
+    });
 
     return new Output(orderPage);
   }

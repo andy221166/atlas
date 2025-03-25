@@ -33,13 +33,13 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
   public Output handle(Input input) throws Exception {
     // Query order
     PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findAll(input.getPagingRequest());
-    if (orderEntityPage.getTotalCount() == 0L) {
+    if (orderEntityPage.isEmpty()) {
       return new Output(PagingResult.empty());
     }
 
     // Fetch products
-    Map<Integer, User> users = fetchUsers(orderEntityPage.getResults());
-    Map<Integer, Product> products = fetchProducts(orderEntityPage.getResults());
+    Map<Integer, User> users = fetchUsers(orderEntityPage.getData());
+    Map<Integer, Product> products = fetchProducts(orderEntityPage.getData());
 
     PagingResult<Order> orderPage = orderEntityPage.map(orderEntity -> {
       Order order = ObjectMapperUtil.getInstance().map(orderEntity, Order.class);

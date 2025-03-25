@@ -3,6 +3,7 @@ package org.atlas.platform.persistence.jpa.core.paging;
 import lombok.experimental.UtilityClass;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -14,11 +15,9 @@ public class PagingConverter {
       Sort.Direction sortDirection = pagingRequest.isSortAscending() ?
           Sort.Direction.ASC : Sort.Direction.DESC;
       Sort sort = Sort.by(sortDirection, pagingRequest.getSortBy());
-      return org.springframework.data.domain.PageRequest.of(
-          pagingRequest.getPage(), pagingRequest.getSize(), sort);
+      return PageRequest.of(pagingRequest.getPage(), pagingRequest.getSize(), sort);
     } else {
-      return org.springframework.data.domain.PageRequest.of(
-          pagingRequest.getPage(), pagingRequest.getSize());
+      return PageRequest.of(pagingRequest.getPage(), pagingRequest.getSize());
     }
   }
 
@@ -26,6 +25,7 @@ public class PagingConverter {
     if (springPage.isEmpty()) {
       return PagingResult.empty();
     }
-    return PagingResult.of(springPage.getContent(), springPage.getTotalElements());
+    PagingRequest pagingRequest = PagingRequest.of(springPage.getNumber(), springPage.getSize());
+    return PagingResult.of(springPage.getContent(), springPage.getTotalElements(), pagingRequest);
   }
 }

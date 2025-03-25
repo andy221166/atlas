@@ -36,7 +36,7 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
         pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
         .mapList(jpaProductEntities, ProductEntity.class);
-    return PagingResult.of(productEntities, totalCount);
+    return PagingResult.of(productEntities, totalCount, pagingRequest);
   }
 
   @Override

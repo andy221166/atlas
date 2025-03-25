@@ -2,387 +2,439 @@
 	"info": {
 		"_postman_id": "3993390d-a826-4762-bf1c-b8b5da4cebfb",
 		"name": "atlas",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1919356"
 	},
 	"item": [
 		{
-			"name": "login admin",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"Aa@123456\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "{{api_host}}/api/users/sign-in"
-			},
-			"response": []
-		},
-		{
-			"name": "login customer",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"customer\",\r\n    \"password\": \"Aa@123456\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "{{api_host}}/api/users/sign-in"
-			},
-			"response": []
-		},
-		{
-			"name": "logout",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lckBhdGxhcy5vcmciLCJpc3MiOiJteS1hcHAiLCJpYXQiOjE3MjgyMjY5NjUsImV4cCI6MTczMDgxODk2NSwianRpIjoiY2MwNGQxYjQtNWM3Mi00ODRiLWEyOWUtYmIyYjJjNmYwNzAwIiwidXNlcl9pZCI6Miwicm9sZSI6IkNVU1RPTUVSIn0.VD2X1Ax0f16YEUHPFok7xtKRl7VSY2uPOGqm5qpkM5VQ1w_cohPNChBJeiLvVLOsS-f7IPOzk9TatLF1DbcPYynSmZyKFUVBPDU7nd95j9CZ12InHcvnGEeelDD371fypPWJytMm8-CG5UR8lDDEvcLFBy0HutQpoOOhXRj7uz5B8y-PHObLvlZtA_B04-mbuomDZUOIY0rghBuS2Og7OqTaDoQC5kOHgQAHbodP1xmflKGRx8AXw7Y72j-_T-6fxHADlEVKgsJvD7oCohH-W1x7WiTI0vL--ZKTsi3dZGUDR9djTlbDddFueZSVav6Ec0PHLf2pwyNYjJ1McG2gJg"
-					}
-				},
-				"method": "POST",
-				"header": [],
-				"url": "{{api_host}}/api/auth/logout"
-			},
-			"response": []
-		},
-		{
-			"name": "get profile",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "*/*"
-					},
-					{
-						"key": "Accept-Language",
-						"value": "en-US,en;q=0.9,vi;q=0.8,zh-CN;q=0.7,zh;q=0.6"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImlzcyI6Im15LWFwcCIsImlhdCI6MTcyODc1MTIyNSwiZXhwIjoxNzMxMzQzMjI1LCJqdGkiOiI3NDU5ZTQ3YS1jNmM0LTQ3NjYtODIwOC1jZjk3ZTdkOWZjYmYiLCJ1c2VyX2lkIjoyLCJyb2xlIjoiQ1VTVE9NRVIifQ.jlAfhl6nLQ6Bu4a290V3EdPRNPb8Xs5NHtS1Dt4lRXDVVvZZXGuO4O1DiBbX0ne26Xav3-92_aV_GuNr_tADOw1G1vfP282epx6x_53c_sRyEfKB0sCGgvelhhLqY83Q4M7XY9vYA6YkLF92xiAVHRRxJc0r88WJRfbTBGaC4fOCj9W1nP6qqyONYruUpF0gLA0XeWIyUQjxns9hE1R6GP74YLAZNo4N61r5qBZGTOK93N9F2n52TtsGrobz3eXUDn2tXOLMt-1pZhyXot4SxQAiY-ttMQMBFhG0W6--yyPsvsz9jE_zRfA6Qq6r8_1ik_rdD5iB_RJzmZkoI3PVjA"
-					},
-					{
-						"key": "Connection",
-						"value": "keep-alive"
-					},
-					{
-						"key": "Origin",
-						"value": "null"
-					},
-					{
-						"key": "Sec-Fetch-Dest",
-						"value": "empty"
-					},
-					{
-						"key": "Sec-Fetch-Mode",
-						"value": "cors"
-					},
-					{
-						"key": "Sec-Fetch-Site",
-						"value": "cross-site"
-					},
-					{
-						"key": "User-Agent",
-						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-					},
-					{
-						"key": "sec-ch-ua",
-						"value": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\""
-					},
-					{
-						"key": "sec-ch-ua-mobile",
-						"value": "?0"
-					},
-					{
-						"key": "sec-ch-ua-platform",
-						"value": "\"Windows\""
-					}
-				],
-				"url": "{{api_host}}/api/profile"
-			},
-			"response": []
-		},
-		{
-			"name": "list category",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huLmRvZSIsImlzcyI6Im15LWFwcCIsImlhdCI6MTczMDc5NjQ2NywiZXhwIjoxNzMzMzg4NDY3LCJqdGkiOiJmNDM5NzEwOC0zY2ZjLTQ2ZTUtYjQ4ZS1jNjBiYWNjYTM0NTEiLCJ1c2VyX2lkIjoxLCJyb2xlIjoiQ1VTVE9NRVIifQ.aKRchtHElmmVpAaOxGX_BZhj2iUGxduGVe4BHbsQK8jaW1zbqRfUYBMl5CfJHa4FeyT4vMyLm4l7Q4uJK2cBEo-dz8-eoOKiTWUcfIQF1wR6d0x_sCd4z8oXHc_qkFuz3aBVQ9j837m4jUUR9O5d8Io8FPUH9QzbmPsLkdT_UWzEDZM_b6T5NkMvGVCffq2vBrXPBbubnEXVtM48b_CBKyQY08leAIDHIeKGh_6-5T-BULy5vPUpsBVPF93tRu4wkqtt3e4xDow6smrFvzUB0tK7QDdI1XKWaVWBx-KfPgT5H4YnbuZIFs2peedrdJ73XTXJuILApy26o6e8Sf5_Gw"
-					}
-				},
-				"method": "GET",
-				"header": [],
-				"url": "{{api_host}}/api/categories"
-			},
-			"response": []
-		},
-		{
-			"name": "search product",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json, text/plain, */*"
-					},
-					{
-						"key": "Accept-Language",
-						"value": "en-US,en;q=0.9,vi;q=0.8,zh-CN;q=0.7,zh;q=0.6"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImlzcyI6Im15LWFwcCIsImlhdCI6MTczNDI3MjI0OSwiZXhwIjoxNzM2ODY0MjQ5LCJqdGkiOiIzOWE3ZjlkNy1mMGRjLTQ5Y2YtYmI3Yy1hODljZDU0MTU4YmEiLCJ1c2VyX2lkIjoyLCJyb2xlIjoiQ1VTVE9NRVIifQ.kYzUGQHulUl8RM-wamJ4_vqxNaNAsYIWJ1pgCYwnF-_SpOB6dbhrJBH--wnd0WpiiEnTD2cx1G9yzyD4WC7nDJ7oh89rD7f2x8I6MMt-2fcqzeoJB7QJSMUIhVi-hreYXNyh5Z-p8VYPqxxTC84HOYnPStYbmHYUZ-W_K2FX7E3-Xa-eP0D4Pkhr3gwCeKQ4Z5el3U9oOTEMpV46QPbNHeJXiZvEXZyWIVZdthaJKEwi2bpdAGQmTMsc-wxWm4JDR7hBlvGdQY7Zn3aqJl-FEBXpF4enW12O0fEPWSsJAChNcAVDYDnzF4_F9qKc7bMKrgUYZbsckETrMnieMMFAyQ"
-					},
-					{
-						"key": "Connection",
-						"value": "keep-alive"
-					},
-					{
-						"key": "Origin",
-						"value": "http://localhost:9000"
-					},
-					{
-						"key": "Referer",
-						"value": "http://localhost:9000/"
-					},
-					{
-						"key": "Sec-Fetch-Dest",
-						"value": "empty"
-					},
-					{
-						"key": "Sec-Fetch-Mode",
-						"value": "cors"
-					},
-					{
-						"key": "Sec-Fetch-Site",
-						"value": "same-site"
-					},
-					{
-						"key": "User-Agent",
-						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-					},
-					{
-						"key": "sec-ch-ua",
-						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
-					},
-					{
-						"key": "sec-ch-ua-mobile",
-						"value": "?0"
-					},
-					{
-						"key": "sec-ch-ua-platform",
-						"value": "\"Windows\""
-					}
-				],
-				"url": {
-					"raw": "{{api_host}}/api/products/search?page=1&size=9",
-					"host": [
-						"{{api_host}}"
-					],
-					"path": [
-						"api",
-						"products",
-						"search"
-					],
-					"query": [
+			"name": "auth",
+			"item": [
+				{
+					"name": "login admin",
+					"event": [
 						{
-							"key": "page",
-							"value": "1"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.environment.set(\"access_token\", response.data.accessToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"Aa@123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.environment.set(\"access_token\", response.data.accessToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Aa@123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "front",
+			"item": [
+				{
+					"name": "get profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						},
 						{
-							"key": "size",
-							"value": "9"
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "place order",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lckBhdGxhcy5vcmciLCJpc3MiOiJteS1hcHAiLCJpYXQiOjE3MjgwMjQwMTIsImV4cCI6MTczMDYxNjAxMiwianRpIjoiYzU1YjE1MjktZTVmYy00NWMyLWI4ZjQtYTJhMjQ4ZGUzMGE0IiwidXNlcl9pZCI6Miwicm9sZSI6IkNVU1RPTUVSIn0.KYsgeJXXkdWV2_F5PsaYClxp3KXQQI4qH3acutLDt1ykhqD30h8uWE0z_3PCF8CDm_H2cymxaKj0I0XZxYmy4P_HXxzyd06RDAqwldHbrov4K5Twpq2a3f1T6C_Pc02cv533ybbTTEn5Yq2B0x1kS6EDaMS2P2WxkN0mPKa-WpBvVwzl7WrC_41G4A7vRa-E_P47X-p3F7ofOVqoP8wywujfcV8MGINi80M08JuiLzMkjFT27J3qL_i-VfanM6KtyyY6zlwLZxU3z3tRHzSON7FaFOSq4Hin8ohL_vMP-8JKkAiZSA7eQWrSj-tOp2kdPVX75LekzifJjudtGwIo2A"
-					}
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 2\r\n        }\r\n    ],\r\n    \"address\": \"HongKong\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/front/users/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"front",
+								"users",
+								"profile"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": "{{api_host}}/api/orders/place"
-			},
-			"response": []
-		},
-		{
-			"name": "get order status",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lckBhdGxhcy5vcmciLCJpc3MiOiJteS1hcHAiLCJpYXQiOjE3MjgwMjQwMTIsImV4cCI6MTczMDYxNjAxMiwianRpIjoiYzU1YjE1MjktZTVmYy00NWMyLWI4ZjQtYTJhMjQ4ZGUzMGE0IiwidXNlcl9pZCI6Miwicm9sZSI6IkNVU1RPTUVSIn0.KYsgeJXXkdWV2_F5PsaYClxp3KXQQI4qH3acutLDt1ykhqD30h8uWE0z_3PCF8CDm_H2cymxaKj0I0XZxYmy4P_HXxzyd06RDAqwldHbrov4K5Twpq2a3f1T6C_Pc02cv533ybbTTEn5Yq2B0x1kS6EDaMS2P2WxkN0mPKa-WpBvVwzl7WrC_41G4A7vRa-E_P47X-p3F7ofOVqoP8wywujfcV8MGINi80M08JuiLzMkjFT27J3qL_i-VfanM6KtyyY6zlwLZxU3z3tRHzSON7FaFOSq4Hin8ohL_vMP-8JKkAiZSA7eQWrSj-tOp2kdPVX75LekzifJjudtGwIo2A"
-					}
+				{
+					"name": "search product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/front/products?keyword=Mac&page=1&size=9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"front",
+								"products"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "Mac"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [],
-				"url": "{{api_host}}/api/orders/1/status"
-			},
-			"response": []
-		},
-		{
-			"name": "list order",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json, text/plain, */*"
-					},
-					{
-						"key": "Accept-Language",
-						"value": "en-US,en;q=0.9,vi;q=0.8,zh-CN;q=0.7,zh;q=0.6"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImlzcyI6Im15LWFwcCIsImlhdCI6MTczNDI3MjI0OSwiZXhwIjoxNzM2ODY0MjQ5LCJqdGkiOiIzOWE3ZjlkNy1mMGRjLTQ5Y2YtYmI3Yy1hODljZDU0MTU4YmEiLCJ1c2VyX2lkIjoyLCJyb2xlIjoiQ1VTVE9NRVIifQ.kYzUGQHulUl8RM-wamJ4_vqxNaNAsYIWJ1pgCYwnF-_SpOB6dbhrJBH--wnd0WpiiEnTD2cx1G9yzyD4WC7nDJ7oh89rD7f2x8I6MMt-2fcqzeoJB7QJSMUIhVi-hreYXNyh5Z-p8VYPqxxTC84HOYnPStYbmHYUZ-W_K2FX7E3-Xa-eP0D4Pkhr3gwCeKQ4Z5el3U9oOTEMpV46QPbNHeJXiZvEXZyWIVZdthaJKEwi2bpdAGQmTMsc-wxWm4JDR7hBlvGdQY7Zn3aqJl-FEBXpF4enW12O0fEPWSsJAChNcAVDYDnzF4_F9qKc7bMKrgUYZbsckETrMnieMMFAyQ"
-					},
-					{
-						"key": "Connection",
-						"value": "keep-alive"
-					},
-					{
-						"key": "Origin",
-						"value": "http://localhost:9000"
-					},
-					{
-						"key": "Referer",
-						"value": "http://localhost:9000/"
-					},
-					{
-						"key": "Sec-Fetch-Dest",
-						"value": "empty"
-					},
-					{
-						"key": "Sec-Fetch-Mode",
-						"value": "cors"
-					},
-					{
-						"key": "Sec-Fetch-Site",
-						"value": "same-site"
-					},
-					{
-						"key": "User-Agent",
-						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-					},
-					{
-						"key": "sec-ch-ua",
-						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
-					},
-					{
-						"key": "sec-ch-ua-mobile",
-						"value": "?0"
-					},
-					{
-						"key": "sec-ch-ua-platform",
-						"value": "\"Windows\""
-					}
-				],
-				"url": {
-					"raw": "{{api_host}}/api/orders?page=1&size=20",
-					"host": [
-						"{{api_host}}"
-					],
-					"path": [
-						"api",
-						"orders"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1"
+				{
+					"name": "place order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lckBhdGxhcy5vcmciLCJpc3MiOiJteS1hcHAiLCJpYXQiOjE3MjgwMjQwMTIsImV4cCI6MTczMDYxNjAxMiwianRpIjoiYzU1YjE1MjktZTVmYy00NWMyLWI4ZjQtYTJhMjQ4ZGUzMGE0IiwidXNlcl9pZCI6Miwicm9sZSI6IkNVU1RPTUVSIn0.KYsgeJXXkdWV2_F5PsaYClxp3KXQQI4qH3acutLDt1ykhqD30h8uWE0z_3PCF8CDm_H2cymxaKj0I0XZxYmy4P_HXxzyd06RDAqwldHbrov4K5Twpq2a3f1T6C_Pc02cv533ybbTTEn5Yq2B0x1kS6EDaMS2P2WxkN0mPKa-WpBvVwzl7WrC_41G4A7vRa-E_P47X-p3F7ofOVqoP8wywujfcV8MGINi80M08JuiLzMkjFT27J3qL_i-VfanM6KtyyY6zlwLZxU3z3tRHzSON7FaFOSq4Hin8ohL_vMP-8JKkAiZSA7eQWrSj-tOp2kdPVX75LekzifJjudtGwIo2A",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "size",
-							"value": "20"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "report",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6Im15LWFwcCIsImlhdCI6MTczNDI2Mjk0NiwiZXhwIjoxNzM2ODU0OTQ2LCJqdGkiOiI5ZTJjMmQ3Zi1hMGJkLTQ1NjQtOTBjNS0wYTQ3MjkwMmMyMjUiLCJ1c2VyX2lkIjoxLCJyb2xlIjoiQURNSU4ifQ.ouoRNQU69cLzz3RFhEys0W2FWvKx9F7TMMB5VyHm8_m06ng6TDNB2k0QfYjFAUmiuvRHnf6-DwyBEQ7Xu44ccapL9YFlsTKyF9nRmIOZ-YKHZK35Hn3zgyAb3PT63Zl1t-C0FA4LMCaTa4GTrTQx0NIIYMDMAbsVwRGp-hMbkAosQFn9K6WQif1-_xQj-jdarjaz_nxW5zumT3JP8dO2W3PXsAYwm1vsU7sDnlV0PqJCi6qYRlmcARui-7g7Nt6D948vMGLTTCnu9MA7wSi8HJr-U_Z__XXuz1V0vH2TjEUZPCY4HDeIcjFJgcSftRV0pC5UjTDdecPZ_FWFwG6Eog"
-					}
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_host}}/api/reports?start_date=2024-12-01&end_date=2025-01-01",
-					"host": [
-						"{{api_host}}"
-					],
-					"path": [
-						"api",
-						"reports"
-					],
-					"query": [
-						{
-							"key": "start_date",
-							"value": "2024-12-01"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 2\r\n        }\r\n    ],\r\n    \"address\": \"HongKong\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "end_date",
-							"value": "2025-01-01"
+						"url": {
+							"raw": "{{base_url}}/api/orders/place",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"place"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "get order status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lckBhdGxhcy5vcmciLCJpc3MiOiJteS1hcHAiLCJpYXQiOjE3MjgwMjQwMTIsImV4cCI6MTczMDYxNjAxMiwianRpIjoiYzU1YjE1MjktZTVmYy00NWMyLWI4ZjQtYTJhMjQ4ZGUzMGE0IiwidXNlcl9pZCI6Miwicm9sZSI6IkNVU1RPTUVSIn0.KYsgeJXXkdWV2_F5PsaYClxp3KXQQI4qH3acutLDt1ykhqD30h8uWE0z_3PCF8CDm_H2cymxaKj0I0XZxYmy4P_HXxzyd06RDAqwldHbrov4K5Twpq2a3f1T6C_Pc02cv533ybbTTEn5Yq2B0x1kS6EDaMS2P2WxkN0mPKa-WpBvVwzl7WrC_41G4A7vRa-E_P47X-p3F7ofOVqoP8wywujfcV8MGINi80M08JuiLzMkjFT27J3qL_i-VfanM6KtyyY6zlwLZxU3z3tRHzSON7FaFOSq4Hin8ohL_vMP-8JKkAiZSA7eQWrSj-tOp2kdPVX75LekzifJjudtGwIo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders/1/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list order",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9,vi;q=0.8,zh-CN;q=0.7,zh;q=0.6"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImlzcyI6Im15LWFwcCIsImlhdCI6MTczNDI3MjI0OSwiZXhwIjoxNzM2ODY0MjQ5LCJqdGkiOiIzOWE3ZjlkNy1mMGRjLTQ5Y2YtYmI3Yy1hODljZDU0MTU4YmEiLCJ1c2VyX2lkIjoyLCJyb2xlIjoiQ1VTVE9NRVIifQ.kYzUGQHulUl8RM-wamJ4_vqxNaNAsYIWJ1pgCYwnF-_SpOB6dbhrJBH--wnd0WpiiEnTD2cx1G9yzyD4WC7nDJ7oh89rD7f2x8I6MMt-2fcqzeoJB7QJSMUIhVi-hreYXNyh5Z-p8VYPqxxTC84HOYnPStYbmHYUZ-W_K2FX7E3-Xa-eP0D4Pkhr3gwCeKQ4Z5el3U9oOTEMpV46QPbNHeJXiZvEXZyWIVZdthaJKEwi2bpdAGQmTMsc-wxWm4JDR7hBlvGdQY7Zn3aqJl-FEBXpF4enW12O0fEPWSsJAChNcAVDYDnzF4_F9qKc7bMKrgUYZbsckETrMnieMMFAyQ"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Origin",
+								"value": "http://localhost:9000"
+							},
+							{
+								"key": "Referer",
+								"value": "http://localhost:9000/"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-site"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/api/orders?page=1&size=20",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "list routes",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "{{api_host}}/api/gateway/routes"
-			},
-			"response": []
+			"name": "admin",
+			"item": []
 		},
 		{
-			"name": "refresh routes",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": "{{api_host}}/api/gateway/routes/refresh"
-			},
-			"response": []
+			"name": "master",
+			"item": [
+				{
+					"name": "list category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/api/master/categories",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"master",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "gateway",
+			"item": [
+				{
+					"name": "list routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/api/gateway/routes",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"api",
+								"gateway",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh routes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gateway/routes/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gateway",
+								"routes",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

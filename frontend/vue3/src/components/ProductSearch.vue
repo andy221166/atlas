@@ -160,8 +160,8 @@ export default {
         };
         const { data } = await searchProductApi(params);
         if (data.success) {
-          products.value = data.data.products.results;
-          totalPages.value = data.data.products.totalPages;
+          products.value = data.data;
+          totalPages.value = data.data.pagination.totalPages;
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -180,7 +180,7 @@ export default {
     };
 
     const handleImageError = (event) => {
-      event.target.src = require("@/assets/placeholder.png");
+      event.target.src = require("@/assets/product-placeholder.jpg");
     };
 
     onMounted(() => {

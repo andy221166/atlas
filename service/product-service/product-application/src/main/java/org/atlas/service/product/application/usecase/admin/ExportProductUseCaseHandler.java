@@ -31,7 +31,7 @@ public class ExportProductUseCaseHandler implements ExportProductUseCase {
     PagingResult<ProductEntity> productEntities = productRepositoryPort.findByCriteria(criteria,
         PagingRequest.unpaged());
     List<ProductRow> productRows = ObjectMapperUtil.getInstance().mapList(
-        productEntities.getResults(), ProductRow.class);
+        productEntities.getData(), ProductRow.class);
 
     byte[] fileContent;
     switch (input.getFileType()) {

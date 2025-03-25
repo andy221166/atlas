@@ -9,7 +9,12 @@ public interface ObjectMapper {
 
   <D> List<D> mapList(List<?> source, Class<D> destinationType);
 
-  <D> PagingResult<D> mapPage(PagingResult<?> source, Class<D> destinationType);
+  default <D> PagingResult<D> mapPage(PagingResult<?> source, Class<D> destinationType) {
+    if (source.isEmpty()) {
+      return PagingResult.empty();
+    }
+    return new PagingResult<>(mapList(source.getData(), destinationType), source.getPagination());
+  }
 
   void merge(Object source, Object destination);
 }

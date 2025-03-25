@@ -27,10 +27,10 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     StringBuilder sqlBuilder = new StringBuilder("""
         select distinct p
         from JpaProductEntity p
-        left join p.detail
-        left join p.attributes
-        left join p.brand
-        left join p.categories
+        left join p.detail d
+        left join p.attributes a
+        left join p.brand b
+        left join p.categories c
         """);
 
     Map<String, Object> params = new HashMap<>();
@@ -69,6 +69,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     String countSql = """
         select count(distinct p.id)
         from JpaProductEntity p
+        left join p.detail d
         left join p.brand b
         left join p.categories c
         left join JpaProductAttributeEntity a on p.id = a.product.id
@@ -87,8 +88,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     if (StringUtils.isNotBlank(criteria.getKeyword())) {
       whereClauseBuilder.append("""
           and (
-            lower(p.code) like :keyword
-            or lower(p.name) like :keyword
+            lower(p.name) like :keyword
             or lower(d.description) like :keyword
             or lower(a.value) like :keyword
           )

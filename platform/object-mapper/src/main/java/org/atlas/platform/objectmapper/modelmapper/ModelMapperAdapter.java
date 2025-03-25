@@ -40,14 +40,6 @@ public class ModelMapperAdapter implements ObjectMapper {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public <D> PagingResult<D> mapPage(PagingResult<?> source, Class<D> destinationType) {
-    if (source.getTotalCount() == 0L) {
-      return PagingResult.empty();
-    }
-    return PagingResult.of(mapList(source.getResults(), destinationType), source.getTotalCount());
-  }
-
   /**
    * Suppose you have a source object and a destination object, and you want to map properties from
    * the source to the destination. By default, ModelMapper will attempt to map all properties, even

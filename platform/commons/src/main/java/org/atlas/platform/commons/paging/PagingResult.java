@@ -13,21 +13,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagingResult<T> {
 
-  private List<T> results;
-  private long totalCount;
+  private List<T> data;
+  private Pagination pagination;
 
-  public static <T> PagingResult<T> empty() {
-    return new PagingResult<>(Collections.emptyList(), 0);
+  public boolean isEmpty() {
+    return pagination.getTotalRecords() == 0L;
   }
 
-  public static <T> PagingResult<T> of(List<T> results, long totalCount) {
-    return new PagingResult<>(results, totalCount);
+  public static <T> PagingResult<T> empty() {
+    return new PagingResult<>(Collections.emptyList(), Pagination.empty());
+  }
+
+  public static <T> PagingResult<T> of(List<T> data, long totalRecords,
+      PagingRequest pagingRequest) {
+    return new PagingResult<>(data, Pagination.of(totalRecords, pagingRequest));
   }
 
   public <U> PagingResult<U> map(Function<? super T, ? extends U> mapper) {
-    List<U> mappedResults = results.stream()
+    List<U> mappedData = data.stream()
         .map(mapper)
         .collect(Collectors.toList());
-    return new PagingResult<>(mappedResults, totalCount);
+    return new PagingResult<>(mappedData, pagination);
   }
 }
