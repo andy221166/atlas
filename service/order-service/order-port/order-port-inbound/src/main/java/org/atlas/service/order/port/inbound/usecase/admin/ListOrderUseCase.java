@@ -32,7 +32,7 @@ public interface ListOrderUseCase
   @AllArgsConstructor
   class Output {
 
-    private PagingResult<Order> orders;
+    private PagingResult<Order> orderPage;
 
     @Data
     @Builder

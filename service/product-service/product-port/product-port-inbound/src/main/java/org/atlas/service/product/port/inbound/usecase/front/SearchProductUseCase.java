@@ -1,18 +1,17 @@
 package org.atlas.service.product.port.inbound.usecase.front;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
-import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase.Output.Product;
+import org.checkerframework.checker.index.qual.Positive;
 
 public interface SearchProductUseCase
     extends UseCase<SearchProductUseCase.Input, SearchProductUseCase.Output> {
@@ -26,7 +25,7 @@ public interface SearchProductUseCase
     private String keyword;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
-    private Integer brandId;
+    private List<Integer> brandIds;
     private List<Integer> categoryIds;
     @Valid
     private PagingRequest pagingRequest;

@@ -6,11 +6,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.product.domain.entity.CategoryEntity;
-import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.domain.entity.ProductAttributeEntity;
+import org.atlas.service.product.domain.entity.ProductEntity;
 import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase.Output.Product;
 import org.atlas.service.product.port.outbound.repository.ProductRepositoryPort;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +22,19 @@ public class GetProductUseCaseHandler implements GetProductUseCase {
 
   @Override
   @Transactional(readOnly = true)
+  @Cacheable("products")
   public Output handle(Input input) throws Exception {
     ProductEntity productEntity = productRepositoryPort.findById(input.getId())
         .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
-    Product product = map(productEntity);
-    return new Output(product);
+    return map(productEntity);
   }
 
-  private Product map(ProductEntity productEntity) {
-    Product product = new Product();
+  private Output map(ProductEntity productEntity) {
+    Output product = new Output();
     product.setId(productEntity.getId());
     product.setName(productEntity.getName());
     product.setPrice(productEntity.getPrice());
+    product.setImageUrl(productEntity.getImageUrl());
     product.setDescription(productEntity.getDetail() != null ?
         productEntity.getDetail().getDescription() : null);
     if (CollectionUtils.isNotEmpty(productEntity.getAttributes())) {

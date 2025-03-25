@@ -80,7 +80,7 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
   @Override
   public void decreaseQuantityWithPessimisticLock(Integer id, Integer decrement) {
     try {
-      JpaProductEntity product = jpaProductRepository.findByIdWithAssociationsAndLock(id)
+      JpaProductEntity product = jpaProductRepository.findByIdWithLock(id)
           .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
       if (product.getQuantity() < decrement) {
         throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);

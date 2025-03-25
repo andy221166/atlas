@@ -68,9 +68,9 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {listOrderApi} from "@/api/order";
+import { api } from "@/api";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/layout/Navbar.vue";
 
 export default {
   components: {
@@ -86,9 +86,9 @@ export default {
     const fetchOrders = async () => {
       try {
         const params = { page: currentPage.value, size: pageSize };
-        const { data } = await listOrderApi(params);
-        orders.value = data.data.records;
-        totalPages.value = data.data.totalPages;
+        const { data } = await api.orders.list(params);
+        orders.value = data.data;
+        totalPages.value = data.pagination.totalPages;
       } catch (error) {
         console.error("Error fetching orders:", error);
       }

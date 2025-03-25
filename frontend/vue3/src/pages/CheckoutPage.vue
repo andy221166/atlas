@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Cart from '@/components/Cart.vue';
-import OrderTracking from '@/components/OrderTracking.vue';
+import Cart from '@/components/order/Cart.vue';
+import OrderTracking from '@/components/order/OrderTracking.vue';
 
 export default {
   components: {

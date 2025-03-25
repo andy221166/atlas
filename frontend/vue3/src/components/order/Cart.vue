@@ -16,13 +16,12 @@
           <button
             @click="removeFromCart(item.product.id)"
             class="btn btn-sm btn-outline-danger mt-1"
+            :disabled="isProcessing"
           >
             Remove
           </button>
         </div>
-        <span class="fw-bold"
-          >${{ (item.product.price * item.quantity).toFixed(2) }}</span
-        >
+        <span class="fw-bold">${{ getItemTotal(item) }}</span>
       </li>
     </ul>
     <p v-else class="text-center text-muted">Your cart is empty.</p>
@@ -35,51 +34,67 @@
     <button
       @click="placeOrder"
       class="btn btn-success w-100 mt-4"
-      :disabled="!cart.length"
+      :disabled="!cart.length || isProcessing"
     >
-      Place Order
+      {{ isProcessing ? 'Processing...' : 'Place Order' }}
     </button>
   </div>
 </template>
 
 <script>
-import {computed} from "vue";
-import {useStore} from "vuex";
+import { computed, ref } from "vue";
 
 export default {
-  emits: ["orderPlaced"],
-  setup(_, { emit }) {
-    const store = useStore();
+  props: {
+    cart: {
+      type: Array,
+      required: true
+    }
+  },
+  emits: ["orderPlaced", "removeFromCart", "placeOrder"],
+  setup(props, { emit }) {
+    const isProcessing = ref(false);
 
-    // Make cart and cartTotal reactive
-    const cart = computed(() => store.state.cart);
-    const cartTotal = computed(() => store.getters.cartTotal);
+    const cartTotal = computed(() => {
+      return props.cart.reduce((total, item) => {
+        return total + (item.product.price * item.quantity);
+      }, 0);
+    });
+    
+    const getItemTotal = (item) => {
+      return (item.product.price * item.quantity).toFixed(2);
+    };
+
+    const removeFromCart = (productId) => {
+      emit("removeFromCart", productId);
+    };
 
     const placeOrder = async () => {
-      if (!store.state.cart.length) return;
-
-      const orderItems = store.state.cart.map((item) => ({
-        productId: item.product.id,
-        quantity: item.quantity,
-      }));
+      if (!props.cart.length || isProcessing.value) return;
 
       try {
-        const response = await store.dispatch("placeOrder", orderItems);
-        if (response.success) {
-          emit("orderPlaced"); // Emit event after successful order
-        } else {
-          alert(`Failed to place order: ${response.message}`);
-        }
+        isProcessing.value = true;
+        const orderItems = props.cart.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        }));
+
+        const orderId = await emit("placeOrder", orderItems);
+        emit("orderPlaced", orderId);
       } catch (error) {
-        alert("An unexpected error occurred while placing the order.");
+        console.error("Failed to place order:", error);
+      } finally {
+        isProcessing.value = false;
       }
     };
 
     return {
-      cart,
+      cart: computed(() => props.cart),
       cartTotal,
-      removeFromCart: (productId) => store.commit("removeFromCart", productId),
+      getItemTotal,
+      removeFromCart,
       placeOrder,
+      isProcessing
     };
   },
 };

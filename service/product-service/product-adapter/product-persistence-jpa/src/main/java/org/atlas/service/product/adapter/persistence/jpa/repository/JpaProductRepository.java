@@ -4,6 +4,7 @@ import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.atlas.platform.persistence.jpa.core.repository.JpaBaseRepository;
 import org.atlas.service.product.adapter.persistence.jpa.entity.JpaProductEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity, Integer>{
+public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity, Integer> {
 
   @Query("""
         select p
@@ -25,11 +26,12 @@ public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity
   Optional<JpaProductEntity> findByIdWithAssociations(@Param("id") Integer id);
 
   @Query("""
-        select p from JpaProductEntity p
+        select p
+        from JpaProductEntity p
         where p.id = :id
       """)
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  Optional<JpaProductEntity> findByIdWithAssociationsAndLock(@Param("id") Integer id);
+  Optional<JpaProductEntity> findByIdWithLock(@Param("id") Integer id);
 
   @Modifying
   @Query("""
@@ -38,5 +40,5 @@ public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity
       where p.id = :id
       and p.quantity >= :decrement
       """)
-  int decreaseQuantity(@Param("id") Integer id, @Param("quantity") Integer decrement);
+  int decreaseQuantity(@Param("id") Integer id, @Param("decrement") Integer decrement);
 }

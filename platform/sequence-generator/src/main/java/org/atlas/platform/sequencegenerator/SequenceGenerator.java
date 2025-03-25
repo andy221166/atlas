@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SequenceGenerator {
 
-  private JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
   @Transactional
   public String generate(SequenceType sequenceType) {

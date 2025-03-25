@@ -12,14 +12,6 @@
           <li class="nav-item me-3">
             <span class="nav-link">Welcome, {{ profile?.firstName }} {{ profile?.lastName }}</span>
           </li>
-          <li class="nav-item me-3">
-            <router-link to="/checkout" class="nav-link position-relative">
-              <i class="bi bi-cart3 fs-5"></i>
-              <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ cartItemCount }}
-              </span>
-            </router-link>
-          </li>
           <li class="nav-item">
             <button class="btn btn-sm btn-danger" @click="logout">Logout</button>
           </li>
@@ -32,17 +24,16 @@
 <script>
 import {useStore} from 'vuex';
 import {computed} from 'vue';
-import {logoutApi} from '@/api/auth';
+import { api } from '@/api';
 
 export default {
   setup() {
     const store = useStore();
-    const profile = computed(() => store.state.profile);
-    const cartItemCount = computed(() => store.state.cart.reduce((total, item) => total + item.quantity, 0));
+    const profile = computed(() => store.state.user.profile);
 
     const logout = async () => {
       try {
-        await logoutApi();
+        await api.auth.logout();
         localStorage.removeItem('accessToken');
         window.location.href = '/';
       } catch (error) {
@@ -52,13 +43,8 @@ export default {
 
     return {
       profile,
-      cartItemCount,
       logout,
     };
   },
 };
 </script>
-
-<style>
-@import 'bootstrap-icons/font/bootstrap-icons.css';
-</style>

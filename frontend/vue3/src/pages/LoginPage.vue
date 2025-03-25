@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import {loginApi} from '@/api/auth';
-import Alert from '@/components/Alert.vue';
-import FormField from '@/components/FormField.vue';
+import { api } from '@/api';
+import Alert from '@/components/common/Alert.vue';
+import FormField from '@/components/common/FormField.vue';
 
 export default {
   name: 'Login',
@@ -33,7 +33,7 @@ export default {
   methods: {
     async login() {
       try {
-        const { data } = await loginApi(this.username, this.password);
+        const { data } = await api.auth.login(this.username, this.password);
         if (data.success) {
           localStorage.setItem('accessToken', data.data.accessToken);
           this.$router.push('/');

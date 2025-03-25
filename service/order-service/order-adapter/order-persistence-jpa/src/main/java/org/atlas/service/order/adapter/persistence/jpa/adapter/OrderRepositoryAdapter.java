@@ -45,6 +45,10 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
   @Override
   public void insert(OrderEntity orderEntity) {
     JpaOrderEntity jpaOrder = ObjectMapperUtil.getInstance().map(orderEntity, JpaOrderEntity.class);
+
+    // To avoid null order_id
+    jpaOrder.getOrderItems().forEach(jpaOrderItem -> jpaOrderItem.setOrder(jpaOrder));
+
     jpaOrderRepository.insert(jpaOrder);
     orderEntity.setId(jpaOrder.getId());
   }

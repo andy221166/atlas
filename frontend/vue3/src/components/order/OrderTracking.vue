@@ -58,27 +58,27 @@
 
 <script>
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {useStore} from "vuex";
 import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {getOrderApi} from "@/api/order";
+import { api } from "@/api";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
 
 const NOTIFICATION_BASE_URL = process.env.VUE_APP_NOTIFICATION_BASE_URL;
 
 export default {
-  setup() {
-    const store = useStore();
-    const orderId = computed(() => store.state.orderTracking.orderId);
-
-    const longPollingOrderStatus = ref(store.state.orderTracking.status);
-    const longPollingCanceledReason = ref(
-      store.state.orderTracking.canceledReason
-    );
-    const wsOrderStatus = ref(store.state.orderTracking.status);
-    const wsCanceledReason = ref(store.state.orderTracking.canceledReason);
-    const sseOrderStatus = ref(store.state.orderTracking.status);
-    const sseCanceledReason = ref(store.state.orderTracking.canceledReason);
+  props: {
+    orderId: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const longPollingOrderStatus = ref('PROCESSING');
+    const longPollingCanceledReason = ref(null);
+    const wsOrderStatus = ref('PROCESSING');
+    const wsCanceledReason = ref(null);
+    const sseOrderStatus = ref('PROCESSING');
+    const sseCanceledReason = ref(null);
 
     let pollingInterval = null;
     let stompClient = null;
@@ -87,8 +87,8 @@ export default {
     const startLongPolling = (orderId) => {
       const pollOrder = async () => {
         try {
-          const response = await getOrderApi(orderId);
-          const { status, canceledReason } = response.data.data;
+          const { data } = await api.orders.getStatus(orderId);
+          const { status, canceledReason } = data.data;
 
           longPollingOrderStatus.value = status;
           longPollingCanceledReason.value = canceledReason || null;
@@ -114,13 +114,21 @@ export default {
     const connectWebSocket = (orderId) => {
       if (stompClient) stompClient.disconnect();
 
-      const socket = new SockJS(`${NOTIFICATION_BASE_URL}/notification/ws`);
+      const socket = new SockJS(`${api.notifications.getWebSocketUrl()}`);
       stompClient = Stomp.over(socket);
+      
+      stompClient.onStompError = (frame) => {
+        console.error('WebSocket connection error:', frame);
+        startLongPolling(orderId);
+      };
+
       stompClient.connect({}, () => {
         stompClient.subscribe(`/topic/order/${orderId}`, (message) => {
           const { orderStatus, canceledReason } = JSON.parse(message.body);
           wsOrderStatus.value = orderStatus;
           wsCanceledReason.value = canceledReason || null;
+          
+          stopLongPolling();
         });
       });
     };
@@ -128,45 +136,55 @@ export default {
     const connectSSE = (orderId) => {
       if (eventSource) eventSource.close();
 
-      eventSource = new EventSource(
-        `${NOTIFICATION_BASE_URL}/notification/sse/orders/${orderId}/status`
-      );
+      eventSource = new EventSource(api.notifications.getSSEUrl(orderId));
+      
+      eventSource.onerror = (error) => {
+        console.error('SSE connection error:', error);
+        eventSource.close();
+        startLongPolling(orderId);
+      };
+
       eventSource.addEventListener("orderStatus", (event) => {
         const { orderStatus, canceledReason } = JSON.parse(event.data);
         sseOrderStatus.value = orderStatus;
         sseCanceledReason.value = canceledReason || null;
+        
+        stopLongPolling();
       });
-      eventSource.onerror = () => {
-        eventSource.close();
-      };
     };
 
-    watch(orderId, (newOrderId) => {
+    const cleanup = () => {
+      stopLongPolling();
+      if (stompClient) {
+        stompClient.disconnect();
+        stompClient = null;
+      }
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+    };
+
+    watch(() => props.orderId, (newOrderId) => {
       resetOrderTrackingInfo();
       if (newOrderId) {
         startLongPolling(newOrderId);
         connectWebSocket(newOrderId);
         connectSSE(newOrderId);
       } else {
-        stopLongPolling();
-        if (stompClient) stompClient.disconnect();
-        if (eventSource) eventSource.close();
+        cleanup();
       }
     });
 
     onMounted(() => {
-      if (orderId.value) {
-        startLongPolling(orderId.value);
-        connectWebSocket(orderId.value);
-        connectSSE(orderId.value);
+      if (props.orderId) {
+        startLongPolling(props.orderId);
+        connectWebSocket(props.orderId);
+        connectSSE(props.orderId);
       }
     });
 
-    onBeforeUnmount(() => {
-      stopLongPolling();
-      if (stompClient) stompClient.disconnect();
-      if (eventSource) eventSource.close();
-    });
+    onBeforeUnmount(cleanup);
 
     const resetOrderTrackingInfo = () => {
       longPollingOrderStatus.value = "PROCESSING";
@@ -178,7 +196,7 @@ export default {
     };
 
     return {
-      orderId,
+      orderId: computed(() => props.orderId),
       longPollingOrderStatus,
       longPollingCanceledReason,
       wsOrderStatus,

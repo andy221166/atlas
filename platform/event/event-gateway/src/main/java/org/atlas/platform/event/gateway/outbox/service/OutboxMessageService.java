@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.event.contract.DomainEvent;
+import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.event.gateway.EventPublisher;
 import org.atlas.platform.event.gateway.outbox.config.OutboxProps;
 import org.atlas.platform.event.gateway.outbox.model.OutboxMessage;
@@ -73,8 +74,13 @@ public class OutboxMessageService {
   @Transactional(propagation = Propagation.REQUIRES_NEW) // Each message has its own transaction
   public void processOutboxMessage(OutboxMessage outboxMessage) {
     try {
+      // Parse event JSON string to object
+      String eventTypeName = (String) JsonUtil.getInstance()
+          .getNodeValue(outboxMessage.getEvent(), "eventType");
+      EventType eventType = EventType.valueOf(eventTypeName);
       DomainEvent event = JsonUtil.getInstance()
-          .toObject(outboxMessage.getEvent(), DomainEvent.class);
+          .toObject(outboxMessage.getEvent(), eventType.getEventClass());
+
       eventPublisher.publish(event, outboxMessage.getDestination());
 
       outboxMessage.toBeProcessed();

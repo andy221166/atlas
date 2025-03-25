@@ -115,9 +115,9 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
       whereClauseBuilder.append(" and p.isActive = :isActive ");
       params.put("isActive", criteria.getIsActive());
     }
-    if (criteria.getBrandId() != null) {
-      whereClauseBuilder.append(" and b.id = :brandId ");
-      params.put("brandId", criteria.getBrandId());
+    if (CollectionUtils.isNotEmpty(criteria.getBrandIds())) {
+      whereClauseBuilder.append(" and b.id IN (:brandIds) ");
+      params.put("brandIds", criteria.getBrandIds());
     }
     if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
       whereClauseBuilder.append(" and c.id IN (:categoryIds) ");

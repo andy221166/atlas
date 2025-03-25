@@ -16,6 +16,6 @@ public class FindProductCriteria {
   private ProductStatus status;
   private Date availableFrom;
   private Boolean isActive;
-  private Integer brandId;
+  private List<Integer> brandIds;
   private List<Integer> categoryIds;
 }

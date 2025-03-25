@@ -1,70 +1,82 @@
 // router/index.js
 import {createRouter, createWebHistory} from "vue-router";
-import Storefront from "@/pages/StorefrontPage.vue";
-import OrderHistoryPage from "@/pages/OrderHistoryPage.vue";
-import RegisterPage from "@/pages/RegisterPage.vue";
-import LoginPage from "@/pages/LoginPage.vue";
-import CheckoutPage from "@/pages/CheckoutPage.vue";
+
+// Lazy load components for better performance
+const Storefront = () => import("@/pages/StorefrontPage.vue");
+const OrderHistoryPage = () => import("@/pages/OrderHistoryPage.vue");
+const RegisterPage = () => import("@/pages/RegisterPage.vue");
+const LoginPage = () => import("@/pages/LoginPage.vue");
+const CheckoutPage = () => import("@/pages/CheckoutPage.vue");
+
+// Navigation guard helper
+const checkAuth = (to, from, next) => {
+  const accessToken = localStorage.getItem("accessToken");
+  const isAuthenticated = accessToken && accessToken !== "undefined";
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return next({ 
+      path: "/login",
+      query: { redirect: to.fullPath }
+    });
+  }
+
+  if (to.path === "/login" && isAuthenticated) {
+    return next("/");
+  }
+
+  next();
+};
 
 const routes = [
   {
     path: "/",
     name: "Storefront",
     component: Storefront,
-    beforeEnter: (to, from, next) => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken || accessToken === "undefined") {
-        next("/login");
-      } else {
-        next();
-      }
-    },
+    meta: { requiresAuth: true }
   },
   {
     path: "/login",
     name: "Login",
     component: LoginPage,
+    meta: { requiresAuth: false }
   },
   {
     path: "/register",
     name: "Register",
     component: RegisterPage,
+    meta: { requiresAuth: false }
   },
   {
     path: "/order-history",
     name: "OrderHistory",
     component: OrderHistoryPage,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true }
   },
   {
     path: "/checkout",
     name: "Checkout",
     component: CheckoutPage,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true }
   },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/"
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});
-
-router.beforeEach((to, from, next) => {
-  const accessToken = localStorage.getItem("accessToken");
-
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // Redirect to login if the route requires auth and token is missing or invalid
-    if (!accessToken || accessToken === "undefined") {
-      return next("/login");
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
     }
   }
-
-  // If user is logged in and tries to access the login page, redirect to storefront
-  if (to.path === "/login" && accessToken) {
-    return next("/storefront");
-  }
-
-  next(); // Allow navigation for other cases
 });
+
+// Global navigation guard
+router.beforeEach(checkAuth);
 
 export default router;

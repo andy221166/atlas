@@ -12,10 +12,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaOrderRepository extends JpaBaseRepository<JpaOrderEntity, Integer> {
 
+  @Query("""
+      select o
+      from JpaOrderEntity o
+      left join fetch o.orderItems
+      where o.userId = :userId
+      """)
   Page<JpaOrderEntity> findByUserId(@Param("userId") Integer userId, Pageable pageable);
 
   @Query("""
-      select o from JpaOrderEntity o
+      select o
+      from JpaOrderEntity o
       left join fetch o.orderItems
       where o.id = :id
       """)

@@ -15,14 +15,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,13 +31,26 @@ import org.atlas.service.product.domain.entity.ProductStatus;
 
 @Entity
 @Table(name = "product")
-@NamedEntityGraph(
-    name = "JpaProductEntity.findByCriteria",
-    attributeNodes = {
-        @NamedAttributeNode("id"),
-        @NamedAttributeNode("name"),
-        @NamedAttributeNode("price"),
-        @NamedAttributeNode("imageUrl")
+@NamedEntityGraphs(
+    {
+        @NamedEntityGraph(
+            name = "JpaProductEntity.findByCriteria",
+            attributeNodes = {
+                @NamedAttributeNode("id"),
+                @NamedAttributeNode("name"),
+                @NamedAttributeNode("price"),
+                @NamedAttributeNode("imageUrl")
+            }
+        ),
+        @NamedEntityGraph(
+            name = "JpaProductEntity.findByIdWithAssociations",
+            attributeNodes = {
+                @NamedAttributeNode("detail"),
+                @NamedAttributeNode("attributes"),
+                @NamedAttributeNode("brand"),
+                @NamedAttributeNode("categories")
+            }
+        )
     }
 )
 @Getter
@@ -78,7 +90,7 @@ public class JpaProductEntity extends JpaBaseEntity {
   private JpaProductDetailEntity detail;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
-  private List<JpaProductAttributeEntity> attributes = new ArrayList<>();
+  private Set<JpaProductAttributeEntity> attributes = new HashSet<>();
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(

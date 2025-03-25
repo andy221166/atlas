@@ -1,6 +1,6 @@
 package org.atlas.service.order.adapter.api.server.rest.admin.controller;
 
-import org.atlas.platform.api.server.rest.response.Response;
+import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase;
@@ -24,7 +24,7 @@ public class OrderController {
   }
 
   @GetMapping
-  public Response<ListOrderUseCase.Output> listOrder(
+  public PagingResponse<ListOrderUseCase.Output.Order> listOrder(
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
   ) throws Exception {
@@ -32,6 +32,6 @@ public class OrderController {
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
     ListOrderUseCase.Output output = listOrderUseCase.handle(input);
-    return Response.success(output);
+    return PagingResponse.success(output.getOrderPage());
   }
 }

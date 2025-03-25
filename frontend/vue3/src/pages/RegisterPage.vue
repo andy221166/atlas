@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import {registerApi} from '@/api/user';
-import Alert from '@/components/Alert.vue';
-import FormField from '@/components/FormField.vue';
+import { api } from '@/api';
+import Alert from '@/components/common/Alert.vue';
+import FormField from '@/components/common/FormField.vue';
 
 export default {
   name: 'Register',
@@ -50,7 +50,7 @@ export default {
       }
 
       try {
-        const { data } = await registerApi(this.username, this.password, this.firstName, this.lastName, this.email, this.phoneNumber);
+        const { data } = await api.users.register(this.username, this.password, this.firstName, this.lastName, this.email, this.phoneNumber);
         if (data.success) {
           this.successMessage = 'You registered successfully';
           this.resetForm();

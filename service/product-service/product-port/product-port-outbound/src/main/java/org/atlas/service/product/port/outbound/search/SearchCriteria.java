@@ -10,6 +10,6 @@ public class SearchCriteria {
   private String keyword;
   private BigDecimal minPrice;
   private BigDecimal maxPrice;
-  private Integer brandId;
+  private List<Integer> brandIds;
   private List<Integer> categoryIds;
 }

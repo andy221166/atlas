@@ -1,5 +1,6 @@
 package org.atlas.service.product.port.inbound.usecase.front;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -21,28 +22,22 @@ public interface GetProductUseCase
     private Integer id;
   }
 
+  /**
+   * Implement {@link Serializable} to support caching
+   */
   @Data
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  class Output {
+  class Output implements Serializable {
 
-    private Product product;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Product {
-
-      private Integer id;
-      private String name;
-      private BigDecimal price;
-      private String imageUrl;
-      private String description;
-      private Map<String, String> attributes;
-      private String brand;
-      private List<String> categories;
-    }
+    private Integer id;
+    private String name;
+    private BigDecimal price;
+    private String imageUrl;
+    private String description;
+    private Map<String, String> attributes;
+    private String brand;
+    private List<String> categories;
   }
 }

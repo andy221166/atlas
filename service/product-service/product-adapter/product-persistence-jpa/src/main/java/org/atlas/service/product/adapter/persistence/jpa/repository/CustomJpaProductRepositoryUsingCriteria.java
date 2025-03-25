@@ -114,8 +114,8 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     if (criteria.getIsActive() != null) {
       spec.addFilter(QueryFilter.of("isActive", criteria.getIsActive(), QueryOperator.EQUAL));
     }
-    if (criteria.getBrandId() != null) {
-      spec.addFilter(QueryFilter.of("brand.id", criteria.getBrandId(), QueryOperator.EQUAL));
+    if (CollectionUtils.isNotEmpty(criteria.getBrandIds())) {
+      spec.addFilter(QueryFilter.of("brand.id", criteria.getCategoryIds(), QueryOperator.IN));
     }
     if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
       spec.addFilter(QueryFilter.of("categories.id", criteria.getCategoryIds(), QueryOperator.IN));
