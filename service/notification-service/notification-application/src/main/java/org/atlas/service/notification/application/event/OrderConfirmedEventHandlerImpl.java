@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.commons.util.FileUtil;
@@ -20,6 +21,7 @@ import org.atlas.service.notification.port.outbound.realtime.sse.SsePort;
 import org.atlas.service.notification.port.outbound.realtime.websocket.WebSocketNotification;
 import org.atlas.service.notification.port.outbound.realtime.websocket.WebSocketPort;
 import org.atlas.service.notification.port.outbound.template.EmailTemplatePort;
+import org.atlas.service.notification.port.outbound.template.ResolveTemplateException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,9 +37,23 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
 
   @Override
   public void handle(OrderConfirmedEvent event) {
-    notifyEmail(event);
-    notifySse(event);
-    notifyWebSocket(event);
+    CompletableFuture.allOf(
+        CompletableFuture.runAsync(() -> notifyEmail(event))
+            .exceptionally(e -> {
+              log.error("Failed to notify email for event {}", event.getEventId(), e);
+              return null;
+            }),
+        CompletableFuture.runAsync(() -> notifySse(event))
+            .exceptionally(e -> {
+              log.error("Failed to notify SSE for event {}", event.getEventId(), e);
+              return null;
+            }),
+        CompletableFuture.runAsync(() -> notifyWebSocket(event))
+            .exceptionally(e -> {
+              log.error("Failed to notify WebSocket for event {}", event.getEventId(), e);
+              return null;
+            })
+    ).join();
   }
 
   private void notifyEmail(OrderConfirmedEvent event) {
@@ -50,7 +66,7 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     try {
       subject = emailTemplatePort.resolveSubject("order_confirmed", model);
     } catch (Exception e) {
-      throw new RuntimeException("Could not resolve subject template", e);
+      throw new ResolveTemplateException("Could not resolve subject template", e);
     }
 
     // Body
@@ -58,7 +74,7 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     try {
       body = emailTemplatePort.resolveBody("order_confirmed", model);
     } catch (Exception e) {
-      throw new RuntimeException("Could not resolve body template", e);
+      throw new ResolveTemplateException("Could not resolve body template", e);
     }
 
     // Attachments (demo)
@@ -67,7 +83,7 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     try {
       attachmentFile = FileUtil.readResourceFile("email/attachment/coffee.jpg");
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new ResolveTemplateException("Could not resolve attachment", e);
     }
     attachment = new Attachment("email/attachment/coffee.jpg", attachmentFile);
 

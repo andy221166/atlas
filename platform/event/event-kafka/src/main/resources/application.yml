@@ -8,6 +8,6 @@ app:
   event:
     kafka:
       topic:
-        user-events: user_events
-        product-events: product_events
-        order-events: order_events
+        user-events: user-events
+        product-events: product-events
+        order-events: order-events

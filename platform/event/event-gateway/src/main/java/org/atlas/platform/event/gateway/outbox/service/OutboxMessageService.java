@@ -51,10 +51,10 @@ public class OutboxMessageService {
 
   @Transactional
   public void processPendingOutboxMessages() {
-    // Find and lock pending outbox messages
-    List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatusWithLock(
+    // Find pending outbox messages
+    List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatusOrderByCreatedAt(
         OutboxMessageStatus.PENDING);
-    log.info("Found and locked {} pending outbox message(s)", outboxMessages.size());
+    log.info("Found {} pending outbox message(s)", outboxMessages.size());
     if (outboxMessages.isEmpty()) {
       return;
     }

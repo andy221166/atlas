@@ -29,7 +29,7 @@ public class OrderEventsConsumer extends KafkaEventConsumer {
   // Non-blocking retry
   @RetryableTopic(
       attempts = "4", // max retries is 3
-      topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-retry-0, order-retry-1, order-retry-2, etc.
+      topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-events-retry-0, order-events-retry-1, order-events-retry-2, etc.
       backoff = @Backoff(delay = 1000, multiplier = 2, random = true) // Exponential backoff
   )
   public void consumeMessage(ConsumerRecord<String, DomainEvent> record) {
@@ -38,10 +38,11 @@ public class OrderEventsConsumer extends KafkaEventConsumer {
 
   @Override
   protected void handleEvent(DomainEvent event) {
-    if (event.getEventType().equals(EventType.ORDER_CREATED)) {
+    EventType eventType = EventType.findEventType(event.getClass());
+    if (eventType.equals(EventType.ORDER_CREATED)) {
       orderCreatedEventHandler.handle((OrderCreatedEvent) event);
     } else {
-      log.debug("Ignoring unsupported event type: {}", event.getEventType());
+      log.debug("Ignoring unsupported event type: {}", eventType);
     }
   }
 }

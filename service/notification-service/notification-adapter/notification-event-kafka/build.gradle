@@ -4,4 +4,5 @@ dependencies {
 
     // Service
     api project(':notification-port-inbound')
+    api project(':notification-port-outbound')
 }

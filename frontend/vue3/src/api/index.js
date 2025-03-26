@@ -147,8 +147,8 @@ export const api = {
   // Notification methods
   notifications: {
     getWebSocketUrl: () => 
-      `${API_BASE_URL}${API_ENDPOINTS.NOTIFICATIONS.WS}`,
+      `${NOTIFICATION_BASE_URL}${API_ENDPOINTS.NOTIFICATIONS.WS}`,
     getSSEUrl: (orderId) => 
-      `${API_BASE_URL}${API_ENDPOINTS.NOTIFICATIONS.SSE(orderId)}`
+      `${NOTIFICATION_BASE_URL}${API_ENDPOINTS.NOTIFICATIONS.SSE(orderId)}`
   }
 };

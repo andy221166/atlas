@@ -10,6 +10,7 @@ import org.atlas.platform.event.contract.order.OrderConfirmedEvent;
 import org.atlas.platform.event.kafka.KafkaEventConsumer;
 import org.atlas.service.notification.port.inbound.event.OrderCanceledEventHandler;
 import org.atlas.service.notification.port.inbound.event.OrderConfirmedEventHandler;
+import org.atlas.service.notification.port.outbound.template.ResolveTemplateException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
@@ -32,7 +33,7 @@ public class OrderEventsConsumer extends KafkaEventConsumer {
   // Non-blocking retry
   @RetryableTopic(
       attempts = "4", // max retries is 3
-      topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-retry-0, order-retry-1, order-retry-2, etc.
+      topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-events-retry-0, order-events-retry-1, order-events-retry-2, etc.
       backoff = @Backoff(delay = 1000, multiplier = 2, random = true) // Exponential backoff
   )
   public void consumeMessage(ConsumerRecord<String, DomainEvent> record) {
@@ -41,12 +42,13 @@ public class OrderEventsConsumer extends KafkaEventConsumer {
 
   @Override
   protected void handleEvent(DomainEvent event) {
-    if (event.getEventType().equals(EventType.ORDER_CONFIRMED)) {
+    EventType eventType = EventType.findEventType(event.getClass());
+    if (eventType.equals(EventType.ORDER_CONFIRMED)) {
       orderConfirmedEventHandler.handle((OrderConfirmedEvent) event);
-    } else if (event.getEventType().equals(EventType.ORDER_CANCELED)) {
+    } else if (eventType.equals(EventType.ORDER_CANCELED)) {
       orderCanceledEventHandler.handle((OrderCanceledEvent) event);
     } else {
-      log.debug("Ignoring unsupported event type: {}", event.getEventType());
+      log.debug("Ignoring unsupported event type: {}", eventType);
     }
   }
 }

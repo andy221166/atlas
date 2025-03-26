@@ -24,7 +24,7 @@ public class EmailTemplateAdapter implements EmailTemplatePort {
   @Override
   public String resolveSubject(@Nonnull String templateName, Map<String, Object> data)
       throws Exception {
-    String path = Paths.get(TEMPLATE_SUBJECT_DIR, templateName).toString();
+    String path = TEMPLATE_SUBJECT_DIR + "/" + templateName + ".html";
     return thymeleafTemplateResolver.resolve(path, data);
   }
 
@@ -36,7 +36,7 @@ public class EmailTemplateAdapter implements EmailTemplatePort {
   @Override
   public String resolveBody(@Nonnull String templateName, Map<String, Object> data)
       throws Exception {
-    String path = Paths.get(TEMPLATE_BODY_DIR, templateName).toString();
+    String path = TEMPLATE_BODY_DIR + "/" + templateName + ".html";
     return thymeleafTemplateResolver.resolve(path, data);
   }
 }

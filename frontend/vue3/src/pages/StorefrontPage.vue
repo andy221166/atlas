@@ -60,7 +60,7 @@
           :cart="cart"
           @remove-from-cart="removeFromCart"
           @place-order="placeOrder"
-          @order-placed="handleOrderPlaced"
+          @update-quantity="updateQuantity"
         />
         <OrderTracking v-if="currentOrderId" :order-id="currentOrderId" />
       </div>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import Navbar from "../components/layout/Navbar.vue";
 import ProductCard from "../components/product/ProductCard.vue";
@@ -90,11 +90,19 @@ export default {
   },
   setup() {
     const store = useStore();
+    
+    // State
     const showModal = ref(false);
     const currentPage = ref(1);
     const pageSize = ref(9);
     const cart = ref([]);
     const currentOrderId = ref(null);
+    const products = ref([]);
+    const categories = ref([]);
+    const brands = ref([]);
+    const selectedProduct = ref(null);
+    const isLoadingProduct = ref(false);
+    const totalPages = ref(1);
     const searchParams = ref({
       keyword: '',
       brand_ids: [],
@@ -102,14 +110,6 @@ export default {
       min_price: null,
       max_price: null
     });
-
-    // State
-    const products = ref([]);
-    const categories = ref([]);
-    const brands = ref([]);
-    const selectedProduct = ref(null);
-    const isLoadingProduct = ref(false);
-    const totalPages = ref(1);
 
     // Cart operations
     const addToCart = (product) => {
@@ -127,30 +127,30 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart.value));
     };
 
-    const placeOrder = async (orderItems) => {
-      try {
-        const { data } = await api.orders.create({
-          orderItems: orderItems
-        });
-        
-        // Only clear cart if API call was successful
-        if (data.success) {
-          cart.value = [];
-          localStorage.removeItem('cart');
-        } else {
-          throw new Error(data.message || "Failed to place order");
-        }
-      } catch (error) {
-        console.error("Failed to place order:", error);
-        // Don't clear cart if API call failed
+    const updateQuantity = (productId, newQuantity) => {
+      const item = cart.value.find(item => item.product.id === productId);
+      if (item) {
+        item.quantity = newQuantity;
+        localStorage.setItem('cart', JSON.stringify(cart.value));
       }
     };
 
-    const handleOrderPlaced = () => {
-      // This function is no longer needed since we handle cart clearing in placeOrder
+    const placeOrder = async (orderItems) => {
+      try {
+        const { data } = await api.orders.create({ orderItems });
+        if (data.success) {
+          cart.value = [];
+          localStorage.removeItem('cart');
+          currentOrderId.value = data.data.orderId;
+        } else {
+          alert(data.message || "Failed to place order");
+        }
+      } catch (error) {
+        alert("Failed to place order:", error);
+      }
     };
 
-    // Actions
+    // Product operations
     const updateSearchParams = async (params) => {
       searchParams.value = { ...searchParams.value, ...params };
       await fetchProducts();
@@ -169,18 +169,15 @@ export default {
           size: pageSize.value
         };
 
-        // Convert snake_case to camelCase and ensure arrays are properly formatted
         const requestBody = {
           page: params.page,
-          size: params.size
+          size: params.size,
+          ...(params.keyword?.trim() && { keyword: params.keyword.trim() }),
+          ...(params.min_price !== null && { minPrice: params.min_price }),
+          ...(params.max_price !== null && { maxPrice: params.max_price }),
+          ...(params.brand_ids?.length && { brandIds: params.brand_ids.map(Number) }),
+          ...(params.category_ids?.length && { categoryIds: params.category_ids.map(Number) })
         };
-
-        // Only add parameters that have values
-        if (params.keyword?.trim()) requestBody.keyword = params.keyword.trim();
-        if (params.min_price !== null) requestBody.minPrice = params.min_price;
-        if (params.max_price !== null) requestBody.maxPrice = params.max_price;
-        if (params.brand_ids?.length) requestBody.brandIds = params.brand_ids.map(Number);
-        if (params.category_ids?.length) requestBody.categoryIds = params.category_ids.map(Number);
 
         const { data } = await api.products.search(requestBody);
         products.value = data.data;
@@ -208,30 +205,16 @@ export default {
       }
     };
 
-    const showProductDetail = async (product) => {
+    const showProductDetail = (product) => {
       selectedProduct.value = product;
       showModal.value = true;
     };
 
     onMounted(async () => {
       store.dispatch("user/fetchProfile");
-      await Promise.all([
-        fetchBrands(),
-        fetchCategories()
-      ]);
+      await Promise.all([fetchBrands(), fetchCategories()]);
+      await fetchProducts();
       
-      // Call fetchProducts with initial search parameters
-      await fetchProducts({
-        keyword: '',
-        brand_ids: [],
-        category_ids: [],
-        min_price: null,
-        max_price: null,
-        page: currentPage.value,
-        size: pageSize.value
-      });
-
-      // Load cart from localStorage
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
         cart.value = JSON.parse(savedCart);
@@ -256,7 +239,7 @@ export default {
       addToCart,
       removeFromCart,
       placeOrder,
-      handleOrderPlaced
+      updateQuantity
     };
   },
 };

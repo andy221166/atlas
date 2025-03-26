@@ -1,6 +1,8 @@
 package org.atlas.service.notification.application.event;
 
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.event.contract.order.OrderCanceledEvent;
 import org.atlas.service.notification.port.inbound.event.OrderCanceledEventHandler;
 import org.atlas.service.notification.port.outbound.realtime.enums.RealtimeNotificationType;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderCanceledEventHandlerImpl implements OrderCanceledEventHandler {
 
   private final SsePort<Integer> ssePort;
@@ -20,8 +23,18 @@ public class OrderCanceledEventHandlerImpl implements OrderCanceledEventHandler 
 
   @Override
   public void handle(OrderCanceledEvent event) {
-    notifySse(event);
-    notifyWebSocket(event);
+    CompletableFuture.allOf(
+        CompletableFuture.runAsync(() -> notifySse(event))
+            .exceptionally(e -> {
+              log.error("Failed to notify SSE for event {}", event.getEventId(), e);
+              return null;
+            }),
+        CompletableFuture.runAsync(() -> notifyWebSocket(event))
+            .exceptionally(e -> {
+              log.error("Failed to notify WebSocket for event {}", event.getEventId(), e);
+              return null;
+            })
+    ).join();
   }
 
   private void notifySse(OrderCanceledEvent event) {

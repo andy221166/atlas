@@ -27,7 +27,7 @@ public class OrderEventsConsumer extends SnsEventConsumer {
 
   @PostConstruct
   public void init() {
-    consumeMessages("order_events", snsEventProps.getSqsQueueUrl().getOrderEvents());
+    consumeMessages("order-events", snsEventProps.getSqsQueueUrl().getOrderEvents());
   }
 
   @PreDestroy
@@ -37,10 +37,11 @@ public class OrderEventsConsumer extends SnsEventConsumer {
 
   @Override
   protected void handleEvent(DomainEvent event) {
-    if (event.getEventType().equals(EventType.ORDER_CREATED)) {
+    EventType eventType = EventType.findEventType(event.getClass());
+    if (eventType.equals(EventType.ORDER_CREATED)) {
       orderCreatedEventHandler.handle((OrderCreatedEvent) event);
     } else {
-      log.debug("Ignoring unsupported event type: {}", event.getEventType());
+      log.debug("Ignoring unsupported event type: {}", eventType);
     }
   }
 }

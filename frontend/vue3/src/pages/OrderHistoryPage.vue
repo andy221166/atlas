@@ -11,7 +11,7 @@
         <li v-for="order in orders" :key="order.id" class="list-group-item">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <p><strong>Order #{{ order.id }}</strong> - {{ formatDate(order.createdAt) }}</p>
+              <p><strong>Order #{{ order.code }}</strong> - {{ order.createdAt }}</p>
               <p><strong>Amount:</strong> ${{ order.amount.toFixed(2) }}</p>
               <p>
                 <strong class="me-1">Status:</strong>
@@ -106,7 +106,6 @@ export default {
     };
 
     const isOrderSelected = (order) => selectedOrderId.value === order.id;
-    const formatDate = (date) => new Date(date).toLocaleString();
 
     onMounted(fetchOrders);
 
@@ -117,7 +116,6 @@ export default {
       changePage,
       toggleDetails,
       isOrderSelected,
-      formatDate,
       applyBadgeClass,
     };
   },

@@ -23,8 +23,8 @@ public class UserController {
   @PostMapping("/list")
   public Response<ListUserUseCase.Output> listUser(@Valid @RequestBody ListUserRequest request)
       throws Exception {
-    ListUserUseCase.Input input =
-        ObjectMapperUtil.getInstance().map(request, ListUserUseCase.Input.class);
+    ListUserUseCase.Input input = ObjectMapperUtil.getInstance()
+        .map(request, ListUserUseCase.Input.class);
     ListUserUseCase.Output output = listUserUseCase.handle(input);
     return Response.success(output);
   }

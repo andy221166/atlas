@@ -6,7 +6,6 @@ const Storefront = () => import("@/pages/StorefrontPage.vue");
 const OrderHistoryPage = () => import("@/pages/OrderHistoryPage.vue");
 const RegisterPage = () => import("@/pages/RegisterPage.vue");
 const LoginPage = () => import("@/pages/LoginPage.vue");
-const CheckoutPage = () => import("@/pages/CheckoutPage.vue");
 
 // Navigation guard helper
 const checkAuth = (to, from, next) => {
@@ -50,12 +49,6 @@ const routes = [
     path: "/order-history",
     name: "OrderHistory",
     component: OrderHistoryPage,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: "/checkout",
-    name: "Checkout",
-    component: CheckoutPage,
     meta: { requiresAuth: true }
   },
   {

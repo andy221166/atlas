@@ -42,7 +42,7 @@ public class SseAdapter<K> implements SsePort<K> {
 
     SseEmitter sseEmitter = sseController.getSseEmitter(notification.getKey());
     if (sseEmitter == null) {
-      throw new IllegalStateException("Not found SseEmitter for key {}" + notification.getKey());
+      throw new IllegalStateException("Not found SseEmitter for key " + notification.getKey());
     }
 
     try {

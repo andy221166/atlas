@@ -45,7 +45,7 @@ public interface ListOrderUseCase
       private List<OrderItem> orderItems;
       private BigDecimal amount;
       private OrderStatus status;
-      private Date createdDate;
+      private Date createdAt;
     }
 
     @Data

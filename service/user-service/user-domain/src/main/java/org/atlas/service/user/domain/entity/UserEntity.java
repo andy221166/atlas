@@ -22,6 +22,8 @@ public class UserEntity extends DomainEntity {
 
   private String lastName;
 
+  private String email;
+
   private String phoneNumber;
 
   private Role role;
