@@ -39,13 +39,14 @@ public class OutboxMessageService {
 
   public void insertOutboxMessage(DomainEvent event, String destination) {
     OutboxMessage outboxMessage = new OutboxMessage();
-    outboxMessage.setEvent(JsonUtil.getInstance().toJson(event));
+    outboxMessage.setEventJson(JsonUtil.getInstance().toJson(event));
+    outboxMessage.setEventType(EventType.findEventType(event.getClass()));
     outboxMessage.setDestination(destination);
     outboxMessage.setStatus(OutboxMessageStatus.PENDING);
     outboxMessage.setRetries(0);
     outboxMessageRepository.insert(outboxMessage);
-    log.info("Inserted outbox message {} of event {}",
-        outboxMessage.getId(), outboxMessage.getEvent());
+    log.info("Inserted outbox message {} of event {} {}",
+        outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson());
   }
 
   @Transactional
@@ -75,20 +76,17 @@ public class OutboxMessageService {
   public void processOutboxMessage(OutboxMessage outboxMessage) {
     try {
       // Parse event JSON string to object
-      String eventTypeName = (String) JsonUtil.getInstance()
-          .getNodeValue(outboxMessage.getEvent(), "eventType");
-      EventType eventType = EventType.valueOf(eventTypeName);
       DomainEvent event = JsonUtil.getInstance()
-          .toObject(outboxMessage.getEvent(), eventType.getEventClass());
+          .toObject(outboxMessage.getEventJson(), outboxMessage.getEventType().getEventClass());
 
       eventPublisher.publish(event, outboxMessage.getDestination());
 
       outboxMessage.toBeProcessed();
-      log.info("Processed outbox message {} of event {}",
-          outboxMessage.getId(), outboxMessage.getEvent());
+      log.info("Processed outbox message {} of event {} {}",
+          outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson());
     } catch (Exception e) {
-      log.error("Failed to process outbox message {} of event {}",
-          outboxMessage.getId(), outboxMessage.getEvent(), e);
+      log.error("Failed to process outbox message {} of event {} {}",
+          outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson(), e);
       outboxMessage.setError(e.getMessage());
 
       // Retry mechanism

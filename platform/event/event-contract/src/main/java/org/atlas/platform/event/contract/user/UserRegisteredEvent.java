@@ -24,10 +24,4 @@ public class UserRegisteredEvent extends DomainEvent {
   public UserRegisteredEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  @NonNull
-  public EventType getEventType() {
-    return EventType.USER_REGISTERED;
-  }
 }

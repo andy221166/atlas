@@ -25,9 +25,4 @@ public class OrderConfirmedEvent extends DomainEvent {
   public OrderConfirmedEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  public EventType getEventType() {
-    return EventType.ORDER_CONFIRMED;
-  }
 }

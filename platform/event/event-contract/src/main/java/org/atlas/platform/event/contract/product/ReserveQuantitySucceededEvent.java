@@ -25,9 +25,4 @@ public class ReserveQuantitySucceededEvent extends DomainEvent {
   public ReserveQuantitySucceededEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  public EventType getEventType() {
-    return EventType.RESERVE_QUANTITY_SUCCEEDED;
-  }
 }

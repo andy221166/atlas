@@ -27,11 +27,6 @@ public class OrderCreatedEvent extends DomainEvent {
     super(eventSource);
   }
 
-  @Override
-  public EventType getEventType() {
-    return EventType.ORDER_CREATED;
-  }
-
   public void addOrderItem(OrderItem orderItem) {
     if (orderItems == null) {
       orderItems = new ArrayList<>();

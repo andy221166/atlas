@@ -1,5 +1,6 @@
 package org.atlas.platform.event.contract;
 
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,4 +40,11 @@ public enum EventType {
   ORDER_CANCELED(OrderCanceledEvent.class);
 
   private final Class<? extends DomainEvent> eventClass;
+
+  public static EventType findEventType(Class<? extends DomainEvent> eventClass) {
+    return Stream.of(EventType.values())
+        .filter(eventType -> eventType.getEventClass().equals(eventClass))
+        .findAny()
+        .orElseThrow(() -> new IllegalArgumentException("Unknown event class"));
+  }
 }

@@ -20,10 +20,4 @@ public class ProductUpdatedEvent extends DomainEvent {
   public ProductUpdatedEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  @NonNull
-  public EventType getEventType() {
-    return EventType.PRODUCT_UPDATED;
-  }
 }

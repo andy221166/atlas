@@ -17,10 +17,4 @@ public class ProductDeletedEvent extends DomainEvent {
   public ProductDeletedEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  @NonNull
-  public EventType getEventType() {
-    return EventType.PRODUCT_DELETED;
-  }
 }

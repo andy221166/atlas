@@ -26,9 +26,4 @@ public class OrderCanceledEvent extends DomainEvent {
   public OrderCanceledEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  public EventType getEventType() {
-    return EventType.ORDER_CANCELED;
-  }
 }

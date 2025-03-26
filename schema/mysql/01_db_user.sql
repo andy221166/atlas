@@ -29,7 +29,8 @@ VALUES (1, 'admin', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE
 CREATE TABLE IF NOT EXISTS outbox_message
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    event        TEXT         NOT NULL,
+    event_json   TEXT         NOT NULL,
+    event_type   VARCHAR(50)  NOT NULL,
     destination  VARCHAR(255) NOT NULL,
     status       VARCHAR(20)  NOT NULL,
     processed_at DATETIME,

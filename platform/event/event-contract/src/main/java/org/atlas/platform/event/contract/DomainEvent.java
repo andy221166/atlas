@@ -24,8 +24,6 @@ public abstract class DomainEvent implements Serializable {
     this.version = 0L;
   }
 
-  public abstract EventType getEventType();
-
   public void incrementVersion() {
     this.version++;
   }

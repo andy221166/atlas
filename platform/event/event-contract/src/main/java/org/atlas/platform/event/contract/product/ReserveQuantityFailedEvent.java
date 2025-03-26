@@ -26,9 +26,4 @@ public class ReserveQuantityFailedEvent extends DomainEvent {
   public ReserveQuantityFailedEvent(String eventSource) {
     super(eventSource);
   }
-
-  @Override
-  public EventType getEventType() {
-    return EventType.RESERVE_QUANTITY_FAILED;
-  }
 }

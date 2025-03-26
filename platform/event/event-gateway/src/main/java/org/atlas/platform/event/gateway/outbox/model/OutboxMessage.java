@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import org.atlas.platform.event.contract.EventType;
 import org.atlas.platform.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity
@@ -24,7 +25,12 @@ public class OutboxMessage extends JpaBaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String event;
+  @Column(name = "event_json")
+  private String eventJson;
+
+  @Column(name = "event_type")
+  @Enumerated(EnumType.STRING)
+  private EventType eventType;
 
   private String destination;
 
