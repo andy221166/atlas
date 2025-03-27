@@ -1,2 +1,2 @@
 springdoc:
-  packages-to-scan: org.atlas.service.user.inbound.adapter.api.server.rest
+  packages-to-scan: org.atlas.service.user.adapter.api.server.rest

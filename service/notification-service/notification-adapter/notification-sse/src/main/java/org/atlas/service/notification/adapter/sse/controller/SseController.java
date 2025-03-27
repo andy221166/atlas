@@ -1,9 +1,11 @@
 package org.atlas.service.notification.adapter.sse.controller;
 
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.atlas.service.notification.port.outbound.realtime.enums.RealtimeNotificationType;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j(topic = "SSE")
 public abstract class SseController<K> {
 
   protected final ConcurrentHashMap<K, SseEmitter> sseEmitters = new ConcurrentHashMap<>();
@@ -15,11 +17,27 @@ public abstract class SseController<K> {
   }
 
   protected SseEmitter subscribe(K key) {
-    SseEmitter sseEmitter = new SseEmitter();
-    sseEmitters.put(key, sseEmitter);
+    log.debug("Subscribing SseEmitter for key: {}", key);
 
-    sseEmitter.onCompletion(() -> sseEmitters.remove(key));
-    sseEmitter.onTimeout(() -> sseEmitters.remove(key));
+    SseEmitter sseEmitter = new SseEmitter();
+
+    sseEmitter.onCompletion(() -> {
+      log.debug("SseEmitter completed for key: {}", key);
+      sseEmitters.remove(key);
+    });
+
+    sseEmitter.onError(e -> {
+      log.error("SseEmitter error for key: {}", key, e);
+      sseEmitters.remove(key);
+    });
+
+    sseEmitter.onTimeout(() -> {
+      log.debug("SseEmitter timed out for key: {}", key);
+      sseEmitters.remove(key);
+    });
+
+    sseEmitters.put(key, sseEmitter);
+    log.debug("Subscribed SseEmitter for key: {}", sseEmitter);
 
     return sseEmitter;
   }

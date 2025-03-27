@@ -8,18 +8,18 @@
         <span class="fw-bold">{{ orderId }}</span>
       </div>
 
-      <!-- Long polling updates -->
+      <!-- Short polling updates -->
       <div class="mt-4">
-        <h6 class="text-secondary">Long Polling Updates</h6>
+        <h6 class="text-secondary">Short Polling Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(longPollingOrderStatus)">{{
-            longPollingOrderStatus
+          <span :class="applyBadgeClass(shortPollingOrderStatus)">{{
+            shortPollingOrderStatus
           }}</span>
         </div>
-        <div v-if="longPollingCanceledReason" class="mt-2 text-danger">
+        <div v-if="shortPollingCanceledReason" class="mt-2 text-danger">
           <span class="text-muted">Cancellation Reason:</span>
-          <p>{{ longPollingCanceledReason }}</p>
+          <p>{{ shortPollingCanceledReason }}</p>
         </div>
       </div>
 
@@ -73,8 +73,8 @@ export default {
     }
   },
   setup(props) {
-    const longPollingOrderStatus = ref('PROCESSING');
-    const longPollingCanceledReason = ref(null);
+    const shortPollingOrderStatus = ref('PROCESSING');
+    const shortPollingCanceledReason = ref(null);
     const wsOrderStatus = ref('PROCESSING');
     const wsCanceledReason = ref(null);
     const sseOrderStatus = ref('PROCESSING');
@@ -84,17 +84,17 @@ export default {
     let stompClient = null;
     let eventSource = null;
 
-    const startLongPolling = (orderId) => {
+    const startShortPolling = (orderId) => {
       const pollOrder = async () => {
         try {
           const { data } = await api.orders.getStatus(orderId);
           const { status, canceledReason } = data.data;
 
-          longPollingOrderStatus.value = status;
-          longPollingCanceledReason.value = canceledReason || null;
+          shortPollingOrderStatus.value = status;
+          shortPollingCanceledReason.value = canceledReason || null;
 
           if (status === "CONFIRMED" || status === "CANCELED") {
-            stopLongPolling();
+            stopShortPolling();
           }
         } catch (error) {
           console.error("Error fetching order:", error);
@@ -104,7 +104,7 @@ export default {
       pollingInterval = setInterval(pollOrder, 3000);
     };
 
-    const stopLongPolling = () => {
+    const stopShortPolling = () => {
       if (pollingInterval) {
         clearInterval(pollingInterval);
         pollingInterval = null;
@@ -119,42 +119,59 @@ export default {
       
       stompClient.onStompError = (frame) => {
         console.error('WebSocket connection error:', frame);
-        startLongPolling(orderId);
       };
 
       stompClient.connect({}, () => {
-        stompClient.subscribe(`/topic/order/${orderId}`, (message) => {
+        stompClient.subscribe(`/topic/orders/${orderId}/status`, (message) => {
           const { orderStatus, canceledReason } = JSON.parse(message.body);
           wsOrderStatus.value = orderStatus;
-          wsCanceledReason.value = canceledReason || null;
-          
-          stopLongPolling();
+          wsCanceledReason.value = canceledReason || null;          
         });
       });
     };
 
     const connectSSE = (orderId) => {
-      if (eventSource) eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
 
       eventSource = new EventSource(api.notifications.getSSEUrl(orderId));
-      
-      eventSource.onerror = (error) => {
-        console.error('SSE connection error:', error);
-        eventSource.close();
-        startLongPolling(orderId);
+
+      eventSource.onopen = () => {
+        console.log('SSE connection established');
       };
 
-      eventSource.addEventListener("orderStatus", (event) => {
-        const { orderStatus, canceledReason } = JSON.parse(event.data);
-        sseOrderStatus.value = orderStatus;
-        sseCanceledReason.value = canceledReason || null;
-        
-        stopLongPolling();
+      eventSource.onerror = (error) => {
+        console.error('SSE connection error:', error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+          console.log('SSE connection closed');
+        }
+      };
+
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          sseOrderStatus.value = data.orderStatus;
+          sseCanceledReason.value = data.canceledReason || null;
+        } catch (error) {
+          console.error('Error parsing SSE message:', error);
+        }
+      };
+
+      // Optional: Handle specific event types
+      eventSource.addEventListener('orderStatus', (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          sseOrderStatus.value = data.orderStatus;
+          sseCanceledReason.value = data.canceledReason || null;
+        } catch (error) {
+          console.error('Error parsing orderStatus event:', error);
+        }
       });
     };
 
     const cleanup = () => {
-      stopLongPolling();
+      stopShortPolling();
       if (stompClient) {
         stompClient.disconnect();
         stompClient = null;
@@ -168,7 +185,7 @@ export default {
     watch(() => props.orderId, (newOrderId) => {
       resetOrderTrackingInfo();
       if (newOrderId) {
-        startLongPolling(newOrderId);
+        startShortPolling(newOrderId);
         connectWebSocket(newOrderId);
         connectSSE(newOrderId);
       } else {
@@ -178,7 +195,7 @@ export default {
 
     onMounted(() => {
       if (props.orderId) {
-        startLongPolling(props.orderId);
+        startShortPolling(props.orderId);
         connectWebSocket(props.orderId);
         connectSSE(props.orderId);
       }
@@ -187,18 +204,18 @@ export default {
     onBeforeUnmount(cleanup);
 
     const resetOrderTrackingInfo = () => {
-      longPollingOrderStatus.value = "PROCESSING";
+      shortPollingOrderStatus.value = "PROCESSING";
       wsOrderStatus.value = "PROCESSING";
       sseOrderStatus.value = "PROCESSING";
-      longPollingCanceledReason.value = null;
+      shortPollingCanceledReason.value = null;
       wsCanceledReason.value = null;
       sseCanceledReason.value = null;
     };
 
     return {
       orderId: computed(() => props.orderId),
-      longPollingOrderStatus,
-      longPollingCanceledReason,
+      shortPollingOrderStatus,
+      shortPollingCanceledReason,
       wsOrderStatus,
       wsCanceledReason,
       sseOrderStatus,

@@ -113,6 +113,11 @@ export default {
 
     // Cart operations
     const addToCart = (product) => {
+      // Clear order tracking if cart is empty (starting new cart)
+      if (cart.value.length === 0) {
+        currentOrderId.value = null;
+      }
+
       const existingItem = cart.value.find(item => item.product.id === product.id);
       if (existingItem) {
         existingItem.quantity += 1;

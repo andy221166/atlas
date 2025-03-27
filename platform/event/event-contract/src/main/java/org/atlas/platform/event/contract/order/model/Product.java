@@ -1,5 +1,6 @@
 package org.atlas.platform.event.contract.order.model;
 
+import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
@@ -7,5 +8,5 @@ public class Product {
 
   private Integer id;
   private String name;
-  private String price;
+  private BigDecimal price;
 }
