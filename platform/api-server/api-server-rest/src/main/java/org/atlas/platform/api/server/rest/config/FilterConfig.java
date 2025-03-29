@@ -1,6 +1,6 @@
 package org.atlas.platform.api.server.rest.config;
 
-import org.atlas.platform.api.server.rest.context.UserContextFilter;
+import org.atlas.platform.api.server.rest.auth.UserContextFilter;
 import org.atlas.platform.api.server.rest.logging.RequestLoggingFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

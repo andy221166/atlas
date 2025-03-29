@@ -1,6 +1,7 @@
 dependencies {
     // Platform
     api project(':api-client-rest-feign')
+    api project(':object-mapper')
 
     // Service
     api project(':user-api-client-contract')

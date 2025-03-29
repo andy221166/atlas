@@ -18,16 +18,16 @@ public class OrderEventPublisherAdapter implements OrderEventPublisherPort {
 
   @Override
   public void publish(OrderCreatedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderCreatedEvent());
   }
 
   @Override
   public void publish(OrderConfirmedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderConfirmedEvent());
   }
 
   @Override
   public void publish(OrderCanceledEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderCanceledEvent());
   }
 }

@@ -18,16 +18,16 @@ public class OrderEventPublisherAdapter implements OrderEventPublisherPort {
 
   @Override
   public void publish(OrderCreatedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getOrderEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getOrderCreatedEvent());
   }
 
   @Override
   public void publish(OrderConfirmedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getOrderEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getOrderConfirmedEvent());
   }
 
   @Override
   public void publish(OrderCanceledEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getOrderEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getOrderCanceledEvent());
   }
 }

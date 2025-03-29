@@ -69,7 +69,7 @@ public class OutboxMessageService {
     // Wait for all parallel tasks to complete
     CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
-    log.info("All outbox messages were processed, releasing lock");
+    log.info("All outbox messages were processed");
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW) // Each message has its own transaction

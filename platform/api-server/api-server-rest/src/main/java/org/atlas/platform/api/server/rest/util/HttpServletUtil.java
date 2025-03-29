@@ -6,13 +6,14 @@ import java.io.PrintWriter;
 import lombok.experimental.UtilityClass;
 import org.atlas.platform.json.JsonUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 @UtilityClass
 public class HttpServletUtil {
 
   public static void respondJson(HttpServletResponse response, Object payload,
       HttpStatus httpStatus) throws IOException {
-    response.setContentType("application/json");
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding("UTF-8");
     response.setStatus(httpStatus.value());
 

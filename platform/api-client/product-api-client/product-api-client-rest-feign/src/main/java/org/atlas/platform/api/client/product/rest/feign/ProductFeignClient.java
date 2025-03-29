@@ -1,8 +1,10 @@
 package org.atlas.platform.api.client.product.rest.feign;
 
+import org.atlas.platform.api.client.product.rest.model.ListProductRequest;
 import org.atlas.platform.api.client.rest.feign.FeignConfig;
 import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
-import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
+import org.atlas.platform.api.client.rest.model.Response;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,5 +17,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ProductFeignClient {
 
   @PostMapping("/api/internal/products/list")
-  ListProductResponse listProduct(@RequestBody ListProductUseCase.Input input);
+  Response<ListProductResponse> listProduct(@RequestBody ListProductRequest request);
 }

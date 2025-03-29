@@ -8,6 +8,12 @@ app:
   event:
     kafka:
       topic:
-        user-events: user-events
-        product-events: product-events
-        order-events: order-events
+        user-registered-event: user-registered-event
+        product-created-event: product-created-event
+        product-updated-event: product-updated-event
+        product-deleted-event: product-deleted-event
+        order-created-event: order-created-event
+        reserve-quantity-succeeded-event: reserve-quantity-succeeded-event
+        reserve-quantity-failed-event: reserve-quantity-failed-event
+        order-confirmed-event: order-confirmed-event
+        order-canceled-event: order-canceled-event

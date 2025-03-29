@@ -2,9 +2,13 @@ package org.atlas.platform.api.client.user.rest.apachehttpclient;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.client.rest.apachehttpclient.HttpClientService;
+import org.atlas.platform.api.client.rest.model.Response;
 import org.atlas.platform.api.client.user.UserApiClient;
+import org.atlas.platform.api.client.user.rest.model.ListUserRequest;
 import org.atlas.platform.api.client.user.rest.model.ListUserResponse;
-import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
+import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserInput;
+import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserOutput;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +22,15 @@ public class UserApiClientImpl implements UserApiClient {
   private final HttpClientService service;
 
   @Override
-  public ListUserUseCase.Output call(ListUserUseCase.Input input) {
+  @SuppressWarnings("unchecked")
+  public ListUserOutput call(ListUserInput input) {
     String url = String.format("%s/api/internal/users/list", baseUrl);
-
-    ListUserResponse response = service.doPost(url, null, input, ListUserResponse.class);
-    return response.getData();
+    ListUserRequest request = ObjectMapperUtil.getInstance()
+        .map(input, ListUserRequest.class);
+    Response<ListUserResponse> response =
+        service.doPost(url, null, request, Response.class);
+    ListUserResponse responseData = response.getData();
+    return ObjectMapperUtil.getInstance()
+        .map(responseData, ListUserOutput.class);
   }
 }

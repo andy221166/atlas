@@ -1,17 +1,26 @@
 package org.atlas.service.order.adapter.api.server.rest.front.controller;
 
 import jakarta.validation.Valid;
-import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.order.adapter.api.server.rest.front.model.GetOrderStatusResponse;
+import org.atlas.service.order.adapter.api.server.rest.front.model.ListOrderResponse;
 import org.atlas.service.order.adapter.api.server.rest.front.model.PlaceOrderRequest;
-import org.atlas.service.order.port.inbound.usecase.front.GetOrderStatusUseCase;
-import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase;
-import org.atlas.service.order.port.inbound.usecase.front.PlaceOrderUseCase;
+import org.atlas.service.order.adapter.api.server.rest.front.model.PlaceOrderResponse;
+import org.atlas.service.order.port.inbound.front.GetOrderStatusUseCase;
+import org.atlas.service.order.port.inbound.front.GetOrderStatusUseCase.GetOrderStatusInput;
+import org.atlas.service.order.port.inbound.front.GetOrderStatusUseCase.GetOrderStatusOutput;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase.ListOrderInput;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase.ListOrderOutput;
+import org.atlas.service.order.port.inbound.front.PlaceOrderUseCase;
+import org.atlas.service.order.port.inbound.front.PlaceOrderUseCase.PlaceOrderInput;
+import org.atlas.service.order.port.inbound.front.PlaceOrderUseCase.PlaceOrderOutput;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,36 +49,42 @@ public class OrderController {
     this.placeOrderUseCase = placeOrderUseCase;
   }
 
-  @GetMapping
-  public PagingResponse<ListOrderUseCase.Output.Order> listOrder(
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<ListOrderResponse> listOrder(
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
   ) throws Exception {
-    ListOrderUseCase.Input input = ListOrderUseCase.Input.builder()
+    ListOrderInput input = ListOrderInput.builder()
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
-    ListOrderUseCase.Output output = listOrderUseCase.handle(input);
-    return PagingResponse.success(output.getOrderPage());
+    ListOrderOutput output = listOrderUseCase.handle(input);
+    ListOrderResponse response = ObjectMapperUtil.getInstance()
+        .map(output, ListOrderResponse.class);
+    return Response.success(response);
   }
 
-  @GetMapping("/{orderId}/status")
-  public Response<GetOrderStatusUseCase.Output> getOrderStatus(
+  @GetMapping(value = "/{orderId}/status", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<GetOrderStatusResponse> getOrderStatus(
       @PathVariable("orderId") Integer orderId) throws Exception {
-    GetOrderStatusUseCase.Input input = GetOrderStatusUseCase.Input.builder()
+    GetOrderStatusInput input = GetOrderStatusInput.builder()
         .orderId(orderId)
         .build();
-    GetOrderStatusUseCase.Output output = getOrderStatusUseCase.handle(input);
-    return Response.success(output);
+    GetOrderStatusOutput output = getOrderStatusUseCase.handle(input);
+    GetOrderStatusResponse response = ObjectMapperUtil.getInstance()
+        .map(output, GetOrderStatusResponse.class);
+    return Response.success(response);
   }
 
-  @PostMapping("/place")
+  @PostMapping(value = "/place", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public Response<PlaceOrderUseCase.Output> placeOrder(
+  public Response<PlaceOrderResponse> placeOrder(
       @Valid @RequestBody PlaceOrderRequest request)
       throws Exception {
-    PlaceOrderUseCase.Input input = ObjectMapperUtil.getInstance()
-        .map(request, PlaceOrderUseCase.Input.class);
-    PlaceOrderUseCase.Output output = placeOrderUseCase.handle(input);
-    return Response.success(output);
+    PlaceOrderInput input = ObjectMapperUtil.getInstance()
+        .map(request, PlaceOrderInput.class);
+    PlaceOrderOutput output = placeOrderUseCase.handle(input);
+    PlaceOrderResponse response = ObjectMapperUtil.getInstance()
+        .map(output, PlaceOrderResponse.class);
+    return Response.success(response);
   }
 }

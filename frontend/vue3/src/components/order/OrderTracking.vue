@@ -13,28 +13,13 @@
         <h6 class="text-secondary">Short Polling Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(shortPollingOrderStatus)">{{
-            shortPollingOrderStatus
-          }}</span>
+          <span :class="applyBadgeClass(orderStatuses.shortPolling)">
+            {{ orderStatuses.shortPolling }}
+          </span>
         </div>
-        <div v-if="shortPollingCanceledReason" class="mt-2 text-danger">
+        <div v-if="canceledReasons.shortPolling" class="mt-2 text-danger">
           <span class="text-muted">Cancellation Reason:</span>
-          <p>{{ shortPollingCanceledReason }}</p>
-        </div>
-      </div>
-
-      <!-- WebSocket updates -->
-      <div class="mt-4">
-        <h6 class="text-secondary">WebSocket Updates</h6>
-        <div class="d-flex justify-content-between mt-2">
-          <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(wsOrderStatus)">{{
-            wsOrderStatus
-          }}</span>
-        </div>
-        <div v-if="wsCanceledReason" class="mt-2 text-danger">
-          <span class="text-muted">Cancellation Reason:</span>
-          <p>{{ wsCanceledReason }}</p>
+          <p>{{ canceledReasons.shortPolling }}</p>
         </div>
       </div>
 
@@ -43,13 +28,28 @@
         <h6 class="text-secondary">SSE Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(sseOrderStatus)">{{
-            sseOrderStatus
-          }}</span>
+          <span :class="applyBadgeClass(orderStatuses.sse)">
+            {{ orderStatuses.sse }}
+          </span>
         </div>
-        <div v-if="sseCanceledReason" class="mt-2 text-danger">
+        <div v-if="canceledReasons.sse" class="mt-2 text-danger">
           <span class="text-muted">Cancellation Reason:</span>
-          <p>{{ sseCanceledReason }}</p>
+          <p>{{ canceledReasons.sse }}</p>
+        </div>
+      </div>
+
+      <!-- WebSocket updates -->
+      <div class="mt-4">
+        <h6 class="text-secondary">WebSocket Updates</h6>
+        <div class="d-flex justify-content-between mt-2">
+          <span class="text-muted">Status:</span>
+          <span :class="applyBadgeClass(orderStatuses.ws)">
+            {{ orderStatuses.ws }}
+          </span>
+        </div>
+        <div v-if="canceledReasons.ws" class="mt-2 text-danger">
+          <span class="text-muted">Cancellation Reason:</span>
+          <p>{{ canceledReasons.ws }}</p>
         </div>
       </div>
     </div>
@@ -57,13 +57,11 @@
 </template>
 
 <script>
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {Stomp} from "@stomp/stompjs";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { api } from "@/api";
-import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
-
-const NOTIFICATION_BASE_URL = process.env.VUE_APP_NOTIFICATION_BASE_URL;
+import { applyBadgeClass } from "@/utils/orderStatusBadgeClass";
 
 export default {
   props: {
@@ -73,25 +71,34 @@ export default {
     }
   },
   setup(props) {
-    const shortPollingOrderStatus = ref('PROCESSING');
-    const shortPollingCanceledReason = ref(null);
-    const wsOrderStatus = ref('PROCESSING');
-    const wsCanceledReason = ref(null);
-    const sseOrderStatus = ref('PROCESSING');
-    const sseCanceledReason = ref(null);
+    // Create reactive objects using ref
+    const orderStatuses = ref({
+      shortPolling: 'PROCESSING',
+      sse: 'PROCESSING',
+      ws: 'PROCESSING'
+    });
+
+    const canceledReasons = ref({
+      shortPolling: null,
+      sse: null,
+      ws: null
+    });
 
     let pollingInterval = null;
     let stompClient = null;
     let eventSource = null;
+
+    const updateOrderStatus = (type, status, reason) => {
+      orderStatuses.value[type] = status;
+      canceledReasons.value[type] = reason || null;
+    };
 
     const startShortPolling = (orderId) => {
       const pollOrder = async () => {
         try {
           const { data } = await api.orders.getStatus(orderId);
           const { status, canceledReason } = data.data;
-
-          shortPollingOrderStatus.value = status;
-          shortPollingCanceledReason.value = canceledReason || null;
+          updateOrderStatus('shortPolling', status, canceledReason);
 
           if (status === "CONFIRMED" || status === "CANCELED") {
             stopShortPolling();
@@ -111,12 +118,40 @@ export default {
       }
     };
 
+    const connectSSE = (orderId) => {
+      if (eventSource) eventSource.close();
+
+      eventSource = new EventSource(api.notifications.getSSEUrl(orderId));
+
+      eventSource.addEventListener('open', (event) => {
+        console.log('SSE connection established', event);
+      });
+
+      // Listen specifically for ORDER_STATUS_CHANGED events
+      eventSource.addEventListener('ORDER_STATUS_CHANGED', (event) => {
+        console.log('SSE received ORDER_STATUS_CHANGED event:', event.data);
+        try {
+          const data = JSON.parse(event.data);
+          updateOrderStatus('sse', data.orderStatus, data.canceledReason);
+        } catch (error) {
+          console.error('SSE error parsing message:', error);
+        }
+      });
+
+      eventSource.addEventListener('error', (error) => {
+        console.error('SSE connection error:', error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+          console.log('SSE connection closed');
+        }
+      });
+    };
+
     const connectWebSocket = (orderId) => {
       if (stompClient) stompClient.disconnect();
 
-      const socket = new SockJS(`${api.notifications.getWebSocketUrl()}`);
+      const socket = new SockJS(api.notifications.getWebSocketUrl());
       stompClient = Stomp.over(socket);
-      
+
       stompClient.onStompError = (frame) => {
         console.error('WebSocket connection error:', frame);
       };
@@ -124,49 +159,8 @@ export default {
       stompClient.connect({}, () => {
         stompClient.subscribe(`/topic/orders/${orderId}/status`, (message) => {
           const { orderStatus, canceledReason } = JSON.parse(message.body);
-          wsOrderStatus.value = orderStatus;
-          wsCanceledReason.value = canceledReason || null;          
+          updateOrderStatus('ws', orderStatus, canceledReason);
         });
-      });
-    };
-
-    const connectSSE = (orderId) => {
-      if (eventSource) {
-        eventSource.close();
-      }
-
-      eventSource = new EventSource(api.notifications.getSSEUrl(orderId));
-
-      eventSource.onopen = () => {
-        console.log('SSE connection established');
-      };
-
-      eventSource.onerror = (error) => {
-        console.error('SSE connection error:', error);
-        if (eventSource.readyState === EventSource.CLOSED) {
-          console.log('SSE connection closed');
-        }
-      };
-
-      eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          sseOrderStatus.value = data.orderStatus;
-          sseCanceledReason.value = data.canceledReason || null;
-        } catch (error) {
-          console.error('Error parsing SSE message:', error);
-        }
-      };
-
-      // Optional: Handle specific event types
-      eventSource.addEventListener('orderStatus', (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          sseOrderStatus.value = data.orderStatus;
-          sseCanceledReason.value = data.canceledReason || null;
-        } catch (error) {
-          console.error('Error parsing orderStatus event:', error);
-        }
       });
     };
 
@@ -182,12 +176,21 @@ export default {
       }
     };
 
+    const resetOrderTrackingInfo = () => {
+      Object.keys(orderStatuses.value).forEach(key => {
+        orderStatuses.value[key] = "PROCESSING";
+      });
+      Object.keys(canceledReasons.value).forEach(key => {
+        canceledReasons.value[key] = null;
+      });
+    };
+
     watch(() => props.orderId, (newOrderId) => {
       resetOrderTrackingInfo();
       if (newOrderId) {
         startShortPolling(newOrderId);
-        connectWebSocket(newOrderId);
         connectSSE(newOrderId);
+        connectWebSocket(newOrderId);
       } else {
         cleanup();
       }
@@ -196,30 +199,17 @@ export default {
     onMounted(() => {
       if (props.orderId) {
         startShortPolling(props.orderId);
-        connectWebSocket(props.orderId);
         connectSSE(props.orderId);
+        connectWebSocket(props.orderId);
       }
     });
 
     onBeforeUnmount(cleanup);
 
-    const resetOrderTrackingInfo = () => {
-      shortPollingOrderStatus.value = "PROCESSING";
-      wsOrderStatus.value = "PROCESSING";
-      sseOrderStatus.value = "PROCESSING";
-      shortPollingCanceledReason.value = null;
-      wsCanceledReason.value = null;
-      sseCanceledReason.value = null;
-    };
-
     return {
       orderId: computed(() => props.orderId),
-      shortPollingOrderStatus,
-      shortPollingCanceledReason,
-      wsOrderStatus,
-      wsCanceledReason,
-      sseOrderStatus,
-      sseCanceledReason,
+      orderStatuses,
+      canceledReasons,
       applyBadgeClass,
     };
   },

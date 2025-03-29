@@ -16,6 +16,6 @@ public class UserEventPublisherAdapter implements UserEventPublisherPort {
 
   @Override
   public void publish(UserRegisteredEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getUserEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getUserRegisteredEvent());
   }
 }

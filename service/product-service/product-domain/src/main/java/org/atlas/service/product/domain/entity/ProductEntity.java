@@ -16,7 +16,6 @@ public class ProductEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
   private Integer id;
-  private String code;
   private String name;
   private String imageUrl;
   private BigDecimal price;

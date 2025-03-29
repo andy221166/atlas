@@ -13,7 +13,7 @@ export const API_ENDPOINTS = {
   },
   PRODUCTS: {
     LIST: '/api/front/products',
-    SEARCH: '/api/front/products',
+    SEARCH: '/api/front/products/search',
     DETAIL: (id) => `/api/front/products/${id}`,
     BRANDS: '/api/master/brands',
     CATEGORIES: '/api/master/categories'

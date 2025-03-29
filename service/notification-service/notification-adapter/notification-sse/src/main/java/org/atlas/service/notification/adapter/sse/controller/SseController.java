@@ -19,7 +19,8 @@ public abstract class SseController<K> {
   protected SseEmitter subscribe(K key) {
     log.debug("Subscribing SseEmitter for key: {}", key);
 
-    SseEmitter sseEmitter = new SseEmitter();
+    // No timeout
+    SseEmitter sseEmitter = new SseEmitter(-1L);
 
     sseEmitter.onCompletion(() -> {
       log.debug("SseEmitter completed for key: {}", key);

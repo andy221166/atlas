@@ -24,6 +24,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.atlas.platform.json.JsonUtil;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,7 +62,7 @@ public class HttpClientService {
       Class<Res> responseClass) {
     HttpPost httpRequest = new HttpPost(url);
     setHeaders(httpRequest, headersMap);
-    httpRequest.addHeader("Content-Type", "application/json");
+    httpRequest.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
     setRequestBodyAsJson(httpRequest, requestBody);
     return call(httpRequest, responseClass);
   }
@@ -82,7 +83,7 @@ public class HttpClientService {
       Class<Res> responseClass) {
     HttpPut httpRequest = new HttpPut(url);
     setHeaders(httpRequest, headersMap);
-    httpRequest.addHeader("Content-Type", "application/json");
+    httpRequest.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
     setRequestBodyAsJson(httpRequest, requestBody);
     return call(httpRequest, responseClass);
   }

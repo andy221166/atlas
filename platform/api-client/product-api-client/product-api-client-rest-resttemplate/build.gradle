@@ -1,6 +1,7 @@
 dependencies {
     // Platform
     api project(':api-client-rest-resttemplate')
+    api project(':object-mapper')
 
     // Service
     api project(':product-api-client-contract')

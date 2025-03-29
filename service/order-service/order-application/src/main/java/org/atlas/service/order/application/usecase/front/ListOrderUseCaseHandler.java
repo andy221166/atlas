@@ -11,12 +11,13 @@ import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.order.domain.entity.OrderEntity;
 import org.atlas.service.order.domain.entity.OrderItemEntity;
-import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase;
-import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase.Output.Order;
-import org.atlas.service.order.port.inbound.usecase.front.ListOrderUseCase.Output.OrderItem;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase.ListOrderOutput.Order;
+import org.atlas.service.order.port.inbound.front.ListOrderUseCase.ListOrderOutput.OrderItem;
 import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
-import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase.Output.Product;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductInput;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput.Product;
 import org.springframework.stereotype.Component;
 
 @Component("frontListOrderUseCaseHandler")
@@ -27,17 +28,17 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
   private final ProductApiClient productApiClient;
 
   @Override
-  public Output handle(Input input) throws Exception {
+  public ListOrderOutput handle(ListOrderInput input) throws Exception {
     // Query order
     Integer userId = UserContext.getUserId();
     PagingResult<OrderEntity> orderEntityPage = orderRepositoryPort.findByUserId(userId,
         input.getPagingRequest());
-    if (orderEntityPage.isEmpty()) {
-      return new Output(PagingResult.empty());
+    if (orderEntityPage.checkEmpty()) {
+      return new ListOrderOutput();
     }
 
     // Fetch products
-    Map<Integer, Product> products = fetchProducts(orderEntityPage.getData());
+    Map<Integer, Product> products = fetchProducts(orderEntityPage.getResults());
 
     PagingResult<Order> orderPage = orderEntityPage.map(orderEntity -> {
       Order order = ObjectMapperUtil.getInstance().map(orderEntity, Order.class);
@@ -51,7 +52,7 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
             Product product = products.get(orderItemEntity.getProductId());
             if (product != null) {
               orderItem.setProduct(
-                  ObjectMapperUtil.getInstance().map(product, Output.Product.class));
+                  ObjectMapperUtil.getInstance().map(product, ListOrderOutput.Product.class));
             }
 
             return orderItem;
@@ -62,7 +63,7 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
       return order;
     });
 
-    return new Output(orderPage);
+    return (ListOrderOutput) orderPage;
   }
 
   private Map<Integer, Product> fetchProducts(List<OrderEntity> orderEntities) {
@@ -72,10 +73,10 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
             .map(OrderItemEntity::getProductId))
         .distinct()
         .toList();
-    ListProductUseCase.Input input = new ListProductUseCase.Input(productIds);
-    ListProductUseCase.Output output = productApiClient.call(input);
+    ListProductInput input = new ListProductInput(productIds);
+    ListProductOutput output = productApiClient.call(input);
     return output.getProducts()
         .stream()
-        .collect(Collectors.toMap(ListProductUseCase.Output.Product::getId, Function.identity()));
+        .collect(Collectors.toMap(Product::getId, Function.identity()));
   }
 }

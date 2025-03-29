@@ -5,6 +5,7 @@ dependencies {
 
     // Platform
     api project(':commons')
+    api project(':config')
     api project(':i18n')
     api project(':json')
     api project(':object-mapper')

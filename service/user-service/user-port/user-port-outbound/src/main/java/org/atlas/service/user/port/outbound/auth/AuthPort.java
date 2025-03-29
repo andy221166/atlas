@@ -6,7 +6,7 @@ public interface AuthPort {
 
   void register(UserEntity userEntity);
 
-  LoginResponse login(LoginRequest request);
+  AuthLoginResponse login(AuthLoginRequest request);
 
   void logout(String accessToken);
 }

@@ -1,10 +1,15 @@
 package org.atlas.service.order.adapter.api.server.rest.admin.controller;
 
-import org.atlas.platform.api.server.rest.response.PagingResponse;
+import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
-import org.atlas.service.order.port.inbound.usecase.admin.ListOrderUseCase;
+import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.order.adapter.api.server.rest.admin.model.ListOrderResponse;
+import org.atlas.service.order.port.inbound.admin.ListOrderUseCase;
+import org.atlas.service.order.port.inbound.admin.ListOrderUseCase.ListOrderInput;
+import org.atlas.service.order.port.inbound.admin.ListOrderUseCase.ListOrderOutput;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +28,16 @@ public class OrderController {
     this.listOrderUseCase = listOrderUseCase;
   }
 
-  @GetMapping
-  public PagingResponse<ListOrderUseCase.Output.Order> listOrder(
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<ListOrderResponse> listOrder(
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
   ) throws Exception {
-    ListOrderUseCase.Input input = ListOrderUseCase.Input.builder()
+    ListOrderInput input = ListOrderInput.builder()
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
-    ListOrderUseCase.Output output = listOrderUseCase.handle(input);
-    return PagingResponse.success(output.getOrderPage());
+    ListOrderOutput output = listOrderUseCase.handle(input);
+    ListOrderResponse response = ObjectMapperUtil.getInstance().map(output, ListOrderResponse.class);
+    return Response.success(response);
   }
 }

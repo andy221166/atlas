@@ -1,0 +1,8 @@
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    default-models-expand-depth: -1 # Hide Schemas section
+  use-fqn: true # Fix for static nested class
+#  packages-to-scan: org.atlas.service.user.adapter.api.server.rest

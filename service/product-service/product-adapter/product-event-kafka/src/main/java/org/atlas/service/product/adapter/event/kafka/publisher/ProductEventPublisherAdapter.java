@@ -20,26 +20,26 @@ public class ProductEventPublisherAdapter implements ProductEventPublisherPort {
 
   @Override
   public void publish(ProductCreatedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductCreatedEvent());
   }
 
   @Override
   public void publish(ProductUpdatedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductUpdatedEvent());
   }
 
   @Override
   public void publish(ProductDeletedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductDeletedEvent());
   }
 
   @Override
   public void publish(ReserveQuantitySucceededEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getOrderEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantitySucceededEvent());
   }
 
   @Override
   public void publish(ReserveQuantityFailedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getOrderEvents());
+    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantityFailedEvent());
   }
 }

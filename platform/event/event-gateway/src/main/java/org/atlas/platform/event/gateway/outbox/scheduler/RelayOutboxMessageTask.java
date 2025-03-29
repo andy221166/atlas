@@ -16,7 +16,7 @@ public class RelayOutboxMessageTask {
   /**
    * Run every minute
    */
-  @Scheduled(cron = "*/15 * * * * *")
+  @Scheduled(cron = "*/5 * * * * *")
   public void run() {
     outboxMessageService.processPendingOutboxMessages();
   }

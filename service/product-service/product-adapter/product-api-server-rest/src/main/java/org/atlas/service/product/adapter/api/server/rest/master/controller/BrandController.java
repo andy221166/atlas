@@ -2,7 +2,11 @@ package org.atlas.service.product.adapter.api.server.rest.master.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
-import org.atlas.service.product.port.inbound.usecase.master.ListBrandUseCase;
+import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.product.adapter.api.server.rest.master.model.ListBrandResponse;
+import org.atlas.service.product.port.inbound.master.ListBrandUseCase;
+import org.atlas.service.product.port.inbound.master.ListBrandUseCase.ListBrandOutput;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +20,11 @@ public class BrandController {
 
   private final ListBrandUseCase listBrandUseCase;
 
-  @GetMapping
-  public Response<ListBrandUseCase.Output> listBrand() throws Exception {
-    ListBrandUseCase.Output output = listBrandUseCase.handle(null);
-    return Response.success(output);
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<ListBrandResponse> listBrand() throws Exception {
+    ListBrandOutput output = listBrandUseCase.handle(null);
+    ListBrandResponse response = ObjectMapperUtil.getInstance()
+        .map(output, ListBrandResponse.class);
+    return Response.success(response);
   }
 }

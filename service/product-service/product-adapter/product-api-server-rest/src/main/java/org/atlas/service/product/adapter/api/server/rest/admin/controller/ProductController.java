@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.enums.FileType;
@@ -13,15 +12,29 @@ import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.util.DateUtil;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
 import org.atlas.service.product.adapter.api.server.rest.admin.model.CreateProductRequest;
+import org.atlas.service.product.adapter.api.server.rest.admin.model.CreateProductResponse;
+import org.atlas.service.product.adapter.api.server.rest.admin.model.GetProductResponse;
+import org.atlas.service.product.adapter.api.server.rest.admin.model.ListProductResponse;
 import org.atlas.service.product.adapter.api.server.rest.admin.model.UpdateProductRequest;
 import org.atlas.service.product.domain.entity.ProductStatus;
-import org.atlas.service.product.port.inbound.usecase.admin.CreateProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.DeleteProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.ExportProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.GetProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.ImportProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.ListProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.admin.UpdateProductUseCase;
+import org.atlas.service.product.port.inbound.admin.CreateProductUseCase;
+import org.atlas.service.product.port.inbound.admin.CreateProductUseCase.CreateProductInput;
+import org.atlas.service.product.port.inbound.admin.CreateProductUseCase.CreateProductOutput;
+import org.atlas.service.product.port.inbound.admin.DeleteProductUseCase;
+import org.atlas.service.product.port.inbound.admin.DeleteProductUseCase.DeleteProductInput;
+import org.atlas.service.product.port.inbound.admin.ExportProductUseCase;
+import org.atlas.service.product.port.inbound.admin.ExportProductUseCase.ExportProductInput;
+import org.atlas.service.product.port.inbound.admin.ExportProductUseCase.ExportProductOutput;
+import org.atlas.service.product.port.inbound.admin.GetProductUseCase;
+import org.atlas.service.product.port.inbound.admin.GetProductUseCase.GetProductInput;
+import org.atlas.service.product.port.inbound.admin.GetProductUseCase.GetProductOutput;
+import org.atlas.service.product.port.inbound.admin.ImportProductUseCase;
+import org.atlas.service.product.port.inbound.admin.ImportProductUseCase.ImportProductInput;
+import org.atlas.service.product.port.inbound.admin.ListProductUseCase;
+import org.atlas.service.product.port.inbound.admin.ListProductUseCase.ListProductInput;
+import org.atlas.service.product.port.inbound.admin.ListProductUseCase.ListProductOutput;
+import org.atlas.service.product.port.inbound.admin.UpdateProductUseCase;
+import org.atlas.service.product.port.inbound.admin.UpdateProductUseCase.UpdateProductInput;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +64,8 @@ public class ProductController {
   private final ImportProductUseCase importProductUseCase;
   private final ExportProductUseCase exportProductUseCase;
 
-  @GetMapping
-  public PagingResponse<ListProductUseCase.Output.Product> listProduct(
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<ListProductResponse> listProduct(
       @RequestParam(name = "id", required = false) Integer id,
       @RequestParam(name = "keyword", required = false) String keyword,
       @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
@@ -65,7 +78,7 @@ public class ProductController {
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
   ) throws Exception {
-    ListProductUseCase.Input input = new ListProductUseCase.Input();
+    ListProductInput input = new ListProductInput();
     input.setId(id);
     input.setKeyword(keyword);
     input.setMinPrice(minPrice);
@@ -76,54 +89,60 @@ public class ProductController {
     input.setBrandId(brandId);
     input.setCategoryIds(categoryIds);
     input.setPagingRequest(PagingRequest.of(page - 1, size));
-    ListProductUseCase.Output output = listProductUseCase.handle(input);
-    return PagingResponse.success(output.getProductPage());
+    ListProductOutput output = listProductUseCase.handle(input);
+    ListProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, ListProductResponse.class);
+    return Response.success(response);
   }
 
-  @GetMapping("/{id}")
-  public Response<GetProductUseCase.Output> getProduct(@PathVariable Integer id) throws Exception {
-    GetProductUseCase.Input input = new GetProductUseCase.Input(id);
-    GetProductUseCase.Output output = getProductUseCase.handle(input);
-    return Response.success(output);
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<GetProductResponse> getProduct(@PathVariable Integer id) throws Exception {
+    GetProductInput input = new GetProductInput(id);
+    GetProductOutput output = getProductUseCase.handle(input);
+    GetProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, GetProductResponse.class);
+    return Response.success(response);
   }
 
-  @PostMapping
-  public Response<CreateProductUseCase.Output> createProduct(
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<CreateProductResponse> createProduct(
       @Valid @RequestBody CreateProductRequest request) throws Exception {
-    CreateProductUseCase.Input input = ObjectMapperUtil.getInstance()
-        .map(request, CreateProductUseCase.Input.class);
-    CreateProductUseCase.Output output = createProductUseCase.handle(input);
-    return Response.success(output);
+    CreateProductInput input = ObjectMapperUtil.getInstance()
+        .map(request, CreateProductInput.class);
+    CreateProductOutput output = createProductUseCase.handle(input);
+    CreateProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, CreateProductResponse.class);
+    return Response.success(response);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<Void> updateProduct(
       @PathVariable("id") Integer id,
       @Valid @RequestBody UpdateProductRequest request) throws Exception {
-    UpdateProductUseCase.Input input = ObjectMapperUtil.getInstance()
-        .map(request, UpdateProductUseCase.Input.class);
+    UpdateProductInput input = ObjectMapperUtil.getInstance()
+        .map(request, UpdateProductInput.class);
     input.setId(id);
     updateProductUseCase.handle(input);
     return Response.success();
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<Void> deleteProduct(@PathVariable("id") Integer id) throws Exception {
-    DeleteProductUseCase.Input input = new DeleteProductUseCase.Input(id);
+    DeleteProductInput input = new DeleteProductInput(id);
     deleteProductUseCase.handle(input);
     return Response.success();
   }
 
-  @PostMapping("/import")
-  public Response<Integer> importProduct(@RequestParam("file") MultipartFile file,
+  @PostMapping(value = "/import", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<Void> importProduct(@RequestParam("file") MultipartFile file,
       @RequestParam("fileType") FileType fileType) throws Exception {
     byte[] fileContent = file.getBytes();
-    ImportProductUseCase.Input input = new ImportProductUseCase.Input(fileType, fileContent);
+    ImportProductInput input = new ImportProductInput(fileType, fileContent);
     importProductUseCase.handle(input);
     return Response.success();
   }
 
-  @GetMapping("/export")
+  @GetMapping(value = "/export", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<byte[]> export(
       @RequestParam(name = "id", required = false) Integer id,
       @RequestParam(name = "keyword", required = false) String keyword,
@@ -136,7 +155,7 @@ public class ProductController {
       @RequestParam(name = "category_ids", required = false) List<Integer> categoryIds,
       @RequestParam(name = "file_type") FileType fileType)
       throws Exception {
-    ExportProductUseCase.Input input = new ExportProductUseCase.Input();
+    ExportProductInput input = new ExportProductInput();
     input.setId(id);
     input.setKeyword(keyword);
     input.setMinPrice(minPrice);
@@ -147,7 +166,7 @@ public class ProductController {
     input.setBrandId(brandId);
     input.setCategoryIds(categoryIds);
 
-    ExportProductUseCase.Output output = exportProductUseCase.handle(input);
+    ExportProductOutput output = exportProductUseCase.handle(input);
 
     HttpHeaders headers = new HttpHeaders();
     String fileName = "export-product-" +

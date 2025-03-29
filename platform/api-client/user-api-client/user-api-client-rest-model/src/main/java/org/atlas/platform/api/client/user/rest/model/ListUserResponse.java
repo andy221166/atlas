@@ -1,12 +1,32 @@
 package org.atlas.platform.api.client.user.rest.model;
 
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.atlas.platform.api.client.rest.model.internal.Response;
-import org.atlas.service.user.port.inbound.usecase.internal.ListUserUseCase;
+import lombok.NoArgsConstructor;
+import org.atlas.platform.commons.enums.Role;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ListUserResponse extends Response<ListUserUseCase.Output> {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ListUserResponse {
 
+  private List<User> users;
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class User {
+
+    private Integer id;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private Role role;
+  }
 }

@@ -8,7 +8,9 @@ import org.atlas.platform.api.server.grpc.protobuf.product.ListProductRequestPro
 import org.atlas.platform.api.server.grpc.protobuf.product.ListProductResponseProto;
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductProto;
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductServiceGrpc;
-import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductInput;
+import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -19,9 +21,9 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
   @Override
   public void listProduct(ListProductRequestProto requestProto,
       StreamObserver<ListProductResponseProto> responseObserver) {
-    ListProductUseCase.Input input = map(requestProto);
+    ListProductInput input = map(requestProto);
     try {
-      ListProductUseCase.Output output = listProductUseCase.handle(input);
+      ListProductOutput output = listProductUseCase.handle(input);
       ListProductResponseProto responseProto = map(output);
       responseObserver.onNext(responseProto);
       responseObserver.onCompleted();
@@ -30,11 +32,11 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
     }
   }
 
-  private ListProductUseCase.Input map(ListProductRequestProto requestProto) {
-    return new ListProductUseCase.Input(requestProto.getIdList());
+  private ListProductInput map(ListProductRequestProto requestProto) {
+    return new ListProductInput(requestProto.getIdList());
   }
 
-  private ListProductResponseProto map(ListProductUseCase.Output output) {
+  private ListProductResponseProto map(ListProductOutput output) {
     if (CollectionUtils.isEmpty(output.getProducts())) {
       return ListProductResponseProto.getDefaultInstance();
     }
@@ -43,7 +45,7 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
     return builder.build();
   }
 
-  private ProductProto map(ListProductUseCase.Output.Product product) {
+  private ProductProto map(ListProductOutput.Product product) {
     return ProductProto.newBuilder()
         .setId(product.getId())
         .setName(product.getName())

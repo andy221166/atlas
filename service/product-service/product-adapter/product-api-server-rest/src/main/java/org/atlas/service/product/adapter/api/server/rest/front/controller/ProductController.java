@@ -2,13 +2,19 @@ package org.atlas.service.product.adapter.api.server.rest.front.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.atlas.platform.api.server.rest.response.PagingResponse;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
+import org.atlas.service.product.adapter.api.server.rest.front.model.GetProductResponse;
 import org.atlas.service.product.adapter.api.server.rest.front.model.SearchProductRequest;
-import org.atlas.service.product.port.inbound.usecase.front.GetProductUseCase;
-import org.atlas.service.product.port.inbound.usecase.front.SearchProductUseCase;
+import org.atlas.service.product.adapter.api.server.rest.front.model.SearchProductResponse;
+import org.atlas.service.product.port.inbound.front.GetProductUseCase;
+import org.atlas.service.product.port.inbound.front.GetProductUseCase.GetProductInput;
+import org.atlas.service.product.port.inbound.front.GetProductUseCase.GetProductOutput;
+import org.atlas.service.product.port.inbound.front.SearchProductUseCase;
+import org.atlas.service.product.port.inbound.front.SearchProductUseCase.SearchProductInput;
+import org.atlas.service.product.port.inbound.front.SearchProductUseCase.SearchProductOutput;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,21 +32,25 @@ public class ProductController {
   private final SearchProductUseCase searchProductUseCase;
   private final GetProductUseCase getProductUseCase;
 
-  @PostMapping
-  public PagingResponse<SearchProductUseCase.Output.Product> searchProduct(
+  @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<SearchProductResponse> searchProduct(
       @Valid @RequestBody SearchProductRequest request) throws Exception {
-    SearchProductUseCase.Input input = ObjectMapperUtil.getInstance()
-        .map(request, SearchProductUseCase.Input.class);
+    SearchProductInput input = ObjectMapperUtil.getInstance()
+        .map(request, SearchProductInput.class);
     input.setPagingRequest(PagingRequest.of(request.getPage() - 1, request.getSize()));
-    SearchProductUseCase.Output output = searchProductUseCase.handle(input);
-    return PagingResponse.success(output.getProductPage());
+    SearchProductOutput output = searchProductUseCase.handle(input);
+    SearchProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, SearchProductResponse.class);
+    return Response.success(response);
   }
 
-  @GetMapping("/{id}")
-  public Response<GetProductUseCase.Output> getProduct(@PathVariable("id") Integer id)
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<GetProductResponse> getProduct(@PathVariable("id") Integer id)
       throws Exception {
-    GetProductUseCase.Input input = new GetProductUseCase.Input(id);
-    GetProductUseCase.Output output = getProductUseCase.handle(input);
-    return Response.success(output);
+    GetProductInput input = new GetProductInput(id);
+    GetProductOutput output = getProductUseCase.handle(input);
+    GetProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, GetProductResponse.class);
+    return Response.success(response);
   }
 }

@@ -7,8 +7,8 @@ import org.atlas.platform.jwt.core.JwtService;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.service.user.domain.entity.UserEntity;
 import org.atlas.service.user.port.outbound.auth.AuthPort;
-import org.atlas.service.user.port.outbound.auth.LoginRequest;
-import org.atlas.service.user.port.outbound.auth.LoginResponse;
+import org.atlas.service.user.port.outbound.auth.AuthLoginRequest;
+import org.atlas.service.user.port.outbound.auth.AuthLoginResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +27,7 @@ public class AuthAdapter implements AuthPort {
   }
 
   @Override
-  public LoginResponse login(LoginRequest request) {
+  public AuthLoginResponse login(AuthLoginRequest request) {
     // Perform login
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
@@ -50,7 +50,7 @@ public class AuthAdapter implements AuthPort {
 
     // TODO: Generate refresh token
 
-    return new LoginResponse(accessToken, null);
+    return new AuthLoginResponse(accessToken, null);
   }
 
   @Override

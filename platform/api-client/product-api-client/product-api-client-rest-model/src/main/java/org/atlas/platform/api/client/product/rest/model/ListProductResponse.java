@@ -1,12 +1,28 @@
 package org.atlas.platform.api.client.product.rest.model;
 
+import java.math.BigDecimal;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.atlas.platform.api.client.rest.model.internal.Response;
-import org.atlas.service.product.port.inbound.usecase.internal.ListProductUseCase;
+import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ListProductResponse extends Response<ListProductUseCase.Output> {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ListProductResponse {
 
+  private List<Product> products;
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Product {
+
+    private Integer id;
+    private String name;
+    private BigDecimal price;
+  }
 }

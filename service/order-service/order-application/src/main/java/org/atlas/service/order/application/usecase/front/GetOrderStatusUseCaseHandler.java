@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.commons.enums.AppError;
 import org.atlas.platform.commons.exception.BusinessException;
 import org.atlas.service.order.domain.entity.OrderEntity;
-import org.atlas.service.order.port.inbound.usecase.front.GetOrderStatusUseCase;
+import org.atlas.service.order.port.inbound.front.GetOrderStatusUseCase;
 import org.atlas.service.order.port.outbound.repository.OrderRepositoryPort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +17,9 @@ public class GetOrderStatusUseCaseHandler implements GetOrderStatusUseCase {
 
   @Override
   @Transactional(readOnly = true)
-  public Output handle(Input input) throws Exception {
+  public GetOrderStatusOutput handle(GetOrderStatusInput input) throws Exception {
     OrderEntity orderEntity = orderRepositoryPort.findById(input.getOrderId())
         .orElseThrow(() -> new BusinessException(AppError.ORDER_NOT_FOUND));
-    return new Output(orderEntity.getStatus());
+    return new GetOrderStatusOutput(orderEntity.getStatus());
   }
 }

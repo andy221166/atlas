@@ -20,26 +20,26 @@ public class ProductEventPublisherAdapter implements ProductEventPublisherPort {
 
   @Override
   public void publish(ProductCreatedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductCreatedEvent());
   }
 
   @Override
   public void publish(ProductUpdatedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductUpdatedEvent());
   }
 
   @Override
   public void publish(ProductDeletedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductDeletedEvent());
   }
 
   @Override
   public void publish(ReserveQuantitySucceededEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantitySucceededEvent());
   }
 
   @Override
   public void publish(ReserveQuantityFailedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getOrderEvents());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantityFailedEvent());
   }
 }

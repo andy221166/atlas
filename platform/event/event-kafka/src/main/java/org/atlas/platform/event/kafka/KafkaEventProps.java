@@ -14,8 +14,14 @@ public class KafkaEventProps {
   @Data
   public static class Topic {
 
-    private String userEvents;
-    private String productEvents;
-    private String orderEvents;
+    private String userRegisteredEvent;
+    private String productCreatedEvent;
+    private String productUpdatedEvent;
+    private String productDeletedEvent;
+    private String orderCreatedEvent;
+    private String reserveQuantitySucceededEvent;
+    private String reserveQuantityFailedEvent;
+    private String orderConfirmedEvent;
+    private String orderCanceledEvent;
   }
 }
