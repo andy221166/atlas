@@ -71,10 +71,10 @@ public interface CreateProductUseCase extends UseCase<CreateProductInput, Create
     public static class ProductAttribute {
 
       @NotBlank
-      private String attributeName;
+      private String name;
 
       @NotBlank
-      private String attributeValue;
+      private String value;
     }
   }
 

@@ -1,5 +1,8 @@
 package org.atlas.service.order.adapter.api.server.rest.admin.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.commons.constant.Constant;
 import org.atlas.platform.commons.paging.PagingRequest;
@@ -28,16 +31,20 @@ public class OrderController {
     this.listOrderUseCase = listOrderUseCase;
   }
 
+  @Operation(summary = "List Orders", description = "Retrieves a paginated list of orders.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<ListOrderResponse> listOrder(
+      @Parameter(name = "page", description = "The page number to be retrieved (default is 1).", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-      @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer size
+      @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "20")
+      @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
     ListOrderInput input = ListOrderInput.builder()
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
     ListOrderOutput output = listOrderUseCase.handle(input);
-    ListOrderResponse response = ObjectMapperUtil.getInstance().map(output, ListOrderResponse.class);
+    ListOrderResponse response = ObjectMapperUtil.getInstance()
+        .map(output, ListOrderResponse.class);
     return Response.success(response);
   }
 }

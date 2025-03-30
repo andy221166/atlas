@@ -8,6 +8,7 @@ def modules = rootProject.ext.loadStackConfig()
 dependencies {
     // Lib
     api 'org.springframework.cloud:spring-cloud-starter-gateway'
+    api 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.6'
 
     // Platform
     api project(':actuator')

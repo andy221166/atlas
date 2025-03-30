@@ -2,6 +2,7 @@ package org.atlas.platform.api.server.rest.config;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.converter.StringToFileTypeConverter;
+import org.atlas.platform.commons.constant.Constant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
@@ -17,11 +18,11 @@ public class RestWebConfig implements WebMvcConfigurer {
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//            .allowedOrigins(Constant.ALLOWED_HOSTS)
-//            .allowedMethods("*")
-//            .allowedHeaders("*")
-//            .allowCredentials(true);
+        registry.addMapping("/**")
+            .allowedOrigins(Constant.ALLOWED_HOSTS)
+            .allowedMethods("*")
+            .allowedHeaders("*")
+            .allowCredentials(true);
   }
 
   @Override

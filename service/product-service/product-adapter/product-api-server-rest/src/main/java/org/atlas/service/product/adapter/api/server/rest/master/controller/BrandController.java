@@ -1,5 +1,6 @@
 package org.atlas.service.product.adapter.api.server.rest.master.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
@@ -20,6 +21,7 @@ public class BrandController {
 
   private final ListBrandUseCase listBrandUseCase;
 
+  @Operation(summary = "List Brands", description = "Retrieves a list of all available brands.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<ListBrandResponse> listBrand() throws Exception {
     ListBrandOutput output = listBrandUseCase.handle(null);

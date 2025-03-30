@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.atlas.platform.commons.constant.Constant;
 import org.checkerframework.checker.index.qual.Positive;
 
 @Data
@@ -18,7 +19,7 @@ public class PagingRequest {
 
   @Positive
   @Min(0)
-  private Integer size;
+  private Integer size = Constant.DEFAULT_PAGE_SIZE;
 
   private String sortBy;
 

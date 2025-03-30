@@ -1,5 +1,7 @@
 package org.atlas.service.product.adapter.api.server.rest.internal.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
@@ -24,10 +26,12 @@ public class ProductController {
 
   private final ListProductUseCase listProductUseCase;
 
+  @Operation(summary = "List Products", description = "Retrieves a list of products based on the provided criteria.")
   @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListProductResponse> listUser(
-      @Valid @RequestBody ListProductRequest request)
-      throws Exception {
+  public Response<ListProductResponse> listProduct(
+      @Parameter(description = "Request object containing the criteria for listing products.", required = true)
+      @Valid @RequestBody ListProductRequest request) throws Exception {
+
     ListProductInput input = ObjectMapperUtil.getInstance()
         .map(request, ListProductInput.class);
     ListProductOutput output = listProductUseCase.handle(input);

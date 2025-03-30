@@ -76,10 +76,10 @@ public interface UpdateProductUseCase extends UseCase<UpdateProductInput, Void> 
       private Integer id;
 
       @NotBlank
-      private String attributeName;
+      private String name;
 
       @NotBlank
-      private String attributeValue;
+      private String value;
     }
   }
 }

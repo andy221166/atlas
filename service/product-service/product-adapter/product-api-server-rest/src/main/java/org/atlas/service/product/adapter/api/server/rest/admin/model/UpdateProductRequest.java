@@ -1,5 +1,6 @@
 package org.atlas.service.product.adapter.api.server.rest.admin.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -10,66 +11,84 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
-import org.atlas.service.product.adapter.api.server.rest.admin.model.CreateProductRequest.ProductAttribute;
 import org.atlas.service.product.domain.entity.ProductStatus;
 
 @Data
+@Schema(description = "Request object for updating an existing product.")
 public class UpdateProductRequest {
 
   @NotNull
+  @Schema(description = "Unique identifier of the product to update.", example = "123")
   private Integer id;
 
   @NotBlank
+  @Schema(description = "Name of the product.", example = "T-Shirt")
   private String name;
 
   @NotNull
   @DecimalMin(value = "0.0")
+  @Schema(description = "Price of the product.", example = "19.99")
   private BigDecimal price = BigDecimal.ZERO;
 
+  @Schema(description = "URL of the product's image.", example = "https://example.com/product-image.jpg")
   private String imageUrl;
 
   @NotNull
   @PositiveOrZero
+  @Schema(description = "Quantity of the product available.", example = "100")
   private Integer quantity;
 
   @NotNull
+  @Schema(description = "Status of the product.", example = "IN_STOCK")
   private ProductStatus status;
 
   @NotNull
+  @Schema(description = "Date and time the product becomes available in ISO 8601 format.", example = "2023-10-01T10:00:00Z")
   private Date availableFrom;
 
+  @Schema(description = "Indicates if the product is active.", example = "true")
   private Boolean isActive;
 
   @NotNull
+  @Schema(description = "ID of the brand associated with the product.", example = "1")
   private Integer brandId;
 
   @NotNull
   @Valid
+  @Schema(description = "Detailed information about the product.")
   private ProductDetail detail;
 
   @Valid
+  @Schema(description = "List of product attributes.")
   private List<ProductAttribute> attributes;
 
   @NotEmpty
+  @Schema(description = "List of category IDs the product belongs to.", example = "[1, 2, 3]")
   private List<Integer> categoryIds;
 
   @Data
+  @Schema(description = "Detailed information about the product.")
   public static class ProductDetail {
 
     @NotBlank
+    @Schema(description = "Description of the product.", example = "A comfortable cotton t-shirt.")
     private String description;
   }
 
   @Data
+  @Schema(description = "Attributes associated with the product.")
   public static class ProductAttribute {
 
     @NotNull
+    @Schema(description = "Unique identifier of the product attribute.", example = "1")
     private Integer id;
 
     @NotBlank
-    private String attributeName;
+    @Schema(description = "Name of the product attribute.", example = "Color")
+    private String name;
 
     @NotBlank
-    private String attributeValue;
+    @Schema(description = "Value of the product attribute.", example = "Red")
+    private String value;
   }
 }

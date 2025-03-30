@@ -13,6 +13,6 @@ public class ProductAttributeEntity extends DomainEntity {
   @EqualsAndHashCode.Include
   private Integer id;
   private Integer productId;
-  private String attributeName;
-  private String attributeValue;
+  private String name;
+  private String value;
 }

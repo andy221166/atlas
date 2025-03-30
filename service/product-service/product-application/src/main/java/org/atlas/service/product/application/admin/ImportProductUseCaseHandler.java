@@ -118,18 +118,18 @@ public class ImportProductUseCaseHandler implements ImportProductUseCase {
 
     // Product attributes
     ProductAttributeEntity productAttributeEntity1 = new ProductAttributeEntity();
-    productAttributeEntity1.setAttributeName(row.getAttributeName1());
-    productAttributeEntity1.setAttributeValue(row.getAttributeValue1());
+    productAttributeEntity1.setName(row.getAttributeName1());
+    productAttributeEntity1.setValue(row.getAttributeValue1());
     productEntity.addAttribute(productAttributeEntity1);
 
     ProductAttributeEntity productAttributeEntity2 = new ProductAttributeEntity();
-    productAttributeEntity2.setAttributeName(row.getAttributeName2());
-    productAttributeEntity2.setAttributeValue(row.getAttributeValue2());
+    productAttributeEntity2.setName(row.getAttributeName2());
+    productAttributeEntity2.setValue(row.getAttributeValue2());
     productEntity.addAttribute(productAttributeEntity2);
 
     ProductAttributeEntity productAttributeEntity3 = new ProductAttributeEntity();
-    productAttributeEntity3.setAttributeName(row.getAttributeName3());
-    productAttributeEntity3.setAttributeValue(row.getAttributeValue3());
+    productAttributeEntity3.setName(row.getAttributeName3());
+    productAttributeEntity3.setValue(row.getAttributeValue3());
     productEntity.addAttribute(productAttributeEntity3);
 
     // Brand

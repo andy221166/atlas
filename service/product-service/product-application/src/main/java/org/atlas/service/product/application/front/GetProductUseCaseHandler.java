@@ -40,8 +40,8 @@ public class GetProductUseCaseHandler implements GetProductUseCase {
     if (CollectionUtils.isNotEmpty(productEntity.getAttributes())) {
       product.setAttributes(productEntity.getAttributes()
           .stream()
-          .collect(Collectors.toMap(ProductAttributeEntity::getAttributeName,
-              ProductAttributeEntity::getAttributeValue)));
+          .collect(Collectors.toMap(ProductAttributeEntity::getName,
+              ProductAttributeEntity::getValue)));
     }
     product.setBrand(productEntity.getBrand() != null ?
         productEntity.getBrand().getName() : null);

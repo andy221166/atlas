@@ -1,5 +1,7 @@
 package org.atlas.service.product.adapter.api.server.rest.front.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.platform.api.server.rest.response.Response;
@@ -32,9 +34,12 @@ public class ProductController {
   private final SearchProductUseCase searchProductUseCase;
   private final GetProductUseCase getProductUseCase;
 
+  @Operation(summary = "Search for products based on various filters.")
   @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<SearchProductResponse> searchProduct(
-      @Valid @RequestBody SearchProductRequest request) throws Exception {
+      @Parameter(description = "Request object containing search criteria.", required = true)
+      @Valid @RequestBody SearchProductRequest request)
+      throws Exception {
     SearchProductInput input = ObjectMapperUtil.getInstance()
         .map(request, SearchProductInput.class);
     input.setPagingRequest(PagingRequest.of(request.getPage() - 1, request.getSize()));
@@ -44,9 +49,11 @@ public class ProductController {
     return Response.success(response);
   }
 
+  @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<GetProductResponse> getProduct(@PathVariable("id") Integer id)
-      throws Exception {
+  public Response<GetProductResponse> getProduct(
+      @Parameter(description = "The unique identifier of the product.", example = "1", required = true)
+      @PathVariable("id") Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = getProductUseCase.handle(input);
     GetProductResponse response = ObjectMapperUtil.getInstance()
