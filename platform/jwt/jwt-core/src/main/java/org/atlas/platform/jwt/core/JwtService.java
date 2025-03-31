@@ -1,10 +1,8 @@
 package org.atlas.platform.jwt.core;
 
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -14,20 +12,21 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @RequiredArgsConstructor
 @Slf4j
-public abstract class JwtService {
+public abstract class JwtService implements InitializingBean {
 
   protected RSAPublicKey publicKey;
   protected RSAPrivateKey privateKey;
 
   protected final RedisTemplate<String, Object> redisTemplate;
 
-  @PostConstruct
-  public void init() throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+  @Override
+  public void afterPropertiesSet() throws Exception {
     KeyFactory keyFactory = KeyFactory.getInstance("RSA");
     this.publicKey = loadPublicKey(keyFactory);
     this.privateKey = loadPrivateKey(keyFactory);

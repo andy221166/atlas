@@ -1,0 +1,10 @@
+dependencies {
+    // Lib
+    implementation 'com.sendgrid:sendgrid-java:4.10.3'
+
+    // Platform
+    api project(':cryptography')
+
+    // Service
+    api project(':notification-port-outbound')
+}

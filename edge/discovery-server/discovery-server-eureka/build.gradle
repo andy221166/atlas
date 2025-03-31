@@ -7,7 +7,7 @@ def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
     // Lib
-    api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
     // Platform
     api project(':actuator')

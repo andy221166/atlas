@@ -40,6 +40,10 @@ public interface ListOrderUseCase
       this.pagination = Pagination.empty();
     }
 
+    public ListOrderOutput(List<Order> results, Pagination pagination) {
+      super(results, pagination);
+    }
+
     @Data
     @Builder
     @NoArgsConstructor

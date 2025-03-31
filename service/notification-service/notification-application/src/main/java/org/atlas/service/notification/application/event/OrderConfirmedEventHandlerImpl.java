@@ -2,6 +2,7 @@ package org.atlas.service.notification.application.event;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -38,7 +39,13 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
   @Override
   public void handle(OrderConfirmedEvent event) {
     CompletableFuture.allOf(
-        CompletableFuture.runAsync(() -> notifyEmail(event))
+        CompletableFuture.runAsync(() -> {
+              try {
+                notifyEmail(event);
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+            })
             .exceptionally(e -> {
               log.error("Failed to notify email for event {}", event.getEventId(), e);
               return null;
@@ -56,7 +63,7 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     ).join();
   }
 
-  private void notifyEmail(OrderConfirmedEvent event) {
+  private void notifyEmail(OrderConfirmedEvent event) throws IOException {
     // Model
     Map<String, Object> model = new HashMap<>();
     model.put("order", event);
@@ -85,7 +92,8 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
     } catch (IOException e) {
       throw new ResolveTemplateException("Could not resolve attachment", e);
     }
-    attachment = new Attachment("email/attachment/coffee.jpg", attachmentFile);
+    attachment = new Attachment(
+        Files.readAllBytes(attachmentFile.toPath()), attachmentFile.getName());
 
     EmailNotification notification = new EmailNotification.Builder()
         .setSender(emailProps.getSender())
@@ -96,7 +104,6 @@ public class OrderConfirmedEventHandlerImpl implements OrderConfirmedEventHandle
         .setHtml(true)
         .build();
     emailPort.notify(notification);
-    log.info("Sent email: event={}", event);
   }
 
   private void notifySse(OrderConfirmedEvent event) {

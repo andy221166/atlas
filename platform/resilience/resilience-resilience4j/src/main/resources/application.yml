@@ -1,0 +1,30 @@
+# Retry
+resilience4j.retry:
+  instances:
+    default-internal:
+      max-attempts: 4
+      wait-duration: 1000ms
+      exponential-backoff-multiplier: 2
+
+# Circuit breaker
+resilience4j.circuitbreaker:
+  instances:
+    default-internal:
+      sliding-window-size: 10  # Number of calls to consider when calculating failure rate
+      minimum-number-of-calls: 5  # Minimum number of calls required in the sliding window before evaluating the failure rate. Here it will evaluate the last 10 calls but only if at least 5 calls have been made.
+      failure-rate-threshold: 50  # If more than 50% of calls in the window fail, the Circuit Breaker will open
+      wait-duration-in-open-state: 10000  # Circuit Breaker will remain open for 10 seconds (10000 ms) after opening before transitioning to half-open state
+      permitted-number-of-calls-in-half-open-state: 2  # In half-open state, allow 2 calls to test if the underlying service has recovered
+
+# Bulkhead
+resilience4j.bulkhead:
+    instances:
+      default-internal:
+        max-concurrent-calls: 5
+
+# Timeout
+# @TimeLimiter only supports return types that are CompletionStage, such as CompletableFuture or Mono (for reactive programming).
+resilience4j.timelimiter:
+  instances:
+    default-internal:
+      timeout-duration: 30s

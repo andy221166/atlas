@@ -11,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.platform.commons.util.ConcurrentUtil;
 import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.json.JsonUtil;
+import org.springframework.beans.factory.DisposableBean;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
@@ -18,13 +19,20 @@ import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
 @RequiredArgsConstructor
 @Slf4j
-public abstract class SnsEventConsumer {
+public abstract class SnsEventConsumer implements DisposableBean {
 
   protected final SnsEventProps snsEventProps;
   protected final SqsClient sqsClient;
 
   private final AtomicBoolean isRunning = new AtomicBoolean(true);
   private ExecutorService executorService;
+
+  @Override
+  public void destroy() {
+    log.info("Shutting down SQS consumer");
+    isRunning.set(false);
+    ConcurrentUtil.shutdown(executorService);
+  }
 
   protected void consumeMessages(String queueName, String queueUrl) {
     executorService = Executors.newSingleThreadExecutor(r -> {
@@ -79,11 +87,5 @@ public abstract class SnsEventConsumer {
         .build();
     sqsClient.deleteMessage(deleteMessageRequest);
     log.info("Deleted message: messageId={}", message.messageId());
-  }
-
-  protected void shutdown() {
-    log.info("Shutting down SQS consumer");
-    isRunning.set(false);
-    ConcurrentUtil.shutdown(executorService);
   }
 }

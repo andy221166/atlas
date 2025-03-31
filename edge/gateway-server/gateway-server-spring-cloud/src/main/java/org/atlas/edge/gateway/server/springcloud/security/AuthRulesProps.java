@@ -9,22 +9,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "app.gateway.authorization-rules")
+@ConfigurationProperties(prefix = "app.gateway.auth-rules")
 @Data
-public class AuthorizationRulesProps {
+public class AuthRulesProps {
 
   @Data
-  public static class AuthorizationRule {
+  public static class AuthRule {
 
     private String path;
     private List<Role> roles;
   }
 
   private List<String> nonSecuredPaths;
-  private List<AuthorizationRule> securedPaths;
+  private List<AuthRule> securedPaths;
 
   public Map<String, List<Role>> getSecuredPathsMap() {
     return securedPaths.stream()
-        .collect(Collectors.toMap(AuthorizationRule::getPath, AuthorizationRule::getRoles));
+        .collect(Collectors.toMap(AuthRule::getPath, AuthRule::getRoles));
   }
 }

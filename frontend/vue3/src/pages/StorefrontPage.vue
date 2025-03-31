@@ -185,8 +185,8 @@ export default {
         };
 
         const { data } = await api.products.search(requestBody);
-        products.value = data.data;
-        totalPages.value = data.pagination.totalPages;
+        products.value = data.data.results;
+        totalPages.value = data.data.pagination.totalPages;
       } catch (error) {
         console.error('Error fetching products:', error);
       }

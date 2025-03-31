@@ -1,6 +1,5 @@
 package org.atlas.platform.api.client.rest.apachehttpclient;
 
-import jakarta.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,12 +23,13 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.atlas.platform.json.JsonUtil;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class HttpClientService {
+public class HttpClientService implements DisposableBean {
 
   private final CloseableHttpClient httpClient;
 
@@ -37,8 +37,8 @@ public class HttpClientService {
     this.httpClient = HttpClientFactory.custom();
   }
 
-  @PreDestroy
-  public void preDestroy() {
+  @Override
+  public void destroy() {
     try {
       this.httpClient.close();
       log.info("Closed HttpClient");

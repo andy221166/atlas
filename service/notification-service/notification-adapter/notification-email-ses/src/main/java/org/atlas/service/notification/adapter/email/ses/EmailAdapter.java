@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.sesv2.model.SendEmailResponse;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "Email")
 public class EmailAdapter implements EmailPort {
 
   private final SesV2Client sesClient;
@@ -130,7 +130,7 @@ public class EmailAdapter implements EmailPort {
     for (Attachment attachment : request.getAttachments()) {
       MimeBodyPart attachmentPart = new MimeBodyPart();
       attachmentPart.attachFile(attachment.file());
-      attachmentPart.setFileName(attachment.fileName());
+      attachmentPart.setFileName(attachment.file().getName());
       multipart.addBodyPart(attachmentPart);
     }
 

@@ -1,14 +1,14 @@
 package org.atlas.platform.event.sns;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Configuration
 @Slf4j
-public class SqsConfig {
+public class SqsConfig implements DisposableBean {
 
   private SqsClient sqsClient;
 
@@ -20,8 +20,8 @@ public class SqsConfig {
     return this.sqsClient;
   }
 
-  @PreDestroy
-  public void closeSqsClient() {
+  @Override
+  public void destroy() {
     if (this.sqsClient != null) {
       this.sqsClient.close();
       log.info("Closed SQS client");

@@ -6,6 +6,11 @@ plugins {
 def modules = rootProject.ext.loadStackConfig()
 
 dependencies {
+    // Lib
+    implementation 'org.springframework.cloud:spring-cloud-config-server'
+
+    // Platform
+    api project(':actuator')
     switch (modules['logging']) {
         case 'logback':
             api project(':logging-logback')
@@ -13,9 +18,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-
-    api project(':actuator')
-
     switch (modules['tracing']) {
         case 'none':
             break
@@ -25,8 +27,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-
-    api 'org.springframework.cloud:spring-cloud-config-server'
 }
 
 jar {

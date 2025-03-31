@@ -1,14 +1,14 @@
 package org.atlas.service.notification.adapter.email.ses.config;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.services.sesv2.SesV2Client;
 
 @Configuration
 @Slf4j
-public class SesConfig {
+public class SesConfig implements DisposableBean {
 
   private SesV2Client sesClient;
 
@@ -20,8 +20,8 @@ public class SesConfig {
     return this.sesClient;
   }
 
-  @PreDestroy
-  public void closeSesClient() {
+  @Override
+  public void destroy() {
     if (this.sesClient != null) {
       try {
         this.sesClient.close();

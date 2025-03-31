@@ -1,14 +1,14 @@
 package org.atlas.platform.event.sns;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.services.sns.SnsClient;
 
 @Configuration
 @Slf4j
-public class SnsConfig {
+public class SnsConfig implements DisposableBean {
 
   private SnsClient snsClient;
 
@@ -20,8 +20,8 @@ public class SnsConfig {
     return this.snsClient;
   }
 
-  @PreDestroy
-  public void closeSnsClient() {
+  @Override
+  public void destroy() {
     if (this.snsClient != null) {
       this.snsClient.close();
       log.info("Closed SNS client");

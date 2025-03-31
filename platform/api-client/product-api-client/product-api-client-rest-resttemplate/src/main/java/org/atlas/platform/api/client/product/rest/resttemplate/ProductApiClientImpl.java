@@ -1,7 +1,9 @@
 package org.atlas.platform.api.client.product.rest.resttemplate;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.api.client.product.ProductApiClient;
 import org.atlas.platform.api.client.product.rest.model.ListProductRequest;
 import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
@@ -14,8 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Retry(name = "default-internal")
+@CircuitBreaker(name = "default-internal")
+@Bulkhead(name = "default-internal")
 @RequiredArgsConstructor
-@Slf4j
 public class ProductApiClientImpl implements ProductApiClient {
 
   @Value("${app.api-client.rest.product-service.base-url:http://localhost:8082}")

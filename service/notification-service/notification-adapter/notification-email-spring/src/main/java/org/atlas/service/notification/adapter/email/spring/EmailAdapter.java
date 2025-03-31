@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "Email")
 public class EmailAdapter implements EmailPort {
 
   private final JavaMailSender mailSender;
@@ -43,7 +43,7 @@ public class EmailAdapter implements EmailPort {
     helper.setText(request.getBody(), request.isHtml());
     if (CollectionUtils.isNotEmpty(request.getAttachments())) {
       for (Attachment attachment : request.getAttachments()) {
-        helper.addAttachment(attachment.fileName(), attachment.file());
+        helper.addAttachment(attachment.file().getName(), attachment.file());
       }
     }
     return mimeMessage;

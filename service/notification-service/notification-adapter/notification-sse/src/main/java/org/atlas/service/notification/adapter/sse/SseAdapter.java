@@ -1,6 +1,5 @@
 package org.atlas.service.notification.adapter.sse;
 
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +12,20 @@ import org.atlas.service.notification.adapter.sse.controller.SseController;
 import org.atlas.service.notification.port.outbound.realtime.enums.RealtimeNotificationType;
 import org.atlas.service.notification.port.outbound.realtime.sse.SseNotification;
 import org.atlas.service.notification.port.outbound.realtime.sse.SsePort;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j(topic = "SSE")
-public class SseAdapter<K> implements SsePort<K> {
+public class SseAdapter<K> implements InitializingBean, SsePort<K> {
 
   private final List<SseController<K>> sseControllers;
   private Map<RealtimeNotificationType, SseController<K>> sseControllersCache;
 
-  @PostConstruct
-  public void init() {
+  @Override
+  public void afterPropertiesSet() throws Exception {
     sseControllersCache = sseControllers.stream()
         .collect(Collectors.toMap(SseController::getEventType, Function.identity()));
   }

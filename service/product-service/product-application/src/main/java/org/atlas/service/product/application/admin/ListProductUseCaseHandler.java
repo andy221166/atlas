@@ -26,6 +26,6 @@ public class ListProductUseCaseHandler implements ListProductUseCase {
         input.getPagingRequest());
     PagingResult<Product> productPage = ObjectMapperUtil.getInstance()
         .mapPage(productEntityPage, Product.class);
-    return (ListProductOutput) productPage;
+    return new ListProductOutput(productPage.getResults(), productPage.getPagination());
   }
 }

@@ -36,6 +36,9 @@ dependencies {
         case 'ses':
             api project(':notification-email-ses')
             break
+        case 'sendgrid':
+            api project(':notification-email-sendgrid')
+            break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['email']}")
     }

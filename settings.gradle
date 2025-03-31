@@ -157,6 +157,10 @@ project(':redis-cluster').projectDir = file('platform/redis/redis-cluster')
 include(':redis-standalone')
 project(':redis-standalone').projectDir = file('platform/redis/redis-standalone')
 
+// Resilience
+include(':resilience-resilience4j')
+project(':resilience-resilience4j').projectDir = file('platform/resilience/resilience-resilience4j')
+
 // Sequence generator
 include(':sequence-generator')
 project(':sequence-generator').projectDir = file('platform/sequence-generator')
@@ -287,6 +291,8 @@ include(':notification-email-spring')
 project(':notification-email-spring').projectDir = file('service/notification-service/notification-adapter/notification-email-spring')
 include(':notification-email-ses')
 project(':notification-email-ses').projectDir = file('service/notification-service/notification-adapter/notification-email-ses')
+include(':notification-email-sendgrid')
+project(':notification-email-sendgrid').projectDir = file('service/notification-service/notification-adapter/notification-email-sendgrid')
 include(':notification-event-kafka')
 project(':notification-event-kafka').projectDir = file('service/notification-service/notification-adapter/notification-event-kafka')
 include(':notification-event-sns')

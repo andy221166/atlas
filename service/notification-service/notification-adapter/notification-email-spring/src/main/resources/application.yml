@@ -2,7 +2,3 @@ spring:
   mail:
     host: ${MAIL_SERVER_HOST:localhost}
     port: 25
-
-app:
-  email:
-    sender: test@atlas.org

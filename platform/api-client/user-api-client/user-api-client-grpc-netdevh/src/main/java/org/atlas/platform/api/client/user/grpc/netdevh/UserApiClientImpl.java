@@ -1,5 +1,8 @@
 package org.atlas.platform.api.client.user.grpc.netdevh;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.atlas.platform.api.client.user.UserApiClient;
@@ -14,6 +17,9 @@ import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserOutp
 import org.springframework.stereotype.Component;
 
 @Component
+@Retry(name = "default-internal")
+@CircuitBreaker(name = "default-internal")
+@Bulkhead(name = "default-internal")
 public class UserApiClientImpl implements UserApiClient {
 
   @GrpcClient("user-service")

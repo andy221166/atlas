@@ -63,7 +63,7 @@ public class ListOrderUseCaseHandler implements ListOrderUseCase {
       return order;
     });
 
-    return (ListOrderOutput) orderPage;
+    return new ListOrderOutput(orderPage.getResults(), orderPage.getPagination());
   }
 
   private Map<Integer, Product> fetchProducts(List<OrderEntity> orderEntities) {

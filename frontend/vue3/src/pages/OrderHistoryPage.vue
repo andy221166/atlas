@@ -87,8 +87,8 @@ export default {
       try {
         const params = { page: currentPage.value, size: pageSize };
         const { data } = await api.orders.list(params);
-        orders.value = data.data;
-        totalPages.value = data.pagination.totalPages;
+        orders.value = data.data.results;
+        totalPages.value = data.data.pagination.totalPages;
       } catch (error) {
         console.error("Error fetching orders:", error);
       }

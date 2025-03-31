@@ -1,6 +1,5 @@
 package org.atlas.service.notification.adapter.sse.config;
 
-import org.atlas.platform.commons.constant.Constant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -8,12 +7,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration("sseWebConfig")
 public class SseWebConfig implements WebMvcConfigurer {
 
+  // TODO: Consider to put it into config-server
+  private static final String[] ALLOWED_HOSTS = {
+      "http://localhost:9000" // Frontend
+  };
+
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-        .allowedOrigins(Constant.ALLOWED_HOSTS)
+        .allowedOrigins(ALLOWED_HOSTS)
         .allowedMethods("*")
         .allowedHeaders("*")
-        .allowCredentials(true);
+        .allowCredentials(true)
+        .maxAge(3600L);
   }
 }

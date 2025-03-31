@@ -5,12 +5,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Constant {
 
-  // TODO: Consider to put it into config-server
-  public static final String[] ALLOWED_HOSTS = {
-      "http://localhost:8080", // Gateway
-      "http://localhost:9000" // Frontend
-  };
-
   public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
   public static final String JWT_ISSUER = "atlas.platform.auth";

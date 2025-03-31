@@ -1,19 +1,19 @@
 package org.atlas.service.order.adapter.event.sns.consumer;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.platform.event.contract.DomainEvent;
 import org.atlas.platform.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.platform.event.sns.SnsEventConsumer;
 import org.atlas.platform.event.sns.SnsEventProps;
 import org.atlas.service.order.port.inbound.event.ReserveQuantitySucceededEventHandler;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Component
 @Slf4j
-public class ReserveQuantitySucceededEventConsumer extends SnsEventConsumer {
+public class ReserveQuantitySucceededEventConsumer extends SnsEventConsumer
+    implements InitializingBean {
 
   private final ReserveQuantitySucceededEventHandler reserveQuantitySucceededEventHandler;
 
@@ -24,15 +24,10 @@ public class ReserveQuantitySucceededEventConsumer extends SnsEventConsumer {
     this.reserveQuantitySucceededEventHandler = reserveQuantitySucceededEventHandler;
   }
 
-  @PostConstruct
-  public void init() {
+  @Override
+  public void afterPropertiesSet() throws Exception {
     consumeMessages("reserve-quantity-succeeded-event",
         snsEventProps.getSqsQueueUrl().getReserveQuantitySucceededEvent());
-  }
-
-  @PreDestroy
-  public void destroy() {
-    shutdown();
   }
 
   @Override

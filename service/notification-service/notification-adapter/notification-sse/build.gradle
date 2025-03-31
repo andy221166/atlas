@@ -1,6 +1,6 @@
 dependencies {
     // Lib
-    api 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // Service
     api project(':notification-port-outbound')

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.atlas.platform.commons.paging.Pagination;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
@@ -36,6 +37,10 @@ public interface SearchProductUseCase
   @Data
   @EqualsAndHashCode(callSuper = false)
   class SearchProductOutput extends PagingResult<Product> {
+
+    public SearchProductOutput(List<Product> results, Pagination pagination) {
+      super(results, pagination);
+    }
 
     @Data
     @Builder

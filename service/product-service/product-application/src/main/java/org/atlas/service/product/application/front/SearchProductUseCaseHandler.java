@@ -40,8 +40,9 @@ public class SearchProductUseCaseHandler implements SearchProductUseCase {
       criteria.setIsActive(true);
       productEntityPage = productRepositoryPort.findByCriteria(criteria, input.getPagingRequest());
     }
+
     PagingResult<SearchProductOutput.Product> productPage = ObjectMapperUtil.getInstance()
         .mapPage(productEntityPage, SearchProductOutput.Product.class);
-    return (SearchProductOutput) productPage;
+    return new SearchProductOutput(productPage.getResults(), productPage.getPagination());
   }
 }

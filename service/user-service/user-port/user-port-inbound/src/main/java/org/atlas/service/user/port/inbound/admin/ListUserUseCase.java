@@ -1,12 +1,14 @@
 package org.atlas.service.user.port.inbound.admin;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.platform.commons.enums.Role;
+import org.atlas.platform.commons.paging.Pagination;
 import org.atlas.platform.commons.paging.PagingRequest;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.platform.usecase.port.UseCase;
@@ -29,6 +31,10 @@ public interface ListUserUseCase extends UseCase<ListUserInput, ListUserOutput> 
   @Data
   @EqualsAndHashCode(callSuper = false)
   class ListUserOutput extends PagingResult<User> {
+
+    public ListUserOutput(List<User> results, Pagination pagination) {
+      super(results, pagination);
+    }
 
     @Data
     @Builder
