@@ -1,0 +1,47 @@
+plugins {
+    id 'maven-publish'
+    id 'org.springframework.boot' version '3.4.0'
+}
+
+def modules = rootProject.ext.loadStackConfig()
+
+dependencies {
+    // Lib
+    implementation 'de.codecentric:spring-boot-admin-starter-server:3.4.5'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Platform
+    api project(':config')
+    switch (modules['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':discovery-client-eureka')
+            break
+        case 'kubernetes':
+            api project(':discovery-client-kubernetes')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+    }
+    switch (modules['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
+}

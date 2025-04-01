@@ -41,6 +41,10 @@ project(':user-api-client-rest-model').projectDir = file('platform/api-client/us
 include(':user-api-client-rest-resttemplate')
 project(':user-api-client-rest-resttemplate').projectDir = file('platform/api-client/user-api-client/user-api-client-rest-resttemplate')
 
+// API gateway
+include(':api-gateway-spring-cloud')
+project(':api-gateway-spring-cloud').projectDir = file('platform/api-gateway/api-gateway-spring-cloud')
+
 // API server
 include(':api-server-grpc-netdevh')
 project(':api-server-grpc-netdevh').projectDir = file('platform/api-server/api-server-grpc-netdevh')
@@ -69,6 +73,10 @@ project(':commons').projectDir = file('platform/commons')
 include(':config')
 project(':config').projectDir = file('platform/config')
 
+// Config server
+include(':config-server-spring-cloud')
+project(':config-server-spring-cloud').projectDir = file('platform/config-server/config-server-spring-cloud')
+
 // Cryptography
 include(':cryptography')
 project(':cryptography').projectDir = file('platform/cryptography')
@@ -78,6 +86,10 @@ include(':discovery-client-eureka')
 project(':discovery-client-eureka').projectDir = file('platform/discovery-client/discovery-client-eureka')
 include(':discovery-client-kubernetes')
 project(':discovery-client-kubernetes').projectDir = file('platform/discovery-client/discovery-client-kubernetes')
+
+// Discovery server
+include(':discovery-server-eureka')
+project(':discovery-server-eureka').projectDir = file('platform/discovery-server/discovery-server-eureka')
 
 // Event
 include(':event-contract')
@@ -127,9 +139,17 @@ project(':object-mapper').projectDir = file('platform/object-mapper')
 
 // Observability
 
-// Observability::Metrics
+// Observability::Actuator
 include(':actuator')
 project(':actuator').projectDir = file('platform/observability/actuator')
+
+// Observability::Admin client
+include(':admin-client')
+project(':admin-client').projectDir = file('platform/observability/admin/admin-client')
+
+// Observability::Admin server
+include(':admin-server')
+project(':admin-server').projectDir = file('platform/observability/admin/admin-server')
 
 // Observability::Logging
 include(':logging-logback')
@@ -305,23 +325,3 @@ include(':notification-template-thymeleaf')
 project(':notification-template-thymeleaf').projectDir = file('service/notification-service/notification-adapter/notification-template-thymeleaf')
 include(':notification-websocket')
 project(':notification-websocket').projectDir = file('service/notification-service/notification-adapter/notification-websocket')
-
-// -------------------------------------------------------------------------------------------------
-// Edge
-// -------------------------------------------------------------------------------------------------
-
-// Discovery server
-include(':discovery-server-eureka')
-project(':discovery-server-eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')
-
-// Config server
-include(':config-server-spring-cloud')
-project(':config-server-spring-cloud').projectDir = file('edge/config-server/config-server-spring-cloud')
-
-// Auth server
-include(':auth-server-spring-security-jwt')
-project(':auth-server-spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
-
-// Gateway server
-include(':gateway-server-spring-cloud')
-project(':gateway-server-spring-cloud').projectDir = file('edge/gateway-server/gateway-server-spring-cloud')

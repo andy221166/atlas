@@ -118,6 +118,16 @@ There are two primary ways to implement the Saga Pattern:
    - Introduces a single point of failure. 
    - Slightly higher coupling compared to choreography.
 
+### Dual-writes
+
+#### Outbox pattern
+
+Disadvantages:
+- First, implementing the outbox pattern requires developers to design and maintain the outbox table, manage its cleanup, and ensure that asynchronous processing works reliably. Mistakes in handling the outbox, such as using overly complicated locking mechanisms or mismanaging the data flow, can introduce bugs and inefficiencies. 
+- Additionally, the operational overhead is high, as the outbox pattern depends on additional processes to query the outbox table, publish messages, and then delete the entries. This can lead to increased resource consumption and latency compared to a direct database-to-queue approach.
+
+#### CDC
+
 ---
 
 ## Fault-Tolerance

@@ -1,0 +1,3 @@
+dependencies {
+    api 'de.codecentric:spring-boot-admin-starter-client:3.4.5'
+}
