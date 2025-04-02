@@ -143,14 +143,6 @@ project(':object-mapper').projectDir = file('platform/object-mapper')
 include(':actuator')
 project(':actuator').projectDir = file('platform/observability/actuator')
 
-// Observability::Admin client
-include(':admin-client')
-project(':admin-client').projectDir = file('platform/observability/admin/admin-client')
-
-// Observability::Admin server
-include(':admin-server')
-project(':admin-server').projectDir = file('platform/observability/admin/admin-server')
-
 // Observability::Logging
 include(':logging-logback')
 project(':logging-logback').projectDir = file('platform/observability/logging/logging-logback')

@@ -1,8 +1,8 @@
 management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: health,info,prometheus
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
   endpoint:
     health:
       probes:
