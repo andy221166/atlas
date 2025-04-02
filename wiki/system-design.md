@@ -154,6 +154,18 @@ https://medium.com/swlh/all-you-need-to-know-about-authentication-is-here-25c8d8
 
 ---
 
+## Notification
+
+### Real-time notification
+
+#### Polling
+
+#### SSE
+
+#### WebSocket
+
+---
+
 ## Observability
 
 ### Tracing
