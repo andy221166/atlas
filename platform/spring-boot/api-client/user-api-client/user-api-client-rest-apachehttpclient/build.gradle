@@ -1,0 +1,6 @@
+dependencies {
+    // Platform
+    api project(':api-client-rest-apachehttpclient')
+    api project(':user-api-client-contract')
+    api project(':user-api-client-rest-model')
+}

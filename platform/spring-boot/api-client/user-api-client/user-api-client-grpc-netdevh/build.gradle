@@ -1,0 +1,6 @@
+dependencies {
+    // Platform
+    api project(':api-server-grpc-protobuf')
+    api project(':api-client-grpc-netdevh')
+    api project(':user-api-client-contract')
+}

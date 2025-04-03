@@ -1,0 +1,54 @@
+plugins {
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.protobuf:protobuf-java:3.25.1'
+    implementation 'io.grpc:grpc-all:1.64.0'
+
+    // Necessary for Java 9+
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.25.1'
+    }
+
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+        }
+    }
+
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'com.google.protobuf:protobuf-bom:3.25.1'
+    }
+}

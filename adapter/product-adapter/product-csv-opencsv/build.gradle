@@ -1,8 +1,0 @@
-dependencies {
-    // Platform
-    api project(':csv-opencsv')
-    api project(':object-mapper')
-
-    // Service
-    api project(':product-port-outbound')
-}

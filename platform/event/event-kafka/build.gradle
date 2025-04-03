@@ -1,7 +1,0 @@
-dependencies {
-    // Lib
-    api 'org.springframework.kafka:spring-kafka'
-
-    // Platform
-    api project(':event-gateway')
-}

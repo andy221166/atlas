@@ -1,5 +1,6 @@
 package org.atlas.business.user.admin;
 
+import lombok.RequiredArgsConstructor;
 import org.atlas.platform.commons.paging.PagingResult;
 import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.port.inbound.user.admin.ListUserUseCase;

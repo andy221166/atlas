@@ -1,0 +1,7 @@
+dependencies {
+    // Platform
+    api project(':excel-poi')
+
+    // Service
+    api project(':product-port-outbound')
+}

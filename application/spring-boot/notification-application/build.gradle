@@ -1,0 +1,90 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'maven-publish'
+}
+
+def modules = loadStackConfig()
+
+dependencies {
+    // Domain
+    api project(':order-domain-shared')
+
+    // Port
+    api project(':notification-port-inbound')
+    api project(':notification-port-outbound')
+
+    // Platform
+    api project(':actuator')
+    api project(':config')
+    switch (modules['datasource']) {
+        case 'mysql':
+            api project(':adapter-spring-boot:notification-datasource-mysql')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+    }
+    switch (modules['event']) {
+        case 'kafka':
+            api project(':adapter-spring-boot:notification-event-kafka')
+            break
+        case 'sns':
+            api project(':adapter-spring-boot:notification-event-sns')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+    }
+    switch (modules['email']) {
+        case 'spring':
+            api project(':adapter-spring-boot:notification-email-spring')
+            break
+        case 'ses':
+            api project(':adapter-spring-boot:notification-email-ses')
+            break
+        case 'sendgrid':
+            api project(':adapter-spring-boot:notification-email-sendgrid')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['email']}")
+    }
+    switch (modules['logging']) {
+        case 'logback':
+            api project(':logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+    }
+    api project(':adapter-spring-boot:notification-sse')
+    switch (modules['template']) {
+        case 'freemarker':
+            api project(':adapter-spring-boot:notification-template-freemarker')
+            break
+        case 'thymeleaf':
+            api project(':adapter-spring-boot:notification-template-thymeleaf')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['template']}")
+    }
+    switch (modules['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
+    }
+    api project(':adapter-spring-boot:notification-websocket')
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
+}

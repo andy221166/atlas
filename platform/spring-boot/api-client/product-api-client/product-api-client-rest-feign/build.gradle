@@ -1,0 +1,6 @@
+dependencies {
+    // Platform
+    api project(':api-client-rest-feign')
+    api project(':product-api-client-contract')
+    api project(':product-api-client-rest-model')
+}

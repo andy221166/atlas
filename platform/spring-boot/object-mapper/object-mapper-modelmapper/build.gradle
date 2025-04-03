@@ -1,0 +1,8 @@
+dependencies {
+    // Lib
+    api 'org.modelmapper:modelmapper:3.2.2'
+
+    // Platform
+    api project(':commons')
+    api project(':object-mapper-base')
+}
