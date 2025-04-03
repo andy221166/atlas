@@ -1,7 +1,7 @@
 package org.atlas.platform.api.client.user;
 
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserInput;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserOutput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserInput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserOutput;
 
 public interface UserApiClient {
 

@@ -34,7 +34,6 @@ subprojects {
 
 	apply plugin: 'java'
 	apply plugin: 'java-library'
-	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'idea'
 
 	java {
@@ -43,7 +42,7 @@ subprojects {
 		}
 	}
 
-	configurations {
+	configurations { // Lombok supports
 		compileOnly {
 			extendsFrom annotationProcessor
 		}
@@ -55,11 +54,12 @@ subprojects {
 	}
 
 	dependencies {
-		implementation('org.springframework.boot:spring-boot-starter') {
-			exclude group: 'commons-logging', module: 'commons-logging'
-		}
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+		// Lombok as annotation processor (automatically included in compileOnly due to the configuration)
+		annotationProcessor 'org.projectlombok:lombok:1.18.38'
+
+		// Optional: Lombok for test scope
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
+		testCompileOnly 'org.projectlombok:lombok:1.18.38'
 	}
 
 	dependencyManagement {

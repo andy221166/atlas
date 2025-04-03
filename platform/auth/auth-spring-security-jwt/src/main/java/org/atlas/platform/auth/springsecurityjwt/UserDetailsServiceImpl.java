@@ -2,7 +2,7 @@ package org.atlas.platform.auth.springsecurityjwt;
 
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.atlas.service.user.domain.entity.UserEntity;
+import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.service.user.port.outbound.repository.UserRepositoryPort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,0 +1,12 @@
+package org.atlas.port.outbound.notification.email;
+
+public class SendEmailException extends RuntimeException {
+
+  public SendEmailException(String message) {
+    super(message);
+  }
+
+  public SendEmailException(Throwable cause) {
+    super(cause);
+  }
+}

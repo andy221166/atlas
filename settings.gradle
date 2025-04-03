@@ -200,120 +200,146 @@ include(':use-case-application')
 project(':use-case-application').projectDir = file('platform/use-case/use-case-application')
 
 // -------------------------------------------------------------------------------------------------
-// Services
+// Domain
 // -------------------------------------------------------------------------------------------------
 
-// User service
-// User service::Domain
 include(':user-domain')
-project(':user-domain').projectDir = file('service/user-service/user-domain')
-// User service::Port
-include(':user-port-inbound')
-project(':user-port-inbound').projectDir = file('service/user-service/user-port/user-port-inbound')
-include(':user-port-outbound')
-project(':user-port-outbound').projectDir = file('service/user-service/user-port/user-port-outbound')
-// User service::Application
-include(':user-application')
-project(':user-application').projectDir = file('service/user-service/user-application')
-// User service::Adapter
-include(':user-api-server-grpc-netdevh')
-project(':user-api-server-grpc-netdevh').projectDir = file('service/user-service/user-adapter/user-api-server-grpc-netdevh')
-include(':user-api-server-rest')
-project(':user-api-server-rest').projectDir = file('service/user-service/user-adapter/user-api-server-rest')
-include(':user-datasource-mysql')
-project(':user-datasource-mysql').projectDir = file('service/user-service/user-adapter/user-datasource-mysql')
-include(':user-event-kafka')
-project(':user-event-kafka').projectDir = file('service/user-service/user-adapter/user-event-kafka')
-include(':user-event-sns')
-project(':user-event-sns').projectDir = file('service/user-service/user-adapter/user-event-sns')
-include(':user-persistence-jpa')
-project(':user-persistence-jpa').projectDir = file('service/user-service/user-adapter/user-persistence-jpa')
+project(':user-domain').projectDir = file('domain/user-domain')
 
-// Product service
-// Product service::Domain
 include(':product-domain')
-project(':product-domain').projectDir = file('service/product-service/product-domain')
-// Product service::Port
-include(':product-port-inbound')
-project(':product-port-inbound').projectDir = file('service/product-service/product-port/product-port-inbound')
-include(':product-port-outbound')
-project(':product-port-outbound').projectDir = file('service/product-service/product-port/product-port-outbound')
-// Product service::Application
-include(':product-application')
-project(':product-application').projectDir = file('service/product-service/product-application')
-// Product service::Adapter
-include(':product-api-server-grpc-netdevh')
-project(':product-api-server-grpc-netdevh').projectDir = file('service/product-service/product-adapter/product-api-server-grpc-netdevh')
-include(':product-api-server-rest')
-project(':product-api-server-rest').projectDir = file('service/product-service/product-adapter/product-api-server-rest')
-include(':product-csv-opencsv')
-project(':product-csv-opencsv').projectDir = file('service/product-service/product-adapter/product-csv-opencsv')
-include(':product-datasource-mysql')
-project(':product-datasource-mysql').projectDir = file('service/product-service/product-adapter/product-datasource-mysql')
-include(':product-event-kafka')
-project(':product-event-kafka').projectDir = file('service/product-service/product-adapter/product-event-kafka')
-include(':product-event-sns')
-project(':product-event-sns').projectDir = file('service/product-service/product-adapter/product-event-sns')
-include(':product-excel-easyexcel')
-project(':product-excel-easyexcel').projectDir = file('service/product-service/product-adapter/product-excel-easyexcel')
-include(':product-excel-poi')
-project(':product-excel-poi').projectDir = file('service/product-service/product-adapter/product-excel-poi')
-include(':product-persistence-jpa')
-project(':product-persistence-jpa').projectDir = file('service/product-service/product-adapter/product-persistence-jpa')
+project(':product-domain').projectDir = file('domain/product-domain')
 
-// Order service
-// Order service::Domain
 include(':order-domain')
-project(':order-domain').projectDir = file('service/order-service/order-domain')
+project(':order-domain').projectDir = file('domain/order-domain')
 include(':order-domain-shared')
-project(':order-domain-shared').projectDir = file('service/order-service/order-domain-shared')
-// Order service::Port
-include(':order-port-inbound')
-project(':order-port-inbound').projectDir = file('service/order-service/order-port/order-port-inbound')
-include(':order-port-outbound')
-project(':order-port-outbound').projectDir = file('service/order-service/order-port/order-port-outbound')
-// Order service::Application
-include(':order-application')
-project(':order-application').projectDir = file('service/order-service/order-application')
-// Order service::Adapter
-include(':order-api-server-rest')
-project(':order-api-server-rest').projectDir = file('service/order-service/order-adapter/order-api-server-rest')
-include(':order-datasource-mysql')
-project(':order-datasource-mysql').projectDir = file('service/order-service/order-adapter/order-datasource-mysql')
-include(':order-event-kafka')
-project(':order-event-kafka').projectDir = file('service/order-service/order-adapter/order-event-kafka')
-include(':order-event-sns')
-project(':order-event-sns').projectDir = file('service/order-service/order-adapter/order-event-sns')
-include(':order-persistence-jpa')
-project(':order-persistence-jpa').projectDir = file('service/order-service/order-adapter/order-persistence-jpa')
+project(':order-domain-shared').projectDir = file('domain/order-domain-shared')
 
-// Notification service
-// Notification service::Application
-include(':notification-application')
-project(':notification-application').projectDir = file('service/notification-service/notification-application')
-// Notification service::Port
+include(':notification-domain')
+project(':notification-domain').projectDir = file('domain/notification-domain')
+
+// -------------------------------------------------------------------------------------------------
+// Port::Business
+// -------------------------------------------------------------------------------------------------
+
+include(':user-business')
+project(':user-business').projectDir = file('business/user-business')
+
+// -------------------------------------------------------------------------------------------------
+// Port::Inbound
+// -------------------------------------------------------------------------------------------------
+
+include(':user-port-inbound')
+project(':user-port-inbound').projectDir = file('port/inbound/user-port-inbound')
+
+include(':product-port-inbound')
+project(':product-port-inbound').projectDir = file('port/inbound/product-port-inbound')
+
+include(':order-port-inbound')
+project(':order-port-inbound').projectDir = file('port/inbound/order-port-inbound')
+
 include(':notification-port-inbound')
-project(':notification-port-inbound').projectDir = file('service/notification-service/notification-port/notification-port-inbound')
+project(':notification-port-inbound').projectDir = file('port/inbound/notification-port-inbound')
+
+// -------------------------------------------------------------------------------------------------
+// Port::Outbound
+// -------------------------------------------------------------------------------------------------
+
+include(':user-port-outbound')
+project(':user-port-outbound').projectDir = file('port/outbound/user-port-outbound')
+
+include(':product-port-outbound')
+project(':product-port-outbound').projectDir = file('port/outbound/product-port-outbound')
+
+include(':order-port-outbound')
+project(':order-port-outbound').projectDir = file('port/outbound/order-port-outbound')
+
 include(':notification-port-outbound')
-project(':notification-port-outbound').projectDir = file('service/notification-service/notification-port/notification-port-outbound')
-// Notification service::Adapter
+project(':notification-port-outbound').projectDir = file('port/outbound/notification-port-outbound')
+
+// -------------------------------------------------------------------------------------------------
+// Adapter
+// -------------------------------------------------------------------------------------------------
+
+// Adapter::User
+include(':user-api-server-grpc-netdevh')
+project(':user-api-server-grpc-netdevh').projectDir = file('adapter/user-adapter/user-api-server-grpc-netdevh')
+include(':user-api-server-rest')
+project(':user-api-server-rest').projectDir = file('adapter/user-adapter/user-api-server-rest')
+include(':user-datasource-mysql')
+project(':user-datasource-mysql').projectDir = file('adapter/user-adapter/user-datasource-mysql')
+include(':user-event-kafka')
+project(':user-event-kafka').projectDir = file('adapter/user-adapter/user-event-kafka')
+include(':user-event-sns')
+project(':user-event-sns').projectDir = file('adapter/user-adapter/user-event-sns')
+include(':user-persistence-jpa')
+project(':user-persistence-jpa').projectDir = file('adapter/user-adapter/user-persistence-jpa')
+
+// Adapter::Product
+include(':product-api-server-grpc-netdevh')
+project(':product-api-server-grpc-netdevh').projectDir = file('adapter/product-adapter/product-api-server-grpc-netdevh')
+include(':product-api-server-rest')
+project(':product-api-server-rest').projectDir = file('adapter/product-adapter/product-api-server-rest')
+include(':product-csv-opencsv')
+project(':product-csv-opencsv').projectDir = file('adapter/product-adapter/product-csv-opencsv')
+include(':product-datasource-mysql')
+project(':product-datasource-mysql').projectDir = file('adapter/product-adapter/product-datasource-mysql')
+include(':product-event-kafka')
+project(':product-event-kafka').projectDir = file('adapter/product-adapter/product-event-kafka')
+include(':product-event-sns')
+project(':product-event-sns').projectDir = file('adapter/product-adapter/product-event-sns')
+include(':product-excel-easyexcel')
+project(':product-excel-easyexcel').projectDir = file('adapter/product-adapter/product-excel-easyexcel')
+include(':product-excel-poi')
+project(':product-excel-poi').projectDir = file('adapter/product-adapter/product-excel-poi')
+include(':product-persistence-jpa')
+project(':product-persistence-jpa').projectDir = file('adapter/product-adapter/product-persistence-jpa')
+
+// Adapter::Order
+include(':order-api-server-rest')
+project(':order-api-server-rest').projectDir = file('adapter/order-adapter/order-api-server-rest')
+include(':order-datasource-mysql')
+project(':order-datasource-mysql').projectDir = file('adapter/order-adapter/order-datasource-mysql')
+include(':order-event-kafka')
+project(':order-event-kafka').projectDir = file('adapter/order-adapter/order-event-kafka')
+include(':order-event-sns')
+project(':order-event-sns').projectDir = file('adapter/order-adapter/order-event-sns')
+include(':order-persistence-jpa')
+project(':order-persistence-jpa').projectDir = file('adapter/order-adapter/order-persistence-jpa')
+
+// Adapter::Notification
 include(':notification-datasource-mysql')
-project(':notification-datasource-mysql').projectDir = file('service/notification-service/notification-adapter/notification-datasource-mysql')
+project(':notification-datasource-mysql').projectDir = file('adapter/notification-adapter/notification-datasource-mysql')
 include(':notification-email-spring')
-project(':notification-email-spring').projectDir = file('service/notification-service/notification-adapter/notification-email-spring')
+project(':notification-email-spring').projectDir = file('adapter/notification-adapter/notification-email-spring')
 include(':notification-email-ses')
-project(':notification-email-ses').projectDir = file('service/notification-service/notification-adapter/notification-email-ses')
+project(':notification-email-ses').projectDir = file('adapter/notification-adapter/notification-email-ses')
 include(':notification-email-sendgrid')
-project(':notification-email-sendgrid').projectDir = file('service/notification-service/notification-adapter/notification-email-sendgrid')
+project(':notification-email-sendgrid').projectDir = file('adapter/notification-adapter/notification-email-sendgrid')
 include(':notification-event-kafka')
-project(':notification-event-kafka').projectDir = file('service/notification-service/notification-adapter/notification-event-kafka')
+project(':notification-event-kafka').projectDir = file('adapter/notification-adapter/notification-event-kafka')
 include(':notification-event-sns')
-project(':notification-event-sns').projectDir = file('service/notification-service/notification-adapter/notification-event-sns')
+project(':notification-event-sns').projectDir = file('adapter/notification-adapter/notification-event-sns')
 include(':notification-sse')
-project(':notification-sse').projectDir = file('service/notification-service/notification-adapter/notification-sse')
+project(':notification-sse').projectDir = file('adapter/notification-adapter/notification-sse')
 include(':notification-template-freemarker')
-project(':notification-template-freemarker').projectDir = file('service/notification-service/notification-adapter/notification-template-freemarker')
+project(':notification-template-freemarker').projectDir = file('adapter/notification-adapter/notification-template-freemarker')
 include(':notification-template-thymeleaf')
-project(':notification-template-thymeleaf').projectDir = file('service/notification-service/notification-adapter/notification-template-thymeleaf')
+project(':notification-template-thymeleaf').projectDir = file('adapter/notification-adapter/notification-template-thymeleaf')
 include(':notification-websocket')
-project(':notification-websocket').projectDir = file('service/notification-service/notification-adapter/notification-websocket')
+project(':notification-websocket').projectDir = file('adapter/notification-adapter/notification-websocket')
+
+// -------------------------------------------------------------------------------------------------
+// Application
+// -------------------------------------------------------------------------------------------------
+
+include(':user-application-spring-boot')
+project(':user-application-spring-boot').projectDir = file('application/spring-boot/user-application-spring-boot')
+
+include(':product-application')
+project(':product-application').projectDir = file('application/product-application')
+
+include(':order-application')
+project(':order-application').projectDir = file('application/order-application')
+
+include(':notification-application')
+project(':notification-application').projectDir = file('application/notification-application')

@@ -12,8 +12,8 @@ import org.atlas.platform.api.server.grpc.protobuf.user.UserProto;
 import org.atlas.platform.api.server.grpc.protobuf.user.UserServiceGrpc;
 import org.atlas.platform.commons.enums.Role;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserInput;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserOutput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserInput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserOutput;
 import org.springframework.stereotype.Component;
 
 @Component

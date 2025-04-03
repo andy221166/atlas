@@ -9,8 +9,8 @@ import org.atlas.platform.api.client.user.UserApiClient;
 import org.atlas.platform.api.client.user.rest.model.ListUserRequest;
 import org.atlas.platform.api.client.user.rest.model.ListUserResponse;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserInput;
-import org.atlas.service.user.port.inbound.internal.ListUserUseCase.ListUserOutput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserInput;
+import org.atlas.port.inbound.user.internal.ListUserUseCase.ListUserOutput;
 import org.springframework.stereotype.Component;
 
 @Component

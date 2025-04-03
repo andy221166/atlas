@@ -1,0 +1,7 @@
+dependencies {
+    // Domain
+    api project(':order-domain')
+
+    // Platform
+    api project(':event-contract')
+}

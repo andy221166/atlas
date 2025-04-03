@@ -1,7 +1,7 @@
 package org.atlas.platform.api.client.product;
 
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductInput;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductInput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductOutput;
 
 public interface ProductApiClient {
 

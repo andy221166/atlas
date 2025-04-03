@@ -11,8 +11,8 @@ import org.atlas.platform.api.server.grpc.protobuf.product.ListProductResponsePr
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductProto;
 import org.atlas.platform.api.server.grpc.protobuf.product.ProductServiceGrpc;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductInput;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductInput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductOutput;
 import org.springframework.stereotype.Component;
 
 @Component

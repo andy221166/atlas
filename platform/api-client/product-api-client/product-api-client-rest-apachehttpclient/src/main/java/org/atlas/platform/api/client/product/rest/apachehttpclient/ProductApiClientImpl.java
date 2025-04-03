@@ -10,8 +10,8 @@ import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
 import org.atlas.platform.api.client.rest.apachehttpclient.HttpClientService;
 import org.atlas.platform.api.client.rest.model.Response;
 import org.atlas.platform.objectmapper.ObjectMapperUtil;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductInput;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase.ListProductOutput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductInput;
+import org.atlas.port.inbound.product.internal.ListProductUseCase.ListProductOutput;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

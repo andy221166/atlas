@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.platform.jwt.core.JwtData;
 import org.atlas.platform.jwt.core.JwtService;
 import org.atlas.platform.commons.constant.Constant;
-import org.atlas.service.user.domain.entity.UserEntity;
+import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.service.user.port.outbound.auth.AuthPort;
 import org.atlas.service.user.port.outbound.auth.AuthLoginRequest;
 import org.atlas.service.user.port.outbound.auth.AuthLoginResponse;

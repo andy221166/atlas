@@ -1,0 +1,4 @@
+dependencies {
+    api project(':user-port-inbound')
+    api project(':user-port-outbound')
+}

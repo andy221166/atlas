@@ -4,7 +4,6 @@ import org.atlas.platform.api.client.product.rest.model.ListProductRequest;
 import org.atlas.platform.api.client.rest.feign.FeignConfig;
 import org.atlas.platform.api.client.product.rest.model.ListProductResponse;
 import org.atlas.platform.api.client.rest.model.Response;
-import org.atlas.service.product.port.inbound.internal.ListProductUseCase;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
