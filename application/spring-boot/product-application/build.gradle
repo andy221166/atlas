@@ -9,41 +9,41 @@ dependencies {
     api project(':product-port-inbound')
     api project(':product-port-outbound')
 
-    api project(':actuator')
+    api project(':adapter-spring-boot:actuator')
     switch (modules['api-server']) {
         case 'rest':
-            api project(':product-api-server-rest')
+            api project(':adapter-spring-boot:product-api-server-rest')
             break
         case 'grpc':
-            api project(':product-api-server-grpc-netdevh')
+            api project(':adapter-spring-boot:product-api-server-grpc-netdevh')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
     switch (modules['cache']) {
         case 'caffeine':
-            api project(':cache-caffeine')
+            api project(':adapter-spring-boot:cache-caffeine')
             break
         case 'ehcache':
-            api project(':cache-ehcache')
+            api project(':adapter-spring-boot:cache-ehcache')
             break
         case 'redis':
-            api project(':cache-redis')
+            api project(':adapter-spring-boot:cache-redis')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['cache']}")
     }
-    api project(':config')
+    api project(':adapter-spring-boot:config')
     switch (modules['csv']) {
         case 'opencsv':
-            api project(':product-csv-opencsv')
+            api project(':adapter-spring-boot:product-csv-opencsv')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['csv']}")
     }
     switch (modules['datasource']) {
         case 'mysql':
-            api project(':product-datasource-mysql')
+            api project(':adapter-spring-boot:product-datasource-mysql')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
@@ -52,54 +52,54 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':discovery-client-eureka')
+            api project(':adapter-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':discovery-client-kubernetes')
+            api project(':adapter-spring-boot:discovery-client-kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
     switch (modules['event']) {
         case 'kafka':
-            api project(':product-event-kafka')
+            api project(':adapter-spring-boot:product-event-kafka')
             break
         case 'sns':
-            api project(':product-event-sns')
+            api project(':adapter-spring-boot:product-event-sns')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
     switch (modules['excel']) {
         case 'easyexcel':
-            api project(':product-excel-easyexcel')
+            api project(':adapter-spring-boot:product-excel-easyexcel')
             break
         case 'poi':
-            api project(':product-excel-poi')
+            api project(':adapter-spring-boot:product-excel-poi')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['excel']}")
     }
     switch (modules['logging']) {
         case 'logback':
-            api project(':logging-logback')
+            api project(':adapter-spring-boot:logging-logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
     switch (modules['persistence']) {
         case 'jpa':
-            api project(':product-persistence-jpa')
+            api project(':adapter-spring-boot:product-persistence-jpa')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
     switch (modules['storage']) {
         case 'filesystem':
-            api project(':storage-filesystem')
+            api project(':adapter-spring-boot:storage-filesystem')
             break
         case 's3s':
-            api project(':storage-s3')
+            api project(':adapter-spring-boot:storage-s3')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['storage']}")
@@ -108,12 +108,12 @@ dependencies {
         case 'none':
             break
         case 'zipkin':
-            api project(':tracing-zipkin')
+            api project(':adapter-spring-boot:tracing-zipkin')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-    api project(':use-case-application')
+    api project(':adapter-spring-boot:use-case')
 }
 
 jar {

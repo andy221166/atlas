@@ -1,4 +1,7 @@
 dependencies {
-    api project(':storage-core')
+    // Lib
     api 'software.amazon.awssdk:s3:2.29.33'
+
+    // Adapter
+    api project(':adapter-spring-boot:storage-base')
 }

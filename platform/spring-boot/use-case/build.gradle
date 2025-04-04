@@ -1,0 +1,8 @@
+dependencies {
+    // Lib
+    api 'org.springframework.boot:spring-boot-starter-aop'
+    api 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Port
+    api project(':use-case')
+}

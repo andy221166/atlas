@@ -8,28 +8,28 @@ def modules = loadStackConfig()
 dependencies {
     api project(':user-business')
 
-    api project(':actuator')
+    api project(':adapter-spring-boot:actuator')
     switch (modules['api-server']) {
         case 'rest':
-            api project(':user-api-server-rest')
+            api project(':adapter-spring-boot:user-api-server-rest')
             break
         case 'grpc':
-            api project(':user-api-server-grpc-netdevh')
+            api project(':adapter-spring-boot:user-api-server-grpc-netdevh')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
     switch (modules['auth']) {
         case 'spring-security-jwt':
-            api project(':auth-spring-security-jwt')
+            api project(':adapter-spring-boot:auth-spring-security-jwt')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['auth']}")
     }
-    api project(':config')
+    api project(':adapter-spring-boot:config')
     switch (modules['datasource']) {
         case 'mysql':
-            api project(':user-datasource-mysql')
+            api project(':adapter-spring-boot:user-datasource-mysql')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
@@ -38,34 +38,34 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':discovery-client-eureka')
+            api project(':adapter-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':discovery-client-kubernetes')
+            api project(':adapter-spring-boot:discovery-client-kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
     }
     switch (modules['event']) {
         case 'kafka':
-            api project(':user-event-kafka')
+            api project(':adapter-spring-boot:user-event-kafka')
             break
         case 'sns':
-            api project(':user-event-sns')
+            api project(':adapter-spring-boot:user-event-sns')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
     switch (modules['logging']) {
         case 'logback':
-            api project(':logging-logback')
+            api project(':adapter-spring-boot:logging-logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
     switch (modules['persistence']) {
         case 'jpa':
-            api project(':user-persistence-jpa')
+            api project(':adapter-spring-boot:user-persistence-jpa')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
@@ -74,12 +74,12 @@ dependencies {
         case 'none':
             break
         case 'zipkin':
-            api project(':tracing-zipkin')
+            api project(':adapter-spring-boot:tracing-zipkin')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-    api project(':use-case-application')
+    api project(':adapter-spring-boot:use-case')
 }
 
 jar {

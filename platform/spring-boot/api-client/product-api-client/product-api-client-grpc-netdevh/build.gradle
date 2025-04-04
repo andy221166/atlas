@@ -2,5 +2,5 @@ dependencies {
     // Platform
     api project(':api-server-grpc-protobuf')
     api project(':api-client-grpc-netdevh')
-    api project(':product-api-client-contract')
+    api project(':adapter-spring-boot:product-api-client-contract')
 }

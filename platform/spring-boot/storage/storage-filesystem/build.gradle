@@ -1,3 +1,4 @@
 dependencies {
-    api project(':storage-core')
+    // Adapter
+    api project(':adapter-spring-boot:storage-base')
 }

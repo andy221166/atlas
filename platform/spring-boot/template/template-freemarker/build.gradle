@@ -1,0 +1,7 @@
+dependencies {
+    // Lib
+    api 'org.springframework.boot:spring-boot-starter-freemarker'
+
+    // Adapter
+    api project(':adapter-spring-boot:template-base')
+}

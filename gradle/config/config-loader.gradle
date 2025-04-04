@@ -2,7 +2,7 @@ def stack = project.hasProperty('stack') ? project.getProperty('stack') : 'local
 
 // Define the loadStackConfig closure as a method
 def loadStackConfig = { ->
-    def configFile = new File("config/stack/${stack}.cfg")
+    def configFile = new File("gradle/config/stack/${stack}.cfg")
     if (!configFile.exists()) {
         throw new GradleException("Config file not found for stack: ${configFile.absolutePath}")
     }

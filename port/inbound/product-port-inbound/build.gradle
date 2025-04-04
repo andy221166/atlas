@@ -1,8 +1,10 @@
 dependencies {
-    // Platform
-    api project(':event-contract')
-    api project(':use-case-port')
-
-    // Service
+    // Domain
     api project(':product-domain')
+
+    // Event
+    api project(':event')
+
+    // Port
+    api project(':use-case')
 }

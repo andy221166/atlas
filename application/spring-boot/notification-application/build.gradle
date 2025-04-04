@@ -14,8 +14,8 @@ dependencies {
     api project(':notification-port-outbound')
 
     // Platform
-    api project(':actuator')
-    api project(':config')
+    api project(':adapter-spring-boot:actuator')
+    api project(':adapter-spring-boot:config')
     switch (modules['datasource']) {
         case 'mysql':
             api project(':adapter-spring-boot:notification-datasource-mysql')
@@ -35,31 +35,31 @@ dependencies {
     }
     switch (modules['email']) {
         case 'spring':
-            api project(':adapter-spring-boot:notification-email-spring')
+            api project(':adapter-spring-boot:email-spring')
             break
         case 'ses':
-            api project(':adapter-spring-boot:notification-email-ses')
+            api project(':adapter-spring-boot:email-ses')
             break
         case 'sendgrid':
-            api project(':adapter-spring-boot:notification-email-sendgrid')
+            api project(':adapter-spring-boot:email-sendgrid')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['email']}")
     }
     switch (modules['logging']) {
         case 'logback':
-            api project(':logging-logback')
+            api project(':adapter-spring-boot:logging-logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
-    api project(':adapter-spring-boot:notification-sse')
+    api project(':adapter-spring-boot:sse')
     switch (modules['template']) {
         case 'freemarker':
-            api project(':adapter-spring-boot:notification-template-freemarker')
+            api project(':adapter-spring-boot:template-freemarker')
             break
         case 'thymeleaf':
-            api project(':adapter-spring-boot:notification-template-thymeleaf')
+            api project(':adapter-spring-boot:template-thymeleaf')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['template']}")
@@ -68,12 +68,12 @@ dependencies {
         case 'none':
             break
         case 'zipkin':
-            api project(':tracing-zipkin')
+            api project(':adapter-spring-boot:tracing-zipkin')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
     }
-    api project(':adapter-spring-boot:notification-websocket')
+    api project(':adapter-spring-boot:websocket')
 }
 
 jar {

@@ -1,6 +1,6 @@
 dependencies {
     // Platform
     api project(':api-client-rest-feign')
-    api project(':user-api-client-contract')
-    api project(':user-api-client-rest-model')
+    api project(':adapter-spring-boot:user-api-client-contract')
+    api project(':adapter-spring-boot:user-api-client-rest-model')
 }

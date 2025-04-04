@@ -1,6 +1,6 @@
 dependencies {
     // Platform
     api project(':api-client-rest-resttemplate')
-    api project(':product-api-client-contract')
-    api project(':product-api-client-rest-model')
+    api project(':adapter-spring-boot:product-api-client-contract')
+    api project(':adapter-spring-boot:product-api-client-rest-model')
 }

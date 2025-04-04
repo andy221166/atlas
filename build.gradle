@@ -21,7 +21,7 @@ subprojects {
 	apply plugin: 'java-library'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'idea'
-	apply from: "$rootDir/gradle/config-loader.gradle"
+	apply from: "$rootDir/gradle/config/config-loader.gradle"
 
 	java {
 		toolchain {

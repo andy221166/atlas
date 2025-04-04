@@ -1,5 +1,3 @@
-apply from: "$rootDir/gradle/config-loader.gradle"
-
 def modules = loadStackConfig()
 
 dependencies {
@@ -9,10 +7,10 @@ dependencies {
     // Platform
     switch (modules['redis']) {
         case 'standalone':
-            api project(':redis-standalone')
+            api project(':adapter-spring-boot:redis-standalone')
             break
         case 'cluster':
-            api project(':redis-cluster')
+            api project(':adapter-spring-boot:redis-cluster')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['redis']}")

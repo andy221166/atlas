@@ -11,41 +11,41 @@ dependencies {
     api project(':order-port-outbound')
 
     // Platform
-    api project(':actuator')
+    api project(':adapter-spring-boot:actuator')
     switch (modules['api-client']) {
         case 'grpc-netdevh':
-            api project(':product-api-client-grpc-netdevh')
-            api project(':user-api-client-grpc-netdevh')
+            api project(':adapter-spring-boot:product-api-client-grpc-netdevh')
+            api project(':adapter-spring-boot:user-api-client-grpc-netdevh')
             break
         case 'rest-apachehttpclient':
-            api project(':product-api-client-rest-apachehttpclient')
-            api project(':user-api-client-rest-apachehttpclient')
+            api project(':adapter-spring-boot:product-api-client-rest-apachehttpclient')
+            api project(':adapter-spring-boot:user-api-client-rest-apachehttpclient')
             break
         case 'rest-feign':
-            api project(':product-api-client-rest-feign')
-            api project(':user-api-client-rest-feign')
+            api project(':adapter-spring-boot:product-api-client-rest-feign')
+            api project(':adapter-spring-boot:user-api-client-rest-feign')
             break
         case 'rest-resttemplate':
-            api project(':product-api-client-rest-resttemplate')
-            api project(':user-api-client-rest-resttemplate')
+            api project(':adapter-spring-boot:product-api-client-rest-resttemplate')
+            api project(':adapter-spring-boot:user-api-client-rest-resttemplate')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-client']}")
     }
     switch (modules['api-server']) {
         case 'rest':
-            api project(':order-api-server-rest')
+            api project(':adapter-spring-boot:order-api-server-rest')
             break
         case 'grpc':
-            api project(':order-api-server-grpc-netdevh')
+            api project(':adapter-spring-boot:order-api-server-grpc-netdevh')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
     }
-    api project(':config')
+    api project(':adapter-spring-boot:config')
     switch (modules['datasource']) {
         case 'mysql':
-            api project(':order-datasource-mysql')
+            api project(':adapter-spring-boot:order-datasource-mysql')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
@@ -54,10 +54,10 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':discovery-client-eureka')
+            api project(':adapter-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':discovery-client-kubernetes')
+            api project(':adapter-spring-boot:discovery-client-kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
@@ -65,34 +65,34 @@ dependencies {
 
     switch (modules['event']) {
         case 'kafka':
-            api project(':order-event-kafka')
+            api project(':adapter-spring-boot:order-event-kafka')
             break
         case 'sns':
-            api project(':order-event-sns')
+            api project(':adapter-spring-boot:order-event-sns')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['event']}")
     }
     switch (modules['logging']) {
         case 'logback':
-            api project(':logging-logback')
+            api project(':adapter-spring-boot:logging-logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['logging']}")
     }
     switch (modules['persistence']) {
         case 'jpa':
-            api project(':order-persistence-jpa')
+            api project(':adapter-spring-boot:order-persistence-jpa')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
     }
-    api project(':sequence-generator')
+    api project(':adapter-spring-boot:sequence-generator')
     switch (modules['tracing']) {
         case 'none':
             break
         case 'zipkin':
-            api project(':tracing-zipkin')
+            api project(':adapter-spring-boot:tracing-zipkin')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
