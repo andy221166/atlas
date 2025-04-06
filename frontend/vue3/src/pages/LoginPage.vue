@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { api } from '@/api';
+import {api} from '@/api';
 import Alert from '@/components/common/Alert.vue';
 import FormField from '@/components/common/FormField.vue';
 

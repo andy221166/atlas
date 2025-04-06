@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':api-client-rest-model')
-
-    // Service
-    api project(':product-port-inbound')
-}

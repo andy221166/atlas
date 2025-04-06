@@ -1,0 +1,42 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'maven-publish'
+}
+
+dependencies {
+    // Lib
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+
+    // Infrastructure
+    api project(':infrastructure-spring-boot:actuator')
+    api project(':infrastructure-spring-boot:config')
+    switch (stackConfig['logging']) {
+        case 'logback':
+            api project(':infrastructure-spring-boot:logging-logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
+    }
+    switch (stackConfig['tracing']) {
+        case 'none':
+            break
+        case 'zipkin':
+            api project(':infrastructure-spring-boot:tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
+}

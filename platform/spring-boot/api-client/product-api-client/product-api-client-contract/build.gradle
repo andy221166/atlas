@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':resilience-resilience4j')
-
-    // Service
-    api project(':product-port-inbound')
-}

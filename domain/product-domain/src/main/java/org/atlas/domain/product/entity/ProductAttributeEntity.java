@@ -3,7 +3,7 @@ package org.atlas.domain.product.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.platform.commons.model.DomainEntity;
+import org.atlas.framework.entity.DomainEntity;
 
 @Getter
 @Setter

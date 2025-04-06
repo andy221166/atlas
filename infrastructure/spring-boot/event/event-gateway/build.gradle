@@ -1,0 +1,5 @@
+dependencies {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:json')
+    api project(':infrastructure-spring-boot:persistence-jpa-core')
+}

@@ -1,6 +1,0 @@
-dependencies {
-    // Platform
-    api project(':api-server-grpc-protobuf')
-    api project(':api-client-grpc-netdevh')
-    api project(':adapter-spring-boot:user-api-client-contract')
-}

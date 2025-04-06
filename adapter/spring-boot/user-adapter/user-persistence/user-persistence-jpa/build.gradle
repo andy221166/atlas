@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':persistence-jpa')
-
-    // Port
-    api project(':user-port-outbound')
-}

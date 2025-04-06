@@ -1,6 +1,0 @@
-dependencies {
-    api 'org.springframework.security:spring-security-crypto:6.2.4'
-    api 'commons-codec:commons-codec:1.17.1'
-
-    api project(':commons')
-}

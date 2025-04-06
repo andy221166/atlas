@@ -3,8 +3,8 @@ package org.atlas.domain.user.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.platform.commons.enums.Role;
-import org.atlas.platform.commons.model.DomainEntity;
+import org.atlas.domain.user.shared.enums.Role;
+import org.atlas.framework.entity.DomainEntity;
 
 @Getter
 @Setter
@@ -16,7 +16,9 @@ public class UserEntity extends DomainEntity {
 
   private String username;
 
-  private String password;
+  private String plainPassword;
+
+  private String hashedPassword;
 
   private String firstName;
 

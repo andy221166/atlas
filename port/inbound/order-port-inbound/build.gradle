@@ -1,7 +1,0 @@
-dependencies {
-    // Adapter
-    api project(':adapter-spring-boot:use-case')
-
-    // Domain
-    api project(':order-domain')
-}

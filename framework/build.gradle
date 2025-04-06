@@ -1,0 +1,34 @@
+dependencies {
+    // Shared domain
+    api project(':order-domain-shared')
+    api project(':product-domain-shared')
+    api project(':user-domain-shared')
+
+    // Logging
+    api 'org.slf4j:slf4j-api:2.0.16'
+
+    // Commons
+    // ---------------------------------------------------------------------------------------------
+    api 'org.apache.commons:commons-lang3:3.17.0'
+    api 'org.apache.commons:commons-collections4:4.4'
+    api 'commons-io:commons-io:2.18.0'
+    api 'com.google.guava:guava:33.3.1-jre'
+
+    // Validation annotations
+    api 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+    // Cryptography
+    // ---------------------------------------------------------------------------------------------
+    api 'org.springframework.security:spring-security-crypto:6.4.4'
+    api 'commons-codec:commons-codec:1.17.1'
+
+    // Object mapper
+    // ---------------------------------------------------------------------------------------------
+    // Object mapper::ModelMapper
+    api 'org.modelmapper:modelmapper:3.2.2'
+
+    // QR generator
+    // ---------------------------------------------------------------------------------------------
+    api 'com.google.zxing:core:3.5.3'
+    api 'com.google.zxing:javase:3.5.3'
+}

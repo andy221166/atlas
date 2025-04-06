@@ -1,0 +1,163 @@
+package org.atlas.domain.product.usecase.admin;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.atlas.domain.product.entity.BrandEntity;
+import org.atlas.domain.product.entity.CategoryEntity;
+import org.atlas.domain.product.entity.ProductAttributeEntity;
+import org.atlas.domain.product.entity.ProductDetailEntity;
+import org.atlas.domain.product.entity.ProductEntity;
+import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.shared.enums.ProductStatus;
+import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductInput;
+import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductOutput;
+import org.atlas.framework.config.ApplicationConfigPort;
+import org.atlas.framework.event.contract.product.ProductCreatedEvent;
+import org.atlas.framework.event.publisher.ProductEventPublisherPort;
+import org.atlas.framework.objectmapper.ObjectMapperUtil;
+import org.atlas.framework.usecase.UseCaseHandler;
+
+@RequiredArgsConstructor
+public class AdminCreateProductUseCaseHandler implements
+    UseCaseHandler<CreateProductInput, CreateProductOutput> {
+
+  private final ProductRepository productRepository;
+  private final ApplicationConfigPort applicationConfigPort;
+  private final ProductEventPublisherPort productEventPublisherPort;
+
+  @Override
+  public CreateProductOutput handle(CreateProductInput input) throws Exception {
+    // Insert product into DB
+    ProductEntity productEntity = map(input);
+    productRepository.insert(productEntity);
+
+    // Publish event
+    publishEvent(productEntity);
+
+    Integer newProductId = productEntity.getId();
+    return new CreateProductOutput(newProductId);
+  }
+
+  private ProductEntity map(CreateProductInput input) {
+    // SearchResponse
+    ProductEntity productEntity = ObjectMapperUtil.getInstance()
+        .map(input, ProductEntity.class);
+
+    // SearchResponse detail
+    ProductDetailEntity productDetailEntity = ObjectMapperUtil.getInstance()
+        .map(input.getDetail(), ProductDetailEntity.class);
+    productEntity.setDetail(productDetailEntity);
+
+    // SearchResponse attributes
+    if (CollectionUtils.isNotEmpty(input.getAttributes())) {
+      List<ProductAttributeEntity> productAttributeEntities = ObjectMapperUtil.getInstance()
+          .mapList(input.getAttributes(), ProductAttributeEntity.class);
+      productEntity.setAttributes(productAttributeEntities);
+    }
+
+    // Categories
+    List<CategoryEntity> categoryEntities = input.getCategoryIds()
+        .stream()
+        .map(categoryId -> {
+          CategoryEntity categoryEntity = new CategoryEntity();
+          categoryEntity.setId(categoryId);
+          return categoryEntity;
+        })
+        .toList();
+    productEntity.setCategories(categoryEntities);
+
+    // Brand
+    BrandEntity brandEntity = new BrandEntity();
+    brandEntity.setId(input.getBrandId());
+    productEntity.setBrand(brandEntity);
+
+    return productEntity;
+  }
+
+  private void publishEvent(ProductEntity productEntity) {
+    ProductCreatedEvent event = new ProductCreatedEvent(applicationConfigPort.getApplicationName());
+    ObjectMapperUtil.getInstance()
+        .merge(productEntity, event);
+    productEventPublisherPort.publish(event);
+  }
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class CreateProductInput {
+
+    @NotBlank
+    private String name;
+
+    @NotNull
+    @DecimalMin(value = "0.0")
+    private BigDecimal price;
+
+    private String imageUrl;
+
+    @NotNull
+    @PositiveOrZero
+    private Integer quantity;
+
+    @NotNull
+    private ProductStatus status;
+
+    @NotNull
+    private Date availableFrom;
+
+    private Boolean isActive;
+
+    @NotNull
+    private Integer brandId;
+
+    @NotNull
+    @Valid
+    private ProductDetail detail;
+
+    @Valid
+    private List<ProductAttribute> attributes;
+
+    @NotEmpty
+    private List<Integer> categoryIds;
+
+    @Data
+    public static class ProductDetail {
+
+      @NotBlank
+      private String description;
+    }
+
+    @Data
+    public static class ProductAttribute {
+
+      @NotBlank
+      private String name;
+
+      @NotBlank
+      private String value;
+    }
+  }
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class CreateProductOutput {
+
+    private Integer id;
+  }
+}

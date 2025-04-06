@@ -1,8 +1,0 @@
-dependencies {
-    // Lib
-    api 'org.springframework:spring-beans'
-
-    // Platform
-    api project(':commons')
-    api project(':object-mapper-base')
-}

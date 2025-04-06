@@ -1,0 +1,6 @@
+dependencies {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:api-client-rest-apachehttpclient')
+    api project(':infrastructure-spring-boot:product-api-rest-model')
+    api project(':infrastructure-spring-boot:resilience-resilience4j')
+}

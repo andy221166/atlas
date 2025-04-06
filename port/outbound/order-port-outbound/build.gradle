@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':order-domain')
-
-    // Event
-    api project(':event')
-}

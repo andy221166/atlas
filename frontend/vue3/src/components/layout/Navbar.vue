@@ -24,7 +24,7 @@
 <script>
 import {useStore} from 'vuex';
 import {computed} from 'vue';
-import { api } from '@/api';
+import {api} from '@/api';
 
 export default {
   setup() {

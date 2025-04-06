@@ -1,113 +1,92 @@
-plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
-    id 'maven-publish'
-}
-
-def modules = loadStackConfig()
-
 dependencies {
-    // Port
-    api project(':order-port-inbound')
-    api project(':order-port-outbound')
+    // Domain
+    api project(':order-domain')
 
-    // Platform
-    api project(':adapter-spring-boot:actuator')
-    switch (modules['api-client']) {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:actuator')
+    switch (stackConfig['api-client']) {
         case 'grpc-netdevh':
-            api project(':adapter-spring-boot:product-api-client-grpc-netdevh')
-            api project(':adapter-spring-boot:user-api-client-grpc-netdevh')
+            api project(':infrastructure-spring-boot:product-api-grpc-netdevh')
+            api project(':infrastructure-spring-boot:user-api-grpc-netdevh')
             break
         case 'rest-apachehttpclient':
-            api project(':adapter-spring-boot:product-api-client-rest-apachehttpclient')
-            api project(':adapter-spring-boot:user-api-client-rest-apachehttpclient')
+            api project(':infrastructure-spring-boot:product-api-rest-apachehttpclient')
+            api project(':infrastructure-spring-boot:user-api-rest-apachehttpclient')
             break
         case 'rest-feign':
-            api project(':adapter-spring-boot:product-api-client-rest-feign')
-            api project(':adapter-spring-boot:user-api-client-rest-feign')
+            api project(':infrastructure-spring-boot:product-api-rest-feign')
+            api project(':infrastructure-spring-boot:user-api-rest-feign')
             break
         case 'rest-resttemplate':
-            api project(':adapter-spring-boot:product-api-client-rest-resttemplate')
-            api project(':adapter-spring-boot:user-api-client-rest-resttemplate')
+            api project(':infrastructure-spring-boot:product-api-rest-resttemplate')
+            api project(':infrastructure-spring-boot:user-api-rest-resttemplate')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['api-client']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['api-client']}")
     }
-    switch (modules['api-server']) {
+    switch (stackConfig['api-server']) {
         case 'rest':
-            api project(':adapter-spring-boot:order-api-server-rest')
+            api project(':infrastructure-spring-boot:api-server-rest-adapter-order')
             break
         case 'grpc':
-            api project(':adapter-spring-boot:order-api-server-grpc-netdevh')
+            api project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
-    api project(':adapter-spring-boot:config')
-    switch (modules['datasource']) {
+    api project(':infrastructure-spring-boot:config')
+    switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':adapter-spring-boot:order-datasource-mysql')
+            api project(':infrastructure-spring-boot:datasource-mysql-adapter-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
     }
-    switch (modules['discovery-client']) {
+    switch (stackConfig['discovery-client']) {
         case 'none':
             break
         case 'eureka':
-            api project(':adapter-spring-boot:discovery-client-eureka')
+            api project(':infrastructure-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':adapter-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-
-    switch (modules['event']) {
+    switch (stackConfig['event']) {
         case 'kafka':
-            api project(':adapter-spring-boot:order-event-kafka')
+            api project(':infrastructure-spring-boot:event-kafka-adapter-order')
             break
         case 'sns':
-            api project(':adapter-spring-boot:order-event-sns')
+            api project(':infrastructure-spring-boot:event-sns-adapter-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
-    switch (modules['logging']) {
+    switch (stackConfig['logging']) {
         case 'logback':
-            api project(':adapter-spring-boot:logging-logback')
+            api project(':infrastructure-spring-boot:logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
-    switch (modules['persistence']) {
+    switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':adapter-spring-boot:order-persistence-jpa')
+            api project(':infrastructure-spring-boot:persistence-jpa-adapter-order')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
-    api project(':adapter-spring-boot:sequence-generator')
-    switch (modules['tracing']) {
+    api project(':infrastructure-spring-boot:sequence-generator')
+    switch (stackConfig['tracing']) {
         case 'none':
             break
         case 'zipkin':
-            api project(':adapter-spring-boot:tracing-zipkin')
+            api project(':infrastructure-spring-boot:tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
-}
-
-jar {
-    enabled = false
-}
-
-publishing {
-    publications {
-        publication(MavenPublication) {
-            artifact bootJar
-            from components.java
-        }
-    }
+    api project(':infrastructure-spring-boot:use-case')
 }

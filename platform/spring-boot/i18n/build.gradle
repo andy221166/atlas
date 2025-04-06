@@ -1,4 +1,0 @@
-dependencies {
-    // Platform
-    api project(':commons')
-}

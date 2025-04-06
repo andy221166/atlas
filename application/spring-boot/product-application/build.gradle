@@ -1,130 +1,106 @@
-plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
-    id 'maven-publish'
-}
-
-def modules = loadStackConfig()
-
 dependencies {
-    api project(':product-port-inbound')
-    api project(':product-port-outbound')
+    // Domain
+    api project(':product-domain')
 
-    api project(':adapter-spring-boot:actuator')
-    switch (modules['api-server']) {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:actuator')
+    switch (stackConfig['api-server']) {
         case 'rest':
-            api project(':adapter-spring-boot:product-api-server-rest')
+            api project(':infrastructure-spring-boot:api-server-rest-adapter-product')
             break
         case 'grpc':
-            api project(':adapter-spring-boot:product-api-server-grpc-netdevh')
+            api project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
-    switch (modules['cache']) {
-        case 'caffeine':
-            api project(':adapter-spring-boot:cache-caffeine')
-            break
-        case 'ehcache':
-            api project(':adapter-spring-boot:cache-ehcache')
-            break
+    switch (stackConfig['cache']) {
         case 'redis':
-            api project(':adapter-spring-boot:cache-redis')
+            api project(':infrastructure-spring-boot:cache-redis')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['cache']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['cache']}")
     }
-    api project(':adapter-spring-boot:config')
-    switch (modules['csv']) {
+    api project(':infrastructure-spring-boot:config')
+    switch (stackConfig['csv']) {
         case 'opencsv':
-            api project(':adapter-spring-boot:product-csv-opencsv')
+            api project(':infrastructure-spring-boot:csv-opencsv-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['csv']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['csv']}")
     }
-    switch (modules['datasource']) {
+    switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':adapter-spring-boot:product-datasource-mysql')
+            api project(':infrastructure-spring-boot:datasource-mysql-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
     }
-    switch (modules['discovery-client']) {
+    switch (stackConfig['discovery-client']) {
         case 'none':
             break
         case 'eureka':
-            api project(':adapter-spring-boot:discovery-client-eureka')
+            api project(':infrastructure-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':adapter-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-    switch (modules['event']) {
+    switch (stackConfig['event']) {
         case 'kafka':
-            api project(':adapter-spring-boot:product-event-kafka')
+            api project(':infrastructure-spring-boot:event-kafka-adapter-product')
             break
         case 'sns':
-            api project(':adapter-spring-boot:product-event-sns')
+            api project(':infrastructure-spring-boot:event-sns-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
-    switch (modules['excel']) {
+    switch (stackConfig['excel']) {
         case 'easyexcel':
-            api project(':adapter-spring-boot:product-excel-easyexcel')
+            api project(':infrastructure-spring-boot:excel-easyexcel-adapter-product')
             break
         case 'poi':
-            api project(':adapter-spring-boot:product-excel-poi')
+            api project(':infrastructure-spring-boot:excel-poi-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['excel']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['excel']}")
     }
-    switch (modules['logging']) {
+    switch (stackConfig['logging']) {
         case 'logback':
-            api project(':adapter-spring-boot:logging-logback')
+            api project(':infrastructure-spring-boot:logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
-    switch (modules['persistence']) {
+    switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':adapter-spring-boot:product-persistence-jpa')
+            api project(':infrastructure-spring-boot:persistence-jpa-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
-    switch (modules['storage']) {
+    switch (stackConfig['storage']) {
         case 'filesystem':
-            api project(':adapter-spring-boot:storage-filesystem')
+            api project(':infrastructure-spring-boot:storage-filesystem')
             break
         case 's3s':
-            api project(':adapter-spring-boot:storage-s3')
+            api project(':infrastructure-spring-boot:storage-s3')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['storage']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['storage']}")
     }
-    switch (modules['tracing']) {
+    switch (stackConfig['tracing']) {
         case 'none':
             break
         case 'zipkin':
-            api project(':adapter-spring-boot:tracing-zipkin')
+            api project(':infrastructure-spring-boot:tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
-    api project(':adapter-spring-boot:use-case')
-}
-
-jar {
-    enabled = false
-}
-
-publishing {
-    publications {
-        publication(MavenPublication) {
-            artifact bootJar
-            from components.java
-        }
-    }
+    api project(':infrastructure-spring-boot:transaction')
+    api project(':infrastructure-spring-boot:use-case')
 }

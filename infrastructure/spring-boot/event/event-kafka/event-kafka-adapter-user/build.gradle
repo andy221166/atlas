@@ -1,0 +1,7 @@
+dependencies {
+    // Domain
+    api project(':user-domain')
+
+    // Infrastructure
+    api project(':infrastructure-spring-boot:event-kafka-core')
+}

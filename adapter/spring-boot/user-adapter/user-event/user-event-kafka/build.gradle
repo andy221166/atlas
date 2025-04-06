@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':event-kafka')
-
-    // Service
-    api project(':user-port-outbound')
-}

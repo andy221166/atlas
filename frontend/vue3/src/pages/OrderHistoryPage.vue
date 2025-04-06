@@ -68,7 +68,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import { api } from "@/api";
+import {api} from "@/api";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
 import Navbar from "@/components/layout/Navbar.vue";
 

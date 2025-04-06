@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':commons')
-    api project(':event-contract')
-    api project(':adapter-spring-boot:json')
-    api project(':persistence-jpa')
-}

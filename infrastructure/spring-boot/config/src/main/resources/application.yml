@@ -1,0 +1,11 @@
+app:
+  product-service:
+    cache:
+      product: product
+    decrease-quantity-strategy: constraint
+    storage:
+      bucket:
+        product-import: product-import
+  notification-service:
+    email:
+      sender: admin@atlas.org

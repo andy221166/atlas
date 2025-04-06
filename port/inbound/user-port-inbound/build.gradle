@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':user-domain')
-
-    // Port
-    api project(':use-case')
-}

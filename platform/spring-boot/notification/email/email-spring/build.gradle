@@ -1,7 +1,0 @@
-dependencies {
-    // Lib
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // Port
-    api project(':notification-port-outbound')
-}

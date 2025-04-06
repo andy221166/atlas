@@ -80,8 +80,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
-import { api } from '@/api';
+import {ref, watch} from 'vue';
 
 export default {
   props: {

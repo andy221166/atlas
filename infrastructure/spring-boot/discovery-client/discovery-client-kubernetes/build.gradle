@@ -1,0 +1,4 @@
+dependencies {
+    // Lib
+    api 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-all:3.2.0'
+}

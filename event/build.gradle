@@ -1,4 +1,0 @@
-dependencies {
-    // Service
-    api project(':order-domain-shared')
-}

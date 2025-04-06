@@ -8,20 +8,24 @@ plugins {
 	id 'idea'
 }
 
+apply from: "$rootDir/gradle/config/config-loader.gradle"
+
 ext {
 	set('springBootVersion', '3.4.0')
+	set('springFrameworkVersion', '6.2.0')
 	set('springCloudVersion', '2024.0.0')
-	set('lombokVersion', '1.18.38') // Define lombokVersion here for global access
+	set('lombokVersion', '1.18.38')
+	stackConfig = loadStackConfig()
 }
 
 subprojects {
-	version = '0.0.1-SNAPSHOT'
-
 	apply plugin: 'java'
 	apply plugin: 'java-library'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'idea'
-	apply from: "$rootDir/gradle/config/config-loader.gradle"
+
+	group = 'org.atlas'
+	version = '0.0.1-SNAPSHOT'
 
 	java {
 		toolchain {
@@ -45,6 +49,22 @@ subprojects {
 		annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 		testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 		testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+		// Exclude :framework
+		if (path != ':framework' &&
+				path != ':user-domain-shared' &&
+				path != ':order-domain-shared' &&
+				path != ':product-domain-shared') {
+			dependencies {
+				api project(':framework')
+			}
+		}
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
 	}
 
 	idea {

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.platform.commons.model.DomainEntity;
 import org.atlas.domain.order.shared.OrderStatus;
+import org.atlas.framework.entity.DomainEntity;
 
 @Getter
 @Setter

@@ -1,0 +1,4 @@
+dependencies {
+    // Lib
+    implementation 'com.sendgrid:sendgrid-java:4.10.3'
+}

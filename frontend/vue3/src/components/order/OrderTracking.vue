@@ -57,11 +57,11 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { Stomp } from "@stomp/stompjs";
+import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { api } from "@/api";
-import { applyBadgeClass } from "@/utils/orderStatusBadgeClass";
+import {api} from "@/api";
+import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
 
 export default {
   props: {

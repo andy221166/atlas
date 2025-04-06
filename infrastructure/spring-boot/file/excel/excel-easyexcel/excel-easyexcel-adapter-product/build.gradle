@@ -1,0 +1,4 @@
+dependencies {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:excel-easyexcel-core')
+}

@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':user-domain')
-
-    // Event
-    api project(':event')
-}

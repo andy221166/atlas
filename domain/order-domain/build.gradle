@@ -1,7 +1,4 @@
 dependencies {
-    // Platform
-    api project(':commons')
-
-    // Service
+    // Domain
     api project(':order-domain-shared')
 }

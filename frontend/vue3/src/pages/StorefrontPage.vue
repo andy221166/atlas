@@ -69,15 +69,15 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { useStore } from "vuex";
+import {onMounted, ref} from "vue";
+import {useStore} from "vuex";
 import Navbar from "../components/layout/Navbar.vue";
 import ProductCard from "../components/product/ProductCard.vue";
 import ProductDetailModal from "../components/product/ProductDetailModal.vue";
 import ProductSearchForm from "../components/product/ProductSearchForm.vue";
 import Cart from "../components/order/Cart.vue";
 import OrderTracking from "../components/order/OrderTracking.vue";
-import { api } from '@/api';
+import {api} from '@/api';
 
 export default {
   components: {

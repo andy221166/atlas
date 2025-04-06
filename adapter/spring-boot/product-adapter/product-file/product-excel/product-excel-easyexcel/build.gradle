@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':excel-easyexcel')
-
-    // Port
-    api project(':product-port-outbound')
-}

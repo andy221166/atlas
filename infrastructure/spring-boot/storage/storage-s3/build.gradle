@@ -1,0 +1,4 @@
+dependencies {
+    // Lib
+    api 'software.amazon.awssdk:s3:2.29.33'
+}

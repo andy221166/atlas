@@ -1,4 +1,0 @@
-dependencies {
-    // Adapter
-    api project(':adapter-spring-boot:storage-base')
-}

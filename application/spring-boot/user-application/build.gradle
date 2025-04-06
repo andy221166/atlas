@@ -1,96 +1,78 @@
-plugins {
-    id 'maven-publish'
-    id 'org.springframework.boot' version '3.4.0'
-}
-
-def modules = loadStackConfig()
-
 dependencies {
-    api project(':user-business')
+    // Domain
+    api project(':user-domain')
 
-    api project(':adapter-spring-boot:actuator')
-    switch (modules['api-server']) {
+    // Infrastructure
+    api project(':infrastructure-spring-boot:actuator')
+    switch (stackConfig['api-server']) {
         case 'rest':
-            api project(':adapter-spring-boot:user-api-server-rest')
+            api project(':infrastructure-spring-boot:api-server-rest-adapter-user')
             break
         case 'grpc':
-            api project(':adapter-spring-boot:user-api-server-grpc-netdevh')
+            api project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-user')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['api-server']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
-    switch (modules['auth']) {
+    switch (stackConfig['auth']) {
         case 'spring-security-jwt':
-            api project(':adapter-spring-boot:auth-spring-security-jwt')
+            api project(':infrastructure-spring-boot:auth-spring-security-jwt')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['auth']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['auth']}")
     }
-    api project(':adapter-spring-boot:config')
-    switch (modules['datasource']) {
+    api project(':infrastructure-spring-boot:config')
+    switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':adapter-spring-boot:user-datasource-mysql')
+            api project(':infrastructure-spring-boot:datasource-mysql-adapter-user')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['datasource']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
     }
-    switch (modules['discovery-client']) {
+    switch (stackConfig['discovery-client']) {
         case 'none':
             break
         case 'eureka':
-            api project(':adapter-spring-boot:discovery-client-eureka')
+            api project(':infrastructure-spring-boot:discovery-client-eureka')
             break
         case 'kubernetes':
-            api project(':adapter-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-    switch (modules['event']) {
+    switch (stackConfig['event']) {
         case 'kafka':
-            api project(':adapter-spring-boot:user-event-kafka')
+            api project(':infrastructure-spring-boot:event-kafka-adapter-user')
             break
         case 'sns':
-            api project(':adapter-spring-boot:user-event-sns')
+            api project(':infrastructure-spring-boot:event-sns-adapter-user')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['event']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
-    switch (modules['logging']) {
+    switch (stackConfig['logging']) {
         case 'logback':
-            api project(':adapter-spring-boot:logging-logback')
+            api project(':infrastructure-spring-boot:logging-logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['logging']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
-    switch (modules['persistence']) {
+    switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':adapter-spring-boot:user-persistence-jpa')
+            api project(':infrastructure-spring-boot:persistence-jpa-adapter-user')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['persistence']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
-    switch (modules['tracing']) {
+    switch (stackConfig['tracing']) {
         case 'none':
             break
         case 'zipkin':
-            api project(':adapter-spring-boot:tracing-zipkin')
+            api project(':infrastructure-spring-boot:tracing-zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${modules['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
-    api project(':adapter-spring-boot:use-case')
-}
-
-jar {
-    enabled = false
-}
-
-publishing {
-    publications {
-        publication(MavenPublication) {
-            artifact bootJar
-            from components.java
-        }
-    }
+    api project(':infrastructure-spring-boot:use-case')
 }

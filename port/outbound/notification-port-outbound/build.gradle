@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':notification-domain')
-
-    // Event
-    api project(':event')
-}

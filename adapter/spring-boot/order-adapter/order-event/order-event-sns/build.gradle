@@ -1,8 +1,0 @@
-dependencies {
-    // Platform
-    api project(':event-sns')
-
-    // Service
-    api project(':order-port-inbound')
-    api project(':order-port-outbound')
-}

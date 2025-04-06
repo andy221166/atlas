@@ -4,7 +4,3 @@ server:
 spring:
   application:
     name: notification-service
-
-app:
-  email:
-    sender: nguyentuananh11b6@gmail.com

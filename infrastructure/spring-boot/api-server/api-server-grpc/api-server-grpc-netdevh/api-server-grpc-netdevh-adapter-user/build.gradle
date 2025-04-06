@@ -1,0 +1,8 @@
+dependencies {
+    // Domain
+    api project(':user-domain')
+
+    // Infrastructure
+    api project(':infrastructure-spring-boot:api-server-grpc-protobuf')
+    api project(':infrastructure-spring-boot:api-server-grpc-netdevh-core')
+}

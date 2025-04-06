@@ -7,7 +7,8 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.platform.commons.model.DomainEntity;
+import org.atlas.domain.product.shared.enums.ProductStatus;
+import org.atlas.framework.entity.DomainEntity;
 
 @Getter
 @Setter

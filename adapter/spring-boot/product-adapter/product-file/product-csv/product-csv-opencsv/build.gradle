@@ -1,7 +1,0 @@
-dependencies {
-    // Platform
-    api project(':csv-opencsv')
-
-    // Port
-    api project(':product-port-outbound')
-}
