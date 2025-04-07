@@ -1,9 +1,10 @@
-package org.atlas.infrastructure.event.gateway.outbox.service;
+package org.atlas.infrastructure.event.gateway.outbox.task;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.task.RelayOutboxMessageTask;
 import org.atlas.infrastructure.event.gateway.EventPublisher;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-public class RelayOutboxMessageService {
+public class RelayOutboxMessageTaskImpl implements RelayOutboxMessageTask {
 
   private static final int MAX_RETRIES = 3;
 
@@ -25,7 +26,7 @@ public class RelayOutboxMessageService {
   private final EventPublisher eventPublisher;
   private final TaskExecutor outboxMessageExecutor;
 
-  public RelayOutboxMessageService(
+  public RelayOutboxMessageTaskImpl(
       OutboxMessageRepository outboxMessageRepository,
       EventPublisher eventPublisher,
       @Qualifier("outboxMessageExecutor") TaskExecutor outboxMessageExecutor) {
@@ -34,8 +35,9 @@ public class RelayOutboxMessageService {
     this.outboxMessageExecutor = outboxMessageExecutor;
   }
 
+  @Override
   @Transactional
-  public void processPendingOutboxMessages() {
+  public void execute() {
     // Find pending outbox messages
     List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatusOrderByCreatedAt(
         OutboxMessageStatus.PENDING);

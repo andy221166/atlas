@@ -67,6 +67,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
+    api project(':infrastructure-spring-boot:scheduler-spring')
     switch (stackConfig['tracing']) {
         case 'none':
             break

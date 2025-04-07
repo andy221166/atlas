@@ -272,6 +272,10 @@ project(':infrastructure-spring-boot:redis-standalone').projectDir = file('infra
 include(':infrastructure-spring-boot:resilience-resilience4j')
 project(':infrastructure-spring-boot:resilience-resilience4j').projectDir = file('infrastructure/spring-boot/resilience/resilience-resilience4j')
 
+// Scheduler
+include(':infrastructure-spring-boot:scheduler-spring')
+project(':infrastructure-spring-boot:scheduler-spring').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring')
+
 // Sequence generator
 include(':infrastructure-spring-boot:sequence-generator')
 project(':infrastructure-spring-boot:sequence-generator').projectDir = file('infrastructure/spring-boot/sequence-generator')
