@@ -2,7 +2,7 @@ package org.atlas.infrastructure.event.gateway.outbox.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.infrastructure.event.gateway.outbox.service.OutboxMessageService;
+import org.atlas.infrastructure.event.gateway.outbox.service.RelayOutboxMessageService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class RelayOutboxMessageTask {
 
-  private final OutboxMessageService outboxMessageService;
+  private final RelayOutboxMessageService relayOutboxMessageService;
 
   /**
    * Run every minute
    */
-  @Scheduled(cron = "*/5 * * * * *")
+  @Scheduled(cron = "*/15 * * * * *")
   public void run() {
-    outboxMessageService.processPendingOutboxMessages();
+    relayOutboxMessageService.processPendingOutboxMessages();
   }
 }

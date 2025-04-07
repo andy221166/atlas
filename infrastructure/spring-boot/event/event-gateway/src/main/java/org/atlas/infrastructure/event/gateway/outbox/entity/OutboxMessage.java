@@ -61,7 +61,7 @@ public class OutboxMessage extends JpaBaseEntity {
     return Objects.hash(id);
   }
 
-  public void toBeProcessed() {
+  public void markAsProcessed() {
     this.status = OutboxMessageStatus.PROCESSED;
     this.processedAt = new Date();
   }

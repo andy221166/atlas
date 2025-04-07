@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.event.DomainEvent;
-import org.atlas.framework.event.EventType;
 import org.atlas.infrastructure.event.gateway.EventPublisher;
-import org.atlas.infrastructure.event.gateway.outbox.config.OutboxProps;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;
 import org.atlas.infrastructure.event.gateway.outbox.repository.OutboxMessageRepository;
@@ -19,34 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-public class OutboxMessageService {
+public class RelayOutboxMessageService {
+
+  private static final int MAX_RETRIES = 3;
 
   private final OutboxMessageRepository outboxMessageRepository;
   private final EventPublisher eventPublisher;
-  private final OutboxProps outboxProps;
   private final TaskExecutor outboxMessageExecutor;
 
-  public OutboxMessageService(
+  public RelayOutboxMessageService(
       OutboxMessageRepository outboxMessageRepository,
       EventPublisher eventPublisher,
-      OutboxProps outboxProps,
       @Qualifier("outboxMessageExecutor") TaskExecutor outboxMessageExecutor) {
     this.outboxMessageRepository = outboxMessageRepository;
     this.eventPublisher = eventPublisher;
-    this.outboxProps = outboxProps;
     this.outboxMessageExecutor = outboxMessageExecutor;
-  }
-
-  public void insertOutboxMessage(DomainEvent event, String destination) {
-    OutboxMessage outboxMessage = new OutboxMessage();
-    outboxMessage.setEventJson(JsonUtil.getInstance().toJson(event));
-    outboxMessage.setEventType(EventType.findEventType(event.getClass()));
-    outboxMessage.setDestination(destination);
-    outboxMessage.setStatus(OutboxMessageStatus.PENDING);
-    outboxMessage.setRetries(0);
-    outboxMessageRepository.insert(outboxMessage);
-    log.info("Inserted outbox message {} of event {} {}",
-        outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson());
   }
 
   @Transactional
@@ -76,14 +61,14 @@ public class OutboxMessageService {
       DomainEvent event = JsonUtil.getInstance()
           .toObject(outboxMessage.getEventJson(), outboxMessage.getEventType().getEventClass());
       eventPublisher.publish(event, outboxMessage.getDestination());
-      outboxMessage.toBeProcessed();
+      outboxMessage.markAsProcessed();
     } catch (Exception e) {
       log.error("Failed to process outbox message {} of event {} {}",
           outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson(), e);
       outboxMessage.setError(e.getMessage());
 
       // Retry mechanism
-      if (outboxMessage.getRetries() >= outboxProps.getMaxRetries()) {
+      if (outboxMessage.getRetries() >= MAX_RETRIES) {
         outboxMessage.setStatus(OutboxMessageStatus.FAILED);
       } else {
         outboxMessage.incRetries();

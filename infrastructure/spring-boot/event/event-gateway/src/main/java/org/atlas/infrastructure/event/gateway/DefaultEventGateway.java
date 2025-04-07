@@ -12,6 +12,7 @@ public class DefaultEventGateway implements EventGateway {
 
   @Override
   public void send(DomainEvent event, String destination) {
+    // Publish event immediately
     eventPublisher.publish(event, destination);
   }
 }

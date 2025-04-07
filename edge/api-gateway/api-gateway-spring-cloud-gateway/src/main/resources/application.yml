@@ -98,7 +98,6 @@ app:
   gateway:
     auth-rules:
       non-secured-paths:
-        - "/api/gateway/**"
         - "/actuator/**"
         - "/api/auth/login"
         - "/api/auth/logout"
