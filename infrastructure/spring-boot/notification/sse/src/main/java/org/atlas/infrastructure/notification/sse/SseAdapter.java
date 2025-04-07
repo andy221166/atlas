@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j(topic = "SSE")
+@Slf4j
 public class SseAdapter<K> implements InitializingBean, SsePort<K> {
 
   private final List<SseController<K>> sseControllers;

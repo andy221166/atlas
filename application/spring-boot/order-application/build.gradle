@@ -80,6 +80,16 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
+    switch (stackConfig['scheduler']) {
+        case 'spring':
+            api project(':infrastructure-spring-boot:scheduler-spring-adapter-order')
+            break
+        case 'quartz':
+            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-order')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+    }
     api project(':infrastructure-spring-boot:sequence-generator')
     switch (stackConfig['tracing']) {
         case 'none':

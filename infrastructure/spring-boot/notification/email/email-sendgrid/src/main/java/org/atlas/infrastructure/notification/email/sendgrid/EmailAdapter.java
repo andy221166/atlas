@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "Email")
+@Slf4j
 public class EmailAdapter implements EmailPort {
 
   // Spring Boot automatically configures SendGrid bean

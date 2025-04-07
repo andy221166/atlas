@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.notification.realtime.enums.RealtimeNotificationType;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@Slf4j(topic = "SSE")
+@Slf4j
 public abstract class SseController<K> {
 
   protected final ConcurrentHashMap<K, SseEmitter> sseEmitters = new ConcurrentHashMap<>();

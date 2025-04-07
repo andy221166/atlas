@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j(topic = "WebSocket")
+@Slf4j
 public class WebSocketAdapter implements WebSocketPort {
 
   private final SimpMessagingTemplate messagingTemplate;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.event.DomainEvent;
-import org.atlas.framework.task.RelayOutboxMessageTask;
+import org.atlas.framework.task.outbox.RelayOutboxMessageTask;
 import org.atlas.infrastructure.event.gateway.EventPublisher;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
 import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;

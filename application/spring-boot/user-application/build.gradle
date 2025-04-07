@@ -67,7 +67,16 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
-    api project(':infrastructure-spring-boot:scheduler-spring')
+    switch (stackConfig['scheduler']) {
+        case 'spring':
+            api project(':infrastructure-spring-boot:scheduler-spring-adapter-user')
+            break
+        case 'quartz':
+            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-user')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+    }
     switch (stackConfig['tracing']) {
         case 'none':
             break

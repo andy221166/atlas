@@ -6,17 +6,17 @@ import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.port.outbound.notification.email.Attachment;
-import org.atlas.port.outbound.notification.email.EmailNotification;
-import org.atlas.port.outbound.notification.email.EmailPort;
-import org.atlas.port.outbound.notification.email.SendEmailException;
+import org.atlas.framework.notification.email.Attachment;
+import org.atlas.framework.notification.email.EmailNotification;
+import org.atlas.framework.notification.email.EmailPort;
+import org.atlas.framework.notification.email.SendEmailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "Email")
+@Slf4j
 public class EmailAdapter implements EmailPort {
 
   private final JavaMailSender mailSender;

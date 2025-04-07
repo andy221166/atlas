@@ -84,6 +84,16 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
+    switch (stackConfig['scheduler']) {
+        case 'spring':
+            api project(':infrastructure-spring-boot:scheduler-spring-adapter-product')
+            break
+        case 'quartz':
+            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-product')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+    }
     switch (stackConfig['storage']) {
         case 'filesystem':
             api project(':infrastructure-spring-boot:storage-filesystem')

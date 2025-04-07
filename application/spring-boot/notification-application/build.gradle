@@ -44,6 +44,16 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
+    switch (stackConfig['scheduler']) {
+        case 'spring':
+            api project(':infrastructure-spring-boot:scheduler-spring-adapter-notification')
+            break
+        case 'quartz':
+            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-notification')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+    }
     api project(':infrastructure-spring-boot:sse')
     switch (stackConfig['template']) {
         case 'freemarker':

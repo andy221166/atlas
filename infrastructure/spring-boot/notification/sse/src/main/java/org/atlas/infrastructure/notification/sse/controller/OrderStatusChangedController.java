@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j(topic = "SSE")
+@Slf4j
 public class OrderStatusChangedController extends SseController<Integer> {
 
   @Override

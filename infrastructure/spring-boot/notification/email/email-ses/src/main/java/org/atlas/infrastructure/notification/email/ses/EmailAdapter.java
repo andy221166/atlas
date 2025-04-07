@@ -13,10 +13,10 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.port.outbound.notification.email.Attachment;
-import org.atlas.port.outbound.notification.email.EmailNotification;
-import org.atlas.port.outbound.notification.email.EmailPort;
-import org.atlas.port.outbound.notification.email.SendEmailException;
+import org.atlas.framework.notification.email.Attachment;
+import org.atlas.framework.notification.email.EmailNotification;
+import org.atlas.framework.notification.email.EmailPort;
+import org.atlas.framework.notification.email.SendEmailException;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.sesv2.SesV2Client;
@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.sesv2.model.SendEmailResponse;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "Email")
+@Slf4j
 public class EmailAdapter implements EmailPort {
 
   private final SesV2Client sesClient;
