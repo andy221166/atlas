@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.usecase.auth.AuthLogoutUseCaseHandler.LogoutInput;
 import org.atlas.framework.auth.AuthPort;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AuthLogoutUseCaseHandler implements UseCaseHandler<LogoutInput, Void> {

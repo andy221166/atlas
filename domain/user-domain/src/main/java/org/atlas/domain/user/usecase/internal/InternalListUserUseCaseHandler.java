@@ -15,7 +15,7 @@ import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler.Lis
 import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler.ListUserOutput;
 import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler.ListUserOutput.User;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 import org.atlas.framework.usecase.input.InternalInput;
 
 @RequiredArgsConstructor

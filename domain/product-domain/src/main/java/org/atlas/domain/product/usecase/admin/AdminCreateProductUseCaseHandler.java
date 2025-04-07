@@ -28,7 +28,7 @@ import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.product.ProductCreatedEvent;
 import org.atlas.framework.event.publisher.ProductEventPublisherPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AdminCreateProductUseCaseHandler implements

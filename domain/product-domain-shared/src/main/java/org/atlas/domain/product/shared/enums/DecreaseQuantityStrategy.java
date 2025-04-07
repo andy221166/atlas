@@ -13,4 +13,13 @@ public enum DecreaseQuantityStrategy {
   PESSIMISTIC_LOCKING("pessimistic_locking");
 
   private final String value;
+
+  public static DecreaseQuantityStrategy fromValue(String value) {
+    for (DecreaseQuantityStrategy strategy : values()) {
+      if (strategy.value.equals(value)) {
+        return strategy;
+      }
+    }
+    throw new IllegalArgumentException(value);
+  }
 }

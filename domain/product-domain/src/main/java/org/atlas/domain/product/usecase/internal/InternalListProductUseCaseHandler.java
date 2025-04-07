@@ -15,7 +15,7 @@ import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandl
 import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductOutput;
 import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductOutput.Product;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 import org.atlas.framework.usecase.input.InternalInput;
 
 @RequiredArgsConstructor

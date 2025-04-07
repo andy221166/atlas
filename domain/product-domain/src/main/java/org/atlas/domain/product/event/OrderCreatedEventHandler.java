@@ -1,6 +1,7 @@
 package org.atlas.domain.product.event;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 import org.atlas.framework.config.ApplicationConfigPort;
@@ -13,11 +14,12 @@ import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.util.ConcurrentUtil;
 
 @RequiredArgsConstructor
+@Slf4j
 public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent> {
 
   private final ProductRepository productRepository;
-  private final ProductEventPublisherPort productEventPublisherPort;
   private final ApplicationConfigPort applicationConfigPort;
+  private final ProductEventPublisherPort productEventPublisherPort;
 
   @Override
   public void handle(OrderCreatedEvent orderCreatedEvent) {
@@ -31,6 +33,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
           .merge(orderCreatedEvent, reserveQuantitySucceededEvent);
       productEventPublisherPort.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
+      log.error("Failed to handle event {}", orderCreatedEvent.getEventId(), e);
       ReserveQuantityFailedEvent reserveQuantityFailedEvent =
           new ReserveQuantityFailedEvent(applicationConfigPort.getApplicationName());
       ObjectMapperUtil.getInstance()
@@ -44,12 +47,13 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
     // Mock for processing
     ConcurrentUtil.sleep(3, 5);
 
-    DecreaseQuantityStrategy decreaseQuantityStrategy = applicationConfigPort.getDecreaseQuantityStrategy();
+    DecreaseQuantityStrategy decreaseQuantityStrategy =
+        applicationConfigPort.getDecreaseQuantityStrategy();
     switch (applicationConfigPort.getDecreaseQuantityStrategy()) {
       case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
       case PESSIMISTIC_LOCKING ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
-      default -> throw new IllegalStateException(
+      default -> throw new UnsupportedOperationException(
           "Unsupported decrease quantity strategy: " + decreaseQuantityStrategy);
     }
   }

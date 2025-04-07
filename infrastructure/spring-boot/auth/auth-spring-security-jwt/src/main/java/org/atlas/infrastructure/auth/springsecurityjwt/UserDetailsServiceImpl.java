@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserDetailsImpl userDetails = new UserDetailsImpl();
     userDetails.setUserId(userEntity.getId());
     userDetails.setUsername(userEntity.getUsername());
-    userDetails.setPassword(userEntity.getHashedPassword());
+    userDetails.setPassword(userEntity.getPassword());
     userDetails.setAuthorities(
         Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().name())));
     return userDetails;

@@ -1,8 +1,8 @@
 package org.atlas.infrastructure.event.gateway.outbox.repository;
 
 import java.util.List;
-import org.atlas.infrastructure.event.gateway.outbox.model.OutboxMessage;
-import org.atlas.infrastructure.event.gateway.outbox.model.OutboxMessageStatus;
+import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
+import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;
 import org.atlas.infrastructure.persistence.jpa.core.repository.JpaBaseRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

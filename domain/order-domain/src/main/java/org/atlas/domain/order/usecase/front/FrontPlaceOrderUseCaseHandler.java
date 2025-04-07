@@ -38,7 +38,7 @@ import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.sequencegenerator.SequenceGenerator;
 import org.atlas.framework.sequencegenerator.SequenceType;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 @Slf4j

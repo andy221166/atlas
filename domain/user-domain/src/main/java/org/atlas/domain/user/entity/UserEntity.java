@@ -18,7 +18,7 @@ public class UserEntity extends DomainEntity {
 
   private String plainPassword;
 
-  private String hashedPassword;
+  private String password;
 
   private String firstName;
 

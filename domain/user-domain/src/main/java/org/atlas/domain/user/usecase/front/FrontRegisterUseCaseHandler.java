@@ -24,7 +24,7 @@ import org.atlas.framework.event.contract.user.UserRegisteredEvent;
 import org.atlas.framework.event.publisher.UserEventPublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -60,7 +60,7 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
     UserEntity userEntity = ObjectMapperUtil.getInstance()
         .map(input, UserEntity.class);
     userEntity.setPlainPassword(input.getPassword());
-    userEntity.setHashedPassword(PasswordUtil.hashPassword(input.getPassword()));
+    userEntity.setPassword(PasswordUtil.hashPassword(input.getPassword()));
     userEntity.setRole(Role.USER);
     userRepository.insert(userEntity);
     return userEntity;
@@ -70,7 +70,6 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
     RegisterRequest request = new RegisterRequest();
     request.setUsername(userEntity.getUsername());
     request.setPlainPassword(userEntity.getPlainPassword());
-    request.setHashedPassword(userEntity.getHashedPassword());
     request.setClaims(Map.of(
         "id", userEntity.getId(),
         "email", userEntity.getEmail(),

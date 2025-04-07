@@ -1,8 +1,7 @@
 package org.atlas.application.notification.config;
 
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.usecase.UseCaseHandler;
-import org.atlas.infrastructure.config.core.ApplicationBeanRegistrar;
+import org.atlas.infrastructure.bean.ApplicationBeanRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

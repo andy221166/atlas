@@ -8,6 +8,5 @@ public class RegisterRequest {
 
   private String username;
   private String plainPassword;
-  private String hashedPassword;
   private Map<String, Object> claims;
 }

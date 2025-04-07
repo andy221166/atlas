@@ -4,6 +4,7 @@ dependencies {
 
     // Infrastructure
     api project(':infrastructure-spring-boot:actuator')
+    api project(':infrastructure-spring-boot:bean')
     api project(':infrastructure-spring-boot:config')
     switch (stackConfig['datasource']) {
         case 'mysql':
@@ -35,6 +36,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
+    api project(':infrastructure-spring-boot:event-handler-decorator')
     switch (stackConfig['logging']) {
         case 'logback':
             api project(':infrastructure-spring-boot:logging-logback')
@@ -62,6 +64,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
-    api project(':infrastructure-spring-boot:use-case')
+    api project(':infrastructure-spring-boot:use-case-handler-decorator')
     api project(':infrastructure-spring-boot:websocket')
 }

@@ -13,7 +13,7 @@ import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductDeletedEvent;
 import org.atlas.framework.event.publisher.ProductEventPublisherPort;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AdminDeleteProductUseCaseHandler implements UseCaseHandler<DeleteProductInput, Void> {

@@ -12,7 +12,7 @@ import org.atlas.framework.auth.AuthPort;
 import org.atlas.framework.auth.model.LoginRequest;
 import org.atlas.framework.auth.model.LoginResponse;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AuthLoginUseCaseHandler implements UseCaseHandler<LoginInput, LoginOutput> {

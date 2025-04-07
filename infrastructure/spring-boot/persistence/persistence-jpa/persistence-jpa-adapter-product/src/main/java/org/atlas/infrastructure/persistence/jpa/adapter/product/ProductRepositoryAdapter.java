@@ -35,7 +35,15 @@ public class ProductRepositoryAdapter implements ProductRepository {
     List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.findByCriteria(criteria,
         pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
-        .mapList(jpaProductEntities, ProductEntity.class);
+        .mapList(jpaProductEntities, jpaProductEntity -> {
+          // Just map selected columns
+          ProductEntity productEntity = new ProductEntity();
+          productEntity.setId(jpaProductEntity.getId());
+          productEntity.setName(jpaProductEntity.getName());
+          productEntity.setPrice(jpaProductEntity.getPrice());
+          productEntity.setImageUrl(jpaProductEntity.getImageUrl());
+          return productEntity;
+        });
     return PagingResult.of(productEntities, totalCount, pagingRequest);
   }
 

@@ -39,7 +39,8 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
                 @NamedAttributeNode("id"),
                 @NamedAttributeNode("name"),
                 @NamedAttributeNode("price"),
-                @NamedAttributeNode("imageUrl")
+                @NamedAttributeNode("imageUrl"),
+                @NamedAttributeNode("detail"), // Fix N+1 issue
             }
         ),
         @NamedEntityGraph(

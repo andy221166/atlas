@@ -60,4 +60,10 @@ public class RestExceptionHandler {
     return Response.error(AppError.BAD_REQUEST.getErrorCode(),
         "Missing " + e.getParameterName());
   }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public Response<Void> handle(Exception e) {
+    return Response.error(AppError.INTERNAL_SERVER_ERROR.getErrorCode(), e.getMessage());
+  }
 }

@@ -80,6 +80,10 @@ project(':infrastructure-spring-boot:api-server-rest-adapter-user').projectDir =
 include(':infrastructure-spring-boot:auth-spring-security-jwt')
 project(':infrastructure-spring-boot:auth-spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth/auth-spring-security-jwt')
 
+// Config
+include(':infrastructure-spring-boot:bean')
+project(':infrastructure-spring-boot:bean').projectDir = file('infrastructure/spring-boot/bean')
+
 // Cache
 include(':infrastructure-spring-boot:cache-redis')
 project(':infrastructure-spring-boot:cache-redis').projectDir = file('infrastructure/spring-boot/cache/cache-redis')
@@ -113,6 +117,10 @@ project(':infrastructure-spring-boot:discovery-client-kubernetes').projectDir = 
 // Event::Gateway
 include(':infrastructure-spring-boot:event-gateway')
 project(':infrastructure-spring-boot:event-gateway').projectDir = file('infrastructure/spring-boot/event/event-gateway')
+
+// Event::Event handler decorator
+include(':infrastructure-spring-boot:event-handler-decorator')
+project(':infrastructure-spring-boot:event-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
 
 // Event::Kafka
 include(':infrastructure-spring-boot:event-kafka-core')
@@ -288,9 +296,9 @@ project(':infrastructure-spring-boot:template-thymeleaf').projectDir = file('inf
 include(':infrastructure-spring-boot:transaction')
 project(':infrastructure-spring-boot:transaction').projectDir = file('infrastructure/spring-boot/transaction')
 
-// Use case
-include(':infrastructure-spring-boot:use-case')
-project(':infrastructure-spring-boot:use-case').projectDir = file('infrastructure/spring-boot/use-case')
+// Use case handler decorator
+include(':infrastructure-spring-boot:use-case-handler-decorator')
+project(':infrastructure-spring-boot:use-case-handler-decorator').projectDir = file('infrastructure/spring-boot/use-case-handler-decorator')
 
 // =================================================================================================
 // Application

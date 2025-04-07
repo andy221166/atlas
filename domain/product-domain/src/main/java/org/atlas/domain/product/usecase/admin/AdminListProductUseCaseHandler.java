@@ -20,7 +20,7 @@ import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.Lis
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AdminListProductUseCaseHandler implements UseCaseHandler<ListProductInput, ListProductOutput> {

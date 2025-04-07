@@ -65,7 +65,6 @@ public class UserRepositoryAdapter implements UserRepository {
   public void insert(UserEntity userEntity) {
     JpaUserEntity jpaUserEntity = ObjectMapperUtil.getInstance()
         .map(userEntity, JpaUserEntity.class);
-    jpaUserEntity.setPassword(userEntity.getHashedPassword());
     jpaUserRepository.save(jpaUserEntity);
     userEntity.setId(jpaUserEntity.getId());
   }

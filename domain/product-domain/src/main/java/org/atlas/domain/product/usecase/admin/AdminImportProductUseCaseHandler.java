@@ -32,7 +32,7 @@ import org.atlas.framework.storage.model.DeleteFileRequest;
 import org.atlas.framework.storage.model.DownloadFileRequest;
 import org.atlas.framework.storage.model.UploadFileRequest;
 import org.atlas.framework.transaction.TransactionPort;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 import org.atlas.framework.util.DateUtil;
 
 @RequiredArgsConstructor

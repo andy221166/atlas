@@ -12,7 +12,7 @@ import org.atlas.framework.context.UserContext;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class FrontGetProfileUseCaseHandler implements UseCaseHandler<Void, GetProfileOutput> {

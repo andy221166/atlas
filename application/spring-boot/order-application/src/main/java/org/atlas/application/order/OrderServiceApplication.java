@@ -1,6 +1,6 @@
 package org.atlas.application.order;
 
-import org.atlas.infrastructure.config.core.YamlConfigLoader;
+import org.atlas.infrastructure.config.YamlConfigLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 

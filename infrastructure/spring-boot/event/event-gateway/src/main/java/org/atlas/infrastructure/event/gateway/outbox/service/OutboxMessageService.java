@@ -7,8 +7,8 @@ import org.atlas.framework.event.DomainEvent;
 import org.atlas.framework.event.EventType;
 import org.atlas.infrastructure.event.gateway.EventPublisher;
 import org.atlas.infrastructure.event.gateway.outbox.config.OutboxProps;
-import org.atlas.infrastructure.event.gateway.outbox.model.OutboxMessage;
-import org.atlas.infrastructure.event.gateway.outbox.model.OutboxMessageStatus;
+import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
+import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;
 import org.atlas.infrastructure.event.gateway.outbox.repository.OutboxMessageRepository;
 import org.atlas.infrastructure.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +54,6 @@ public class OutboxMessageService {
     // Find pending outbox messages
     List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatusOrderByCreatedAt(
         OutboxMessageStatus.PENDING);
-    log.info("Found {} pending outbox message(s)", outboxMessages.size());
     if (outboxMessages.isEmpty()) {
       return;
     }
@@ -68,8 +67,6 @@ public class OutboxMessageService {
 
     // Wait for all parallel tasks to complete
     CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-
-    log.info("All outbox messages were processed");
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW) // Each message has its own transaction
@@ -78,12 +75,8 @@ public class OutboxMessageService {
       // Parse event JSON string to object
       DomainEvent event = JsonUtil.getInstance()
           .toObject(outboxMessage.getEventJson(), outboxMessage.getEventType().getEventClass());
-
       eventPublisher.publish(event, outboxMessage.getDestination());
-
       outboxMessage.toBeProcessed();
-      log.info("Processed outbox message {} of event {} {}",
-          outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson());
     } catch (Exception e) {
       log.error("Failed to process outbox message {} of event {} {}",
           outboxMessage.getId(), outboxMessage.getEventType(), outboxMessage.getEventJson(), e);

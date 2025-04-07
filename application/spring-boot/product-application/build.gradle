@@ -21,6 +21,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['cache']}")
     }
+    api project(':infrastructure-spring-boot:bean')
     api project(':infrastructure-spring-boot:config')
     switch (stackConfig['csv']) {
         case 'opencsv':
@@ -58,6 +59,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
+    api project(':infrastructure-spring-boot:event-handler-decorator')
     switch (stackConfig['excel']) {
         case 'easyexcel':
             api project(':infrastructure-spring-boot:excel-easyexcel-adapter-product')
@@ -101,6 +103,5 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
-    api project(':infrastructure-spring-boot:transaction')
-    api project(':infrastructure-spring-boot:use-case')
+    api project(':infrastructure-spring-boot:use-case-handler-decorator')
 }

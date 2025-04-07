@@ -28,7 +28,7 @@ import org.atlas.framework.event.contract.product.ProductUpdatedEvent;
 import org.atlas.framework.event.publisher.ProductEventPublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdateProductInput, Void> {

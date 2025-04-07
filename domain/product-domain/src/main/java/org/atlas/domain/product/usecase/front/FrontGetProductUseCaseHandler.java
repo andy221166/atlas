@@ -22,7 +22,7 @@ import org.atlas.framework.cache.CachePort;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.framework.usecase.UseCaseHandler;
+import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class FrontGetProductUseCaseHandler implements

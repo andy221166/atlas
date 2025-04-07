@@ -1,6 +1,7 @@
 package org.atlas.framework.objectmapper;
 
 import java.util.List;
+import java.util.function.Function;
 import org.atlas.framework.paging.PagingResult;
 
 public interface ObjectMapper {
@@ -8,6 +9,12 @@ public interface ObjectMapper {
   <D> D map(Object source, Class<D> destinationType);
 
   <D> List<D> mapList(List<?> source, Class<D> destinationType);
+
+  default <S, D> List<D> mapList(List<S> source, Function<S, D> mapper) {
+    return source.stream()
+        .map(mapper)
+        .toList();
+  }
 
   default <D> PagingResult<D> mapPage(PagingResult<?> source, Class<D> destinationType) {
     if (source.checkEmpty()) {

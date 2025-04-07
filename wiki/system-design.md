@@ -60,6 +60,8 @@ Checklist:
 - [x] Routing
 - [x] Authentication
 - [x] CORS
+- [ ] Rate limiting
+- [ ] Aggregate response
 - [x] API document
 
 ---
