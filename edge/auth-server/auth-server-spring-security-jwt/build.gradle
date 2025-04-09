@@ -1,0 +1,66 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'maven-publish'
+}
+
+dependencies {
+    // Lib
+    api 'org.springframework.boot:spring-boot-starter-security'
+
+    // Infrastructure
+    switch (stackConfig['api-server']) {
+        case 'rest':
+            api project(':infrastructure-spring-boot:api-server-rest-adapter-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
+    }
+    switch (stackConfig['datasource']) {
+        case 'mysql':
+            api project(':infrastructure-spring-boot:datasource-mysql-adapter-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
+    }
+    switch (stackConfig['event']) {
+        case 'kafka':
+            api project(':infrastructure-spring-boot:event-kafka-adapter-auth')
+            break
+        case 'sns':
+            api project(':infrastructure-spring-boot:event-sns-adapter-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
+    }
+    switch (stackConfig['persistence']) {
+        case 'jpa':
+            api project(':infrastructure-spring-boot:persistence-jpa-adapter-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
+    }
+    api project(':infrastructure-spring-boot:jwt-auth0')
+    switch (stackConfig['scheduler']) {
+        case 'spring':
+            api project(':infrastructure-spring-boot:scheduler-spring-adapter-auth')
+            break
+        case 'quartz':
+            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-auth')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+    }
+}
+
+jar {
+    enabled = false
+}
+
+publishing {
+    publications {
+        publication(MavenPublication) {
+            artifact bootJar
+            from components.java
+        }
+    }
+}

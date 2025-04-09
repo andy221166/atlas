@@ -1,0 +1,1 @@
+https://scalabrix.medium.com/api-design-refresher-ecf55666ba5a

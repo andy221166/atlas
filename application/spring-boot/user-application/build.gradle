@@ -14,13 +14,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
-    switch (stackConfig['auth']) {
-        case 'spring-security-jwt':
-            api project(':infrastructure-spring-boot:auth-spring-security-jwt')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['auth']}")
-    }
     api project(':infrastructure-spring-boot:bean')
     api project(':infrastructure-spring-boot:config')
     switch (stackConfig['datasource']) {

@@ -29,8 +29,6 @@ public class JpaUserEntity extends JpaBaseEntity implements Serializable {
 
   private String username;
 
-  private String password;
-
   @Column(name = "first_name")
   private String firstName;
 

@@ -3,7 +3,6 @@ package org.atlas.domain.user.usecase.front;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +13,8 @@ import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterInput;
-import org.atlas.framework.auth.AuthPort;
-import org.atlas.framework.auth.model.RegisterRequest;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
-import org.atlas.framework.cryptography.PasswordUtil;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.user.UserRegisteredEvent;
 import org.atlas.framework.event.publisher.UserEventPublisherPort;
@@ -33,14 +29,12 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   private final UserRepository userRepository;
   private final ApplicationConfigPort applicationConfigPort;
   private final UserEventPublisherPort userEventPublisherPort;
-  private final AuthPort authPort;
 
   @Override
   public Void handle(RegisterInput input) throws Exception {
     checkValidity(input);
     UserEntity userEntity = createUser(input);
-    syncAuth(userEntity);
-    publishEvent(userEntity);
+    publishEvent(userEntity, input);
     return null;
   }
 
@@ -59,30 +53,17 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   private UserEntity createUser(RegisterInput input) {
     UserEntity userEntity = ObjectMapperUtil.getInstance()
         .map(input, UserEntity.class);
-    userEntity.setPlainPassword(input.getPassword());
-    userEntity.setPassword(PasswordUtil.hashPassword(input.getPassword()));
     userEntity.setRole(Role.USER);
     userRepository.insert(userEntity);
     return userEntity;
   }
 
-  private void syncAuth(UserEntity userEntity) {
-    RegisterRequest request = new RegisterRequest();
-    request.setUsername(userEntity.getUsername());
-    request.setPlainPassword(userEntity.getPlainPassword());
-    request.setClaims(Map.of(
-        "id", userEntity.getId(),
-        "email", userEntity.getEmail(),
-        "role", userEntity.getRole()
-    ));
-    authPort.register(request);
-  }
-
-  private void publishEvent(UserEntity userEntity) {
+  private void publishEvent(UserEntity userEntity, RegisterInput input) {
     UserRegisteredEvent event = new UserRegisteredEvent(
         applicationConfigPort.getApplicationName());
     ObjectMapperUtil.getInstance()
         .merge(userEntity, event);
+    event.setPassword(input.getPassword());
     userEventPublisherPort.publish(event);
   }
 

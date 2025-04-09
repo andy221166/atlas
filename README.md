@@ -19,6 +19,19 @@
 
 ---
 
+## Getting started
+
+```bash
+./gradlew :discovery-server-eureka:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew :application-spring-boot:user-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew :application-spring-boot:product-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew :application-spring-boot:order-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew :application-spring-boot:notification-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew :api-gateway-spring-cloud-gateway:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+```
+
+---
+
 ## Installation
 
 ### Build the Project
