@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':auth-domain')
-
-    // Infrastructure
-    api project(':infrastructure-spring-boot:event-sns-core')
-}

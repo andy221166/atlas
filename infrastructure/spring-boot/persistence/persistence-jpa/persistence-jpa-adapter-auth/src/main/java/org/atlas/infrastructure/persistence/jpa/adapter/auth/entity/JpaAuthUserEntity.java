@@ -21,8 +21,9 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 public class JpaAuthUserEntity extends JpaBaseEntity implements Serializable {
 
   @Id
+  @Column(name = "user_id")
   @EqualsAndHashCode.Include
-  private Integer id;
+  private Integer userId;
 
   private String username;
 

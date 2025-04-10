@@ -8,29 +8,13 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-security'
 
     // Infrastructure
-    switch (stackConfig['api-server']) {
-        case 'rest':
-            api project(':infrastructure-spring-boot:api-server-rest-adapter-auth')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
-    }
+    api project(':infrastructure-spring-boot:api-server-rest-core')
     switch (stackConfig['datasource']) {
         case 'mysql':
             api project(':infrastructure-spring-boot:datasource-mysql-adapter-auth')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
-    }
-    switch (stackConfig['event']) {
-        case 'kafka':
-            api project(':infrastructure-spring-boot:event-kafka-adapter-auth')
-            break
-        case 'sns':
-            api project(':infrastructure-spring-boot:event-sns-adapter-auth')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
     }
     switch (stackConfig['persistence']) {
         case 'jpa':
@@ -40,15 +24,15 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
     api project(':infrastructure-spring-boot:jwt-auth0')
-    switch (stackConfig['scheduler']) {
-        case 'spring':
-            api project(':infrastructure-spring-boot:scheduler-spring-adapter-auth')
+    switch (stackConfig['redis']) {
+        case 'standalone':
+            api project(':infrastructure-spring-boot:redis-standalone')
             break
-        case 'quartz':
-            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-auth')
+        case 'cluster':
+            api project(':infrastructure-spring-boot:redis-cluster')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
     }
 }
 

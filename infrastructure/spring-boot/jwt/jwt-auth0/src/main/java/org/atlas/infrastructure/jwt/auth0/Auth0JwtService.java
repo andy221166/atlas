@@ -4,23 +4,18 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.atlas.domain.auth.enums.CustomClaim;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.framework.auth.enums.CustomClaim;
 import org.atlas.framework.util.UUIDGenerator;
 import org.atlas.infrastructure.jwt.core.JwtData;
 import org.atlas.infrastructure.jwt.core.JwtService;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Auth0JwtService extends JwtService {
 
-  public Auth0JwtService(RedisTemplate<String, Object> redisTemplate) {
-    super(redisTemplate);
-  }
-
   @Override
-  public String issueToken(JwtData jwtData) {
+  public String generateJwt(JwtData jwtData) {
     return JWT.create()
         .withJWTId(UUIDGenerator.generate())
         .withIssuer(jwtData.getIssuer())
@@ -34,7 +29,10 @@ public class Auth0JwtService extends JwtService {
   }
 
   @Override
-  public JwtData doParseToken(String jwt, String issuer) {
+  public JwtData decodeJwt(String jwt, String issuer) {
+    if (jwt.startsWith(JWT_PREFIX)) {
+      jwt = jwt.substring(JWT_PREFIX.length());
+    }
     DecodedJWT decodedJWT;
     try {
       decodedJWT = JWT.require(Algorithm.RSA256(publicKey))

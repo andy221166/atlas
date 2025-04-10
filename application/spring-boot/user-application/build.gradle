@@ -14,6 +14,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
+    api project(':infrastructure-spring-boot:auth-client-spring-security-jwt')
     api project(':infrastructure-spring-boot:bean')
     api project(':infrastructure-spring-boot:config')
     switch (stackConfig['datasource']) {

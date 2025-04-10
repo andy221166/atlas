@@ -1,4 +1,0 @@
-dependencies {
-    // Infrastructure
-    api project(':infrastructure-spring-boot:scheduler-quartz-core')
-}

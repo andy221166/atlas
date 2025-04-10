@@ -13,6 +13,8 @@ import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterInput;
+import org.atlas.framework.auth.AuthApiPort;
+import org.atlas.framework.auth.model.CreateUserRequest;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
 import org.atlas.framework.error.AppError;
@@ -27,6 +29,7 @@ import org.atlas.framework.usecase.handler.UseCaseHandler;
 public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput, Void> {
 
   private final UserRepository userRepository;
+  private final AuthApiPort authApiPort;
   private final ApplicationConfigPort applicationConfigPort;
   private final UserEventPublisherPort userEventPublisherPort;
 
@@ -34,7 +37,8 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   public Void handle(RegisterInput input) throws Exception {
     checkValidity(input);
     UserEntity userEntity = createUser(input);
-    publishEvent(userEntity, input);
+    createAuthUser(userEntity);
+    publishEvent(userEntity);
     return null;
   }
 
@@ -58,12 +62,19 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
     return userEntity;
   }
 
-  private void publishEvent(UserEntity userEntity, RegisterInput input) {
+  private void createAuthUser(UserEntity userEntity) {
+    CreateUserRequest request = ObjectMapperUtil.getInstance()
+        .map(userEntity, CreateUserRequest.class);
+    authApiPort.createUser(request);
+    log.info("Created auth user: userId={}, username={}",
+        userEntity.getId(), userEntity.getUsername());
+  }
+
+  private void publishEvent(UserEntity userEntity) {
     UserRegisteredEvent event = new UserRegisteredEvent(
         applicationConfigPort.getApplicationName());
     ObjectMapperUtil.getInstance()
         .merge(userEntity, event);
-    event.setPassword(input.getPassword());
     userEventPublisherPort.publish(event);
   }
 

@@ -16,7 +16,7 @@ public class AuthUserRepositoryAdapter implements AuthUserRepository {
   private final JpaAuthUserRepository jpaAuthUserRepository;
 
   @Override
-  public Optional<AuthUserEntity> findByCredential(String credential) {
+  public Optional<AuthUserEntity> findByIdentifier(String credential) {
     return jpaAuthUserRepository.findByUsernameOrEmailOrPhoneNumber(credential)
         .map(jpaAuthUserEntity -> ObjectMapperUtil.getInstance()
             .map(jpaAuthUserEntity, AuthUserEntity.class));

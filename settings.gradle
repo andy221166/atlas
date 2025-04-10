@@ -81,7 +81,11 @@ project(':infrastructure-spring-boot:api-server-rest-adapter-product').projectDi
 include(':infrastructure-spring-boot:api-server-rest-adapter-user')
 project(':infrastructure-spring-boot:api-server-rest-adapter-user').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-user')
 
-// Config
+// Auth client
+include(':infrastructure-spring-boot:auth-client-spring-security-jwt')
+project(':infrastructure-spring-boot:auth-client-spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-spring-security-jwt')
+
+// Bean
 include(':infrastructure-spring-boot:bean')
 project(':infrastructure-spring-boot:bean').projectDir = file('infrastructure/spring-boot/bean')
 
@@ -128,8 +132,6 @@ project(':infrastructure-spring-boot:event-handler-decorator').projectDir = file
 // Event::Kafka
 include(':infrastructure-spring-boot:event-kafka-core')
 project(':infrastructure-spring-boot:event-kafka-core').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-core')
-include(':infrastructure-spring-boot:event-kafka-adapter-auth')
-project(':infrastructure-spring-boot:event-kafka-adapter-auth').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-auth')
 include(':infrastructure-spring-boot:event-kafka-adapter-notification')
 project(':infrastructure-spring-boot:event-kafka-adapter-notification').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-notification')
 include(':infrastructure-spring-boot:event-kafka-adapter-order')
@@ -142,8 +144,6 @@ project(':infrastructure-spring-boot:event-kafka-adapter-user').projectDir = fil
 // Event::SNS
 include(':infrastructure-spring-boot:event-sns-core')
 project(':infrastructure-spring-boot:event-sns-core').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-core')
-include(':infrastructure-spring-boot:event-sns-adapter-auth')
-project(':infrastructure-spring-boot:event-sns-adapter-auth').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-auth')
 include(':infrastructure-spring-boot:event-sns-adapter-notification')
 project(':infrastructure-spring-boot:event-sns-adapter-notification').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-notification')
 include(':infrastructure-spring-boot:event-sns-adapter-order')
@@ -286,8 +286,6 @@ project(':infrastructure-spring-boot:resilience-resilience4j').projectDir = file
 // Scheduler::Spring
 include(':infrastructure-spring-boot:scheduler-spring-core')
 project(':infrastructure-spring-boot:scheduler-spring-core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-core')
-include(':infrastructure-spring-boot:scheduler-spring-adapter-auth')
-project(':infrastructure-spring-boot:scheduler-spring-adapter-auth').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-auth')
 include(':infrastructure-spring-boot:scheduler-spring-adapter-notification')
 project(':infrastructure-spring-boot:scheduler-spring-adapter-notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-notification')
 include(':infrastructure-spring-boot:scheduler-spring-adapter-order')
@@ -300,8 +298,6 @@ project(':infrastructure-spring-boot:scheduler-spring-adapter-user').projectDir 
 // Scheduler::Quartz
 include(':infrastructure-spring-boot:scheduler-quartz-core')
 project(':infrastructure-spring-boot:scheduler-quartz-core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-core')
-include(':infrastructure-spring-boot:scheduler-quartz-adapter-auth')
-project(':infrastructure-spring-boot:scheduler-quartz-adapter-auth').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-auth')
 include(':infrastructure-spring-boot:scheduler-quartz-adapter-notification')
 project(':infrastructure-spring-boot:scheduler-quartz-adapter-notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-notification')
 include(':infrastructure-spring-boot:scheduler-quartz-adapter-order')

@@ -12,7 +12,7 @@ import org.atlas.framework.entity.DomainEntity;
 public class AuthUserEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
-  private Integer id;
+  private Integer userId;
 
   private String username;
 
