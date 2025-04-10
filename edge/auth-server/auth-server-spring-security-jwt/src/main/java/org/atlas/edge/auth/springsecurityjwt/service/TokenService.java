@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.edge.auth.springsecurityjwt.exception.InvalidTokenException;
-import org.atlas.infrastructure.jwt.core.JwtData;
-import org.atlas.infrastructure.jwt.core.JwtService;
+import org.atlas.framework.jwt.JwtData;
+import org.atlas.framework.jwt.JwtService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

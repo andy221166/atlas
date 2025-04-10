@@ -22,6 +22,10 @@ dependencies {
     api 'org.springframework.security:spring-security-crypto:6.4.4'
     api 'commons-codec:commons-codec:1.17.1'
 
+    // JWT/JWKS
+    api 'com.auth0:java-jwt:4.4.0'
+    api 'com.nimbusds:nimbus-jose-jwt:10.2'
+
     // Object mapper
     // ---------------------------------------------------------------------------------------------
     // Object mapper::ModelMapper

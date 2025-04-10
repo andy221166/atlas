@@ -1,42 +1,43 @@
-package org.atlas.infrastructure.jwt.core;
+package org.atlas.framework.jwt;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.ClassPathResource;
+import org.atlas.framework.util.FileUtil;
 
-@RequiredArgsConstructor
 @Slf4j
-public abstract class JwtService implements InitializingBean {
+public abstract class JwtService {
 
   protected static final String JWT_PREFIX = "Bearer ";
 
-  protected RSAPublicKey publicKey;
-  protected RSAPrivateKey privateKey;
+  protected static final RSAPublicKey RSA_PUBLIC_KEY;
+  protected static final RSAPrivateKey RSA_PRIVATE_KEY;
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-    this.publicKey = loadPublicKey(keyFactory);
-    this.privateKey = loadPrivateKey(keyFactory);
+  static {
+    try {
+      KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+      RSA_PUBLIC_KEY = loadPublicKey(keyFactory);
+      RSA_PRIVATE_KEY = loadPrivateKey(keyFactory);
+    } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public abstract String generateJwt(JwtData jwtData);
 
   public abstract JwtData decodeJwt(String token, String issuer);
 
-  private RSAPublicKey loadPublicKey(KeyFactory keyFactory)
+  private static RSAPublicKey loadPublicKey(KeyFactory keyFactory)
       throws IOException, InvalidKeySpecException {
-    try (InputStream inputStream = new ClassPathResource("jwt.pub").getInputStream()) {
+    try (InputStream inputStream = FileUtil.readResourceFileAsStream("jwt.pub")) {
       byte[] publicKeyBytes = inputStream.readAllBytes();
       String publicKeyContent = new String(publicKeyBytes)
           .replace("-----BEGIN PUBLIC KEY-----", "")
@@ -49,9 +50,9 @@ public abstract class JwtService implements InitializingBean {
     }
   }
 
-  private RSAPrivateKey loadPrivateKey(KeyFactory keyFactory)
+  private static RSAPrivateKey loadPrivateKey(KeyFactory keyFactory)
       throws IOException, InvalidKeySpecException {
-    try (InputStream inputStream = new ClassPathResource("jwt.key").getInputStream()) {
+    try (InputStream inputStream = FileUtil.readResourceFileAsStream("jwt.key")) {
       byte[] privateKeyBytes = inputStream.readAllBytes();
       String privateKeyContent = new String(privateKeyBytes)
           .replace("-----BEGIN PRIVATE KEY-----", "")

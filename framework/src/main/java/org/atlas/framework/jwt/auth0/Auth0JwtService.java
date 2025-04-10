@@ -1,17 +1,15 @@
-package org.atlas.infrastructure.jwt.auth0;
+package org.atlas.framework.jwt.auth0;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.atlas.domain.auth.enums.CustomClaim;
 import org.atlas.domain.user.shared.enums.Role;
+import org.atlas.framework.auth.CustomClaim;
 import org.atlas.framework.util.UUIDGenerator;
-import org.atlas.infrastructure.jwt.core.JwtData;
-import org.atlas.infrastructure.jwt.core.JwtService;
-import org.springframework.stereotype.Service;
+import org.atlas.framework.jwt.JwtData;
+import org.atlas.framework.jwt.JwtService;
 
-@Service
 public class Auth0JwtService extends JwtService {
 
   @Override
@@ -25,7 +23,7 @@ public class Auth0JwtService extends JwtService {
         .withExpiresAt(jwtData.getExpiredAt())
         .withClaim(CustomClaim.USER_ID.value(), jwtData.getUserId())
         .withClaim(CustomClaim.USER_ROLE.value(), jwtData.getUserRole().name())
-        .sign(Algorithm.RSA256(publicKey, privateKey));
+        .sign(Algorithm.RSA256(RSA_PUBLIC_KEY, RSA_PRIVATE_KEY));
   }
 
   @Override
@@ -35,7 +33,7 @@ public class Auth0JwtService extends JwtService {
     }
     DecodedJWT decodedJWT;
     try {
-      decodedJWT = JWT.require(Algorithm.RSA256(publicKey))
+      decodedJWT = JWT.require(Algorithm.RSA256(RSA_PUBLIC_KEY))
           .withIssuer(issuer)
           .build()
           .verify(jwt);

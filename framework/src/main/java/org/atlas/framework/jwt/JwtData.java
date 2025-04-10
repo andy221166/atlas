@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.jwt.core;
+package org.atlas.framework.jwt;
 
 import java.util.Date;
 import lombok.Builder;
