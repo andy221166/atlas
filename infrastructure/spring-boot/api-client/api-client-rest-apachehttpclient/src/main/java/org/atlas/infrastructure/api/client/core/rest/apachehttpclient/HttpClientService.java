@@ -22,9 +22,8 @@ import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
-import org.atlas.infrastructure.json.JsonUtil;
+import org.atlas.framework.json.JsonUtil;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -62,7 +61,7 @@ public class HttpClientService implements DisposableBean {
       Class<Res> responseClass) {
     HttpPost httpRequest = new HttpPost(url);
     setHeaders(httpRequest, headersMap);
-    httpRequest.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+    httpRequest.addHeader("Content-Type", "application/json");
     setRequestBodyAsJson(httpRequest, requestBody);
     return call(httpRequest, responseClass);
   }
@@ -83,7 +82,7 @@ public class HttpClientService implements DisposableBean {
       Class<Res> responseClass) {
     HttpPut httpRequest = new HttpPut(url);
     setHeaders(httpRequest, headersMap);
-    httpRequest.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+    httpRequest.addHeader("Content-Type", "application/json");
     setRequestBodyAsJson(httpRequest, requestBody);
     return call(httpRequest, responseClass);
   }
@@ -116,7 +115,8 @@ public class HttpClientService implements DisposableBean {
     if (requestBody == null) {
       return;
     }
-    String requestBodyJson = JsonUtil.getInstance().toJson(requestBody);
+    String requestBodyJson = JsonUtil.getInstance()
+        .toJson(requestBody);
     StringEntity httpEntity = new StringEntity(requestBodyJson, StandardCharsets.UTF_8);
     httpRequest.setEntity(httpEntity);
   }

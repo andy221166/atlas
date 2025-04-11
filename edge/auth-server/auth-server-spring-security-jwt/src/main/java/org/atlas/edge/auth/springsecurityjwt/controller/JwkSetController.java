@@ -1,24 +1,30 @@
 package org.atlas.edge.auth.springsecurityjwt.controller;
 
-import java.security.interfaces.RSAKey;
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
-import org.atlas.framework.jwt.JwtService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.atlas.framework.constant.SecurityConstant;
+import org.atlas.framework.security.cryptography.RsaKeyLoader;
+import org.atlas.framework.jwks.JwkSetUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(("/.well-known/jwks.json"))
+@RequestMapping("/.well-known/jwks.json")
+@RequiredArgsConstructor
+@Slf4j
 public class JwkSetController {
 
-    private final RSAKey rsaKey;
-
-    public JwkSetController(JwtService jwtService) {
-      this.rsaKey = jwtService.getPublicKey();
-    }
-
-    @GetMapping
-    public Map<String, Object> getJwks() {
-        return new JWKSet(rsaKey.toPublicJWK()).toJSONObject();
-    }
+  @GetMapping
+  @Cacheable(cacheNames = "jwks")
+  public Map<String, Object> getJwks() throws IOException, InvalidKeySpecException {
+    log.info("Getting jwks...");
+    return JwkSetUtil.getInstance()
+        .generate(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH),
+            SecurityConstant.JWKS_KEY_ID);
+  }
 }

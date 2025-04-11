@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.Data;
 import org.atlas.domain.product.shared.enums.ProductStatus;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.excel.ProductExcelReaderPort;
 import org.atlas.framework.file.model.read.ProductRow;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
@@ -45,7 +45,7 @@ public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
     private ProductStatus status;
 
     @ExcelProperty(value = "Available From")
-    @DateTimeFormat(value = Constant.DATE_TIME_FORMAT)
+    @DateTimeFormat(value = CommonConstant.DATE_TIME_FORMAT)
     private Date availableFrom;
 
     @ExcelProperty(value = "Active")

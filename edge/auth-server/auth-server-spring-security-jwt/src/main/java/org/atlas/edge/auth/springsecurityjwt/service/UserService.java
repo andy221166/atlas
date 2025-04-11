@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.auth.entity.AuthUserEntity;
 import org.atlas.domain.auth.repository.AuthUserRepository;
 import org.atlas.edge.auth.springsecurityjwt.model.CreateUserRequest;
-import org.atlas.framework.cryptography.PasswordUtil;
+import org.atlas.framework.security.cryptography.PasswordUtil;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

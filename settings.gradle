@@ -90,6 +90,8 @@ include(':infrastructure-spring-boot:bean')
 project(':infrastructure-spring-boot:bean').projectDir = file('infrastructure/spring-boot/bean')
 
 // Cache
+include(':infrastructure-spring-boot:cache-simple')
+project(':infrastructure-spring-boot:cache-simple').projectDir = file('infrastructure/spring-boot/cache/cache-simple')
 include(':infrastructure-spring-boot:cache-redis')
 project(':infrastructure-spring-boot:cache-redis').projectDir = file('infrastructure/spring-boot/cache/cache-redis')
 
@@ -206,16 +208,6 @@ include(':infrastructure-spring-boot:user-api-rest-model')
 project(':infrastructure-spring-boot:user-api-rest-model').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-model')
 include(':infrastructure-spring-boot:user-api-rest-resttemplate')
 project(':infrastructure-spring-boot:user-api-rest-resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
-
-// JSON
-include(':infrastructure-spring-boot:json')
-project(':infrastructure-spring-boot:json').projectDir = file('infrastructure/spring-boot/json')
-
-// JWT
-include(':infrastructure-spring-boot:jwt-core')
-project(':infrastructure-spring-boot:jwt-core').projectDir = file('infrastructure/spring-boot/jwt/jwt-core')
-include(':infrastructure-spring-boot:jwt-auth0')
-project(':infrastructure-spring-boot:jwt-auth0').projectDir = file('infrastructure/spring-boot/jwt/jwt-auth0')
 
 // Lock
 include(':infrastructure-spring-boot:lock-core')

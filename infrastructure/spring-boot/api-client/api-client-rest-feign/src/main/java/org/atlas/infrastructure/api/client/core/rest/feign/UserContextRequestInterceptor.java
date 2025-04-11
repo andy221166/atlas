@@ -2,9 +2,9 @@ package org.atlas.infrastructure.api.client.core.rest.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import org.atlas.framework.auth.enums.CustomClaim;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.security.UserContext;
+import org.atlas.framework.security.model.UserInfo;
 import org.springframework.stereotype.Component;
 
 @Component

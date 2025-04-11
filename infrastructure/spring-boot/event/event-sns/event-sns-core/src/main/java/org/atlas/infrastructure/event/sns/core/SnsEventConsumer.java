@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.json.JsonUtil;
 import org.atlas.framework.util.ConcurrentUtil;
-import org.atlas.infrastructure.json.JsonUtil;
 import org.springframework.beans.factory.DisposableBean;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
@@ -59,7 +59,8 @@ public abstract class SnsEventConsumer implements DisposableBean {
                   log.debug("Handling message: {}", message.messageId());
                   try {
                     // Note: Need to enable raw message delivery when create subscription to be able to get message body directly
-                    DomainEvent event = JsonUtil.getInstance().toObject(message.body(), DomainEvent.class);
+                    DomainEvent event = JsonUtil.getInstance()
+                        .toObject(message.body(), DomainEvent.class);
                     handleEvent(event);
                     deleteMessage(message, queueUrl);
                   } catch (Exception e) {

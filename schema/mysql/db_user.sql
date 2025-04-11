@@ -19,8 +19,6 @@ CREATE TABLE IF NOT EXISTS users
 ) ENGINE = INNODB;
 
 -- Password: Aa@123456
-INSERT INTO users (id, username, password, first_name, last_name, email, phone_number, role)
-VALUES (1, 'admin', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE2', 'John', 'Doe',
-        'admin@atlas.org', '0987654321', 'ADMIN'),
-       (2, 'user', '$2a$12$JBXIjeVKldJZ0824t5ULHOLeoq330xmpx0Ua/5Ipz4hlGxlSm9nE2', 'John', 'Smith',
-        'user@atlas.org', '0987321654', 'USER');
+INSERT INTO users (id, username, first_name, last_name, email, phone_number, role)
+VALUES (1, 'admin', 'John', 'Doe', 'admin@atlas.org', '0987654321', 'ADMIN'),
+       (2, 'user', 'John', 'Smith', 'user@atlas.org', '0987321654', 'USER');

@@ -4,8 +4,8 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import org.atlas.framework.auth.AuthApiPort;
-import org.atlas.framework.auth.model.CreateUserRequest;
+import org.atlas.framework.security.AuthApiPort;
+import org.atlas.framework.security.model.CreateUserRequest;
 import org.springframework.stereotype.Component;
 
 @Component

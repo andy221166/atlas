@@ -6,6 +6,8 @@ plugins {
 dependencies {
     // Lib
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.6'
 
     // Infrastructure
@@ -23,8 +25,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-    api project(':infrastructure-spring-boot:json')
-    api project(':infrastructure-spring-boot:jwt-auth0')
     switch (stackConfig['logging']) {
         case 'logback':
             api project(':infrastructure-spring-boot:logging-logback')

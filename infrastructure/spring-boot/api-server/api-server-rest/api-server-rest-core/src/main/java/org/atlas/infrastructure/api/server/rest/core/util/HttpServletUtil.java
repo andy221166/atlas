@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import lombok.experimental.UtilityClass;
-import org.atlas.infrastructure.json.JsonUtil;
+import org.atlas.framework.json.JsonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 

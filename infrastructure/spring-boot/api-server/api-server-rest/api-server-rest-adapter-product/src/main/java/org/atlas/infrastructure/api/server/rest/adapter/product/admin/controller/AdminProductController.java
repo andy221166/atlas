@@ -26,7 +26,7 @@ import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.Lis
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductOutput;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.enums.FileType;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -90,7 +90,7 @@ public class AdminProductController {
       @Parameter(description = "Page number for pagination.", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(description = "Number of items per page.", example = "20")
-      @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE_STR) Integer size
+      @RequestParam(name = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
     ListProductInput input = new ListProductInput();
     input.setId(id);

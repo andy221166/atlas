@@ -1,9 +1,9 @@
 package org.atlas.infrastructure.api.client.core.rest.resttemplate;
 
 import java.io.IOException;
-import org.atlas.framework.auth.enums.CustomClaim;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.security.UserContext;
+import org.atlas.framework.security.model.UserInfo;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

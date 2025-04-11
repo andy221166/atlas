@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler.ListUserInput;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler.ListUserOutput;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.user.admin.model.ListUserResponse;
@@ -32,7 +32,7 @@ public class AdminUserController {
       @Parameter(description = "The page number to retrieve.", example = "1")
       @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(description = "The number of users per page.", example = "20")
-      @RequestParam(value = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE_STR) Integer size
+      @RequestParam(value = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
     ListUserInput input = new ListUserInput(PagingRequest.of(page, size));
     ListUserOutput output = adminListUserUseCaseHandler.handle(input);

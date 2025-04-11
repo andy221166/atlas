@@ -2,8 +2,8 @@ package org.atlas.edge.auth.springsecurityjwt.security;
 
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.atlas.domain.user.entity.UserEntity;
-import org.atlas.domain.user.repository.UserRepository;
+import org.atlas.domain.auth.entity.AuthUserEntity;
+import org.atlas.domain.auth.repository.AuthUserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,23 +14,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final UserRepository userRepository;
+  private final AuthUserRepository authUserRepository;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findByUsername(username)
+  public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+    return authUserRepository.findByIdentifier(identifier)
         .map(this::map)
-        .orElseThrow(
-            () -> new UsernameNotFoundException(String.format("User %s not found", username)));
+        .orElseThrow(() -> new UsernameNotFoundException(
+            String.format("User with identifier %s not found", identifier)));
   }
 
-  public UserDetailsImpl map(UserEntity userEntity) {
+  public UserDetailsImpl map(AuthUserEntity authUserEntity) {
     UserDetailsImpl userDetails = new UserDetailsImpl();
-    userDetails.setUserId(userEntity.getId());
-    userDetails.setUsername(userEntity.getUsername());
-    userDetails.setPassword(userEntity.getPassword());
+    userDetails.setUserId(authUserEntity.getUserId());
+    userDetails.setUsername(authUserEntity.getUsername());
+    userDetails.setPassword(authUserEntity.getPassword());
     userDetails.setAuthorities(
-        Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().name())));
+        Collections.singletonList(new SimpleGrantedAuthority(authUserEntity.getRole().name())));
     return userDetails;
   }
 }

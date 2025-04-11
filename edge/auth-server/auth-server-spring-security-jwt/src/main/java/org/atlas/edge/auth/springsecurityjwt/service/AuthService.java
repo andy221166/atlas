@@ -1,5 +1,7 @@
 package org.atlas.edge.auth.springsecurityjwt.service;
 
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import lombok.RequiredArgsConstructor;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginResponse;
@@ -18,7 +20,7 @@ public class AuthService {
   private final TokenService tokenService;
 
   @Transactional(readOnly = true)
-  public LoginResponse login(LoginRequest request) {
+  public LoginResponse login(LoginRequest request) throws IOException, InvalidKeySpecException {
     // Perform login
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword());
@@ -32,7 +34,7 @@ public class AuthService {
     return new LoginResponse(accessToken, refreshToken);
   }
 
-  public void logout(String accessToken) {
+  public void logout(String accessToken) throws IOException, InvalidKeySpecException {
     tokenService.revokeAccessToken(accessToken);
   }
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.usecase.front.FrontGetProfileUseCaseHandler.GetProfileOutput;
-import org.atlas.framework.context.UserContext;
+import org.atlas.framework.security.UserContext;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;

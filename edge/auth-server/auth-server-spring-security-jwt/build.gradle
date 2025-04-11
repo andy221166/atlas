@@ -9,6 +9,8 @@ dependencies {
 
     // Infrastructure
     api project(':infrastructure-spring-boot:api-server-rest-core')
+    api project(':infrastructure-spring-boot:cache-simple')
+    api project(':infrastructure-spring-boot:config')
     switch (stackConfig['datasource']) {
         case 'mysql':
             api project(':infrastructure-spring-boot:datasource-mysql-adapter-auth')
@@ -23,7 +25,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
-    api project(':infrastructure-spring-boot:jwt-auth0')
     switch (stackConfig['redis']) {
         case 'standalone':
             api project(':infrastructure-spring-boot:redis-standalone')

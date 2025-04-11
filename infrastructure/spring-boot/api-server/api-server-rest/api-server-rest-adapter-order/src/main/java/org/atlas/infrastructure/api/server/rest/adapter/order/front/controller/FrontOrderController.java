@@ -13,7 +13,7 @@ import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrd
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderInput;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderOutput;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.infrastructure.api.server.rest.core.response.Response;
@@ -49,7 +49,7 @@ public class FrontOrderController {
       @Parameter(name = "page", description = "The page number to retrieve (default is 1).", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "10")
-      @RequestParam(name = "size", required = false, defaultValue = Constant.DEFAULT_PAGE_SIZE_STR) Integer size
+      @RequestParam(name = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
     ListOrderInput input = ListOrderInput.builder()
         .pagingRequest(PagingRequest.of(page - 1, size))

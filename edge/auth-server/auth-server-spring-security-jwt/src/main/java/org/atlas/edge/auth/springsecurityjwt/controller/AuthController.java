@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginResponse;
-import org.atlas.edge.auth.springsecurityjwt.model.CreateUserRequest;
 import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
 import org.atlas.infrastructure.api.server.rest.core.response.Response;
 import org.springframework.http.HttpHeaders;
@@ -25,15 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final AuthService authService;
-
-  @Operation(summary = "Auth user registration", description = "Register user into the auth system.")
-  @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<Void> register(
-      @Parameter(description = "Request object containing registration data.", required = true)
-      @Valid @RequestBody CreateUserRequest request) throws Exception {
-    authService.register(request);
-    return Response.success();
-  }
 
   @Operation(summary = "User Login", description = "Authenticates a user and returns a login response.")
   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)

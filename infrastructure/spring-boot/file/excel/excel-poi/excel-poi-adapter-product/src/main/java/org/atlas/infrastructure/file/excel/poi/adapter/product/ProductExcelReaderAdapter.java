@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.atlas.domain.product.shared.enums.ProductStatus;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.excel.ProductExcelReaderPort;
 import org.atlas.framework.file.model.read.ProductRow;
 import org.atlas.framework.util.DateUtil;
@@ -54,7 +54,7 @@ public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
     productRow.setQuantity((int) row.getCell(3).getNumericCellValue());
     productRow.setStatus(ProductStatus.valueOf(row.getCell(4).getStringCellValue()));
     productRow.setAvailableFrom(DateUtil.parse(row.getCell(5).getStringCellValue(),
-        Constant.DATE_TIME_FORMAT));
+        CommonConstant.DATE_TIME_FORMAT));
     productRow.setIsActive(row.getCell(6).getBooleanCellValue());
     productRow.setDescription(row.getCell(7).getStringCellValue());
     productRow.setAttributeName1(row.getCell(8).getStringCellValue());

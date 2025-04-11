@@ -1,5 +1,0 @@
-dependencies {
-    // Lib
-    api 'org.springframework.boot:spring-boot-starter-json'
-    api 'com.google.code.gson:gson:2.12.1'
-}

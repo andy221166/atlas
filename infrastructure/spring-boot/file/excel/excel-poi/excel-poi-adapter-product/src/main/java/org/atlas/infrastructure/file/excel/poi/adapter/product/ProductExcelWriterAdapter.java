@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.atlas.framework.constant.Constant;
+import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.excel.ProductExcelWriterPort;
 import org.atlas.framework.file.model.write.ProductRow;
 import org.atlas.framework.util.DateUtil;
@@ -144,7 +144,7 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
       cell.setCellStyle(style);
 
       cell = row.createCell(6);
-      cell.setCellValue(DateUtil.format(productRow.getAvailableFrom(), Constant.DATE_TIME_FORMAT));
+      cell.setCellValue(DateUtil.format(productRow.getAvailableFrom(), CommonConstant.DATE_TIME_FORMAT));
       cell.setCellStyle(style);
 
       cell = row.createCell(7);

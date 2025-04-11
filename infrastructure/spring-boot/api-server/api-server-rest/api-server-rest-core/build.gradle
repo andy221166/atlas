@@ -6,5 +6,4 @@ dependencies {
     // Infrastructure
     api project(':infrastructure-spring-boot:config')
     api project(':infrastructure-spring-boot:i18n')
-    api project(':infrastructure-spring-boot:json')
 }

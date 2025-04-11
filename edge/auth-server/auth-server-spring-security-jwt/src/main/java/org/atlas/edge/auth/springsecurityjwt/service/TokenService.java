@@ -1,13 +1,18 @@
 package org.atlas.edge.auth.springsecurityjwt.service;
 
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
-import org.atlas.edge.auth.springsecurityjwt.exception.InvalidTokenException;
-import org.atlas.framework.jwt.JwtData;
-import org.atlas.framework.jwt.JwtService;
+import org.atlas.framework.constant.SecurityConstant;
+import org.atlas.framework.security.cryptography.RsaKeyLoader;
+import org.atlas.framework.jwt.DecodeJwtInput;
+import org.atlas.framework.jwt.DecodeJwtOutput;
+import org.atlas.framework.jwt.EncodeJwtInput;
+import org.atlas.framework.jwt.JwtUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,49 +21,40 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class TokenService {
 
-  public static final String TOKEN_ISSUER = "atlas.auth";
-  public static final String TOKEN_AUDIENCE = "atlas";
-  public static final long ACCESS_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-
-  private final JwtService jwtService;
   private final RedisTemplate<String, Object> redisTemplate;
 
-  public String issueAccessToken(UserDetailsImpl userDetails) {
+  public String issueAccessToken(UserDetailsImpl userDetails)
+      throws IOException, InvalidKeySpecException {
     Date issuedAt = new Date();
-    Date expiresAt = new Date(issuedAt.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
-    JwtData jwtData = JwtData.builder()
-        .issuer(TOKEN_ISSUER)
+    Date expiresAt = new Date(issuedAt.getTime() + SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
+    EncodeJwtInput encodeJwtInput = EncodeJwtInput.builder()
+        .issuer(SecurityConstant.TOKEN_ISSUER)
         .issuedAt(issuedAt)
         .subject(String.valueOf(userDetails.getUserId()))
-        .audience(TOKEN_AUDIENCE)
+        .audience(SecurityConstant.TOKEN_AUDIENCE)
         .expiredAt(expiresAt)
+        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
+        .rsaPrivateKey(RsaKeyLoader.loadPrivateKey(SecurityConstant.RSA_PRIVATE_KEY_PATH))
         .userId(userDetails.getUserId())
         .userRole(userDetails.getRole())
         .build();
-    return jwtService.generateJwt(jwtData);
+    return JwtUtil.getInstance().encodeJwt(encodeJwtInput);
   }
 
   public String issueRefreshToken(UserDetailsImpl userDetails) {
     return null;
   }
 
-  public JwtData verifyAccessToken(String accessToken) {
-    // Try decoding access token to JwtData
-    JwtData jwtData = jwtService.decodeJwt(accessToken, TOKEN_ISSUER);
-
-    // Check blacklist
-    String blacklistRedisKey = getBlacklistRedisKey(accessToken);
-    if (redisTemplate.opsForValue().get(blacklistRedisKey) != null) {
-      throw new InvalidTokenException("The access token was inactivated");
-    }
-
-    return jwtData;
-  }
-
-  public void revokeAccessToken(String accessToken) {
+  public void revokeAccessToken(String accessToken) throws IOException, InvalidKeySpecException {
     // Calculate TTL
-    JwtData jwtData = jwtService.decodeJwt(accessToken, TOKEN_ISSUER);
-    long remainingTimeMillis = jwtData.getExpiredAt().getTime() - System.currentTimeMillis();
+    DecodeJwtInput decodeJwtInput = DecodeJwtInput.builder()
+        .jwt(accessToken)
+        .issuer(SecurityConstant.TOKEN_ISSUER)
+        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
+        .build();
+    DecodeJwtOutput decodeJwtOutput = JwtUtil.getInstance().decodeJwt(decodeJwtInput);
+    long remainingTimeMillis =
+        decodeJwtOutput.getExpiredAt().getTime() - System.currentTimeMillis();
     String blacklistRedisKey = getBlacklistRedisKey(accessToken);
     redisTemplate.opsForValue()
         .set(blacklistRedisKey, true, remainingTimeMillis, TimeUnit.MILLISECONDS);

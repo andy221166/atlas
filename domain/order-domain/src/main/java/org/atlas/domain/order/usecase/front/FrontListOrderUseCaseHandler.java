@@ -25,7 +25,7 @@ import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrd
 import org.atlas.domain.product.shared.internal.ListProductInput;
 import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.product.shared.internal.ListProductOutput.Product;
-import org.atlas.framework.context.UserContext;
+import org.atlas.framework.security.UserContext;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
