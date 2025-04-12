@@ -1,4 +1,10 @@
 dependencies {
     // Infrastructure
-    api project(':infrastructure-spring-boot:persistence-jpa-core')
+    switch (stackConfig['persistence']) {
+        case 'jpa':
+            api project(':infrastructure-spring-boot:persistence-jpa-adapter-outbox')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
+    }
 }

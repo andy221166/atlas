@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "app.gateway.auth-rules")
+@ConfigurationProperties(prefix = "app.api-gateway.auth-rules")
 @Data
 public class AuthRulesProperties {
 

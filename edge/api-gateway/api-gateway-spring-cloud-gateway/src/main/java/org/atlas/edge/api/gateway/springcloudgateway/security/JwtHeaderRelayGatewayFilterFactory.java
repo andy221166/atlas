@@ -3,16 +3,19 @@ package org.atlas.edge.api.gateway.springcloudgateway.security;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
 
 @Component
-public class JwtHeaderRelayFilter extends
-    AbstractGatewayFilterFactory<JwtHeaderRelayFilter.Config> {
+public class JwtHeaderRelayGatewayFilterFactory extends
+    AbstractGatewayFilterFactory<JwtHeaderRelayGatewayFilterFactory.Config> {
 
-  public JwtHeaderRelayFilter() {
+  public JwtHeaderRelayGatewayFilterFactory() {
     super(Config.class);
   }
 
@@ -29,12 +32,18 @@ public class JwtHeaderRelayFilter extends
           String userRole = jwt.getClaimAsString(CustomClaim.USER_ROLE.getClaim());
 
           // Mutate the request to add custom headers
-          exchange.getRequest().mutate()
-              .header(CustomClaim.USER_ID.getHeader(), userId)
-              .header(CustomClaim.USER_ROLE.getHeader(), userRole)
+          ServerHttpRequest mutatedRequest = exchange.getRequest()
+              .mutate()
+              .headers(httpHeaders -> {
+                httpHeaders.remove(HttpHeaders.AUTHORIZATION);
+                httpHeaders.set(CustomClaim.USER_ID.getHeader(), userId);
+                httpHeaders.set(CustomClaim.USER_ROLE.getHeader(), userRole);
+              })
               .build();
-
-          return chain.filter(exchange);
+          ServerWebExchange mutatedExchange = exchange.mutate()
+              .request(mutatedRequest)
+              .build();
+          return chain.filter(mutatedExchange);
         });
   }
 

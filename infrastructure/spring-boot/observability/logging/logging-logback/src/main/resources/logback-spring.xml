@@ -69,14 +69,14 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- Task Scheduler::Quartz -->
+    <!-- Scheduler::Quartz -->
     <logger name="org.quartz.core" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- Gateway Server -->
-    <logger name="org.springframework.cloud.gateway" level="DEBUG" additivity="false">
+    <!-- Spring Security -->
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

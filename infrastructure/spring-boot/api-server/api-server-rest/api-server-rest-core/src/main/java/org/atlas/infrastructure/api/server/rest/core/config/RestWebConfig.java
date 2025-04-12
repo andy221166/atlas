@@ -17,7 +17,7 @@ public class RestWebConfig implements WebMvcConfigurer {
 
   // TODO: Consider to put it into config-server
   private static final String[] ALLOWED_ORIGINS = {
-      "http://localhost:8080", // Gateway
+      "http://localhost:8080", // API Gateway
       "http://localhost:9000" // Frontend
   };
 

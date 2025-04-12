@@ -3,13 +3,13 @@ package org.atlas.infrastructure.event.gateway.outbox.task;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.domain.outbox.entity.OutboxMessageEntity;
+import org.atlas.domain.outbox.entity.OutboxMessageStatus;
+import org.atlas.domain.outbox.repository.OutboxMessageRepository;
 import org.atlas.framework.event.DomainEvent;
 import org.atlas.framework.json.JsonUtil;
 import org.atlas.framework.task.outbox.RelayOutboxMessageTask;
 import org.atlas.infrastructure.event.gateway.EventPublisher;
-import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessage;
-import org.atlas.infrastructure.event.gateway.outbox.entity.OutboxMessageStatus;
-import org.atlas.infrastructure.event.gateway.outbox.repository.OutboxMessageRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class RelayOutboxMessageTaskImpl implements RelayOutboxMessageTask {
   @Transactional
   public void execute() {
     // Find pending outbox messages
-    List<OutboxMessage> outboxMessages = outboxMessageRepository.findByStatusOrderByCreatedAt(
+    List<OutboxMessageEntity> outboxMessages = outboxMessageRepository.findByStatusOrderByCreatedAt(
         OutboxMessageStatus.PENDING);
     if (outboxMessages.isEmpty()) {
       return;
@@ -57,7 +57,7 @@ public class RelayOutboxMessageTaskImpl implements RelayOutboxMessageTask {
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW) // Each message has its own transaction
-  public void processOutboxMessage(OutboxMessage outboxMessage) {
+  public void processOutboxMessage(OutboxMessageEntity outboxMessage) {
     try {
       // Parse event JSON string to object
       DomainEvent event = JsonUtil.getInstance()
@@ -76,6 +76,6 @@ public class RelayOutboxMessageTaskImpl implements RelayOutboxMessageTask {
         outboxMessage.incRetries();
       }
     }
-    outboxMessageRepository.save(outboxMessage);
+    outboxMessageRepository.update(outboxMessage);
   }
 }

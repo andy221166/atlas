@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: gateway-server
+    name: api-gateway
   cloud:
     gateway:
       routes:
@@ -29,18 +29,18 @@ spring:
           filters:
             - RewritePath=/api-docs/user-service, /api-docs
         # Auth service
-        - id: auth-service-auth
-          uri: lb://auth-service
+        - id: auth-server-auth
+          uri: lb://auth-server
           predicates:
             - Path=/api/auth/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-        - id: auth-service-api-docs
-          uri: lb://auth-service
+        - id: auth-server-api-docs
+          uri: lb://auth-server
           predicates:
-            - Path=/api-docs/auth-service
+            - Path=/api-docs/auth-server
           filters:
-            - RewritePath=/api-docs/auth-service, /api-docs
+            - RewritePath=/api-docs/auth-server, /api-docs
         # Product service
         - id: product-service-admin
           uri: lb://product-service
@@ -98,7 +98,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8091/.well-known/jwks.json}
+          jwk-set-uri: ${JWK_SET_URI:http://localhost:8091/.well-known/jwks.json}
 
 springdoc:
   api-docs:
@@ -108,15 +108,16 @@ springdoc:
     urls:
       - name: User Service
         url: /api-docs/user-service
-      - name: Auth Service
-        url: /api-docs/auth-service
       - name: Product Service
         url: /api-docs/product-service
       - name: Order Service
         url: /api-docs/order-service
+      - name: Auth Server
+        url: /api-docs/auth-server
+    default-models-expand-depth: -1 # Hide Schemas section
 
 app:
-  gateway:
+  api-gateway:
     auth-rules:
       non-secured-paths:
         - "/actuator/**"
@@ -124,6 +125,7 @@ app:
         - "/api/auth/logout"
         - "/api/front/users/register"
         - "/api-docs/**"
+        - "/swagger-ui/**"
       secured-paths:
         - path: "/api/master/**"
           roles: [ "USER", "ADMIN" ]

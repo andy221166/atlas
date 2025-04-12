@@ -18,6 +18,18 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
     }
+    switch (stackConfig['discovery-client']) {
+        case 'none':
+            break
+        case 'eureka':
+            api project(':infrastructure-spring-boot:discovery-client-eureka')
+            break
+        case 'kubernetes':
+            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
+    }
     switch (stackConfig['persistence']) {
         case 'jpa':
             api project(':infrastructure-spring-boot:persistence-jpa-adapter-auth')

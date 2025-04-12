@@ -105,7 +105,7 @@ export const api = {
   // Auth methods
   auth: {
     login: (username, password) => 
-      apiClient.post(API_ENDPOINTS.AUTH.LOGIN, { username, password }),
+      apiClient.post(API_ENDPOINTS.AUTH.LOGIN, { identifier: username, password }),
     logout: () => 
       apiClient.post(API_ENDPOINTS.AUTH.LOGOUT)
   },

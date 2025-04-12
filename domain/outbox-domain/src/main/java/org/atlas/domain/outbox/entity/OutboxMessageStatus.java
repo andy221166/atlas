@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.event.gateway.outbox.entity;
+package org.atlas.domain.outbox.entity;
 
 public enum OutboxMessageStatus {
 

@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.server.rest.core.auth;
+package org.atlas.infrastructure.api.server.rest.core.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

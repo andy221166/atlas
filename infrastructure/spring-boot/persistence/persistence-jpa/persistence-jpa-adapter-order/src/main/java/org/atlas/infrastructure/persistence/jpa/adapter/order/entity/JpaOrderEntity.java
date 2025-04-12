@@ -11,16 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.atlas.domain.order.shared.OrderStatus;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity
 @Table(name = "orders")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 public class JpaOrderEntity extends JpaBaseEntity {
 
@@ -43,12 +44,4 @@ public class JpaOrderEntity extends JpaBaseEntity {
 
   @Column(name = "canceled_reason")
   private String canceledReason;
-
-  public void addOrderItem(JpaOrderItemEntity orderItem) {
-    if (this.orderItems == null) {
-      this.orderItems = new ArrayList<>();
-    }
-    this.orderItems.add(orderItem);
-    orderItem.setOrder(this);
-  }
 }

@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.event.gateway.outbox.entity;
+package org.atlas.infrastructure.persistence.jpa.adapter.outbox.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,9 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Date;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.atlas.domain.outbox.entity.OutboxMessageStatus;
 import org.atlas.framework.event.EventType;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
@@ -19,7 +20,8 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 @Table(name = "outbox_message")
 @Getter
 @Setter
-public class OutboxMessage extends JpaBaseEntity {
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+public class JpaOutboxMessageEntity extends JpaBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,23 +45,6 @@ public class OutboxMessage extends JpaBaseEntity {
   private String error;
 
   private Integer retries = 0;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    OutboxMessage other = (OutboxMessage) o;
-    return id != null && id.equals(other.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
 
   public void markAsProcessed() {
     this.status = OutboxMessageStatus.PROCESSED;

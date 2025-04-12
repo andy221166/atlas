@@ -30,6 +30,9 @@ project(':order-domain-shared').projectDir = file('domain/order-domain-shared')
 include(':notification-domain')
 project(':notification-domain').projectDir = file('domain/notification-domain')
 
+include(':outbox-domain')
+project(':outbox-domain').projectDir = file('domain/outbox-domain')
+
 // =================================================================================================
 // Infrastructure
 // =================================================================================================
@@ -256,6 +259,8 @@ include(':infrastructure-spring-boot:persistence-jpa-adapter-auth')
 project(':infrastructure-spring-boot:persistence-jpa-adapter-auth').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-auth')
 include(':infrastructure-spring-boot:persistence-jpa-adapter-order')
 project(':infrastructure-spring-boot:persistence-jpa-adapter-order').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-order')
+include(':infrastructure-spring-boot:persistence-jpa-adapter-outbox')
+project(':infrastructure-spring-boot:persistence-jpa-adapter-outbox').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-outbox')
 include(':infrastructure-spring-boot:persistence-jpa-adapter-product')
 project(':infrastructure-spring-boot:persistence-jpa-adapter-product').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-product')
 include(':infrastructure-spring-boot:persistence-jpa-adapter-user')

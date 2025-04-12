@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.event.gateway.outbox.config;
+package org.atlas.infrastructure.persistence.jpa.adapter.outbox.config;
 
 import org.atlas.infrastructure.persistence.jpa.core.repository.JpaBaseRepositoryImpl;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * project.
  */
 @Configuration
-@EntityScan(basePackages = "org.atlas.infrastructure.event.gateway.outbox.entity")
+@EntityScan(basePackages = "org.atlas.infrastructure.persistence.jpa.adapter.outbox.entity")
 @EnableJpaRepositories(
-    basePackages = "org.atlas.infrastructure.event.gateway.outbox.repository",
+    basePackages = "org.atlas.infrastructure.persistence.jpa.adapter.outbox.repository",
     repositoryBaseClass = JpaBaseRepositoryImpl.class
 )
 public class OutboxJpaConfig {
