@@ -38,6 +38,7 @@ public class KafkaEventConsumerConfig {
     ConcurrentKafkaListenerContainerFactory<Object, Object> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(consumerFactory());
+    factory.getContainerProperties().setObservationEnabled(true); // Enable micrometer tracing
     factory.setCommonErrorHandler(new GlobalErrorHandler());
     return factory;
   }

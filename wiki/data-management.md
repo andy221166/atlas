@@ -61,3 +61,7 @@ Disadvantages:
 - Additionally, the operational overhead is high, as the outbox pattern depends on additional processes to query the outbox table, publish messages, and then delete the entries. This can lead to increased resource consumption and latency compared to a direct database-to-queue approach.
 
 ### CDC
+
+---
+
+## Race-condition

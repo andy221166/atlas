@@ -108,7 +108,7 @@ export default {
             toast.error(data.message);
           }
         } catch (error) {
-          toast.error("Error fetching order:", error);
+          toast.error("Error fetching order: " + error.message);
         }
       };
 

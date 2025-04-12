@@ -44,13 +44,11 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
   }
 
   private void decreaseQuantity(Integer productId, Integer quantity) {
-    // Mock for processing
-    ConcurrentUtil.sleep(3, 5);
-
     DecreaseQuantityStrategy decreaseQuantityStrategy =
         applicationConfigPort.getDecreaseQuantityStrategy();
     switch (applicationConfigPort.getDecreaseQuantityStrategy()) {
-      case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
+      case CONSTRAINT ->
+          productRepository.decreaseQuantityWithConstraint(productId, quantity);
       case PESSIMISTIC_LOCKING ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
       default -> throw new UnsupportedOperationException(

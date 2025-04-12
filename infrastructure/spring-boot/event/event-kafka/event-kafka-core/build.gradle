@@ -4,4 +4,14 @@ dependencies {
 
     // Infrastructure
     api project(':infrastructure-spring-boot:event-gateway')
+    switch (stackConfig['tracing']) {
+        case 'simple':
+            api project(':infrastructure-spring-boot:tracing-simple')
+            break
+        case 'zipkin':
+            api project(':infrastructure-spring-boot:tracing-zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
 }

@@ -92,7 +92,8 @@ dependencies {
     }
     api project(':infrastructure-spring-boot:sequence-generator')
     switch (stackConfig['tracing']) {
-        case 'none':
+        case 'simple':
+            api project(':infrastructure-spring-boot:tracing-simple')
             break
         case 'zipkin':
             api project(':infrastructure-spring-boot:tracing-zipkin')

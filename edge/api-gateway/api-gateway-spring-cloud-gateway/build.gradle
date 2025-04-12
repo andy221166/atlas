@@ -33,7 +33,8 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
     switch (stackConfig['tracing']) {
-        case 'none':
+        case 'simple':
+            api project(':infrastructure-spring-boot:tracing-simple')
             break
         case 'zipkin':
             api project(':infrastructure-spring-boot:tracing-zipkin')

@@ -247,6 +247,8 @@ include(':infrastructure-spring-boot:logging-logback')
 project(':infrastructure-spring-boot:logging-logback').projectDir = file('infrastructure/spring-boot/observability/logging/logging-logback')
 
 // Observability::Tracing
+include(':infrastructure-spring-boot:tracing-simple')
+project(':infrastructure-spring-boot:tracing-simple').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-simple')
 include(':infrastructure-spring-boot:tracing-zipkin')
 project(':infrastructure-spring-boot:tracing-zipkin').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-zipkin')
 

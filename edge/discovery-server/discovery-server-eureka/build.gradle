@@ -17,15 +17,6 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
-    switch (stackConfig['tracing']) {
-        case 'none':
-            break
-        case 'zipkin':
-            api project(':infrastructure-spring-boot:tracing-zipkin')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
-    }
 }
 
 jar {
