@@ -36,6 +36,9 @@ public class JpaOutboxMessageEntity extends JpaBaseEntity {
 
   private String destination;
 
+  @Column(name = "message_key")
+  private String messageKey;
+
   @Enumerated(EnumType.STRING)
   private OutboxMessageStatus status;
 

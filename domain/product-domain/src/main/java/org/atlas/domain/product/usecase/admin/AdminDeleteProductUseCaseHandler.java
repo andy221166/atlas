@@ -33,7 +33,7 @@ public class AdminDeleteProductUseCaseHandler implements UseCaseHandler<DeletePr
 
   private void publishEvent(ProductEntity productEntity) {
     ProductDeletedEvent event = new ProductDeletedEvent(applicationConfigPort.getApplicationName());
-    event.setId(productEntity.getId());
+    event.setProductId(productEntity.getId());
     productEventPublisherPort.publish(event);
   }
 

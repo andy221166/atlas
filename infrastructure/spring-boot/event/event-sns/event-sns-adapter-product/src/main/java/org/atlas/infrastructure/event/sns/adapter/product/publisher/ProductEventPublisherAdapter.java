@@ -20,26 +20,31 @@ public class ProductEventPublisherAdapter implements ProductEventPublisherPort {
 
   @Override
   public void publish(ProductCreatedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductCreatedEvent());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductCreatedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ProductUpdatedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductUpdatedEvent());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductUpdatedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ProductDeletedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductDeletedEvent());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getProductDeletedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ReserveQuantitySucceededEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantitySucceededEvent());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantitySucceededEvent(),
+        String.valueOf(event.getOrderId()));
   }
 
   @Override
   public void publish(ReserveQuantityFailedEvent event) {
-    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantityFailedEvent());
+    eventGateway.send(event, snsEventProps.getSnsTopicArn().getReserveQuantityFailedEvent(),
+        String.valueOf(event.getOrderId()));
   }
 }

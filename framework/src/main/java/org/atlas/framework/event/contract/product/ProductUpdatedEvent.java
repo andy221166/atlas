@@ -11,7 +11,7 @@ import org.atlas.framework.event.DomainEvent;
 @EqualsAndHashCode(callSuper = true)
 public class ProductUpdatedEvent extends DomainEvent {
 
-  private Integer id;
+  private Integer productId;
   private String name;
   private BigDecimal price;
 

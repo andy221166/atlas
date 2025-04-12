@@ -11,7 +11,7 @@ import org.atlas.framework.event.DomainEvent;
 @EqualsAndHashCode(callSuper = true)
 public class UserRegisteredEvent extends DomainEvent {
 
-  private Integer id;
+  private Integer userId;
   private String username;
   private String firstName;
   private String lastName;

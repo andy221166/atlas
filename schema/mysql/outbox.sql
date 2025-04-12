@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS outbox_message
     event_json   TEXT         NOT NULL,
     event_type   VARCHAR(50)  NOT NULL,
     destination  VARCHAR(255) NOT NULL,
+    message_key  VARCHAR(255) NOT NULL,
     status       VARCHAR(20)  NOT NULL,
     processed_at DATETIME,
     error        TEXT,

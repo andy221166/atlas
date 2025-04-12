@@ -17,6 +17,7 @@ public class OutboxMessageEntity extends DomainEntity {
   private String eventJson;
   private EventType eventType;
   private String destination;
+  private String messageKey;
   private OutboxMessageStatus status;
   private Date processedAt;
   private String error;

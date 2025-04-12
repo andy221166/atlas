@@ -62,7 +62,7 @@ public class RelayOutboxMessageTaskImpl implements RelayOutboxMessageTask {
       // Parse event JSON string to object
       DomainEvent event = JsonUtil.getInstance()
           .toObject(outboxMessage.getEventJson(), outboxMessage.getEventType().getEventClass());
-      eventPublisher.publish(event, outboxMessage.getDestination());
+      eventPublisher.publish(event, outboxMessage.getDestination(), outboxMessage.getMessageKey());
       outboxMessage.markAsProcessed();
     } catch (Exception e) {
       log.error("Failed to process outbox message {} of event {} {}",

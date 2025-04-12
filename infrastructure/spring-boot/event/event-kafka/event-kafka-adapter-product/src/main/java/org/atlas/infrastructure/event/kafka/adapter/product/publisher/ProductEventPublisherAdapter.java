@@ -20,26 +20,31 @@ public class ProductEventPublisherAdapter implements ProductEventPublisherPort {
 
   @Override
   public void publish(ProductCreatedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductCreatedEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductCreatedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ProductUpdatedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductUpdatedEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductUpdatedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ProductDeletedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getProductDeletedEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getProductDeletedEvent(),
+        String.valueOf(event.getProductId()));
   }
 
   @Override
   public void publish(ReserveQuantitySucceededEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantitySucceededEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantitySucceededEvent(),
+        String.valueOf(event.getOrderId()));
   }
 
   @Override
   public void publish(ReserveQuantityFailedEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantityFailedEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getReserveQuantityFailedEvent(),
+        String.valueOf(event.getOrderId()));
   }
 }

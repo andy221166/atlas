@@ -16,6 +16,7 @@ public class UserEventPublisherAdapter implements UserEventPublisherPort {
 
   @Override
   public void publish(UserRegisteredEvent event) {
-    eventGateway.send(event, kafkaEventProps.getTopic().getUserRegisteredEvent());
+    eventGateway.send(event, kafkaEventProps.getTopic().getUserRegisteredEvent(),
+        String.valueOf(event.getUserId()));
   }
 }

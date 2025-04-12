@@ -91,6 +91,7 @@ public class AdminCreateProductUseCaseHandler implements
     ProductCreatedEvent event = new ProductCreatedEvent(applicationConfigPort.getApplicationName());
     ObjectMapperUtil.getInstance()
         .merge(productEntity, event);
+    event.setProductId(productEntity.getId());
     productEventPublisherPort.publish(event);
   }
 

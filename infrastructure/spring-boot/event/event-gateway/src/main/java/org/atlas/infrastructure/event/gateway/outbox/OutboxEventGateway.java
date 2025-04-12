@@ -23,14 +23,14 @@ public class OutboxEventGateway implements EventGateway {
   private final EventPublisher eventPublisher;
 
   @Override
-  public void send(DomainEvent event, String destination) {
-    OutboxMessageEntity outboxMessage = newOutboxMessage(event, destination);
+  public void send(DomainEvent event, String destination, String messageKey) {
+    OutboxMessageEntity outboxMessage = newOutboxMessage(event, destination, messageKey);
     outboxMessageRepository.insert(outboxMessage);
     log.info("Inserted outbox message {} of event {}", outboxMessage.getId(), event);
 
     try {
       // Parse event JSON string to object
-      eventPublisher.publish(event, destination);
+      eventPublisher.publish(event, destination, messageKey);
 
       // Mark outbox message as be processed
       outboxMessage.markAsProcessed();
@@ -41,11 +41,12 @@ public class OutboxEventGateway implements EventGateway {
     }
   }
 
-  private OutboxMessageEntity newOutboxMessage(DomainEvent event, String destination) {
+  private OutboxMessageEntity newOutboxMessage(DomainEvent event, String destination, String messageKey) {
     OutboxMessageEntity outboxMessage = new OutboxMessageEntity();
     outboxMessage.setEventJson(JsonUtil.getInstance().toJson(event));
     outboxMessage.setEventType(EventType.findEventType(event.getClass()));
     outboxMessage.setDestination(destination);
+    outboxMessage.setMessageKey(messageKey);
     outboxMessage.setStatus(OutboxMessageStatus.PENDING);
     outboxMessage.setRetries(0);
     return outboxMessage;

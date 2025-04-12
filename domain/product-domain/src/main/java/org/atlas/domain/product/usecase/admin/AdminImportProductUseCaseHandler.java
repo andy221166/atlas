@@ -89,6 +89,7 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
                 applicationConfigPort.getApplicationName());
             ObjectMapperUtil.getInstance()
                 .merge(productEntity, event);
+            event.setProductId(productEntity.getId());
             productEventPublisherPort.publish(event);
           });
         });

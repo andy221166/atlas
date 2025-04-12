@@ -63,6 +63,9 @@ public class KafkaEventPublisherConfig {
 
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
-    return new KafkaTemplate<>(producerFactory());
+    KafkaTemplate<String, Object> kafkaTemplate = new KafkaTemplate<>(producerFactory());
+    // Enable micrometer tracing that will propagate context to consumer
+    kafkaTemplate.setObservationEnabled(true);
+    return kafkaTemplate;
   }
 }

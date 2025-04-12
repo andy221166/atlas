@@ -17,7 +17,7 @@ public class SnsEventPublisher implements EventPublisher {
 
   private final SnsClient snsClient;
 
-  public void publish(DomainEvent event, String snsTopicArn) {
+  public void publish(DomainEvent event, String snsTopicArn, String messageKey) {
     String message = JsonUtil.getInstance()
         .toJson(event);
     PublishRequest request = PublishRequest.builder()

@@ -27,9 +27,11 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     stopWatch.start();
 
     if (userInfo == null) {
-      log.debug("Anonymous user started handling use case {}: {}", useCaseClass, input);
+      log.debug("Anonymous user started handling use case {}: {}",
+          useCaseClass.getSimpleName(), input);
     } else {
-      log.debug("User {} started handling use case {}: {}", userInfo, useCaseClass, input);
+      log.debug("User {} started handling use case {}: {}",
+          userInfo, useCaseClass.getSimpleName(), input);
     }
   }
 

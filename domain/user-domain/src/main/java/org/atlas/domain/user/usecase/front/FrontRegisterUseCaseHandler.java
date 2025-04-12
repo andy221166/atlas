@@ -71,10 +71,10 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   }
 
   private void publishEvent(UserEntity userEntity) {
-    UserRegisteredEvent event = new UserRegisteredEvent(
-        applicationConfigPort.getApplicationName());
+    UserRegisteredEvent event = new UserRegisteredEvent(applicationConfigPort.getApplicationName());
     ObjectMapperUtil.getInstance()
         .merge(userEntity, event);
+    event.setUserId(userEntity.getId());
     userEventPublisherPort.publish(event);
   }
 

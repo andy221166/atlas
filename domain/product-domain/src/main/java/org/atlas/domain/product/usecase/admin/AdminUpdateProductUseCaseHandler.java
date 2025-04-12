@@ -89,6 +89,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
     ProductUpdatedEvent event = new ProductUpdatedEvent(applicationConfigPort.getApplicationName());
     ObjectMapperUtil.getInstance()
         .merge(productEntity, event);
+    event.setProductId(productEntity.getId());
     productEventPublisherPort.publish(event);
   }
 
