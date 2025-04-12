@@ -25,6 +25,7 @@
 import {useStore} from 'vuex';
 import {computed} from 'vue';
 import {api} from '@/api';
+import {toast} from "vue3-toastify";
 
 export default {
   setup() {
@@ -33,11 +34,15 @@ export default {
 
     const logout = async () => {
       try {
-        await api.auth.logout();
-        localStorage.removeItem('accessToken');
-        window.location.href = '/';
+        const { data } = await api.auth.logout();
+        if (data.success) {
+          localStorage.removeItem('accessToken');
+          window.location.href = '/';
+        } else {
+          toast.error(data.message);
+        }
       } catch (error) {
-        console.error('Logout failed');
+        toast.error('Logout failed: ' + error.message);
       }
     };
 

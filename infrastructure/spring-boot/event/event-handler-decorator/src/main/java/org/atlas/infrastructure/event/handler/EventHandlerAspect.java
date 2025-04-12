@@ -21,7 +21,7 @@ public class EventHandlerAspect {
   private final TransactionPort transactionPort;
 
   @Around("execution(* org.atlas.framework.event.handler.EventHandler.handle(..))")
-  public Object aroundHandle(ProceedingJoinPoint joinPoint) {
+  public Object aroundHandle(ProceedingJoinPoint joinPoint) throws Throwable {
     // Retrieve input safely
     Object[] args = joinPoint.getArgs();
     DomainEvent event = (DomainEvent) args[0];
@@ -30,20 +30,17 @@ public class EventHandlerAspect {
     interceptors.forEach(interceptor -> interceptor.preHandle(event));
 
     // Execute EventHandler in a transaction manner
-    Object result;
+    transactionPort.begin();
     try {
-      result = transactionPort.execute(() -> {
-        try {
-          return joinPoint.proceed();
-        } catch (Throwable e) {
-          throw new RuntimeException(e);
-        }
-      });
+      Object result = joinPoint.proceed();
+      transactionPort.commit();
+      return result;
+    } catch (Throwable e) {
+      transactionPort.rollback();
+      throw e;
     } finally {
       // Execute post-handle interceptors
       interceptors.forEach(interceptor -> interceptor.postHandle(event));
     }
-
-    return result;
   }
 }

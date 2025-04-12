@@ -21,7 +21,7 @@ public class UseCaseHandlerAspect {
   private final TransactionPort transactionPort;
 
   @Around("execution(* org.atlas.framework.usecase.handler.UseCaseHandler.handle(..))")
-  public Object aroundHandle(ProceedingJoinPoint joinPoint) {
+  public Object aroundHandle(ProceedingJoinPoint joinPoint) throws Throwable {
     // Extract class and method details
     Class<?> useCaseHandlerClass = joinPoint.getTarget().getClass();
 
@@ -34,20 +34,17 @@ public class UseCaseHandlerAspect {
     interceptors.forEach(interceptor -> interceptor.preHandle(useCaseHandlerClass, input));
 
     // Execute UseCaseHandler in a transaction manner
-    Object result;
+    transactionPort.begin();
     try {
-      result = transactionPort.execute(() -> {
-        try {
-          return joinPoint.proceed();
-        } catch (Throwable e) {
-          throw new RuntimeException(e);
-        }
-      });
+      Object result = joinPoint.proceed();
+      transactionPort.commit();
+      return result;
+    } catch (Throwable e) {
+      transactionPort.rollback();
+      throw e;
     } finally {
       // Execute post-handle interceptors
       interceptors.forEach(interceptor -> interceptor.postHandle(useCaseHandlerClass, input));
     }
-
-    return result;
   }
 }

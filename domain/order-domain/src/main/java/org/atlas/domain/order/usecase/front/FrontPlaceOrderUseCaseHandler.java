@@ -27,7 +27,6 @@ import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.user.shared.internal.ListUserInput;
 import org.atlas.domain.user.shared.internal.ListUserOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.security.UserContext;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.order.model.User;
@@ -36,6 +35,7 @@ import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
+import org.atlas.framework.security.UserContext;
 import org.atlas.framework.sequencegenerator.SequenceGenerator;
 import org.atlas.framework.sequencegenerator.SequenceType;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
@@ -54,34 +54,39 @@ public class FrontPlaceOrderUseCaseHandler implements
 
   @Override
   public PlaceOrderOutput handle(PlaceOrderInput input) {
-    OrderEntity orderEntity = newOrder(input);
-    orderEntity.setCode(sequenceGenerator.generate(SequenceType.ORDER));
+    try {
+      OrderEntity orderEntity = newOrder(input);
+      orderEntity.setCode(sequenceGenerator.generate(SequenceType.ORDER));
 
-    // Fetch user and products info from internal services
-    ListUserOutput.User user = fetchUser(orderEntity);
-    Map<Integer, ListProductOutput.Product> products = fetchProducts(orderEntity);
+      // Fetch user and products info from internal services
+      ListUserOutput.User user = fetchUser(orderEntity);
+      Map<Integer, ListProductOutput.Product> products = fetchProducts(orderEntity);
 
-    // Update price of item
-    orderEntity.getOrderItems()
-        .forEach(orderItemEntity -> {
-          ListProductOutput.Product product = products.get(orderItemEntity.getProductId());
-          if (product == null) {
-            log.error("SearchResponse not found: productId={}", orderItemEntity.getProductId());
-            throw new BusinessException(AppError.PRODUCT_NOT_FOUND);
-          }
-          orderItemEntity.setProductPrice(product.getPrice());
-        });
+      // Update price of item
+      orderEntity.getOrderItems()
+          .forEach(orderItemEntity -> {
+            ListProductOutput.Product product = products.get(orderItemEntity.getProductId());
+            if (product == null) {
+              log.error("SearchResponse not found: productId={}", orderItemEntity.getProductId());
+              throw new BusinessException(AppError.PRODUCT_NOT_FOUND);
+            }
+            orderItemEntity.setProductPrice(product.getPrice());
+          });
 
-    // Calculate order amount
-    orderEntity.calculateOrderAmount();
+      // Calculate order amount
+      orderEntity.calculateOrderAmount();
 
-    // Save into DB
-    orderRepository.insert(orderEntity);
+      // Save into DB
+      orderRepository.insert(orderEntity);
 
-    // Publish event
-    publishEvent(orderEntity, user, products);
+      // Publish event
+      publishEvent(orderEntity, user, products);
 
-    return new PlaceOrderOutput(orderEntity.getId());
+      return new PlaceOrderOutput(orderEntity.getId());
+    } catch (Exception e) {
+      log.error("Failed to place order", e);
+      throw new BusinessException(AppError.FAILED_TO_PLACE_ORDER);
+    }
   }
 
   private OrderEntity newOrder(PlaceOrderInput input) {

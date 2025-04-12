@@ -41,15 +41,7 @@ export default {
           this.setError(data.code, data.message); // Handle known error format from server response
         }
       } catch (error) {
-        if (error.response) {
-          if (error.response.data && error.response.data.code && error.response.data.message) {
-            this.setError(error.response.data.code, error.response.data.message);
-          } else {
-            this.setError(error.response.status, "An unexpected server error occurred. Please try again.");
-          }
-        } else {
-          this.setError("Network Error", "Unable to connect. Please check your network connection.");
-        }
+        this.setError(undefined, error.message);
       }
     },
     goToRegister() {

@@ -137,7 +137,7 @@ export default {
         const orderId = await emit("placeOrder", orderItems);
         emit("orderPlaced", orderId);
       } catch (error) {
-        console.error("Failed to place order:", error);
+        console.error("Failed to place order: " + error.message);
       } finally {
         isProcessing.value = false;
       }

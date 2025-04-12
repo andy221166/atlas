@@ -59,17 +59,7 @@ export default {
           this.setError(data.code, data.message);
         }
       } catch (error) {
-        // Handle 500 error with response data
-        if (error.response && error.response.data && error.response.data.code) {
-          // Server returned a known error format with code and message
-          this.setError(error.response.data.code, error.response.data.message);
-        } else if (error.response && error.response.status === 500) {
-          // Handle unknown 500 error without custom message
-          this.setError('Server Error', 'An unexpected server error occurred. Please try again later.');
-        } else {
-          // Handle network or unexpected errors without a response
-          this.setError('Network Error', 'An unexpected error occurred. Please check your network connection.');
-        }
+        this.setError(undefined, error.message);
       }
     },
     goToLogin() {

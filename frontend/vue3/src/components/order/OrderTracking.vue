@@ -62,6 +62,7 @@ import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import {api} from "@/api";
 import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
+import {toast} from "vue3-toastify";
 
 export default {
   props: {
@@ -97,14 +98,17 @@ export default {
       const pollOrder = async () => {
         try {
           const { data } = await api.orders.getStatus(orderId);
-          const { status, canceledReason } = data.data;
-          updateOrderStatus('shortPolling', status, canceledReason);
-
-          if (status === "CONFIRMED" || status === "CANCELED") {
-            stopShortPolling();
+          if (data.success) {
+            const { status, canceledReason } = data.data;
+            updateOrderStatus('shortPolling', status, canceledReason);
+            if (status === "CONFIRMED" || status === "CANCELED") {
+              stopShortPolling();
+            }
+          } else {
+            toast.error(data.message);
           }
         } catch (error) {
-          console.error("Error fetching order:", error);
+          toast.error("Error fetching order:", error);
         }
       };
 
@@ -134,7 +138,7 @@ export default {
           const data = JSON.parse(event.data);
           updateOrderStatus('sse', data.orderStatus, data.canceledReason);
         } catch (error) {
-          console.error('SSE error parsing message:', error);
+          console.error('SSE error parsing message: ' + error.message);
         }
       });
 

@@ -10,14 +10,11 @@ import org.springframework.kafka.listener.MessageListenerContainer;
 public class GlobalErrorHandler implements CommonErrorHandler {
 
   @Override
-  public boolean handleOne(Exception thrownException,
-      ConsumerRecord<?, ?> record,
-      Consumer<?, ?> consumer,
-      MessageListenerContainer container) {
+  public boolean handleOne(Exception thrownException, ConsumerRecord<?, ?> record,
+      Consumer<?, ?> consumer, MessageListenerContainer container) {
     log.error(
-        "Occurred exception while processing record: payload={}, partition={}, offset={}, cause={}",
-        record.value(), record.partition(), record.offset(),
-        thrownException.getCause().getMessage());
+        "Occurred exception while processing record: payload={}, partition={}, offset={}",
+        record.value(), record.partition(), record.offset(), thrownException);
     return true;
   }
 }

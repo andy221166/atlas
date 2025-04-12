@@ -78,6 +78,7 @@ import ProductSearchForm from "../components/product/ProductSearchForm.vue";
 import Cart from "../components/order/Cart.vue";
 import OrderTracking from "../components/order/OrderTracking.vue";
 import {api} from '@/api';
+import {toast} from "vue3-toastify";
 
 export default {
   components: {
@@ -142,16 +143,16 @@ export default {
 
     const placeOrder = async (orderItems) => {
       try {
-        const { data } = await api.orders.create({ orderItems });
+        const { data } = await api.orders.place({ orderItems });
         if (data.success) {
           cart.value = [];
           localStorage.removeItem('cart');
           currentOrderId.value = data.data.orderId;
         } else {
-          alert(data.message || "Failed to place order");
+          toast.error(data.message);
         }
       } catch (error) {
-        alert("Failed to place order:", error);
+        toast.error("Failed to place order: " + error.message);
       }
     };
 
@@ -185,28 +186,40 @@ export default {
         };
 
         const { data } = await api.products.search(requestBody);
-        products.value = data.data.results;
-        totalPages.value = data.data.pagination.totalPages;
+        if (data.success) {
+          products.value = data.data.results;
+          totalPages.value = data.data.pagination.totalPages;
+        } else {
+          toast.error(data.message);
+        }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        toast.error('Error fetching products: ' + error.message);
       }
     };
 
     const fetchBrands = async () => {
       try {
         const { data } = await api.products.listBrands();
-        brands.value = data.data.brands;
+        if (data.success) {
+          brands.value = data.data.brands;
+        } else {
+          toast.error(data.message);
+        }
       } catch (error) {
-        console.error('Error fetching brands:', error);
+        toast.error('Error fetching brands: ' + error.message);
       }
     };
 
     const fetchCategories = async () => {
       try {
         const { data } = await api.products.listCategories();
-        categories.value = data.data.categories;
+        if (data.success) {
+          categories.value = data.data.categories;
+        } else {
+          toast.error(data.message);
+        }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        toast.error('Error fetching categories: ' + error.message);
       }
     };
 

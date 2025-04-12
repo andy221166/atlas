@@ -22,26 +22,41 @@ public class KafkaEventPublisherConfig {
   public ProducerFactory<String, Object> producerFactory() {
     Map<String, Object> configProps = new HashMap<>();
 
-    // Basic configuration
+    // === Basic configuration ===
     configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
-    // Reliability settings
-    configProps.put(ProducerConfig.ACKS_CONFIG, "all");  // Strongest durability guarantee
-    configProps.put(ProducerConfig.RETRIES_CONFIG, 3);   // Number of retries if the request fails
-    configProps.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 1000); // Delay between retries
+    // === Reliability settings ===
 
-    // Performance tuning
-    configProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);  // Batch size in bytes
-    configProps.put(ProducerConfig.LINGER_MS_CONFIG, 10);      // Wait up to 10ms to batch messages
-    configProps.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432); // 32MB producer buffer
+    // Wait for all replicas to acknowledge before considering the message as sent
+    configProps.put(ProducerConfig.ACKS_CONFIG, "all");
 
-    // Compression
-    configProps.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
+    // Retry sending the message up to 3 times in case of failure
+    configProps.put(ProducerConfig.RETRIES_CONFIG, 3);
 
-    // Idempotence settings (exactly-once semantics)
+    // Wait 1 second between retry attempts
+    configProps.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 1000);
+
+    // === Idempotence (Exactly-once semantics) ===
+
+    // Ensures no duplicates during retries by tracking message sequence numbers
+    // This requires max.in.flight.requests.per.connection to be less than or equal to 5.
     configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+
+    // === Performance tuning ===
+
+    // The producer will try to batch records together into fewer requests to improve performance
+    configProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384); // 16 KB
+
+    // Linger time — how long the producer waits before sending a batch (to allow more messages to be added)
+    configProps.put(ProducerConfig.LINGER_MS_CONFIG, 10); // 10 milliseconds
+
+    // Total memory available to the producer for buffering (in bytes)
+    configProps.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432); // 32 MB
+
+    // Compress messages using Snappy (can improve performance and reduce network usage)
+    configProps.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
 
     return new DefaultKafkaProducerFactory<>(configProps);
   }

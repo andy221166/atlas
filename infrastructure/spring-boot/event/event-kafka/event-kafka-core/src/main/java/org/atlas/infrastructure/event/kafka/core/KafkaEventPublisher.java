@@ -20,8 +20,9 @@ public class KafkaEventPublisher implements EventPublisher {
     if (StringUtils.isBlank(topic)) {
       throw new IllegalArgumentException("Topic must be specified");
     }
-    kafkaTemplate.send(topic, event).whenCompleteAsync(
-        (result, throwable) -> {
+    // Asynchronous send
+    kafkaTemplate.send(topic, event)
+        .whenCompleteAsync((result, throwable) -> {
           if (throwable == null) {
             log.info("Published event: {}\nTopic: {}. Partition: {}. Offset: {}",
                 event, topic, result.getRecordMetadata().partition(),

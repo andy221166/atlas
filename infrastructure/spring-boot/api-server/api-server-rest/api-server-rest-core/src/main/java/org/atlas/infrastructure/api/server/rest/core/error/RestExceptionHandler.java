@@ -25,7 +25,6 @@ public class RestExceptionHandler {
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public Response<Void> handle(BusinessException e) {
-    log.error("Occurred a business exception", e);
     String errorMessage = messageService.getMessage(e.getMessageCode(), "Unknown error");
     return Response.error(e.getErrorCode(), errorMessage);
   }

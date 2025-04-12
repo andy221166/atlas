@@ -6,6 +6,24 @@
 
 #### Error handling - Producer side
 
+Several issues can arise during the message publishing process, threatening data accuracy and potentially leading to data loss. Understanding these potential points of failure is the first step in building robust solutions.
+- Invalid Data: The source system might provide data in an incorrect format or with invalid content, which the producer cannot process.
+- Kafka Broker Unavailability: The producer may be unable to connect to a broker due to network issues, broker downtime, or other connectivity problems.
+- Producer Interruption: If the producer application crashes or is interrupted before a message is successfully sent, data residing in the producer’s memory might be lost.
+- Topic Not Found: The producer might attempt to send data to a topic that doesn’t exist.
+- Exceptions During Data Processing: Unexpected errors can occur during data serialization, message construction, or other processing steps within the producer.
+
+These issues can be broadly categorized as:
+1. **Retriable Errors**: Errors that have a chance of being resolved by retrying the operation. Examples include network glitches, temporary broker unavailability, and `NotEnoughReplicasException`.
+2. **Non-Retriable Errors**: Errors that retrying will not fix. These often relate to invalid data or configuration issues (e.g., INVALID_CONFIG exceptions).
+
+##### Handling Retriable Errors: Ensuring Message Delivery
+
+Retries are essential for handling transient errors and ensuring reliable message delivery. They are a cornerstone of building fault-tolerant systems.
+- Handling Transient Errors: Temporary network issues, broker restarts, leader elections, and `NotEnoughReplicasException` can all cause temporary disruptions. Retries allow the producer to weather these storms without losing data.
+- Preventing Data Loss: Without retries, messages affected by transient errors would be lost. Automatic retries ensure that messages are eventually delivered.
+- Ensuring Eventual Delivery: The producer will keep attempting to resend a message until it succeeds or a defined timeout is reached.
+
 1. Enable Idempotence (Recommended)
 
 To avoid duplicates during retries, enable idempotence:
@@ -41,63 +59,213 @@ acks=all
 - `acks=1`: Leader only ack (risk of data loss if leader fails).
 - `acks=all`: All replicas must ack — safest but may increase latency.
 
-4. Handle Exceptions in Code
+##### Handling Non-Retriable Errors: Application-Level Error Handling
 
-Always wrap your `send()` calls with exception handling:
+Non-retriable errors require a different approach. Since retrying won’t solve the problem, you need to implement error handling at the application level. This typically involves using a callback mechanism with the producer.send() method.
 
-✅ Example (Synchronous Send):
-
-```java
-try {
-  producer.send(record).get(); // wait for ack
-} catch (ExecutionException | InterruptedException e) {
-  // Log or retry based on the exception type
-  e.printStackTrace();
-}
-```
-
-✅ Example (Asynchronous Send with Callback):
+Example (Java with Callback): Demonstrates how to use callbacks to log retriable exceptions and route non-retriable exceptions to a Dead-Letter Queue (DLQ).
 
 ```java
-producer.send(record, (metadata, exception) -> {
-    if (exception != null) {
-        // Handle failure
-        exception.printStackTrace();
-    } else {
-        // Success
-        System.out.printf("Produced to topic %s, partition %d%n", metadata.topic(), metadata.partition());
+public <T> void send(T message, Optional<String> topicName) {
+    Objects.requireNonNull(message, "message cannot be null");
+    String targetTopic = topicName.orElse(kafkaProperties.getTopicName());
+    log.info("Publishing message to topic: {}", targetTopic);
+
+    try {
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(
+                targetTopic, message);
+        future.whenComplete((result, ex) -> {
+            if (ex == null) {
+                onSuccess(result, message);
+            } else {
+                handleException(ex, message, targetTopic);
+            }
+        });
+    } catch (Exception ex) {
+        log.error("Exception occurred while sending message to Kafka", ex);
+        throw new PublisherException("Failed to publish message to Kafka", ex);
     }
-});
-```
+}
 
-5. Handle Serialization Failures
+private <T> void onSuccess(final SendResult<String, Object> result, final T t) {
+    log.info("Successfully send message=[{}] to topic-partition={}-{} with offset={}",
+            t,
+            result.getRecordMetadata().topic(),
+            result.getRecordMetadata().partition(),
+            result.getRecordMetadata().offset());
+}
 
-Set a custom serializer or use error handling with Spring Kafka.
+private <T> void handleException(Throwable ex, final T payload, final String targetTopic) {
+    if (ex instanceof UnsupportedVersionException
+            || ex instanceof RecordTooLargeException
+            || ex instanceof CorruptRecordException) {
+        log.error("Non-Retriable exception occurred. Sending message to dead-letter queue: [{}] Error: {}", payload, ex.getMessage());
+        sendToDeadLetterTopic(payload, targetTopic);
+    } else if (ex instanceof SerializationException) {
+        log.error("Serialization error! message=[{}]", payload);
+    } else if (ex instanceof RetriableException) {
+        log.warn("Retriable exception occurred. Kafka will retry automatically: {}", ex.getMessage());
+    }
+}
 
-If using Spring Kafka:
-
-```properties
-key.serializer=org.springframework.kafka.support.serializer.ErrorHandlingSerializer
-value.serializer=org.springframework.kafka.support.serializer.ErrorHandlingSerializer
-```
-
-Then wrap your actual serializer inside this.
-
-6. Implement a Dead Letter Queue (Optional)
-
-If a message fails to send even after retries (e.g., due to serialization or business logic errors), you can push it to a DLQ topic for offline processing.
-
-You need to manually handle this in the producer logic:
-
-```java
-if (failedRecord != null) {
-    producer.send(new ProducerRecord<>("dead-letter-topic", failedRecord));
+private <T> void sendToDeadLetterTopic(T payload, final String topic) {
+    String deadLetterTopic = topic + ".DLT";
+    log.info("Sending failed message to Dead Letter Topic: {}", deadLetterTopic);
+    kafkaTemplate.send(deadLetterTopic, payload);
 }
 ```
 
-7. Tune Buffering and Timeouts
+#### Error handling - Consumer side
 
-Useful for performance and graceful error handling:
+##### Spring’s Retryable Topics: Non-Blocking Retries for the Win
+
+Spring Kafka offers a clever way to handle retries: **retryable topics**. Instead of blocking the main consumer thread while retrying, Spring sends the failed message to a separate retry topic. This keeps the main consumer moving, ensuring that other messages aren’t held up by one stubborn one.
+
+It’s like having a dedicated team of mail carriers for those tricky letters. If the first team can’t figure it out, they pass it to a second team, and so on.
+
+You can configure how many retry topics you want, with increasing backoff times between retries. This gives your system time to recover from transient issues.
+
+To use retryable topics, just add `@RetryableTopic` to your `@KafkaListener` and configure it to your liking.
+
+```java
+@RetryableTopic(
+        attempts = "4",
+        backoff = @Backoff(delay = 5000, multiplier = 1.5, maxDelay = 15000),
+        dltStrategy = DltStrategy.FAIL_ON_ERROR,
+        dltTopicSuffix = ".DLT",
+        exclude = {DeserializationException.class,
+                MessageConversionException.class,
+                ConversionException.class,
+                MethodArgumentResolutionException.class,
+                NoSuchMethodException.class,
+                ClassCastException.class}
+)
+@KafkaListener(topics = "${topic-name}",
+        containerFactory = "defaultKafkaListenerContainerFactory")
+public void consumeEvents(User user,
+                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                          @Header(KafkaHeaders.OFFSET) long offset) {
+
+}
+```
+
+If you prefer a global configuration, I have good news for you. if you want to access all the re-tryable configurations in one class and define all conditions for all of your `@KafkaListener`, then you can create a `@Configuration` class and define a bean for `RetryTopicConfiguration`.
+
+```java
+@Bean
+public RetryTopicConfiguration myRetryTopic(KafkaTemplate<String, MyPojo> template) {
+    return RetryTopicConfigurationBuilder
+            .newInstance()
+            .fixedBackOff(3000)
+            .maxAttempts(5)
+            .concurrency(1)
+            .includeTopics(List.of("my-topic", "my-other-topic"))
+            .create(template);
+}
+
+@Bean
+public RetryTopicConfiguration myOtherRetryTopic(KafkaTemplate<String, MyOtherPojo> template) {
+    return RetryTopicConfigurationBuilder
+            .newInstance()
+            .exponentialBackoff(1000, 2, 5000)
+            .maxAttempts(4)
+            .excludeTopics(List.of("my-topic", "my-other-topic"))
+            .retryOn(MyException.class)
+            .create(template);
+}
+```
+
+Once all retries are exhausted, the message lands in the DLQ. To process these messages, just create a method with `@DltHandler`.
+
+```java
+@RetryableTopic
+@KafkaListener(topics = "my-annotated-topic")
+public void processMessage(MyPojo message) {
+    // ... message processing
+}
+
+@DltHandler
+public void processDltMessage(MyPojo message) {
+    // ... message processing, persistence, etc
+}
+```
+
+##### Bonus: Blocking Retries (For When You’re Feeling Impatient)
+
+Sometimes, you want to try retrying a message a few times in the same connection before sending it to a retry topic. This is like giving that weird letter a quick once-over before sending it to the special team.
+
+You can configure blocking retries by overriding configureBlockingRetries in a `@Configuration` class that extends `RetryTopicConfigurationSupport`.
+
+```java
+@Configuration
+public class RetryConfig extends RetryTopicConfigurationSupport {
+
+    @Override
+    protected void configureBlockingRetries(BlockingRetriesConfigurer configurer) {
+        configurer.retryOn(ConsumerException.class)
+                .backOff(new FixedBackOff(1_000, 3));
+    }
+}
+```
+
+##### Custom Error Handlers: Taking Control of the Chaos
+
+For ultimate control, you can create a custom error handler. This allows you to define your own retry strategies, send messages to the DLQ, and commit offsets for failed messages.
+
+Create a bean that creates an instance of DefaultErrorHandler. This class allows you to
+
+✔ Retry messages before failing completely
+✔ Send failed messages to a Dead Letter Topic (DLT)
+✔ Commit offsets for failed messages to avoid infinite retries
+✔ Prevent blocking the consumer when an error occurs
+
+```java
+@Bean
+public DefaultErrorHandler customErrorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
+    int attempts = 3;
+    BackOff backOff = new FixedBackOff(2000, attempts);
+
+    // Dead Letter Publishing Recoverer: Sends messages to DLT after max retries
+    final DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
+            (consumerRecord, ex) -> {
+                log.error(" Received: {} , after {} attempts, exception: {}",
+                        consumerRecord.value(), attempts, ex.getMessage());
+                return new TopicPartition(consumerRecord.topic() + ".DLT", consumerRecord.partition());
+            });
+
+    DefaultErrorHandler customErrorHandler = new DefaultErrorHandler(recoverer, backOff);
+
+    // Configure retryable and non-retryable exceptions
+    customErrorHandler.addRetryableExceptions(IOException.class, ConsumerException.class);
+    customErrorHandler.addNotRetryableExceptions(NullPointerException.class);
+
+    // Set error handling behavior
+    customErrorHandler.setCommitRecovered(true); // Ensures committed offsets for failed records
+
+    return customErrorHandler;
+}
+```
+
+Then, inject it (`DefaultErrorHandler`) into your `KafkaListenerContainerFactory`:
+
+```java
+// (Use AckMode.MANUAL_IMMEDIATE and you should manually call ack mode for successful processing in your kafka Listener)
+@Bean
+public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Object>> kafkaCustomErrorRetryContainerFactory(ConsumerFactory<String, Object> consumerFactory, DefaultErrorHandler defaultErrorHandler) {
+    ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    factory.setConcurrency(1);
+    factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    factory.setCommonErrorHandler(defaultErrorHandler);
+    factory.setConsumerFactory(consumerFactory);
+    return factory;
+}
+```
+
+---
+
+### Performance tuning
+
+Useful configs for producer's performance:
 
 ```properties
 linger.ms=10               # Wait before batching
@@ -107,5 +275,3 @@ max.block.ms=60000         # Time producer will block if buffer is full
 ```
 
 If `max.block.ms` is too small and the buffer is full, you'll get a `TimeoutException`.
-
-#### Error handling - Consumer side

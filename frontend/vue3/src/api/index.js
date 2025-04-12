@@ -19,7 +19,7 @@ export const API_ENDPOINTS = {
     CATEGORIES: '/api/master/categories'
   },
   ORDERS: {
-    CREATE: '/api/front/orders/place',
+    PLACE: '/api/front/orders/place',
     LIST: '/api/front/orders',
     STATUS: (id) => `/api/front/orders/${id}/status`
   },
@@ -46,7 +46,8 @@ const apiClient = axios.create({
   headers: API_HEADERS,
   paramsSerializer: {
     indexes: null // This will serialize arrays without brackets
-  }
+  },
+  validateStatus: (status) => [200, 400, 401, 403, 500].includes(status),
 });
 
 // Request interceptor for adding auth token
@@ -126,8 +127,8 @@ export const api = {
 
   // Order methods
   orders: {
-    create: (orderData) => 
-      apiClient.post(API_ENDPOINTS.ORDERS.CREATE, orderData),
+    place: (orderData) =>
+      apiClient.post(API_ENDPOINTS.ORDERS.PLACE, orderData),
     list: (params) => 
       apiClient.get(API_ENDPOINTS.ORDERS.LIST, { params }),
     getDetail: (id) => 

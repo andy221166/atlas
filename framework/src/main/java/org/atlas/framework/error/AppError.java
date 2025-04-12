@@ -29,7 +29,8 @@ public enum AppError {
 
   // Order-related errors
   ORDER_NOT_FOUND(4000, "error.order.not_found"),
-  ORDER_INVALID_STATUS(4001, "error.order.invalid_status"),
+  FAILED_TO_PLACE_ORDER(4001, "error.order.failed_to_place_order"),
+  ORDER_INVALID_STATUS(4002, "error.order.invalid_status"),
   ;
 
   private final int errorCode;
