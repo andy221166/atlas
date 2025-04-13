@@ -14,14 +14,16 @@ spring:
             - Path=/api/admin/users/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: user-service-front
           uri: lb://user-service
           predicates:
             - Path=/api/front/users/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: user-service-api-docs
           uri: lb://user-service
           predicates:
@@ -48,21 +50,24 @@ spring:
             - Path=/api/admin/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: product-service-front
           uri: lb://product-service
           predicates:
             - Path=/api/front/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: product-service-master
           uri: lb://product-service
           predicates:
             - Path=/api/master/brands/**,/api/master/categories/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: product-service-api-docs
           uri: lb://product-service
           predicates:
@@ -76,14 +81,16 @@ spring:
             - Path=/api/admin/orders/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: order-service-front
           uri: lb://order-service
           predicates:
             - Path=/api/front/orders/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - JwtHeaderRelay
+            - RevokedToken
+            - TokenRelay
         - id: order-service-api-docs
           uri: lb://order-service
           predicates:

@@ -6,12 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.entity.ProductEntity;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.usecase.admin.AdminDeleteProductUseCaseHandler.DeleteProductInput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductDeletedEvent;
-import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 

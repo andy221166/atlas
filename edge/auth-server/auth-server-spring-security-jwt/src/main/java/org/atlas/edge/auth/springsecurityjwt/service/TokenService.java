@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
-import org.atlas.framework.security.cryptography.RsaKeyLoader;
 import org.atlas.framework.jwt.DecodeJwtInput;
 import org.atlas.framework.jwt.DecodeJwtOutput;
 import org.atlas.framework.jwt.EncodeJwtInput;
 import org.atlas.framework.jwt.JwtUtil;
+import org.atlas.framework.security.cryptography.RsaKeyLoader;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -55,13 +55,9 @@ public class TokenService {
     DecodeJwtOutput decodeJwtOutput = JwtUtil.getInstance().decodeJwt(decodeJwtInput);
     long remainingTimeMillis =
         decodeJwtOutput.getExpiredAt().getTime() - System.currentTimeMillis();
-    String blacklistRedisKey = getBlacklistRedisKey(accessToken);
+    final String blacklistRedisKey = SecurityConstant.BLACKLIST_REDIS_KEY_PREFIX + accessToken;
     redisTemplate.opsForValue()
         .set(blacklistRedisKey, true, remainingTimeMillis, TimeUnit.MILLISECONDS);
     log.info("The access token has been revoked: {}", accessToken);
-  }
-
-  private String getBlacklistRedisKey(String jwt) {
-    return "jwt_blacklist:" + jwt;
   }
 }

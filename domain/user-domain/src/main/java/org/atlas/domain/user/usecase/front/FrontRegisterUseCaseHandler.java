@@ -14,14 +14,14 @@ import org.atlas.domain.user.port.messaging.UserMessagePublisherPort;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterInput;
-import org.atlas.framework.security.client.AuthApiPort;
-import org.atlas.framework.security.client.model.CreateUserRequest;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.user.UserRegisteredEvent;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
+import org.atlas.framework.security.client.AuthApiPort;
+import org.atlas.framework.security.client.model.CreateUserRequest;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor

@@ -32,6 +32,16 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
+    switch (stackConfig['redis']) {
+        case 'standalone':
+            api project(':infrastructure-spring-boot:redis-standalone')
+            break
+        case 'cluster':
+            api project(':infrastructure-spring-boot:redis-cluster')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+    }
     switch (stackConfig['tracing']) {
         case 'simple':
             api project(':infrastructure-spring-boot:tracing-simple')

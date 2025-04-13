@@ -20,13 +20,13 @@ import org.atlas.domain.product.entity.CategoryEntity;
 import org.atlas.domain.product.entity.ProductAttributeEntity;
 import org.atlas.domain.product.entity.ProductDetailEntity;
 import org.atlas.domain.product.entity.ProductEntity;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductInput;
 import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.product.ProductCreatedEvent;
-import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 

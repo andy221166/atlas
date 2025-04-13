@@ -1,7 +1,7 @@
 package org.atlas.infrastructure.api.server.rest.core.config;
 
-import org.atlas.infrastructure.api.server.rest.core.security.UserContextFilter;
 import org.atlas.infrastructure.api.server.rest.core.logging.RequestLoggingFilter;
+import org.atlas.infrastructure.api.server.rest.core.security.UserContextFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

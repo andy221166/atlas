@@ -2,6 +2,7 @@ package org.atlas.domain.product.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 import org.atlas.framework.config.ApplicationConfigPort;
@@ -9,7 +10,6 @@ import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 
 @RequiredArgsConstructor

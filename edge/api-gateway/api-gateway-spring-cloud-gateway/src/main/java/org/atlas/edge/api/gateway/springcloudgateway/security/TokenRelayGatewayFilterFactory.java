@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 @Component
-public class JwtHeaderRelayGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<JwtHeaderRelayGatewayFilterFactory.Config> {
+public class TokenRelayGatewayFilterFactory extends
+    AbstractGatewayFilterFactory<TokenRelayGatewayFilterFactory.Config> {
 
-  public JwtHeaderRelayGatewayFilterFactory() {
+  public TokenRelayGatewayFilterFactory() {
     super(Config.class);
   }
 

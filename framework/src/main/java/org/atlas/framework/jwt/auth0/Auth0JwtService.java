@@ -5,11 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.framework.security.enums.CustomClaim;
 import org.atlas.framework.jwt.DecodeJwtInput;
 import org.atlas.framework.jwt.DecodeJwtOutput;
 import org.atlas.framework.jwt.EncodeJwtInput;
 import org.atlas.framework.jwt.JwtService;
+import org.atlas.framework.security.enums.CustomClaim;
 import org.atlas.framework.util.UUIDGenerator;
 
 public class Auth0JwtService implements JwtService {

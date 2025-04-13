@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.atlas.framework.messaging.outbox.OutboxMessageStatus;
-import org.atlas.framework.event.EventType;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity

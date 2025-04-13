@@ -14,11 +14,11 @@ import java.nio.file.Files;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.framework.security.cryptography.Base64Util;
 import org.atlas.framework.notification.email.Attachment;
 import org.atlas.framework.notification.email.EmailNotification;
 import org.atlas.framework.notification.email.EmailPort;
 import org.atlas.framework.notification.email.SendEmailException;
+import org.atlas.framework.security.cryptography.Base64Util;
 import org.springframework.stereotype.Service;
 
 @Service
