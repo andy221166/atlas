@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.domain.user.entity.UserEntity;
+import org.atlas.domain.user.port.messaging.UserMessagePublisherPort;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterInput;
-import org.atlas.framework.security.AuthApiPort;
-import org.atlas.framework.security.model.CreateUserRequest;
+import org.atlas.framework.security.client.AuthApiPort;
+import org.atlas.framework.security.client.model.CreateUserRequest;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.user.UserRegisteredEvent;
-import org.atlas.framework.event.publisher.UserEventPublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
@@ -31,7 +31,7 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   private final UserRepository userRepository;
   private final AuthApiPort authApiPort;
   private final ApplicationConfigPort applicationConfigPort;
-  private final UserEventPublisherPort userEventPublisherPort;
+  private final UserMessagePublisherPort userMessagePublisherPort;
 
   @Override
   public Void handle(RegisterInput input) throws Exception {
@@ -75,7 +75,7 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
     ObjectMapperUtil.getInstance()
         .merge(userEntity, event);
     event.setUserId(userEntity.getId());
-    userEventPublisherPort.publish(event);
+    userMessagePublisherPort.publish(event);
   }
 
   @Data

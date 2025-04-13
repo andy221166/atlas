@@ -1,8 +1,8 @@
 package org.atlas.infrastructure.usecase.handler.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.security.UserContext;
-import org.atlas.framework.security.model.UserInfo;
+import org.atlas.framework.context.UserContext;
+import org.atlas.framework.context.UserInfo;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;

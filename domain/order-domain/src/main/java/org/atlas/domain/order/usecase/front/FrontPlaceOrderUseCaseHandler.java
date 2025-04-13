@@ -30,14 +30,14 @@ import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.order.model.User;
-import org.atlas.framework.event.publisher.OrderEventPublisherPort;
+import org.atlas.domain.order.port.messaging.OrderMessagePublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.security.UserContext;
+import org.atlas.framework.context.UserContext;
 import org.atlas.framework.sequencegenerator.SequenceGenerator;
-import org.atlas.framework.sequencegenerator.SequenceType;
+import org.atlas.framework.sequencegenerator.enums.SequenceType;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class FrontPlaceOrderUseCaseHandler implements
 
   private final OrderRepository orderRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final OrderEventPublisherPort orderEventPublisherPort;
+  private final OrderMessagePublisherPort orderMessagePublisherPort;
   private final ProductApiPort productApiPort;
   private final SequenceGenerator sequenceGenerator;
   private final UserApiPort userApiPort;
@@ -134,7 +134,7 @@ public class FrontPlaceOrderUseCaseHandler implements
       ListProductOutput.Product product = products.get(orderItem.getProduct().getId());
       ObjectMapperUtil.getInstance().merge(product, orderItem.getProduct());
     });
-    orderEventPublisherPort.publish(event);
+    orderMessagePublisherPort.publish(event);
   }
 
   @Data

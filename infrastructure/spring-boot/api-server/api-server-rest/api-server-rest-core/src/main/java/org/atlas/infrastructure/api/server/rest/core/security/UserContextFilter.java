@@ -8,8 +8,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.framework.security.enums.CustomClaim;
-import org.atlas.framework.security.UserContext;
-import org.atlas.framework.security.model.UserInfo;
+import org.atlas.framework.context.UserContext;
+import org.atlas.framework.context.UserInfo;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class UserContextFilter extends OncePerRequestFilter {

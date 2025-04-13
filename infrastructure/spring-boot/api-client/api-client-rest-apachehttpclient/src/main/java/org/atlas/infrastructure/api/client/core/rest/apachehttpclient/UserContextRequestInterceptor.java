@@ -7,8 +7,8 @@ import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.atlas.framework.security.enums.CustomClaim;
-import org.atlas.framework.security.UserContext;
-import org.atlas.framework.security.model.UserInfo;
+import org.atlas.framework.context.UserContext;
+import org.atlas.framework.context.UserInfo;
 
 public class UserContextRequestInterceptor implements HttpRequestInterceptor {
 

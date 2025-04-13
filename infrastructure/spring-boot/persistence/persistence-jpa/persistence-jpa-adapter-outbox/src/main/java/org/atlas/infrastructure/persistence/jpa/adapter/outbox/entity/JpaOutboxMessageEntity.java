@@ -12,7 +12,7 @@ import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.domain.outbox.entity.OutboxMessageStatus;
+import org.atlas.framework.messaging.outbox.OutboxMessageStatus;
 import org.atlas.framework.event.EventType;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
@@ -27,17 +27,16 @@ public class JpaOutboxMessageEntity extends JpaBaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "event_json")
-  private String eventJson;
+  @Column(name = "message_payload")
+  private String messagePayload;
 
-  @Column(name = "event_type")
-  @Enumerated(EnumType.STRING)
-  private EventType eventType;
-
-  private String destination;
+  @Column(name = "message_class")
+  private String messageClass;
 
   @Column(name = "message_key")
   private String messageKey;
+
+  private String destination;
 
   @Enumerated(EnumType.STRING)
   private OutboxMessageStatus status;

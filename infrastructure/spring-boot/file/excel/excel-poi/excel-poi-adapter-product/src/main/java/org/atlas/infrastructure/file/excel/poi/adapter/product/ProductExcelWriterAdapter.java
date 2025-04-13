@@ -11,8 +11,8 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.atlas.framework.constant.CommonConstant;
-import org.atlas.framework.file.excel.ProductExcelWriterPort;
-import org.atlas.framework.file.model.write.ProductRow;
+import org.atlas.domain.product.port.file.excel.ProductExcelWriterPort;
+import org.atlas.domain.product.port.file.model.write.ProductRow;
 import org.atlas.framework.util.DateUtil;
 import org.springframework.stereotype.Component;
 

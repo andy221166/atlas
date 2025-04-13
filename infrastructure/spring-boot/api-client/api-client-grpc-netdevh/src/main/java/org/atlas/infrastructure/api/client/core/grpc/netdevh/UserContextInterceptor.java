@@ -9,8 +9,8 @@ import io.grpc.Metadata;
 import io.grpc.MethodDescriptor;
 import net.devh.boot.grpc.client.interceptor.GrpcGlobalClientInterceptor;
 import org.atlas.framework.security.enums.CustomClaim;
-import org.atlas.framework.security.UserContext;
-import org.atlas.framework.security.model.UserInfo;
+import org.atlas.framework.context.UserContext;
+import org.atlas.framework.context.UserInfo;
 
 @GrpcGlobalClientInterceptor
 public class UserContextInterceptor implements ClientInterceptor {

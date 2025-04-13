@@ -1,7 +1,7 @@
 package org.atlas.infrastructure.scheduler.spring.adapter.user;
 
 import lombok.RequiredArgsConstructor;
-import org.atlas.framework.task.outbox.RelayOutboxMessageTask;
+import org.atlas.framework.messaging.outbox.RelayOutboxMessageTask;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

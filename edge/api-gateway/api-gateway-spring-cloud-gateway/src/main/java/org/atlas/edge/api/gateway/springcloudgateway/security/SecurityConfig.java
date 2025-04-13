@@ -1,17 +1,18 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Flux;
 
 @Configuration
@@ -19,16 +20,41 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  // TODO: Consider to put it into config-server
+  private static final String[] ALLOWED_ORIGINS = {
+      "http://localhost:9000" // Frontend
+  };
+
+  private final CustomServerAuthenticationEntryPoint serverAuthenticationEntryPoint;
   private final AuthRulesProperties authRules;
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
-        .cors(Customizer.withDefaults())
+        .cors(corsSpec ->
+            corsSpec.configurationSource(exchange -> {
+              CorsConfiguration corsConfig = new CorsConfiguration();
+              corsConfig.setAllowedOrigins(Arrays.stream(ALLOWED_ORIGINS).toList());
+              corsConfig.addAllowedMethod("*");
+              corsConfig.addAllowedHeader("*");
+              corsConfig.setAllowCredentials(true);
+              corsConfig.setMaxAge(3600L);
+              return corsConfig;
+            }))
         .oauth2ResourceServer(oauth2 ->
-            oauth2.jwt(jwt ->
-                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+            oauth2
+                .jwt(jwt ->
+                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                // Handle JWT validation errors (e.g., expired token)
+                .authenticationFailureHandler((webFilterExchange, exception) -> {
+                  // Delegate to CustomAuthenticationEntryPoint
+                  return serverAuthenticationEntryPoint.commence(webFilterExchange.getExchange(),
+                      exception);
+                })
+        )
+        .exceptionHandling(exceptionHandlingSpec ->
+            exceptionHandlingSpec.authenticationEntryPoint(serverAuthenticationEntryPoint)
         )
         .authorizeExchange(auth -> {
           // Permit preflight requests

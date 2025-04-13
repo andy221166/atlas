@@ -26,17 +26,17 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['email']}")
     }
-    switch (stackConfig['event']) {
+    switch (stackConfig['messaging']) {
         case 'kafka':
-            api project(':infrastructure-spring-boot:event-kafka-adapter-notification')
+            api project(':infrastructure-spring-boot:messaging-kafka-adapter-notification')
             break
         case 'sns':
-            api project(':infrastructure-spring-boot:event-sns-adapter-notification')
+            api project(':infrastructure-spring-boot:messaging-sns-adapter-notification')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['messaging']}")
     }
-    api project(':infrastructure-spring-boot:event-handler-decorator')
+    api project(':infrastructure-spring-boot:messaging-handler-decorator')
     switch (stackConfig['logging']) {
         case 'logback':
             api project(':infrastructure-spring-boot:logging-logback')

@@ -47,7 +47,7 @@ const apiClient = axios.create({
   paramsSerializer: {
     indexes: null // This will serialize arrays without brackets
   },
-  validateStatus: (status) => [200, 201, 400, 401, 403, 500].includes(status),
+  validateStatus: (status) => [200, 201, 400, 500].includes(status),
 });
 
 // Request interceptor for adding auth token

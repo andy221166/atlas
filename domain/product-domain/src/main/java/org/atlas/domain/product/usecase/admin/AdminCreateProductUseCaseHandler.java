@@ -26,7 +26,7 @@ import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.C
 import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.product.ProductCreatedEvent;
-import org.atlas.framework.event.publisher.ProductEventPublisherPort;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -36,7 +36,7 @@ public class AdminCreateProductUseCaseHandler implements
 
   private final ProductRepository productRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final ProductEventPublisherPort productEventPublisherPort;
+  private final ProductMessagePublisherPort productMessagePublisherPort;
 
   @Override
   public CreateProductOutput handle(CreateProductInput input) throws Exception {
@@ -92,7 +92,7 @@ public class AdminCreateProductUseCaseHandler implements
     ObjectMapperUtil.getInstance()
         .merge(productEntity, event);
     event.setProductId(productEntity.getId());
-    productEventPublisherPort.publish(event);
+    productMessagePublisherPort.publish(event);
   }
 
   @Data

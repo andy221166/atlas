@@ -9,9 +9,8 @@ import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.event.publisher.ProductEventPublisherPort;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.util.ConcurrentUtil;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +18,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
 
   private final ProductRepository productRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final ProductEventPublisherPort productEventPublisherPort;
+  private final ProductMessagePublisherPort productMessagePublisherPort;
 
   @Override
   public void handle(OrderCreatedEvent orderCreatedEvent) {
@@ -31,7 +30,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
           new ReserveQuantitySucceededEvent(applicationConfigPort.getApplicationName());
       ObjectMapperUtil.getInstance()
           .merge(orderCreatedEvent, reserveQuantitySucceededEvent);
-      productEventPublisherPort.publish(reserveQuantitySucceededEvent);
+      productMessagePublisherPort.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
       log.error("Failed to handle event {}", orderCreatedEvent.getEventId(), e);
       ReserveQuantityFailedEvent reserveQuantityFailedEvent =
@@ -39,7 +38,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
       ObjectMapperUtil.getInstance()
           .merge(orderCreatedEvent, reserveQuantityFailedEvent);
       reserveQuantityFailedEvent.setError(e.getMessage());
-      productEventPublisherPort.publish(reserveQuantityFailedEvent);
+      productMessagePublisherPort.publish(reserveQuantityFailedEvent);
     }
   }
 

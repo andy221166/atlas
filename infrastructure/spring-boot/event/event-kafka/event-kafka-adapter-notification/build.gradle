@@ -1,7 +1,0 @@
-dependencies {
-    // Domain
-    api project(':notification-domain')
-
-    // Infrastructure
-    api project(':infrastructure-spring-boot:event-kafka-core')
-}

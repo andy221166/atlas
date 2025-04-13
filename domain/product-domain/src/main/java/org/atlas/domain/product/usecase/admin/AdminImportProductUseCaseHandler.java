@@ -21,11 +21,11 @@ import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler.ImportProductInput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.product.ProductCreatedEvent;
-import org.atlas.framework.event.publisher.ProductEventPublisherPort;
-import org.atlas.framework.file.csv.ProductCsvReaderPort;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
+import org.atlas.domain.product.port.file.csv.ProductCsvReaderPort;
 import org.atlas.framework.file.enums.FileType;
-import org.atlas.framework.file.excel.ProductExcelReaderPort;
-import org.atlas.framework.file.model.read.ProductRow;
+import org.atlas.domain.product.port.file.excel.ProductExcelReaderPort;
+import org.atlas.domain.product.port.file.model.read.ProductRow;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.storage.StoragePort;
 import org.atlas.framework.storage.model.DeleteFileRequest;
@@ -45,7 +45,7 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
   private final ApplicationConfigPort applicationConfigPort;
   private final ProductCsvReaderPort productCsvReaderPort;
   private final ProductExcelReaderPort productExcelReaderPort;
-  private final ProductEventPublisherPort productEventPublisherPort;
+  private final ProductMessagePublisherPort productMessagePublisherPort;
   private final StoragePort storagePort;
   private final TransactionPort transactionPort;
 
@@ -90,7 +90,7 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
             ObjectMapperUtil.getInstance()
                 .merge(productEntity, event);
             event.setProductId(productEntity.getId());
-            productEventPublisherPort.publish(event);
+            productMessagePublisherPort.publish(event);
           });
         });
         log.info("Inserted {} products", rows.size());

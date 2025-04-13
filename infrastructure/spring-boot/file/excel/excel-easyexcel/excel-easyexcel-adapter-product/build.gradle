@@ -1,4 +1,7 @@
 dependencies {
+    // Domain
+    api project(':product-domain')
+
     // Infrastructure
     api project(':infrastructure-spring-boot:excel-easyexcel-core')
 }

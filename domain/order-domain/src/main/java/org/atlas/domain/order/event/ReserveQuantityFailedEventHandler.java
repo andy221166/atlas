@@ -9,7 +9,7 @@ import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCanceledEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.event.publisher.OrderEventPublisherPort;
+import org.atlas.domain.order.port.messaging.OrderMessagePublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 
@@ -18,7 +18,7 @@ public class ReserveQuantityFailedEventHandler implements EventHandler<ReserveQu
 
   private final OrderRepository orderRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final OrderEventPublisherPort orderEventPublisherPort;
+  private final OrderMessagePublisherPort orderMessagePublisherPort;
 
   @Override
   public void handle(ReserveQuantityFailedEvent reserveQuantityFailedEvent) {
@@ -40,6 +40,6 @@ public class ReserveQuantityFailedEventHandler implements EventHandler<ReserveQu
     ObjectMapperUtil.getInstance()
         .merge(reserveQuantityFailedEvent, orderCanceledEvent);
     orderCanceledEvent.setCanceledReason(orderEntity.getCanceledReason());
-    orderEventPublisherPort.publish(orderCanceledEvent);
+    orderMessagePublisherPort.publish(orderCanceledEvent);
   }
 }

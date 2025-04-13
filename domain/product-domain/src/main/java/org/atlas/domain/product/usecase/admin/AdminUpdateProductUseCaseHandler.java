@@ -25,7 +25,7 @@ import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.U
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductUpdatedEvent;
-import org.atlas.framework.event.publisher.ProductEventPublisherPort;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
@@ -35,7 +35,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
 
   private final ProductRepository productRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final ProductEventPublisherPort productEventPublisherPort;
+  private final ProductMessagePublisherPort productMessagePublisherPort;
 
   @Override
   public Void handle(UpdateProductInput input) throws Exception {
@@ -90,7 +90,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
     ObjectMapperUtil.getInstance()
         .merge(productEntity, event);
     event.setProductId(productEntity.getId());
-    productEventPublisherPort.publish(event);
+    productMessagePublisherPort.publish(event);
   }
 
   @Data

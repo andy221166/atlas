@@ -19,7 +19,7 @@ import org.atlas.framework.notification.realtime.sse.SseNotification;
 import org.atlas.framework.notification.realtime.sse.SsePort;
 import org.atlas.framework.notification.realtime.websocket.WebSocketNotification;
 import org.atlas.framework.notification.realtime.websocket.WebSocketPort;
-import org.atlas.framework.template.ResolveTemplateException;
+import org.atlas.framework.template.exception.ResolveTemplateException;
 import org.atlas.framework.template.TemplatePort;
 import org.atlas.framework.util.FileUtil;
 import org.atlas.framework.util.UUIDGenerator;

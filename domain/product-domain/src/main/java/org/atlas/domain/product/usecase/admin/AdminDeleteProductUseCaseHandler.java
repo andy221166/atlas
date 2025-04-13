@@ -11,7 +11,7 @@ import org.atlas.domain.product.usecase.admin.AdminDeleteProductUseCaseHandler.D
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductDeletedEvent;
-import org.atlas.framework.event.publisher.ProductEventPublisherPort;
+import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -20,7 +20,7 @@ public class AdminDeleteProductUseCaseHandler implements UseCaseHandler<DeletePr
 
   private final ProductRepository productRepository;
   private final ApplicationConfigPort applicationConfigPort;
-  private final ProductEventPublisherPort productEventPublisherPort;
+  private final ProductMessagePublisherPort productMessagePublisherPort;
 
   @Override
   public Void handle(DeleteProductInput input) throws Exception {
@@ -34,7 +34,7 @@ public class AdminDeleteProductUseCaseHandler implements UseCaseHandler<DeletePr
   private void publishEvent(ProductEntity productEntity) {
     ProductDeletedEvent event = new ProductDeletedEvent(applicationConfigPort.getApplicationName());
     event.setProductId(productEntity.getId());
-    productEventPublisherPort.publish(event);
+    productMessagePublisherPort.publish(event);
   }
 
   @Data

@@ -49,17 +49,17 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-    switch (stackConfig['event']) {
+    switch (stackConfig['messaging']) {
         case 'kafka':
-            api project(':infrastructure-spring-boot:event-kafka-adapter-product')
+            api project(':infrastructure-spring-boot:messaging-kafka-adapter-product')
             break
         case 'sns':
-            api project(':infrastructure-spring-boot:event-sns-adapter-product')
+            api project(':infrastructure-spring-boot:messaging-sns-adapter-product')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['event']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['messaging']}")
     }
-    api project(':infrastructure-spring-boot:event-handler-decorator')
+    api project(':infrastructure-spring-boot:messaging-handler-decorator')
     switch (stackConfig['excel']) {
         case 'easyexcel':
             api project(':infrastructure-spring-boot:excel-easyexcel-adapter-product')

@@ -126,37 +126,9 @@ project(':infrastructure-spring-boot:discovery-client-kubernetes').projectDir = 
 
 // Event
 
-// Event::Gateway
-include(':infrastructure-spring-boot:event-gateway')
-project(':infrastructure-spring-boot:event-gateway').projectDir = file('infrastructure/spring-boot/event/event-gateway')
-
 // Event::Event handler decorator
-include(':infrastructure-spring-boot:event-handler-decorator')
-project(':infrastructure-spring-boot:event-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
-
-// Event::Kafka
-include(':infrastructure-spring-boot:event-kafka-core')
-project(':infrastructure-spring-boot:event-kafka-core').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-core')
-include(':infrastructure-spring-boot:event-kafka-adapter-notification')
-project(':infrastructure-spring-boot:event-kafka-adapter-notification').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-notification')
-include(':infrastructure-spring-boot:event-kafka-adapter-order')
-project(':infrastructure-spring-boot:event-kafka-adapter-order').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-order')
-include(':infrastructure-spring-boot:event-kafka-adapter-product')
-project(':infrastructure-spring-boot:event-kafka-adapter-product').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-product')
-include(':infrastructure-spring-boot:event-kafka-adapter-user')
-project(':infrastructure-spring-boot:event-kafka-adapter-user').projectDir = file('infrastructure/spring-boot/event/event-kafka/event-kafka-adapter-user')
-
-// Event::SNS
-include(':infrastructure-spring-boot:event-sns-core')
-project(':infrastructure-spring-boot:event-sns-core').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-core')
-include(':infrastructure-spring-boot:event-sns-adapter-notification')
-project(':infrastructure-spring-boot:event-sns-adapter-notification').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-notification')
-include(':infrastructure-spring-boot:event-sns-adapter-order')
-project(':infrastructure-spring-boot:event-sns-adapter-order').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-order')
-include(':infrastructure-spring-boot:event-sns-adapter-product')
-project(':infrastructure-spring-boot:event-sns-adapter-product').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-product')
-include(':infrastructure-spring-boot:event-sns-adapter-user')
-project(':infrastructure-spring-boot:event-sns-adapter-user').projectDir = file('infrastructure/spring-boot/event/event-sns/event-sns-adapter-user')
+include(':infrastructure-spring-boot:messaging-handler-decorator')
+project(':infrastructure-spring-boot:messaging-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
 
 // File
 
@@ -217,6 +189,32 @@ include(':infrastructure-spring-boot:lock-core')
 project(':infrastructure-spring-boot:lock-core').projectDir = file('infrastructure/spring-boot/lock/lock-core')
 include(':infrastructure-spring-boot:lock-redis')
 project(':infrastructure-spring-boot:lock-redis').projectDir = file('infrastructure/spring-boot/lock/lock-redis')
+
+// Messaging
+
+// Messaging::Kafka
+include(':infrastructure-spring-boot:messaging-kafka-core')
+project(':infrastructure-spring-boot:messaging-kafka-core').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-core')
+include(':infrastructure-spring-boot:messaging-kafka-adapter-notification')
+project(':infrastructure-spring-boot:messaging-kafka-adapter-notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-notification')
+include(':infrastructure-spring-boot:messaging-kafka-adapter-order')
+project(':infrastructure-spring-boot:messaging-kafka-adapter-order').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-order')
+include(':infrastructure-spring-boot:messaging-kafka-adapter-product')
+project(':infrastructure-spring-boot:messaging-kafka-adapter-product').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-product')
+include(':infrastructure-spring-boot:messaging-kafka-adapter-user')
+project(':infrastructure-spring-boot:messaging-kafka-adapter-user').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-user')
+
+// Messaging::SNS
+include(':infrastructure-spring-boot:messaging-sns-core')
+project(':infrastructure-spring-boot:messaging-sns-core').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-core')
+include(':infrastructure-spring-boot:messaging-sns-adapter-notification')
+project(':infrastructure-spring-boot:messaging-sns-adapter-notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-notification')
+include(':infrastructure-spring-boot:messaging-sns-adapter-order')
+project(':infrastructure-spring-boot:messaging-sns-adapter-order').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-order')
+include(':infrastructure-spring-boot:messaging-sns-adapter-product')
+project(':infrastructure-spring-boot:messaging-sns-adapter-product').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-product')
+include(':infrastructure-spring-boot:messaging-sns-adapter-user')
+project(':infrastructure-spring-boot:messaging-sns-adapter-user').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-user')
 
 // Notification
 
