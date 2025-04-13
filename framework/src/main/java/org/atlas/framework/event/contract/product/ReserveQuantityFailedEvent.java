@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.order.model.OrderItem;
 import org.atlas.framework.event.contract.order.model.User;
 
@@ -24,5 +25,16 @@ public class ReserveQuantityFailedEvent extends DomainEvent {
 
   public ReserveQuantityFailedEvent(String eventSource) {
     super(eventSource);
+  }
+
+  public void merge(OrderCreatedEvent event) {
+    this.orderId = event.getOrderId();
+    this.user = new User(event.getUser());
+    this.orderItems = event.getOrderItems() // Deep copy
+        .stream()
+        .map(OrderItem::new)
+        .toList();
+    this.amount = event.getAmount();
+    this.createdAt = event.getCreatedAt();
   }
 }

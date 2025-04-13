@@ -34,6 +34,7 @@ public class EventHandlerAspect {
     try {
       Object result = joinPoint.proceed();
       transactionPort.commit();
+      event.markAsProcessed();
       return result;
     } catch (Throwable e) {
       transactionPort.rollback();

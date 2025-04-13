@@ -37,8 +37,7 @@ public class ReserveQuantitySucceededEventHandler implements
     // Publish event
     OrderConfirmedEvent orderConfirmedEvent = new OrderConfirmedEvent(
         applicationConfigPort.getApplicationName());
-    ObjectMapperUtil.getInstance()
-        .merge(reserveQuantitySucceededEvent, orderConfirmedEvent);
+    orderConfirmedEvent.merge(reserveQuantitySucceededEvent);
     orderMessagePublisherPort.publish(orderConfirmedEvent);
   }
 }

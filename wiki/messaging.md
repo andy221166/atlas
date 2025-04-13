@@ -2,6 +2,44 @@
 
 ## Apache Kafka
 
+### Idempotency
+
+Reasons to Check Idempotency at Kafka Consumers
+1. Kafka’s At-Least-Once Delivery Semantics:
+By default, Kafka ensures messages are delivered at least once to consumers (if enable.auto.commit is enabled or manual commits are used with retries). This means a consumer might receive the same message multiple times due to network issues, consumer crashes, or offset commit failures.
+For example, if a consumer processes a message but crashes before committing its offset, Kafka will redeliver the same message when the consumer restarts, potentially leading to duplicate processing.
+Why Idempotency?: Idempotency ensures that even if a DomainEvent (with a unique eventId) is processed multiple times, the outcome remains the same, preventing side effects like duplicate database writes or incorrect state changes.
+
+2. Consumer Retries for Transient Failures:
+Many Kafka consumer applications implement retry logic for transient errors (e.g., temporary database unavailability or network timeouts). If a consumer retries a message, it might process the same DomainEvent multiple times.
+Without idempotency, retries could lead to unintended side effects, such as creating multiple records for the same event or updating a resource incorrectly.
+Why Idempotency?: Checking the eventId in the preHandle method (using Redis, as discussed) ensures that retries don’t result in duplicate processing.
+
+3. Producer-Side Duplicates:
+Kafka producers can send duplicate messages if they retry due to network issues or timeouts, even with idempotent producers enabled (though idempotent producers reduce this risk).
+If a producer sends the same DomainEvent multiple times (with the same eventId), the consumer might receive duplicates in the topic.
+Why Idempotency?: The consumer can use the eventId to detect and ignore duplicates, ensuring that only the first processing of the event has an effect.
+
+4. Consumer Group Rebalancing:
+In Kafka, consumer group rebalancing occurs when consumers join/leave the group or when partitions are reassigned. During rebalancing, messages may be redelivered to a different consumer instance, leading to potential duplicate processing.
+For example, if a consumer processes a message but doesn’t commit the offset before a rebalance, another consumer may process the same message.
+Why Idempotency?: Idempotency checking in the preHandle method ensures that redelivered messages (identified by eventId) are not processed again, maintaining consistency.
+
+5. Manual Offset Management:
+If your consumer uses manual offset commits for fine-grained control, there’s a risk of committing offsets too late or too early, leading to either missed or duplicate messages.
+For instance, processing a message and then failing to commit the offset correctly could cause Kafka to redeliver the message.
+Why Idempotency?: By checking the eventId against a Redis store, the consumer can safely handle redelivered messages without causing duplicate side effects.
+
+6. Exactly-Once Semantics Not Fully Guaranteed:
+While Kafka supports exactly-once semantics (EOS) for certain scenarios (e.g., transactional producers and consumers with isolation.level=read_committed), enabling EOS can introduce complexity and performance overhead, and it’s not always practical for all use cases.
+Many applications opt for at-least-once delivery with idempotency at the consumer to achieve effectively exactly-once processing without relying on Kafka’s transactional features.
+Why Idempotency?: Idempotency at the consumer layer (via EventHandlerInterceptor) is a simpler and more flexible way to ensure no duplicate processing, especially for applications where EOS is not configured.
+
+7. Business Logic Requirements:
+Certain business operations (e.g., financial transactions, order processing, or inventory updates) require strict guarantees that an event is processed exactly once to avoid errors like double-charging a customer or overselling inventory.
+For example, a DomainEvent representing an order creation must not create multiple orders if the same event is delivered multiple times.
+Why Idempotency?: The eventId in your DomainEvent allows the consumer to detect duplicates and ensure the business operation is executed only once.
+
 ### Error handling
 
 #### Error handling - Producer side

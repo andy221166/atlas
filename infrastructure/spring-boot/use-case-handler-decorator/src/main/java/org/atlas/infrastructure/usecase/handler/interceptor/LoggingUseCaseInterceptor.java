@@ -3,9 +3,9 @@ package org.atlas.infrastructure.usecase.handler.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.context.UserContext;
 import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.util.StopWatch;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 @Component
 @Order(1)
@@ -43,18 +43,19 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     // Stop the StopWatch
     stopWatch.stop();
 
-    // Get the execution time in milliseconds
-    long timeElapsedMs = stopWatch.getTotalTimeMillis();
+    long elapsedTimeMillis = stopWatch.getElapsedTimeMillis();
 
     // Merge user info and performance check into one log statement
     String message;
     if (userInfo == null) {
-      message = "Anonymous user finished handling use case " + useCaseClass.getSimpleName() + ": " + input + " in " + timeElapsedMs + " ms";
+      message = String.format("Anonymous user finished handling use case %s: %s in %d ms",
+          useCaseClass.getSimpleName(), input, elapsedTimeMillis);
     } else {
-      message = "User " + userInfo + " finished handling use case " + useCaseClass.getSimpleName() + ": " + input + " in " + timeElapsedMs + " ms";
+      message = String.format("User %s finished handling use case %s: %s in %d ms",
+          userInfo, useCaseClass.getSimpleName(), input, elapsedTimeMillis);
     }
 
-    if (timeElapsedMs > ACCEPTED_MAX_EXECUTION_TIME_MS) {
+    if (elapsedTimeMillis > ACCEPTED_MAX_EXECUTION_TIME_MS) {
       log.warn("{} ===> Exceeded max time, check performance!!!", message);
     } else {
       log.debug(message);

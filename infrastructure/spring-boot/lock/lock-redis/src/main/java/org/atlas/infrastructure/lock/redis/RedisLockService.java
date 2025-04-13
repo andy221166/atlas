@@ -26,7 +26,8 @@ public class RedisLockService implements LockService {
     boolean acquired;
     if (timeout > 0) {
       acquired = Boolean.TRUE.equals(
-          redisTemplate.opsForValue().setIfAbsent(key, LOCK_VALUE, timeout, timeUnit));
+          redisTemplate.opsForValue()
+              .setIfAbsent(key, LOCK_VALUE, timeout, timeUnit));
     } else {
       acquired = Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, LOCK_VALUE));
     }

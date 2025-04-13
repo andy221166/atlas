@@ -10,7 +10,6 @@ import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.objectmapper.ObjectMapperUtil;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,15 +27,13 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
       });
       ReserveQuantitySucceededEvent reserveQuantitySucceededEvent =
           new ReserveQuantitySucceededEvent(applicationConfigPort.getApplicationName());
-      ObjectMapperUtil.getInstance()
-          .merge(orderCreatedEvent, reserveQuantitySucceededEvent);
+      reserveQuantitySucceededEvent.merge(orderCreatedEvent);
       productMessagePublisherPort.publish(reserveQuantitySucceededEvent);
     } catch (Exception e) {
       log.error("Failed to handle event {}", orderCreatedEvent.getEventId(), e);
       ReserveQuantityFailedEvent reserveQuantityFailedEvent =
           new ReserveQuantityFailedEvent(applicationConfigPort.getApplicationName());
-      ObjectMapperUtil.getInstance()
-          .merge(orderCreatedEvent, reserveQuantityFailedEvent);
+      reserveQuantityFailedEvent.merge(orderCreatedEvent);
       reserveQuantityFailedEvent.setError(e.getMessage());
       productMessagePublisherPort.publish(reserveQuantityFailedEvent);
     }
@@ -46,8 +43,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
     DecreaseQuantityStrategy decreaseQuantityStrategy =
         applicationConfigPort.getDecreaseQuantityStrategy();
     switch (applicationConfigPort.getDecreaseQuantityStrategy()) {
-      case CONSTRAINT ->
-          productRepository.decreaseQuantityWithConstraint(productId, quantity);
+      case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
       case PESSIMISTIC_LOCKING ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
       default -> throw new UnsupportedOperationException(

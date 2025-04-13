@@ -3,5 +3,16 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-aop'
 
     // Infrastructure
+    api project(':infrastructure-spring-boot:config')
+    switch (stackConfig['redis']) {
+        case 'standalone':
+            api project(':infrastructure-spring-boot:redis-standalone')
+            break
+        case 'cluster':
+            api project(':infrastructure-spring-boot:redis-cluster')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+    }
     api project(':infrastructure-spring-boot:transaction')
 }

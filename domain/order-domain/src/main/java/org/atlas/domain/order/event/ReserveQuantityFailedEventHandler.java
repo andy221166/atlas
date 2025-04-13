@@ -37,8 +37,7 @@ public class ReserveQuantityFailedEventHandler implements EventHandler<ReserveQu
     // Publish event
     OrderCanceledEvent orderCanceledEvent = new OrderCanceledEvent(
         applicationConfigPort.getApplicationName());
-    ObjectMapperUtil.getInstance()
-        .merge(reserveQuantityFailedEvent, orderCanceledEvent);
+    orderCanceledEvent.merge(reserveQuantityFailedEvent);
     orderCanceledEvent.setCanceledReason(orderEntity.getCanceledReason());
     orderMessagePublisherPort.publish(orderCanceledEvent);
   }

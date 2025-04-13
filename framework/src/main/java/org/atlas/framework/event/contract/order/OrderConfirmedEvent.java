@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.atlas.framework.event.DomainEvent;
 import org.atlas.framework.event.contract.order.model.OrderItem;
 import org.atlas.framework.event.contract.order.model.User;
+import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 
 @Data
 @NoArgsConstructor
@@ -23,5 +24,16 @@ public class OrderConfirmedEvent extends DomainEvent {
 
   public OrderConfirmedEvent(String eventSource) {
     super(eventSource);
+  }
+
+  public void merge(ReserveQuantitySucceededEvent event) {
+    this.orderId = event.getOrderId();
+    this.user = new User(event.getUser());
+    this.orderItems = event.getOrderItems() // Deep copy
+        .stream()
+        .map(OrderItem::new)
+        .toList();
+    this.amount = event.getAmount();
+    this.createdAt = event.getCreatedAt();
   }
 }

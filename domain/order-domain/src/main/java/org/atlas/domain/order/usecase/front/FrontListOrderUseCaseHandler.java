@@ -29,11 +29,13 @@ import org.atlas.framework.context.UserContext;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
+import org.atlas.framework.paging.PagingRequest.SortOrder;
 import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
-public class FrontListOrderUseCaseHandler implements UseCaseHandler<ListOrderInput, ListOrderOutput> {
+public class FrontListOrderUseCaseHandler implements
+    UseCaseHandler<ListOrderInput, ListOrderOutput> {
 
   private final OrderRepository orderRepository;
   private final ProductApiPort productApiPort;
@@ -42,6 +44,8 @@ public class FrontListOrderUseCaseHandler implements UseCaseHandler<ListOrderInp
   public ListOrderOutput handle(ListOrderInput input) throws Exception {
     // Query order
     Integer userId = UserContext.getUserId();
+    input.getPagingRequest().setSortBy("createdAt");
+    input.getPagingRequest().setSortOrder(SortOrder.DESC);
     PagingResult<OrderEntity> orderEntityPage = orderRepository.findByUserId(userId,
         input.getPagingRequest());
     if (orderEntityPage.checkEmpty()) {
