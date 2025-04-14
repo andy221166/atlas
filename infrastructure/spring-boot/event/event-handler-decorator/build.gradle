@@ -4,15 +4,12 @@ dependencies {
 
     // Infrastructure
     api project(':infrastructure-spring-boot:config')
-    switch (stackConfig['redis']) {
-        case 'standalone':
-            api project(':infrastructure-spring-boot:redis-standalone')
-            break
-        case 'cluster':
-            api project(':infrastructure-spring-boot:redis-cluster')
+    switch (stackConfig['lock']) {
+        case 'redis':
+            api project(':infrastructure-spring-boot:lock-redis')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['lock']}")
     }
     api project(':infrastructure-spring-boot:transaction')
 }

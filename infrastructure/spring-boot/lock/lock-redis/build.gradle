@@ -1,6 +1,5 @@
 dependencies {
     // Infrastructure
-    api project(':infrastructure-spring-boot:lock-core')
     switch (stackConfig['redis']) {
         case 'standalone':
             api project(':infrastructure-spring-boot:redis-standalone')

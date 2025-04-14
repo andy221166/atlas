@@ -185,10 +185,10 @@ include(':infrastructure-spring-boot:user-api-rest-resttemplate')
 project(':infrastructure-spring-boot:user-api-rest-resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
 
 // Lock
-include(':infrastructure-spring-boot:lock-core')
-project(':infrastructure-spring-boot:lock-core').projectDir = file('infrastructure/spring-boot/lock/lock-core')
 include(':infrastructure-spring-boot:lock-redis')
 project(':infrastructure-spring-boot:lock-redis').projectDir = file('infrastructure/spring-boot/lock/lock-redis')
+include(':infrastructure-spring-boot:lock-util')
+project(':infrastructure-spring-boot:lock-util').projectDir = file('infrastructure/spring-boot/lock/lock-util')
 
 // Messaging
 

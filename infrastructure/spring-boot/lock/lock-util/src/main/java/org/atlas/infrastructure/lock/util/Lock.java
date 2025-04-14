@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.lock.core;
+package org.atlas.infrastructure.lock.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
