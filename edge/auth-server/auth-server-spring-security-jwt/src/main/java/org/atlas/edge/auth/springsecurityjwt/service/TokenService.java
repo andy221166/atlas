@@ -26,7 +26,8 @@ public class TokenService {
   public String issueAccessToken(UserDetailsImpl userDetails)
       throws IOException, InvalidKeySpecException {
     Date issuedAt = new Date();
-    Date expiresAt = new Date(issuedAt.getTime() + SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
+    Date expiresAt = new Date(
+        issuedAt.getTime() + SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME * 1000);
     Jwt jwt = Jwt.builder()
         .issuer(SecurityConstant.TOKEN_ISSUER)
         .issuedAt(issuedAt)
@@ -47,7 +48,8 @@ public class TokenService {
   public String issueRefreshToken(UserDetailsImpl userDetails)
       throws IOException, InvalidKeySpecException {
     Date issuedAt = new Date();
-    Date expiresAt = new Date(issuedAt.getTime() + SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME);
+    Date expiresAt = new Date(
+        issuedAt.getTime() + SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME * 1000);
     Jwt jwt = Jwt.builder()
         .issuer(SecurityConstant.TOKEN_ISSUER)
         .issuedAt(issuedAt)

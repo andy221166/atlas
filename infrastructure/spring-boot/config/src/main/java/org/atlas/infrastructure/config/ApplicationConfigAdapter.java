@@ -1,12 +1,17 @@
 package org.atlas.infrastructure.config;
 
+import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ApplicationConfigAdapter implements ApplicationConfigPort {
+
+  private final Environment environment;
 
   // Commons
   // -----------------------------------------------------------------------------------------------
@@ -17,6 +22,11 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort {
   @Override
   public String getApplicationName() {
     return applicationName;
+  }
+
+  @Override
+  public String getProfile() {
+    return environment.getActiveProfiles()[0];
   }
 
   // Product service
