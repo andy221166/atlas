@@ -6,14 +6,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginResponse;
+import org.atlas.edge.auth.springsecurityjwt.model.LogoutRequest;
+import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
+import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
-import org.springframework.http.HttpHeaders;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,12 +35,21 @@ public class AuthController {
     return Response.success(response);
   }
 
+  @Operation(summary = "Refresh Token", description = "Issues a new access token using a valid refresh token.")
+  @PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Response<RefreshTokenResponse> refreshToken(
+      @Parameter(description = "Refresh token sent in the request body", required = true)
+      @Valid @RequestBody RefreshTokenRequest request) throws Exception {
+    RefreshTokenResponse response = authService.refreshToken(request);
+    return Response.success(response);
+  }
+
   @Operation(summary = "User Logout", description = "Logs out a user using the provided authorization header.")
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
   public Response<Void> logout(
-      @Parameter(description = "Authorization header containing the user's token.", required = true, example = "Bearer <token>")
-      @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) throws Exception {
-    authService.logout(authorizationHeader);
+      @Parameter(description = "Logout request includes access token and refresh token", required = true)
+      @Valid @RequestBody LogoutRequest request) throws Exception {
+    authService.logout(request);
     return Response.success();
   }
 }

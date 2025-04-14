@@ -2,7 +2,7 @@ package org.atlas.edge.api.gateway.springcloudgateway.util;
 
 import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
-import org.atlas.edge.api.gateway.springcloudgateway.response.Response;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.json.JsonUtil;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;

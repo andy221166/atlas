@@ -1,7 +1,7 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
-import org.atlas.edge.api.gateway.springcloudgateway.response.Response;
 import org.atlas.edge.api.gateway.springcloudgateway.util.SpringWebFluxUtil;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.error.AppError;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

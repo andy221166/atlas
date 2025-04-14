@@ -1,6 +1,7 @@
 package org.atlas.infrastructure.event.handler.interceptor;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.config.ApplicationConfigPort;
@@ -39,7 +40,7 @@ public class IdempotencyEventHandlerInterceptor implements EventHandlerIntercept
           String.format("Event %s has already been processed", event.getEventId()));
     }
 
-    if (!lockPort.acquireLock(lockKey, Duration.ofMinutes(15))) {
+    if (!lockPort.acquireLock(lockKey, 15, TimeUnit.MINUTES)) {
       throw new IllegalStateException(
           String.format("Event %s is already being processed", event.getEventId()));
     }
@@ -59,7 +60,7 @@ public class IdempotencyEventHandlerInterceptor implements EventHandlerIntercept
     String lockKey = processedKey + ":lock";
 
     if (event.isProcessed()) {
-      redisTemplate.opsForValue().set(processedKey, Duration.ofDays(7));
+      redisTemplate.opsForValue().set(processedKey, "processed", 7, TimeUnit.DAYS);
     }
 
     lockPort.releaseLock(lockKey);

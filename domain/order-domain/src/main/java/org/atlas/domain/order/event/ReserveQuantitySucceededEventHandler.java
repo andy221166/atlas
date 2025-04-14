@@ -11,7 +11,6 @@ import org.atlas.framework.event.contract.order.OrderConfirmedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.framework.objectmapper.ObjectMapperUtil;
 
 @RequiredArgsConstructor
 public class ReserveQuantitySucceededEventHandler implements

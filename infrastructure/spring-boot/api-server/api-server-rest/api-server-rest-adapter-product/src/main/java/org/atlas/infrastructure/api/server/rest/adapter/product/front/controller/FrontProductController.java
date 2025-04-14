@@ -10,12 +10,12 @@ import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetP
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.SearchProductInput;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.SearchProductOutput;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.GetProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.SearchProductRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.SearchProductResponse;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

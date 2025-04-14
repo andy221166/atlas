@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.edge.auth.springsecurityjwt.model.CreateUserRequest;
 import org.atlas.edge.auth.springsecurityjwt.service.UserService;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -26,6 +26,7 @@ import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.Lis
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductOutput;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.enums.FileType;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
@@ -36,7 +37,6 @@ import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.Crea
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.GetProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.ListProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.UpdateProductRequest;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

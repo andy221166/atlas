@@ -6,5 +6,5 @@ public interface JwtService {
 
   String encodeJwt(EncodeJwtInput encodeJwtInput);
 
-  DecodeJwtOutput decodeJwt(DecodeJwtInput input);
+  Jwt decodeJwt(DecodeJwtInput input);
 }

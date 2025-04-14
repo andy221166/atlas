@@ -10,7 +10,6 @@ import org.atlas.framework.event.DomainEvent;
 import org.atlas.framework.event.contract.order.model.OrderItem;
 import org.atlas.framework.event.contract.order.model.User;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 
 @Data
 @NoArgsConstructor

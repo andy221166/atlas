@@ -2,15 +2,15 @@ package org.atlas.edge.auth.springsecurityjwt.service;
 
 import java.io.IOException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.Duration;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.jwt.DecodeJwtInput;
-import org.atlas.framework.jwt.DecodeJwtOutput;
 import org.atlas.framework.jwt.EncodeJwtInput;
+import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.jwt.JwtUtil;
 import org.atlas.framework.security.cryptography.RsaKeyLoader;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,37 +27,65 @@ public class TokenService {
       throws IOException, InvalidKeySpecException {
     Date issuedAt = new Date();
     Date expiresAt = new Date(issuedAt.getTime() + SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
-    EncodeJwtInput encodeJwtInput = EncodeJwtInput.builder()
+    Jwt jwt = Jwt.builder()
         .issuer(SecurityConstant.TOKEN_ISSUER)
         .issuedAt(issuedAt)
-        .subject(String.valueOf(userDetails.getUserId()))
+        .subject(String.valueOf(userDetails.getUsername()))
         .audience(SecurityConstant.TOKEN_AUDIENCE)
         .expiredAt(expiresAt)
-        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
-        .rsaPrivateKey(RsaKeyLoader.loadPrivateKey(SecurityConstant.RSA_PRIVATE_KEY_PATH))
         .userId(userDetails.getUserId())
         .userRole(userDetails.getRole())
         .build();
-    return JwtUtil.getInstance().encodeJwt(encodeJwtInput);
+    EncodeJwtInput input = EncodeJwtInput.builder()
+        .jwt(jwt)
+        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
+        .rsaPrivateKey(RsaKeyLoader.loadPrivateKey(SecurityConstant.RSA_PRIVATE_KEY_PATH))
+        .build();
+    return JwtUtil.getInstance().encodeJwt(input);
   }
 
-  public String issueRefreshToken(UserDetailsImpl userDetails) {
-    return null;
+  public String issueRefreshToken(UserDetailsImpl userDetails)
+      throws IOException, InvalidKeySpecException {
+    Date issuedAt = new Date();
+    Date expiresAt = new Date(issuedAt.getTime() + SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME);
+    Jwt jwt = Jwt.builder()
+        .issuer(SecurityConstant.TOKEN_ISSUER)
+        .issuedAt(issuedAt)
+        .subject(String.valueOf(userDetails.getUsername()))
+        .audience(SecurityConstant.TOKEN_AUDIENCE)
+        .expiredAt(expiresAt)
+        .build();
+    EncodeJwtInput input = EncodeJwtInput.builder()
+        .jwt(jwt)
+        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
+        .rsaPrivateKey(RsaKeyLoader.loadPrivateKey(SecurityConstant.RSA_PRIVATE_KEY_PATH))
+        .build();
+    return JwtUtil.getInstance().encodeJwt(input);
   }
 
-  public void revokeAccessToken(String accessToken) throws IOException, InvalidKeySpecException {
-    // Calculate TTL
-    DecodeJwtInput decodeJwtInput = DecodeJwtInput.builder()
-        .jwt(accessToken)
+  public Jwt parseToken(String token) throws IOException, InvalidKeySpecException {
+    DecodeJwtInput input = DecodeJwtInput.builder()
+        .jwt(token)
         .issuer(SecurityConstant.TOKEN_ISSUER)
         .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
         .build();
-    DecodeJwtOutput decodeJwtOutput = JwtUtil.getInstance().decodeJwt(decodeJwtInput);
-    long remainingTimeMillis =
-        decodeJwtOutput.getExpiredAt().getTime() - System.currentTimeMillis();
-    final String blacklistRedisKey = SecurityConstant.BLACKLIST_REDIS_KEY_PREFIX + accessToken;
+    return JwtUtil.getInstance().decodeJwt(input);
+  }
+
+  public void revokeToken(String token) throws IOException, InvalidKeySpecException {
+    // Calculate TTL
+    Jwt jwt = parseToken(token);
+    long remainingTimeMillis = jwt.getExpiredAt().getTime() - System.currentTimeMillis();
     redisTemplate.opsForValue()
-        .set(blacklistRedisKey, true, remainingTimeMillis, TimeUnit.MILLISECONDS);
-    log.info("The access token has been revoked: {}", accessToken);
+        .set(tokenBlacklistRedisKey(token), true, Duration.ofMillis(remainingTimeMillis));
+    log.info("The token has been revoked: {}", token);
+  }
+
+  public boolean isBlacklist(String token) {
+    return redisTemplate.hasKey(tokenBlacklistRedisKey(token));
+  }
+
+  private String tokenBlacklistRedisKey(String token) {
+    return SecurityConstant.TOKEN_BLACKLIST_REDIS_KEY_PREFIX + token;
   }
 }

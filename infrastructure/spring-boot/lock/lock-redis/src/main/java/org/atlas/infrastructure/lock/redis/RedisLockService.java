@@ -1,6 +1,6 @@
 package org.atlas.infrastructure.lock.redis;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.lock.LockPort;
@@ -17,15 +17,9 @@ public class RedisLockService implements LockPort {
   private final RedisTemplate<String, String> redisTemplate;
 
   @Override
-  public boolean acquireLock(String key, Duration timeout) {
-    boolean acquired;
-    if (!timeout.isZero()) {
-      acquired = Boolean.TRUE.equals(
-          redisTemplate.opsForValue().setIfAbsent(key, LOCK_VALUE, timeout));
-    } else {
-      acquired = Boolean.TRUE.equals(
-          redisTemplate.opsForValue().setIfAbsent(key, LOCK_VALUE));
-    }
+  public boolean acquireLock(String key, long timeout, TimeUnit timeUnit) {
+    boolean acquired = Boolean.TRUE.equals(
+        redisTemplate.opsForValue().setIfAbsent(key, LOCK_VALUE, timeout, timeUnit));
     if (acquired) {
       log.info("Acquired lock {} in {}", key, timeout);
     }

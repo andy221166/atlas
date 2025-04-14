@@ -2,11 +2,12 @@ package org.atlas.infrastructure.api.server.rest.core.error;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
 import org.atlas.infrastructure.i18n.service.MessageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,10 +24,13 @@ public class RestExceptionHandler {
   private final MessageService messageService;
 
   @ExceptionHandler(BusinessException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public Response<Void> handle(BusinessException e) {
-    String errorMessage = messageService.getMessage(e.getMessageCode(), "Unknown error");
-    return Response.error(e.getErrorCode(), errorMessage);
+  public ResponseEntity<Response<Void>> handle(BusinessException e) {
+    String errorMessage = e.getMessage() != null ? e.getMessage() :
+        messageService.getMessage(e.getMessageCode(), "Unknown error");
+    Response<Void> body = Response.error(e.getErrorCode(), errorMessage);
+    int status = e.getErrorCode() < 1000 ? e.getErrorCode() :
+        HttpStatus.INTERNAL_SERVER_ERROR.value();
+    return ResponseEntity.status(status).body(body);
   }
 
   /**
@@ -63,6 +67,6 @@ public class RestExceptionHandler {
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public Response<Void> handle(Exception e) {
-    return Response.error(AppError.INTERNAL_SERVER_ERROR.getErrorCode(), e.getMessage());
+    return Response.error(AppError.DEFAULT.getErrorCode(), e.getMessage());
   }
 }

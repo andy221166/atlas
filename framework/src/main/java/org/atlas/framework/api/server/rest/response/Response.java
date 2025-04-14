@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.server.rest.core.response;
+package org.atlas.framework.api.server.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -9,8 +9,8 @@ public class Response<T> {
 
   private boolean success;
   private T data;
-  private Integer code;
-  private String message;
+  private Integer errorCode;
+  private String errorMessage;
 
   public static <T> Response<T> success() {
     return success(null);
@@ -23,11 +23,11 @@ public class Response<T> {
     return instance;
   }
 
-  public static Response<Void> error(int code, String message) {
+  public static Response<Void> error(int errorCode, String errorMessage) {
     Response<Void> instance = new Response<>();
     instance.setSuccess(false);
-    instance.setCode(code);
-    instance.setMessage(message);
+    instance.setErrorCode(errorCode);
+    instance.setErrorMessage(errorMessage);
     return instance;
   }
 }

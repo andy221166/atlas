@@ -1,7 +1,6 @@
 package org.atlas.framework.event.contract.product;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;

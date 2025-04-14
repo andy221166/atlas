@@ -2,8 +2,8 @@ package org.atlas.edge.api.gateway.springcloudgateway.security;
 
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.edge.api.gateway.springcloudgateway.response.Response;
 import org.atlas.edge.api.gateway.springcloudgateway.util.SpringWebFluxUtil;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.error.AppError;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RevokedTokenGatewayFilterFactory extends AbstractGatewayFilterFactory<RevokedTokenGatewayFilterFactory.Config> {
+public class RevokedTokenGatewayFilterFactory extends
+    AbstractGatewayFilterFactory<RevokedTokenGatewayFilterFactory.Config> {
 
   private final RedisTemplate<String, Object> redisTemplate;
 
@@ -33,14 +34,15 @@ public class RevokedTokenGatewayFilterFactory extends AbstractGatewayFilterFacto
         return chain.filter(exchange);
       }
       String accessToken = authorizationHeaders.get(0);
-      final String blacklistRedisKey = SecurityConstant.BLACKLIST_REDIS_KEY_PREFIX + accessToken;
+      final String tokenBlacklistRedisKey =
+          SecurityConstant.TOKEN_BLACKLIST_REDIS_KEY_PREFIX + accessToken;
 
       // Check if the access token is in the Redis blacklist
-      Boolean isBlacklisted = redisTemplate.hasKey(blacklistRedisKey);
+      Boolean isBlacklisted = redisTemplate.hasKey(tokenBlacklistRedisKey);
 
       if (Boolean.TRUE.equals(isBlacklisted)) {
-        Response<Void> responseBody = Response.error(AppError.UNAUTHORIZED.getErrorCode(),
-            "Token has been revoked");
+        Response<Void> responseBody =
+            Response.error(AppError.UNAUTHORIZED.getErrorCode(), "Token has been revoked");
         return SpringWebFluxUtil.respond(exchange, responseBody, HttpStatus.UNAUTHORIZED);
       }
 

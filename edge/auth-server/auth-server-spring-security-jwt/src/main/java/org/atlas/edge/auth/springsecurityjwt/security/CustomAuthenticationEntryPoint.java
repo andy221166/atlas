@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.infrastructure.api.server.rest.core.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

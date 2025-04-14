@@ -7,7 +7,7 @@ import org.atlas.domain.user.shared.enums.Role;
 
 @Data
 @Builder
-public class DecodeJwtOutput {
+public class Jwt {
 
   // 'jti' claim
   private String jwtId;

@@ -13,6 +13,7 @@ import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrd
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderInput;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderOutput;
+import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -20,7 +21,6 @@ import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.GetOrd
 import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.ListOrderResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.PlaceOrderRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.PlaceOrderResponse;
-import org.atlas.infrastructure.api.server.rest.core.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;

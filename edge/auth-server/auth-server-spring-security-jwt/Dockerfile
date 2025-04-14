@@ -13,6 +13,17 @@ COPY --from=builder extracted/application/ ./
 # Expose application port
 EXPOSE 8080
 
-# Since Spring Boot 3.2.0, a new org.springframework.boot.loader.launch.JarLauncher has been introduced
-# instead of org.springframework.boot.loader.JarLauncher
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+# Optimized JVM options with heap dump on OOM
+ENTRYPOINT ["java", \
+  "-Xms512m -Xmx512m", \
+  "-XX:+UseContainerSupport", \
+  "-XX:MaxRAMPercentage=75.0", \
+  "-XX:+UseG1GC", \
+  "-XX:MaxGCPauseMillis=200", \
+  "-XX:+AlwaysPreTouch", \
+  "-XX:+HeapDumpOnOutOfMemoryError", \
+  "-XX:HeapDumpPath=/tmp/heapdump.hprof", \
+  "-Djava.security.egd=file:/dev/urandom", \
+  # Since Spring Boot 3.2.0, a new org.springframework.boot.loader.launch.JarLauncher has been introduced
+  # instead of org.springframework.boot.loader.JarLauncher
+  "org.springframework.boot.loader.launch.JarLauncher"]
