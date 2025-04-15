@@ -1,10 +1,10 @@
 package org.atlas.framework.lock;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public interface LockPort {
 
-  boolean acquireLock(String key, long timeout, TimeUnit timeUnit);
+  boolean acquireLock(String key, Duration timeout);
 
   void releaseLock(String key);
 }

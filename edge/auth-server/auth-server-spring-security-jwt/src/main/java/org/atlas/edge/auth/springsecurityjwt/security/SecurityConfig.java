@@ -36,16 +36,16 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(a -> a.anyRequest().permitAll())
-        // No session should be created
-        .sessionManagement(
-            (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oneTimeTokenLogin(Customizer.withDefaults())
-        .exceptionHandling(e -> {
+        .authorizeHttpRequests(auth ->
+            auth.anyRequest().permitAll())
+        .sessionManagement((session) ->
+            // No session should be created
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .exceptionHandling(ex -> {
           // Unauthorized
-          e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+          ex.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
           // Access denied
-          e.accessDeniedHandler(new CustomAccessDeniedHandler());
+          ex.accessDeniedHandler(new CustomAccessDeniedHandler());
         })
         .build();
   }

@@ -1,12 +1,10 @@
 package org.atlas.infrastructure.event.handler.interceptor;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.DomainEvent;
-import org.atlas.framework.lock.LockPort;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,55 +16,47 @@ import org.springframework.stereotype.Component;
 public class IdempotencyEventHandlerInterceptor implements EventHandlerInterceptor {
 
   private final ApplicationConfigPort applicationConfigPort;
-  private final LockPort lockPort;
   private final RedisTemplate<String, Object> redisTemplate;
 
-  /**
-   * Pre-handle logic to ensure the event is not processed more than once.
-   * Steps:
-   * 1. Check if the event has already been marked as processed using Redis.
-   *    - If yes, throw an exception to prevent re-processing.
-   * 2. Try to acquire a distributed lock (short TTL, e.g., 15 minutes).
-   *    - This prevents multiple clients from processing the same event concurrently.
-   *    - If the lock is not acquired, it means another client is currently processing it.
-   */
+  private static final String PROCESSING_REDIS_VALUE = "processing";
+  private static final Duration PROCESSING_TIMEOUT = Duration.ofMinutes(15);
+  private static final String PROCESSED_REDIS_VALUE = "processed";
+  private static final Duration PROCESSED_TTL = Duration.ofDays(7);
+
   @Override
   public void preHandle(DomainEvent event) {
-    String processedKey = redisKey(event);
-    String lockKey = processedKey + ":lock";
+    String redisKey = obtainRedisKey(event);
+    String redisValue = (String) redisTemplate.opsForValue().get(redisKey);
 
-    if (redisTemplate.hasKey(processedKey)) {
+    // Check if the event has already been processed
+    if (PROCESSED_REDIS_VALUE.equals(redisValue)) {
       throw new IllegalStateException(
           String.format("Event %s has already been processed", event.getEventId()));
     }
 
-    if (!lockPort.acquireLock(lockKey, 15, TimeUnit.MINUTES)) {
+    // Try to acquire a lock for processing
+    if (Boolean.FALSE.equals(redisTemplate.opsForValue()
+        .setIfAbsent(redisKey, PROCESSING_REDIS_VALUE, PROCESSING_TIMEOUT))) {
+      // If the lock is already held, it means other instance has been processing the event
       throw new IllegalStateException(
-          String.format("Event %s is already being processed", event.getEventId()));
+          String.format("Event %s is already being processed by other instance",
+              event.getEventId()));
     }
   }
 
-  /**
-   * Post-handle logic to update event state after processing.
-   * Steps:
-   * 1. If the event was successfully processed, store a marker key in Redis
-   *    to prevent future re-processing (with a long TTL, e.g., 7 days).
-   * 2. Release the previously acquired lock to allow cleanup.
-   *    - Optional if the lock has a TTL, but still good for cleanup.
-   */
   @Override
   public void postHandle(DomainEvent event) {
-    String processedKey = redisKey(event);
-    String lockKey = processedKey + ":lock";
+    String redisKey = obtainRedisKey(event);
 
     if (event.isProcessed()) {
-      redisTemplate.opsForValue().set(processedKey, "processed", 7, TimeUnit.DAYS);
+      redisTemplate.opsForValue().set(redisKey, PROCESSED_REDIS_VALUE, PROCESSED_TTL);
     }
 
-    lockPort.releaseLock(lockKey);
+    // Release the lock of processing acquisition
+    redisTemplate.delete(redisKey);
   }
 
-  private String redisKey(DomainEvent event) {
+  private String obtainRedisKey(DomainEvent event) {
     return String.format("event:%s:%s",
         event.getEventId(), applicationConfigPort.getApplicationName());
   }

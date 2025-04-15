@@ -22,9 +22,8 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
   @Override
   public void handle(OrderCreatedEvent orderCreatedEvent) {
     try {
-      orderCreatedEvent.getOrderItems().forEach(orderItem -> {
-        decreaseQuantity(orderItem.getProduct().getId(), orderItem.getQuantity());
-      });
+      orderCreatedEvent.getOrderItems().forEach(orderItem ->
+          decreaseQuantity(orderItem.getProduct().getId(), orderItem.getQuantity()));
       ReserveQuantitySucceededEvent reserveQuantitySucceededEvent =
           new ReserveQuantitySucceededEvent(applicationConfigPort.getApplicationName());
       reserveQuantitySucceededEvent.merge(orderCreatedEvent);

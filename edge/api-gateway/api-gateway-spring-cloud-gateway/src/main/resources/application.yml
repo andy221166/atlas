@@ -132,6 +132,8 @@ app:
         - "/actuator/**"
         - "/api/auth/login"
         - "/api/auth/logout"
+        - "/api/auth/ott/generate"
+        - "/api/auth/ott/login"
         - "/api/front/users/register"
         - "/api-docs/**"
         - "/swagger-ui/**"

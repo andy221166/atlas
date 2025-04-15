@@ -1,10 +1,12 @@
 package org.atlas.framework.jwks;
 
+import lombok.experimental.UtilityClass;
 import org.atlas.framework.jwks.nimbus.NimbusJwkSetService;
 
 /**
  * Implement Singleton pattern with Bill Pugh solution
  */
+@UtilityClass
 public class JwkSetUtil {
 
   private static class ServiceHolder {
