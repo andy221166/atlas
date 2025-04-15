@@ -1,5 +1,6 @@
 package org.atlas.infrastructure.redis.core.config;
 
+import org.atlas.framework.json.jackson.JacksonService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,13 +17,16 @@ public class RedisConfig {
 
     redisTemplate.setConnectionFactory(connectionFactory);
 
+    // Key serialization
     StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
     redisTemplate.setKeySerializer(stringRedisSerializer);
     redisTemplate.setHashKeySerializer(stringRedisSerializer);
 
-    GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-    redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
-    redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
+    // Value serialization
+    GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(
+        JacksonService.objectMapper);
+    redisTemplate.setValueSerializer(serializer);
+    redisTemplate.setHashValueSerializer(serializer);
 
     return redisTemplate;
   }

@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.json.JsonService;
@@ -28,6 +29,11 @@ public class GsonService implements JsonService {
   @Override
   public <T> T toObject(String source, Class<T> objectClass) {
     return gson.fromJson(source, objectClass);
+  }
+
+  @Override
+  public <T> T toObject(LinkedHashMap<?, ?> source, Class<T> type) {
+    throw new UnsupportedOperationException();
   }
 
   @Override

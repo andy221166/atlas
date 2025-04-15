@@ -67,6 +67,7 @@ public class RestExceptionHandler {
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public Response<Void> handle(Exception e) {
+    log.error("Occurred exception", e);
     return Response.error(AppError.DEFAULT.getErrorCode(), e.getMessage());
   }
 }

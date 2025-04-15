@@ -27,7 +27,12 @@ dependencies {
     api 'com.nimbusds:nimbus-jose-jwt:10.2'
 
     // JSON
+
+    // JSON::Jackson
     api 'com.fasterxml.jackson.core:jackson-databind:2.18.1'
+    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.1'
+
+    // JSON::Gson
     api 'com.google.code.gson:gson:2.12.1'
 
     // Object mapper

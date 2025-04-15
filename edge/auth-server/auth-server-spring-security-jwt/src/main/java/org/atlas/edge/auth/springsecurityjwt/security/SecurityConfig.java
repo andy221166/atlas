@@ -1,16 +1,19 @@
 package org.atlas.edge.auth.springsecurityjwt.security;
 
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.ott.OneTimeTokenAuthenticationProvider;
+import org.springframework.security.authentication.ott.OneTimeTokenService;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,17 +30,21 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   private final UserDetailsService userDetailsService;
+  private final OneTimeTokenService oneTimeTokenService;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
         .csrf(AbstractHttpConfigurer::disable)
-        // Fix cannot login H2 console due to forbidden error
-        .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
         .authorizeHttpRequests(a -> a.anyRequest().permitAll())
         // No session should be created
         .sessionManagement(
             (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .oneTimeTokenLogin(ott -> ott
+            .tokenService(oneTimeTokenService)
+            .tokenGeneratingUrl("/api/auth/ott/generate")
+            .tokenGenerationSuccessHandler(new CustomOneTimeTokenGenerationSuccessHandler())
+        )
         .exceptionHandling(e -> {
           // Unauthorized
           e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
@@ -53,7 +60,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationProvider authenticationProvider() {
+  public AuthenticationProvider daoAuthenticationProvider() {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
     authenticationProvider.setUserDetailsService(userDetailsService);
     authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -61,8 +68,15 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-      throws Exception {
-    return config.getAuthenticationManager();
+  public AuthenticationProvider oneTimeTokenAuthenticationProvider() {
+    return new OneTimeTokenAuthenticationProvider(oneTimeTokenService, userDetailsService);
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config,
+      AuthenticationProvider daoAuthenticationProvider,
+      AuthenticationProvider oneTimeTokenAuthenticationProvider) throws Exception {
+    // Manually configure AuthenticationManager with both providers
+    return new ProviderManager(daoAuthenticationProvider, oneTimeTokenAuthenticationProvider);
   }
 }

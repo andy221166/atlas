@@ -5,9 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
+import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginResponse;
 import org.atlas.edge.auth.springsecurityjwt.model.LogoutRequest;
+import org.atlas.edge.auth.springsecurityjwt.model.OneTimeTokenLoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
@@ -36,15 +39,24 @@ public class AuthController {
       @Parameter(description = "Request object containing user credentials for login.", required = true)
       @Valid @RequestBody LoginRequest request,
       HttpServletResponse httpServletResponse) throws Exception {
-    LoginResponse response = authService.login(request);
-    cookieService.addCookie(httpServletResponse,
-        SecurityConstant.ACCESS_TOKEN_COOKIE,
-        response.getAccessToken(),
-        SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
-    cookieService.addCookie(httpServletResponse,
-        SecurityConstant.REFRESH_TOKEN_COOKIE,
-        response.getAccessToken(),
-        SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME);
+    LoginResponse loginResponse = authService.login(request);
+    addTokensToCookies(httpServletResponse, loginResponse);
+    return Response.success(loginResponse);
+  }
+
+  @PostMapping("/ott/login")
+  public Response<LoginResponse> oneTimeTokenLogin(
+      @Valid @RequestBody OneTimeTokenLoginRequest request,
+      HttpServletResponse httpServletResponse) throws Exception {
+    LoginResponse loginResponse = authService.oneTimeTokenLogin(request);
+    addTokensToCookies(httpServletResponse, loginResponse);
+    return Response.success(loginResponse);
+  }
+
+  @PostMapping("/ott/generate")
+  public Response<GenerateOneTimeTokenResponse> generateOneTimeToken(
+      @Valid @RequestBody GenerateOneTimeTokenRequest request) {
+    GenerateOneTimeTokenResponse response = authService.generateOneTimeToke(request);
     return Response.success(response);
   }
 
@@ -67,5 +79,17 @@ public class AuthController {
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.REFRESH_TOKEN_COOKIE);
     return Response.success();
+  }
+
+  private void addTokensToCookies(HttpServletResponse httpServletResponse,
+      LoginResponse loginResponse) {
+    cookieService.addCookie(httpServletResponse,
+        SecurityConstant.ACCESS_TOKEN_COOKIE,
+        loginResponse.getAccessToken(),
+        SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
+    cookieService.addCookie(httpServletResponse,
+        SecurityConstant.REFRESH_TOKEN_COOKIE,
+        loginResponse.getRefreshToken(),
+        SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME);
   }
 }
