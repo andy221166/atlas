@@ -1,6 +1,5 @@
 package org.atlas.edge.auth.springsecurityjwt.security;
 
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +9,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.ott.OneTimeTokenAuthenticationProvider;
 import org.springframework.security.authentication.ott.OneTimeTokenService;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,11 +40,7 @@ public class SecurityConfig {
         // No session should be created
         .sessionManagement(
             (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oneTimeTokenLogin(ott -> ott
-            .tokenService(oneTimeTokenService)
-            .tokenGeneratingUrl("/api/auth/ott/generate")
-            .tokenGenerationSuccessHandler(new CustomOneTimeTokenGenerationSuccessHandler())
-        )
+        .oneTimeTokenLogin(Customizer.withDefaults())
         .exceptionHandling(e -> {
           // Unauthorized
           e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());

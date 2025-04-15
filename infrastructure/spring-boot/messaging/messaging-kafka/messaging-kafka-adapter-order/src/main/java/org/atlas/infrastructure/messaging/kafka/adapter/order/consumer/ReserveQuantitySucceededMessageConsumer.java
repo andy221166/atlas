@@ -9,6 +9,7 @@ import org.atlas.infrastructure.messaging.kafka.core.KafkaMessageConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +31,8 @@ public class ReserveQuantitySucceededMessageConsumer extends KafkaMessageConsume
       topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE, // order-events-retry-0, order-events-retry-1, order-events-retry-2, etc.
       backoff = @Backoff(delay = 1000, multiplier = 2, random = true) // Exponential backoff
   )
-  public void consumeMessage(ConsumerRecord<String, Object> record) {
-    super.consumeMessage(record);
+  public void consumeMessage(ConsumerRecord<String, Object> record, Acknowledgment ack) {
+    super.consumeMessage(record, ack);
   }
 
   @Override

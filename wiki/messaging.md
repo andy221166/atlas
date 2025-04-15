@@ -2,6 +2,48 @@
 
 ## Apache Kafka
 
+### Offset management
+
+Scenario:
+1. Consumer A processes messages in Partition 0 up to offset 4, then crashes.
+2. Consumer B (same consumer group) takes over and resumes from offset 4 (re-processing or retrying that offset).
+
+**When `enable.auto.commit = true` (default):**
+
+Kafka will automatically commit offsets periodically (default every 5 seconds, configurable via `auto.commit.interval.ms`).
+
+⚙️ Behavior:
+- Offset is committed regardless of whether the message was successfully processed or not.
+- If a consumer crashes after offset 4 is auto-committed but before processing it, that message is lost (won’t be reprocessed).
+- Risk of message loss if processing fails between fetch and commit.
+
+📌 Summary:
+- Pro: Simpler setup
+- Con: Not safe if you need guaranteed processing (e.g., payments)
+
+**When `enable.auto.commit = false`:**
+
+- You must manually commit the offset after successful processing either via:
+  - `ack.acknowledge()` in Spring Kafka
+  - or Kafka native API: `consumer.commitSync()` / `commitAsync()`
+
+⚙️ Behavior:
+- If consumer crashes before offset is manually committed, message is redelivered when a new consumer takes over.
+- Prevents message loss, ensures at-least-once delivery.
+
+📌 Summary:
+- Pro: Safe and reliable
+- Con: Slightly more complex to implement
+
+By default, Spring Kafka sets `enable.auto.commit = false` and lets you choose the ack mode:
+
+Ack Mode | Commit Timing
+RECORD | After each record
+BATCH | After each batch of records
+TIME | Periodically
+MANUAL | Only when you call ack.acknowledge()
+MANUAL_IMMEDIATE | Same as MANUAL but commits immediately
+
 ### Idempotency
 
 Reasons to Check Idempotency at Kafka Consumers
