@@ -65,3 +65,20 @@ Disadvantages:
 ---
 
 ## Race-condition
+
+### SQL constraint
+
+### Pessimistic locking + Unique key
+
+### Optimistic locking + Unique key
+
+### Redis locking
+
+| Feature/Aspect         | Redis Lock                                                                 | Optimistic Locking                                                                 | Pessimistic Locking                                                               |
+|------------------------|----------------------------------------------------------------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **Usage Context**      | Distributed systems where multiple processes/servers or databases need to coordinate. | Scenarios with high contention but low likelihood of conflicts.                     | Scenarios with a high likelihood of conflicts or critical sections.               |
+| **Concurrency**        | Allows multiple processes/servers to attempt to acquire the lock.         | Multiple transactions proceed in parallel, and conflicts are detected at commit time. | Only one transaction can access the resource at a time.                          |
+| **Performance**        | Moderate latency due to network round-trips to Redis.                     | High performance is due to less waiting, but there is potential for retries.        | Lower performance due to increased waiting time.                                  |
+| **Failure Handling**   | Requires handling for lock expiration and ensuring atomicity using mechanisms like Lua scripts. | Requires handling for retries on conflict detection.                               | Straightforward, but needs to handle deadlocks and potentially long waits.        |
+| **Implementation Complexity** | Moderate; involves network calls and handling Redis-specific details.       | Moderate; involves adding version/timestamp checks in the code.                    | Simple to implement but can complicate transaction management.                    |
+| **Scalability**        | Highly scalable due to Redis' ability to handle high loads.               | Highly scalable; minimal contention and no centralized locking mechanism.           | Less scalable due to potential bottlenecks with high contention.                 |

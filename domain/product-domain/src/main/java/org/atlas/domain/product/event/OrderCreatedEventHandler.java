@@ -42,9 +42,12 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
     DecreaseQuantityStrategy decreaseQuantityStrategy =
         applicationConfigPort.getDecreaseQuantityStrategy();
     switch (applicationConfigPort.getDecreaseQuantityStrategy()) {
-      case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
+      case CONSTRAINT ->
+          productRepository.decreaseQuantityWithConstraint(productId, quantity);
       case PESSIMISTIC_LOCKING ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
+      case OPTIMISTIC_LOCKING ->
+          productRepository.decreaseQuantityWithOptimisticLock(productId, quantity);
       default -> throw new UnsupportedOperationException(
           "Unsupported decrease quantity strategy: " + decreaseQuantityStrategy);
     }

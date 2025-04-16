@@ -52,6 +52,10 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 jar {
@@ -65,4 +69,8 @@ publishing {
             from components.java
         }
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }

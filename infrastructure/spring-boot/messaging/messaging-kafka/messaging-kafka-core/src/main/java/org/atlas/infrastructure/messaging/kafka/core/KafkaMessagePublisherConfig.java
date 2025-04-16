@@ -49,7 +49,7 @@ public class KafkaMessagePublisherConfig {
     // === Idempotence (Exactly-once semantics) ===
 
     // Ensures no duplicates during retries by tracking message sequence numbers
-    // This requires max.in.flight.requests.per.connection to be less than or equal to 5.
+    // This requires max.in.flight.requests.per.connection (default to 5) to be less than or equal to 5.
     configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
 
     // === Performance tuning ===

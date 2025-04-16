@@ -2,6 +2,8 @@ package org.atlas.infrastructure.i18n.service;
 
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
+import org.atlas.framework.config.ApplicationConfigPort;
+import org.atlas.framework.i18n.I18nPort;
 import org.atlas.framework.util.StringUtil;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -9,16 +11,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MessageService {
+public class I18nService implements I18nPort {
 
-  private final Locale locale;
+  private final ApplicationConfigPort applicationConfigPort;
   private final MessageSource messageSource;
 
+  @Override
   public String getMessage(String code, Object... params) {
-    return getMessage(code, StringUtil.EMPTY, params);
+    return getMessage(code, StringUtil.EMPTY, applicationConfigPort.getLocale(), params);
   }
 
+  @Override
+  public String getMessage(String code, Locale locale, Object... params) {
+    return getMessage(code, StringUtil.EMPTY, locale, params);
+  }
+
+  @Override
   public String getMessage(String code, String defaultValue, Object... params) {
+    return getMessage(code, defaultValue, applicationConfigPort.getLocale(), params);
+  }
+
+  @Override
+  public String getMessage(String code, String defaultValue, Locale locale, Object... params) {
     try {
       return messageSource.getMessage(code, params, locale);
     } catch (NoSuchMessageException e) {

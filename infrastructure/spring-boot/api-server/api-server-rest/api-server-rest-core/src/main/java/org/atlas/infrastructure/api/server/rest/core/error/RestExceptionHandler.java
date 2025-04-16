@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.api.server.rest.response.Response;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.infrastructure.i18n.service.MessageService;
+import org.atlas.framework.i18n.I18nPort;
+import org.atlas.infrastructure.i18n.service.I18nService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -21,12 +22,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class RestExceptionHandler {
 
-  private final MessageService messageService;
+  private final I18nPort i18nPort;
 
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<Response<Void>> handle(BusinessException e) {
     String errorMessage = e.getMessage() != null ? e.getMessage() :
-        messageService.getMessage(e.getMessageCode(), "Unknown error");
+        i18nPort.getMessage(e.getMessageCode(), "Unknown error");
     Response<Void> body = Response.error(e.getErrorCode(), errorMessage);
     int status = e.getErrorCode() < 1000 ? e.getErrorCode() :
         HttpStatus.INTERNAL_SERVER_ERROR.value();

@@ -1,25 +1,19 @@
 package org.atlas.infrastructure.i18n.config;
 
-import java.util.Locale;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.atlas.framework.config.ApplicationConfigPort;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
+@RequiredArgsConstructor
 @Slf4j
-public class LocaleConfig {
+public class I18nConfig {
 
-  @Value("${app.locale:en-US}")
-  private String appLocale;
-
-  @Bean
-  public Locale locale() {
-    log.info("Application locale: {}", appLocale);
-    return Locale.forLanguageTag(appLocale);
-  }
+  private final ApplicationConfigPort applicationConfigPort;
 
   @Bean
   public MessageSource messageSource() {
@@ -27,7 +21,7 @@ public class LocaleConfig {
     // src/main/resources/messages_{locale}.properties file
     messageSource.setBasename("messages");
     messageSource.setDefaultEncoding("UTF-8");
-    messageSource.setDefaultLocale(locale());
+    messageSource.setDefaultLocale(applicationConfigPort.getLocale());
     return messageSource;
   }
 }

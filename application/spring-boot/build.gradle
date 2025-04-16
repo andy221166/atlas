@@ -1,26 +1,13 @@
-plugins {
-	id 'org.springframework.boot' version "${springBootVersion}"
-	id 'maven-publish'
-}
-
 subprojects {
 	apply plugin: 'org.springframework.boot'
-	apply plugin: 'maven-publish'
-}
 
-jar {
-	enabled = false
-}
-
-publishing {
-	publications {
-		publication(MavenPublication) {
-			artifact bootJar
-			from components.java
-		}
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter'
+  		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	}
-}
 
-tasks.named('test') {
-  useJUnitPlatform()
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
 }

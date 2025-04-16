@@ -10,7 +10,8 @@ public enum DecreaseQuantityStrategy {
 
   CONSTRAINT("constraint"),
   OPTIMISTIC_LOCKING("optimistic_locking"),
-  PESSIMISTIC_LOCKING("pessimistic_locking");
+  PESSIMISTIC_LOCKING("pessimistic_locking"),
+  REDIS_LOCK("redis_lock");
 
   private final String value;
 

@@ -46,7 +46,28 @@ MANUAL_IMMEDIATE | Same as MANUAL but commits immediately
 
 ### Idempotency
 
-Reasons to Check Idempotency at Kafka Consumers
+#### Producer idempotency
+
+Kafka Idempotent Producer guarantees that duplicate messages are automatically ignored even if the producer sends the same message multiple times due to:
+- Network Failure
+- Retries
+- Application Restart
+
+How It Works (In Simple Points)
+1. Every Producer Session gets a unique PID (Producer ID).
+2. Each message gets a Sequence Number (like 0, 1, 2…).
+3. Kafka stores the PID + Sequence Number in an internal state table.
+4. If the same PID + Sequence combination comes again → Kafka automatically ignores the duplicate message.
+5. When the producer restarts → a new PID is assigned, and Kafka automatically ignores old messages..
+
+How to Enable It in Code?
+
+```ini
+spring.kafka.producer.enable-idempotence=true
+```
+
+#### Consumer Idempotency
+
 1. Kafka’s At-Least-Once Delivery Semantics:
 By default, Kafka ensures messages are delivered at least once to consumers (if enable.auto.commit is enabled or manual commits are used with retries). This means a consumer might receive the same message multiple times due to network issues, consumer crashes, or offset commit failures.
 For example, if a consumer processes a message but crashes before committing its offset, Kafka will redeliver the same message when the consumer restarts, potentially leading to duplicate processing.

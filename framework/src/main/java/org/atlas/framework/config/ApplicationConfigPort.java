@@ -1,5 +1,6 @@
 package org.atlas.framework.config;
 
+import java.util.Locale;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 
 public interface ApplicationConfigPort {
@@ -7,6 +8,7 @@ public interface ApplicationConfigPort {
   // System
   String getApplicationName();
   String getProfile();
+  Locale getLocale();
 
   // Product
   String getProductCacheName();

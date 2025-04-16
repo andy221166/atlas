@@ -1,5 +1,6 @@
 package org.atlas.infrastructure.config;
 
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 import org.atlas.framework.config.ApplicationConfigPort;
@@ -13,11 +14,14 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort {
 
   private final Environment environment;
 
-  // Commons
+  // System
   // -----------------------------------------------------------------------------------------------
 
   @Value("${spring.application.name}")
   private String applicationName;
+
+  @Value("${app.system.locale:en-US}")
+  private String locale;
 
   @Override
   public String getApplicationName() {
@@ -27,6 +31,11 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort {
   @Override
   public String getProfile() {
     return environment.getActiveProfiles()[0];
+  }
+
+  @Override
+  public Locale getLocale() {
+    return Locale.forLanguageTag(locale);
   }
 
   // Product service

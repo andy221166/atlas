@@ -21,14 +21,26 @@
 
 ## Getting started
 
+Step 1: Start MySQL, Redis, Kafka
+
+### For Spring Boot stack
+
+Step 2: Build project
+
 ```bash
-./gradlew :discovery-server-eureka:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :application-spring-boot:user-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :application-spring-boot:product-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :application-spring-boot:order-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :application-spring-boot:notification-application:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :auth-server:auth-server-spring-security-jwt:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
-./gradlew :api-gateway-spring-cloud-gateway:bootRun -Dorg.gradle.java.home=/pah/to/jdk-home
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home clean build
+```
+
+Step 3: Run applications
+
+```bash
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :discovery-server-eureka:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:user-application:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:product-application:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:order-application:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:notification-application:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :auth-server:auth-server-spring-security-jwt:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :api-gateway-spring-cloud-gateway:bootRun
 ```
 
 ---

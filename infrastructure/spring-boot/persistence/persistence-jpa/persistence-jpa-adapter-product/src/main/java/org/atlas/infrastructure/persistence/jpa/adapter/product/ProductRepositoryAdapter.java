@@ -12,9 +12,12 @@ import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
+import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaOptimisticProductEntity;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaProductEntity;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.CustomJpaProductRepository;
+import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaOptimisticProductRepository;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaProductRepository;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Component;
 public class ProductRepositoryAdapter implements ProductRepository {
 
   private final JpaProductRepository jpaProductRepository;
+  private final JpaOptimisticProductRepository jpaOptimisticProductRepository;
   private final CustomJpaProductRepository customJpaProductRepository;
 
   @Override
@@ -97,6 +101,23 @@ public class ProductRepositoryAdapter implements ProductRepository {
       product.setQuantity(product.getQuantity() - decrement);
       jpaProductRepository.save(product);
     } catch (Exception e) {
+      throw new RuntimeException(
+          String.format("Error while decreasing quantity: id=%d, decrement=%d",
+              id, decrement), e);
+    }
+  }
+
+  @Override
+  public void decreaseQuantityWithOptimisticLock(Integer id, Integer decrement) {
+    try {
+      JpaOptimisticProductEntity jpaOptimisticProductEntity = jpaOptimisticProductRepository.findById(id)
+          .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+      if (jpaOptimisticProductEntity.getQuantity() < decrement) {
+        throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
+      }
+      jpaOptimisticProductEntity.setQuantity(jpaOptimisticProductEntity.getQuantity() - decrement);
+      jpaOptimisticProductRepository.save(jpaOptimisticProductEntity);
+    } catch (OptimisticLockingFailureException e) {
       throw new RuntimeException(
           String.format("Error while decreasing quantity: id=%d, decrement=%d",
               id, decrement), e);
