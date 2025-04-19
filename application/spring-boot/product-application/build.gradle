@@ -1,42 +1,56 @@
 plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootPluginVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+}
+
+group = 'org.atlas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
     // Domain
-    api project(':product-domain')
+    api project(':domain.product')
 
     // Infrastructure
-    api project(':infrastructure-spring-boot:actuator')
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['api-server']) {
         case 'rest':
-            api project(':infrastructure-spring-boot:api-server-rest-adapter-product')
+            api project(':infrastructure.spring-boot.api-server.rest.adapter.product')
             break
         case 'grpc':
-            api project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-product')
+            api project(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.product')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
     switch (stackConfig['cache']) {
         case 'redis':
-            api project(':infrastructure-spring-boot:cache-redis')
+            api project(':infrastructure.spring-boot.cache.redis')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['cache']}")
     }
-    api project(':infrastructure-spring-boot:bean')
-    api project(':infrastructure-spring-boot:config')
-    switch (stackConfig['csv']) {
-        case 'opencsv':
-            api project(':infrastructure-spring-boot:csv-opencsv-adapter-product')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['csv']}")
-    }
+    api project(':infrastructure.spring-boot.bean')
+    api project(':infrastructure.spring-boot.config')
     switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':infrastructure-spring-boot:datasource-mysql-adapter-product')
+            api project(':infrastructure.spring-boot.datasource.mysql.adapter.product')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
@@ -45,78 +59,116 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':infrastructure-spring-boot:discovery-client-eureka')
+            api project(':infrastructure.spring-boot.discovery-client.eureka')
             break
         case 'kubernetes':
-            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure.spring-boot.discovery-client.kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
+    switch (stackConfig['file.csv']) {
+        case 'opencsv':
+            api project(':infrastructure.spring-boot.csv.opencsv.adapter.product')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['file.csv']}")
+    }
+    switch (stackConfig['file.excel']) {
+        case 'easyexcel':
+            api project(':infrastructure.spring-boot.excel.easyexcel.adapter.product')
+            break
+        case 'poi':
+            api project(':infrastructure.spring-boot.excel.poi.adapter.product')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['file.excel']}")
+    }
     switch (stackConfig['messaging']) {
         case 'kafka':
-            api project(':infrastructure-spring-boot:messaging-kafka-adapter-product')
+            api project(':infrastructure.spring-boot.messaging.kafka.adapter.product')
             break
         case 'sns':
-            api project(':infrastructure-spring-boot:messaging-sns-adapter-product')
+            api project(':infrastructure.spring-boot.messaging.sns.adapter.product')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['messaging']}")
     }
-    api project(':infrastructure-spring-boot:messaging-handler-decorator')
-    switch (stackConfig['excel']) {
-        case 'easyexcel':
-            api project(':infrastructure-spring-boot:excel-easyexcel-adapter-product')
-            break
-        case 'poi':
-            api project(':infrastructure-spring-boot:excel-poi-adapter-product')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['excel']}")
-    }
-    switch (stackConfig['logging']) {
+    api project(':infrastructure.spring-boot.messaging-handler-decorator')
+    switch (stackConfig['observability.logging']) {
         case 'logback':
-            api project(':infrastructure-spring-boot:logging-logback')
+            api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
+    switch (stackConfig['observability.metrics']) {
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+            break
+        case 'prometheus':
+            api project(':infrastructure.spring-boot.observability.metrics.prometheus')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
+    switch (stackConfig['observability.tracing']) {
+        case 'simple':
+            api project(':infrastructure.spring-boot.observability.tracing.simple')
+            break
+        case 'zipkin':
+            api project(':infrastructure.spring-boot.observability.tracing.zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
     switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':infrastructure-spring-boot:persistence-jpa-adapter-product')
+            api project(':infrastructure.spring-boot.persistence.jpa.adapter.product')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
     switch (stackConfig['scheduler']) {
         case 'spring':
-            api project(':infrastructure-spring-boot:scheduler-spring-adapter-product')
+            api project(':infrastructure.spring-boot.scheduler.spring.adapter.product')
             break
         case 'quartz':
-            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-product')
+            api project(':infrastructure.spring-boot.scheduler.quartz.adapter.product')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
     }
     switch (stackConfig['storage']) {
         case 'filesystem':
-            api project(':infrastructure-spring-boot:storage-filesystem')
+            api project(':infrastructure.spring-boot.storage.filesystem')
+            break
+        case 'minio':
+            api project(':infrastructure.spring-boot.storage.minio')
             break
         case 's3s':
-            api project(':infrastructure-spring-boot:storage-s3')
+            api project(':infrastructure.spring-boot.storage.s3')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['storage']}")
     }
-    switch (stackConfig['tracing']) {
-        case 'simple':
-            api project(':infrastructure-spring-boot:tracing-simple')
-            break
-        case 'zipkin':
-            api project(':infrastructure-spring-boot:tracing-zipkin')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    api project(':infrastructure.spring-boot.use-case-handler-decorator')
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
-    api project(':infrastructure-spring-boot:use-case-handler-decorator')
+}
+
+test {
+    useJUnitPlatform()
 }

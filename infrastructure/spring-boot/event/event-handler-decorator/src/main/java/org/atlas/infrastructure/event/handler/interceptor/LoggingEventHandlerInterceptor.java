@@ -25,9 +25,9 @@ public class LoggingEventHandlerInterceptor implements EventHandlerInterceptor {
   public void postHandle(DomainEvent event) {
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
     stopWatch.stop();
-    long elapsedTimeMillis = stopWatch.getElapsedTimeMillis();
+    long elapsedTimeMs = stopWatch.getElapsedTimeMs();
     log.debug("Finished handling event {}. Elapsed time: {} ms",
-        event.getEventId(), elapsedTimeMillis);
+        event.getEventId(), elapsedTimeMs);
     // Clean up: Reset the StopWatch and remove it from ThreadLocal
     STOP_WATCH_THREAD_LOCAL.remove();
   }

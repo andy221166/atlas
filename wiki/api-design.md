@@ -6,10 +6,10 @@ https://scalabrix.medium.com/api-design-refresher-ecf55666ba5a
 
 Breaking Changes Without Versioning:
 
-Imagine you launch an API, and many clients integrate with it. Later, you realize the response structure is inefficient and decide to change the format.
+Imagine you launch an API, and many clients integrate with it. Later, you realize the apiResponseWrapper structure is inefficient and decide to change the format.
 
 What happens?
-- Existing clients break because their code is expecting the old response structure.
+- Existing clients break because their code is expecting the old apiResponseWrapper structure.
 - Developers are forced to update their implementations immediately.
 - No rollback option, making debugging a nightmare. 
 

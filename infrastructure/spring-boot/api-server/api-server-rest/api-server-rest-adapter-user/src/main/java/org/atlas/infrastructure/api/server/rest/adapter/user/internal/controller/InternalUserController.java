@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler;
 import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler.ListUserInput;
 import org.atlas.domain.user.usecase.internal.InternalListUserUseCaseHandler.ListUserOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.infrastructure.api.server.rest.adapter.user.internal.model.ListUserRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.user.internal.model.ListUserResponse;
@@ -28,7 +28,7 @@ public class InternalUserController {
 
   @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "List Users", description = "Retrieves a list of users based on the provided user IDs.")
-  public Response<ListUserResponse> listUser(
+  public ApiResponseWrapper<ListUserResponse> listUser(
       @Parameter(description = "Request object containing the user IDs for the user list.", required = true)
       @Valid @RequestBody ListUserRequest request)
       throws Exception {
@@ -37,6 +37,6 @@ public class InternalUserController {
     ListUserOutput output = internalListUserUseCaseHandler.handle(input);
     ListUserResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListUserResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

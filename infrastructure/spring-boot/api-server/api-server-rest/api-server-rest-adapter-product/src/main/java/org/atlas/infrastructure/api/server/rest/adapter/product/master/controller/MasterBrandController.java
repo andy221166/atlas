@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.usecase.master.MasterListBrandUseCaseHandler;
 import org.atlas.domain.product.usecase.master.MasterListBrandUseCaseHandler.ListBrandOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.infrastructure.api.server.rest.adapter.product.master.model.ListBrandResponse;
 import org.springframework.http.MediaType;
@@ -23,10 +23,10 @@ public class MasterBrandController {
 
   @Operation(summary = "List Brands", description = "Retrieves a list of all available brands.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListBrandResponse> listBrand() throws Exception {
+  public ApiResponseWrapper<ListBrandResponse> listBrand() throws Exception {
     ListBrandOutput output = masterListBrandUseCaseHandler.handle(null);
     ListBrandResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListBrandResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

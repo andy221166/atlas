@@ -107,6 +107,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
 
     @NotNull
     @DecimalMin(value = "0.0")
+    @Builder.Default
     private BigDecimal price = BigDecimal.ZERO;
 
     private String imageUrl;

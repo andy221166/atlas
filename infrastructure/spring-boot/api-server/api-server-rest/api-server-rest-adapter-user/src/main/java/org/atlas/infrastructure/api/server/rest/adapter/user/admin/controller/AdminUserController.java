@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler.ListUserInput;
 import org.atlas.domain.user.usecase.admin.AdminListUserUseCaseHandler.ListUserOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -28,7 +28,7 @@ public class AdminUserController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "List users", description = "Retrieves a paginated list of users.")
-  public Response<ListUserResponse> listUser(
+  public ApiResponseWrapper<ListUserResponse> listUser(
       @Parameter(description = "The page number to retrieve.", example = "1")
       @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(description = "The number of users per page.", example = "20")
@@ -38,6 +38,6 @@ public class AdminUserController {
     ListUserOutput output = adminListUserUseCaseHandler.handle(input);
     ListUserResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListUserResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

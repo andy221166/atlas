@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object for refreshing token containing access and refresh tokens.")
+@Schema(description = "ApiResponseWrapper object for refreshing token containing access and refresh tokens.")
 public class RefreshTokenResponse {
 
   @Schema(description = "Access token for authenticated user.", example = "eyJhbGciOiJIUzI1NiIsInR...")

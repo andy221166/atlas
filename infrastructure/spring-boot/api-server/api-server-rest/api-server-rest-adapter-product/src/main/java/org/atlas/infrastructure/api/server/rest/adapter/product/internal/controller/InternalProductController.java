@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler;
 import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductInput;
 import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.infrastructure.api.server.rest.adapter.product.internal.model.ListProductRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.internal.model.ListProductResponse;
@@ -28,7 +28,7 @@ public class InternalProductController {
 
   @Operation(summary = "List Products", description = "Retrieves a list of products based on the provided criteria.")
   @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListProductResponse> listProduct(
+  public ApiResponseWrapper<ListProductResponse> listProduct(
       @Parameter(description = "Request object containing the criteria for listing products.", required = true)
       @Valid @RequestBody ListProductRequest request) throws Exception {
     ListProductInput input = ObjectMapperUtil.getInstance()
@@ -36,6 +36,6 @@ public class InternalProductController {
     ListProductOutput output = internalListProductUseCaseHandler.handle(input);
     ListProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

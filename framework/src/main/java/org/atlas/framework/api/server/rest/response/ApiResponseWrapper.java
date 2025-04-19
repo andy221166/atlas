@@ -5,26 +5,26 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Response<T> {
+public class ApiResponseWrapper<T> {
 
   private boolean success;
   private T data;
   private Integer errorCode;
   private String errorMessage;
 
-  public static <T> Response<T> success() {
+  public static <T> ApiResponseWrapper<T> success() {
     return success(null);
   }
 
-  public static <T> Response<T> success(T data) {
-    Response<T> instance = new Response<>();
+  public static <T> ApiResponseWrapper<T> success(T data) {
+    ApiResponseWrapper<T> instance = new ApiResponseWrapper<>();
     instance.setSuccess(true);
     instance.setData(data);
     return instance;
   }
 
-  public static Response<Void> error(int errorCode, String errorMessage) {
-    Response<Void> instance = new Response<>();
+  public static ApiResponseWrapper<Void> error(int errorCode, String errorMessage) {
+    ApiResponseWrapper<Void> instance = new ApiResponseWrapper<>();
     instance.setSuccess(false);
     instance.setErrorCode(errorCode);
     instance.setErrorMessage(errorMessage);

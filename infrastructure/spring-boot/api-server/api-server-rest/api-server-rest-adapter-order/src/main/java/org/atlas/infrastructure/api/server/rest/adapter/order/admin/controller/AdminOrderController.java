@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler.ListOrderInput;
 import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler.ListOrderOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -28,7 +28,7 @@ public class AdminOrderController {
 
   @Operation(summary = "List Orders", description = "Retrieves a paginated list of orders.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListOrderResponse> listOrder(
+  public ApiResponseWrapper<ListOrderResponse> listOrder(
       @Parameter(name = "page", description = "The page number to be retrieved (default is 1).", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "20")
@@ -40,6 +40,6 @@ public class AdminOrderController {
     ListOrderOutput output = adminListOrderUseCaseHandler.handle(input);
     ListOrderResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListOrderResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

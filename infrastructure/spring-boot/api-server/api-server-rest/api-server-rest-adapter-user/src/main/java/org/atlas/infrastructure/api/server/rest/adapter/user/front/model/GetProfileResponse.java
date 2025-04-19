@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object containing user profile information.")
+@Schema(description = "ApiResponseWrapper object containing user profile information.")
 public class GetProfileResponse {
 
   @Schema(description = "User's first name.", example = "John")

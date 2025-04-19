@@ -5,7 +5,7 @@ The API Gateway acts as a single entry point, routing requests to the appropriat
 How It Works:
 1. Client sends a request to the API Gateway. 
 2. Gateway forwards the request to the right microservice(s).
-3. Gateway aggregates responses if needed and returns a single response to the client.
+3. Gateway aggregates responses if needed and returns a single apiResponseWrapper to the client.
 
 Solution:
 - [Spring Cloud Gateway](/edge/gateway-server/gateway-server-spring-cloud)
@@ -15,5 +15,5 @@ Checklist:
 - [x] Authentication
 - [x] CORS
 - [ ] Rate limiting
-- [ ] Aggregate response
+- [ ] Aggregate apiResponseWrapper
 - [x] API document

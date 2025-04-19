@@ -38,7 +38,7 @@ public class GrpcClientLoggingInterceptor implements ClientInterceptor {
                 responseListener) {
               @Override
               public void onMessage(RespT message) {
-                log.debug("Response message: {}", limitLogMessage(message));
+                log.debug("ApiResponseWrapper message: {}", limitLogMessage(message));
                 super.onMessage(message);
               }
 

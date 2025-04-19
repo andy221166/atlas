@@ -1,6 +1,26 @@
 plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
-    id 'maven-publish'
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootPluginVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+}
+
+group = 'org.atlas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -8,12 +28,12 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-security'
 
     // Infrastructure
-    api project(':infrastructure-spring-boot:api-server-rest-core')
-    api project(':infrastructure-spring-boot:cache-simple')
-    api project(':infrastructure-spring-boot:config')
+    api project(':infrastructure.spring-boot.api-server.rest.core')
+    api project(':infrastructure.spring-boot.cache.simple')
+    api project(':infrastructure.spring-boot.config')
     switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':infrastructure-spring-boot:datasource-mysql-adapter-auth')
+            api project(':infrastructure.spring-boot.datasource.mysql.adapter.auth')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
@@ -22,59 +42,74 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':infrastructure-spring-boot:discovery-client-eureka')
+            api project(':infrastructure.spring-boot.discovery-client.eureka')
             break
         case 'kubernetes':
-            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure.spring-boot.discovery-client.kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
+    switch (stackConfig['observability.logging']) {
+        case 'logback':
+            api project(':infrastructure.spring-boot.observability.logging.logback')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
+    }
+    switch (stackConfig['observability.metrics']) {
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+            break
+        case 'prometheus':
+            api project(':infrastructure.spring-boot.observability.metrics.prometheus')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
+    switch (stackConfig['observability.tracing']) {
+        case 'simple':
+            api project(':infrastructure.spring-boot.observability.tracing.simple')
+            break
+        case 'zipkin':
+            api project(':infrastructure.spring-boot.observability.tracing.zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
     switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':infrastructure-spring-boot:persistence-jpa-adapter-auth')
+            api project(':infrastructure.spring-boot.persistence.jpa.adapter.auth')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
     switch (stackConfig['redis']) {
         case 'standalone':
-            api project(':infrastructure-spring-boot:redis-standalone')
+            api project(':infrastructure.spring-boot.redis.standalone')
             break
         case 'cluster':
-            api project(':infrastructure-spring-boot:redis-cluster')
+            api project(':infrastructure.spring-boot.redis.cluster')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
     }
-    switch (stackConfig['tracing']) {
-        case 'simple':
-            api project(':infrastructure-spring-boot:tracing-simple')
-            break
-        case 'zipkin':
-            api project(':infrastructure-spring-boot:tracing-zipkin')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
-    }
 
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-jar {
-    enabled = false
-}
-
-publishing {
-    publications {
-        publication(MavenPublication) {
-            artifact bootJar
-            from components.java
-        }
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

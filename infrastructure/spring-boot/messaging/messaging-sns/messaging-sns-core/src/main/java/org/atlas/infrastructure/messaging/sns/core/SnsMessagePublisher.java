@@ -25,7 +25,7 @@ public class SnsMessagePublisher implements MessagePublisher {
         .topicArn(snsTopicArn)
         .build();
     PublishResponse response = snsClient.publish(request);
-    log.info("Published message: payload={}, key={}\nStatus: {}. Response: {}",
+    log.info("Published message: payload={}, key={}\nStatus: {}. ApiResponseWrapper: {}",
         messagePayload, messageKey, response.sdkHttpResponse().statusCode(), response);
   }
 }

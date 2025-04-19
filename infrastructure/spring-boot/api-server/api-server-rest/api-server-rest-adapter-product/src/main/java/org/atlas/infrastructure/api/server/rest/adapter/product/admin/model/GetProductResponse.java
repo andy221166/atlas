@@ -14,7 +14,7 @@ import org.atlas.domain.product.shared.enums.ProductStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object for retrieving product details.")
+@Schema(description = "ApiResponseWrapper object for retrieving product details.")
 public class GetProductResponse {
 
   @Schema(description = "Unique identifier of the product.", example = "123")

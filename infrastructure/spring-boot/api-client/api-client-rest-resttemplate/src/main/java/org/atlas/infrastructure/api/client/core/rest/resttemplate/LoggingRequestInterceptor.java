@@ -49,7 +49,7 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
   private void logResponse(String requestId, ClientHttpResponse response) throws IOException {
     String responseBody = readAndLimitResponseBody(response);
-    log.info("[{}] Response: HTTP status code = {}, Response body = {}",
+    log.info("[{}] ApiResponseWrapper: HTTP status code = {}, ApiResponseWrapper body = {}",
         requestId,
         response.getStatusCode(),
         responseBody);

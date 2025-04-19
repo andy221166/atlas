@@ -34,13 +34,13 @@ Step 2: Build project
 Step 3: Run applications
 
 ```bash
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :discovery-server-eureka:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:user-application:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:product-application:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:order-application:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application-spring-boot:notification-application:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :auth-server:auth-server-spring-security-jwt:bootRun
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :api-gateway-spring-cloud-gateway:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :discovery-server.eureka:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.user:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.product:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.order:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.notification:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :auth-server:auth-server.spring-security-jwt:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :api-gateway.spring-cloud-gateway:bootRun
 ```
 
 ---

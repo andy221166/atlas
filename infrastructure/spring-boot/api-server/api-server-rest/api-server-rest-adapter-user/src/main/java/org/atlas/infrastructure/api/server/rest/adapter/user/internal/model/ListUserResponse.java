@@ -12,7 +12,7 @@ import org.atlas.domain.user.shared.enums.Role;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object containing a list of users.")
+@Schema(description = "ApiResponseWrapper object containing a list of users.")
 public class ListUserResponse {
 
   @Schema(description = "List of users.", example = "[{\"id\": 1, \"username\": \"john_doe\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john.doe@example.com\", \"phoneNumber\": \"+1234567890\", \"role\": \"USER\"}]")

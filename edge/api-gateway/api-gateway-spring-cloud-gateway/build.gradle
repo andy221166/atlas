@@ -1,6 +1,26 @@
 plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
-    id 'maven-publish'
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootPluginVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+}
+
+group = 'org.atlas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -11,66 +31,74 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.6'
 
     // Infrastructure
-    api project(':infrastructure-spring-boot:actuator')
-    api project(':infrastructure-spring-boot:config')
+    api project(':infrastructure.spring-boot.observability.actuator')
+    api project(':infrastructure.spring-boot.config')
     switch (stackConfig['discovery-client']) {
         case 'none':
             break
         case 'eureka':
-            api project(':infrastructure-spring-boot:discovery-client-eureka')
+            api project(':infrastructure.spring-boot.discovery-client.eureka')
             break
         case 'kubernetes':
-            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure.spring-boot.discovery-client.kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
-    switch (stackConfig['logging']) {
+    switch (stackConfig['observability.logging']) {
         case 'logback':
-            api project(':infrastructure-spring-boot:logging-logback')
+            api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
-    switch (stackConfig['redis']) {
-        case 'standalone':
-            api project(':infrastructure-spring-boot:redis-standalone')
+    switch (stackConfig['observability.metrics']) {
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
             break
-        case 'cluster':
-            api project(':infrastructure-spring-boot:redis-cluster')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
-    }
-    switch (stackConfig['tracing']) {
-        case 'simple':
-            api project(':infrastructure-spring-boot:tracing-simple')
-            break
-        case 'zipkin':
-            api project(':infrastructure-spring-boot:tracing-zipkin')
+        case 'prometheus':
+            api project(':infrastructure.spring-boot.observability.metrics.prometheus')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
+    switch (stackConfig['observability.tracing']) {
+        case 'simple':
+            api project(':infrastructure.spring-boot.observability.tracing.simple')
+            break
+        case 'zipkin':
+            api project(':infrastructure.spring-boot.observability.tracing.zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
+    switch (stackConfig['redis']) {
+        case 'standalone':
+            api project(':infrastructure.spring-boot.redis.standalone')
+            break
+        case 'cluster':
+            api project(':infrastructure.spring-boot.redis.cluster')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+    }
 
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-jar {
-    enabled = false
-}
-
-publishing {
-    publications {
-        publication(MavenPublication) {
-            artifact bootJar
-            from components.java
-        }
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

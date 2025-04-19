@@ -2,13 +2,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info
   endpoint:
     health:
       probes:
         enabled: true
-    prometheus:
-      enabled: true
   health:
     livenessstate:
       enabled: true

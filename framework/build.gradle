@@ -1,14 +1,37 @@
+plugins {
+    id 'java-library'
+    id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+}
+
+group = 'org.atlas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     // Shared domain
-    api project(':order-domain-shared')
-    api project(':product-domain-shared')
-    api project(':user-domain-shared')
+    api project(':domain.order.shared')
+    api project(':domain.product.shared')
+    api project(':domain.user.shared')
 
     // Logging
     api 'org.slf4j:slf4j-api:2.0.16'
 
     // Commons
-    // ---------------------------------------------------------------------------------------------
     api 'org.apache.commons:commons-lang3:3.17.0'
     api 'org.apache.commons:commons-collections4:4.4'
     api 'commons-io:commons-io:2.18.0'
@@ -18,7 +41,6 @@ dependencies {
     api 'jakarta.validation:jakarta.validation-api:3.0.2'
 
     // Cryptography
-    // ---------------------------------------------------------------------------------------------
     api 'org.springframework.security:spring-security-crypto:6.4.4'
     api 'commons-codec:commons-codec:1.17.1'
 
@@ -36,12 +58,22 @@ dependencies {
     api 'com.google.code.gson:gson:2.12.1'
 
     // Object mapper
-    // ---------------------------------------------------------------------------------------------
+
     // Object mapper::ModelMapper
     api 'org.modelmapper:modelmapper:3.2.2'
 
     // QR generator
-    // ---------------------------------------------------------------------------------------------
     api 'com.google.zxing:core:3.5.3'
     api 'com.google.zxing:javase:3.5.3'
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // Testing
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
+}
+
+test {
+    useJUnitPlatform()
 }

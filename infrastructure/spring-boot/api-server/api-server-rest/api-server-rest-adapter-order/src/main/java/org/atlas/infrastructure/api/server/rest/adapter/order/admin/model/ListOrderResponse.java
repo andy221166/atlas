@@ -14,7 +14,7 @@ import org.atlas.framework.paging.PagingResult;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "Response object containing the list of orders with pagination.")
+@Schema(description = "ApiResponseWrapper object containing the list of orders with pagination.")
 public class ListOrderResponse extends PagingResult<ListOrderResponse.Order> {
 
   @Data

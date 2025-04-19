@@ -1,7 +1,6 @@
 package org.atlas.infrastructure.lock.util;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,7 +22,8 @@ public class LockAspect {
       throws Throwable {
     boolean acquired = false;
     try {
-      acquired = lockPort.acquireLock(lock.key(), lock.timeout(), lock.timeUnit());
+      acquired = lockPort.acquireLock(lock.key(), Duration.of(lock.timeout(),
+          lock.timeUnit().toChronoUnit()));
       if (acquired) {
         return joinPoint.proceed();
       } else {

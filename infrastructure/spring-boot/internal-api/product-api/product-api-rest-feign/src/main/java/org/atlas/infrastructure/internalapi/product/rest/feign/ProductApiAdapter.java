@@ -6,9 +6,9 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.shared.internal.ListProductInput;
 import org.atlas.domain.product.shared.internal.ListProductOutput;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.infrastructure.api.client.core.rest.model.Response;
 import org.atlas.infrastructure.internalapi.product.rest.model.ListProductRequest;
 import org.atlas.infrastructure.internalapi.product.rest.model.ListProductResponse;
 import org.springframework.stereotype.Component;
@@ -26,8 +26,8 @@ public class ProductApiAdapter implements ProductApiPort {
   public ListProductOutput call(ListProductInput input) {
     ListProductRequest request = ObjectMapperUtil.getInstance()
         .map(input, ListProductRequest.class);
-    Response<ListProductResponse> response = feignClient.listProduct(request);
-    ListProductResponse responseData = response.getData();
+    ApiResponseWrapper<ListProductResponse> apiResponseWrapper = feignClient.listProduct(request);
+    ListProductResponse responseData = apiResponseWrapper.getData();
     return ObjectMapperUtil.getInstance()
         .map(responseData, ListProductOutput.class);
   }

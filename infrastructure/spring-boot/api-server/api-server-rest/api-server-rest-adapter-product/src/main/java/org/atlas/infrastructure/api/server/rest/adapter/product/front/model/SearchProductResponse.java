@@ -11,7 +11,7 @@ import org.atlas.framework.paging.PagingResult;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "Response object for searching products with pagination.")
+@Schema(description = "ApiResponseWrapper object for searching products with pagination.")
 public class SearchProductResponse extends PagingResult<SearchProductResponse.Product> {
 
   @Data

@@ -26,7 +26,7 @@ import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.Lis
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductOutput;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.enums.FileType;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
@@ -68,7 +68,7 @@ public class AdminProductController {
 
   @Operation(summary = "List products with optional filters and pagination.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListProductResponse> listProduct(
+  public ApiResponseWrapper<ListProductResponse> listProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
       @RequestParam(name = "id", required = false) Integer id,
       @Parameter(description = "Keyword for searching products.", example = "T-Shirt")
@@ -106,24 +106,24 @@ public class AdminProductController {
     ListProductOutput output = adminListProductUseCaseHandler.handle(input);
     ListProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<GetProductResponse> getProduct(
+  public ApiResponseWrapper<GetProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
       @PathVariable Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = adminGetProductUseCaseHandler.handle(input);
     GetProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, GetProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Create a new product.")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<CreateProductResponse> createProduct(
+  public ApiResponseWrapper<CreateProductResponse> createProduct(
       @Parameter(description = "Request object containing the details of the product to create.", required = true)
       @Valid @RequestBody CreateProductRequest request) throws Exception {
     CreateProductInput input = ObjectMapperUtil.getInstance()
@@ -131,12 +131,12 @@ public class AdminProductController {
     CreateProductOutput output = adminCreateProductUseCaseHandler.handle(input);
     CreateProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, CreateProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Update an existing product by ID.")
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<Void> updateProduct(
+  public ApiResponseWrapper<Void> updateProduct(
       @Parameter(description = "The unique identifier of the product to update.", example = "1")
       @PathVariable("id") Integer id,
       @Parameter(description = "Request object containing the new details for the product.", required = true)
@@ -145,22 +145,22 @@ public class AdminProductController {
         .map(request, UpdateProductInput.class);
     input.setId(id);
     adminUpdateProductUseCaseHandler.handle(input);
-    return Response.success();
+    return ApiResponseWrapper.success();
   }
 
   @Operation(summary = "Delete a product by ID.")
   @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<Void> deleteProduct(
+  public ApiResponseWrapper<Void> deleteProduct(
       @Parameter(description = "The unique identifier of the product to delete.", example = "1")
       @PathVariable("id") Integer id) throws Exception {
     DeleteProductInput input = new DeleteProductInput(id);
     adminDeleteProductUseCaseHandler.handle(input);
-    return Response.success();
+    return ApiResponseWrapper.success();
   }
 
   @Operation(summary = "Import products from a file.")
   @PostMapping(value = "/import", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<Void> importProduct(
+  public ApiResponseWrapper<Void> importProduct(
       @Parameter(description = "The file containing products to import.")
       @RequestParam("file") MultipartFile file,
       @Parameter(description = "The type of the file (e.g., csv, xlsx).", example = "csv")
@@ -168,7 +168,7 @@ public class AdminProductController {
     byte[] fileContent = file.getBytes();
     ImportProductInput input = new ImportProductInput(fileType, fileContent);
     adminImportProductUseCaseHandler.handle(input);
-    return Response.success();
+    return ApiResponseWrapper.success();
   }
 
   @Operation(summary = "Export products based on optional filters.")

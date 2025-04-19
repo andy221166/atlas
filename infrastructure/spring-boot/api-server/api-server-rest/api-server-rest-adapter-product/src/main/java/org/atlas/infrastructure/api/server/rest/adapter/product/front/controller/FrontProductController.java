@@ -10,7 +10,7 @@ import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetP
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.SearchProductInput;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.SearchProductOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.GetProductResponse;
@@ -36,7 +36,7 @@ public class FrontProductController {
 
   @Operation(summary = "Search for products based on various filters.")
   @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<SearchProductResponse> searchProduct(
+  public ApiResponseWrapper<SearchProductResponse> searchProduct(
       @Parameter(description = "Request object containing search criteria.", required = true)
       @Valid @RequestBody SearchProductRequest request)
       throws Exception {
@@ -46,18 +46,18 @@ public class FrontProductController {
     SearchProductOutput output = frontSearchProductUseCaseHandler.handle(input);
     SearchProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, SearchProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<GetProductResponse> getProduct(
+  public ApiResponseWrapper<GetProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1", required = true)
       @PathVariable("id") Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = frontGetProductUseCaseHandler.handle(input);
     GetProductResponse response = ObjectMapperUtil.getInstance()
         .map(output, GetProductResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

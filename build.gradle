@@ -1,68 +1,15 @@
-plugins {
-	// Ensures all subprojects are treated as Java libraries with api and implementation configurations
-	id 'java'
-	id 'java-library'
-	id 'org.springframework.boot' version '3.4.0'
-	// Allows subprojects to use BOMs (e.g., Spring Boot or Protobuf), centralizing dependency versions
-	id 'io.spring.dependency-management' version '1.1.6'
-	// Support bootJar
-	id 'maven-publish'
-}
-
 apply from: "$rootDir/gradle/config/config-loader.gradle"
 
 ext {
-	set('springBootVersion', '3.4.0')
+	// Plugins
+	set('springBootPluginVersion', '3.4.0')
+	set('springDependencyManagementPluginVersion', '1.1.7')
+
 	set('springFrameworkVersion', '6.2.0')
 	set('springCloudVersion', '2024.0.0')
+	set('awsSdkVersion', '2.29.33')
 	set('lombokVersion', '1.18.38')
+	set('junitPlatformVersion', '1.11.3')
+
 	stackConfig = loadStackConfig()
-}
-
-subprojects {
-	apply plugin: 'java'
-	apply plugin: 'java-library'
-	apply plugin: 'io.spring.dependency-management'
-
-	group = 'org.atlas'
-	version = '0.0.1-SNAPSHOT'
-
-	java {
-		toolchain {
-			languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_17 as String)
-		}
-	}
-
-	configurations { // Lombok support
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-	}
-
-	repositories {
-		mavenLocal()
-		mavenCentral()
-	}
-
-	dependencies {
-		// Lombok
-		compileOnly "org.projectlombok:lombok:${lombokVersion}"
-		annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-		// Exclude :framework
-		if (path != ':framework' &&
-				path != ':user-domain-shared' &&
-				path != ':order-domain-shared' &&
-				path != ':product-domain-shared') {
-			dependencies {
-				api project(':framework')
-			}
-		}
-	}
-
-	dependencyManagement {
-		imports {
-			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-		}
-	}
 }

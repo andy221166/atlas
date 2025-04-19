@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object for placing a new order.")
+@Schema(description = "ApiResponseWrapper object for placing a new order.")
 public class PlaceOrderResponse {
 
   @Schema(description = "Unique identifier of the newly created order.", example = "1")

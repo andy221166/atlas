@@ -26,8 +26,8 @@ public class SchedulerLoggingAspect {
     Object result = joinPoint.proceed();
 
     stopWatch.stop();
-    long elapsedTimeMillis = stopWatch.getElapsedTimeMillis();
-    log.info("Finished executing task {}. Elapsed time: {} ms", taskName, elapsedTimeMillis);
+    long elapsedTimeMs = stopWatch.getElapsedTimeMs();
+    log.info("Finished executing task {}. Elapsed time: {} ms", taskName, elapsedTimeMs);
 
     return result;
   }

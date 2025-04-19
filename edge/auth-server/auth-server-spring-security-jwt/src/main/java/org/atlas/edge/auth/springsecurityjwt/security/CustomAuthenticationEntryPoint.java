@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.infrastructure.api.server.rest.core.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -22,12 +22,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
       AuthenticationException exception)
       throws IOException {
     if (response.isCommitted()) {
-      log.info("Response has already been committed");
+      log.info("ApiResponseWrapper has already been committed");
       return;
     }
 
-    Response<Void> restResponse = Response.error(HttpStatus.UNAUTHORIZED.value(),
+    ApiResponseWrapper<Void> restApiResponseWrapper = ApiResponseWrapper.error(HttpStatus.UNAUTHORIZED.value(),
         exception.getMessage());
-    HttpServletUtil.respondJson(response, restResponse, HttpStatus.UNAUTHORIZED);
+    HttpServletUtil.respondJson(response, restApiResponseWrapper, HttpStatus.UNAUTHORIZED);
   }
 }

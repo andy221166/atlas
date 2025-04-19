@@ -2,7 +2,7 @@ package org.atlas.edge.api.gateway.springcloudgateway.util;
 
 import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.json.JsonUtil;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @UtilityClass
 public class SpringWebFluxUtil {
 
-  public <T> Mono<Void> respond(ServerWebExchange exchange, Response<T> responseBody,
+  public <T> Mono<Void> respond(ServerWebExchange exchange, ApiResponseWrapper<T> apiResponseWrapperBody,
       HttpStatus httpStatus) {
     ServerHttpResponse response = exchange.getResponse();
 
@@ -22,8 +22,8 @@ public class SpringWebFluxUtil {
     response.setStatusCode(httpStatus);
     response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-    // Response body
-    String responseBodyJson = JsonUtil.getInstance().toJson(responseBody);
+    // ApiResponseWrapper body
+    String responseBodyJson = JsonUtil.getInstance().toJson(apiResponseWrapperBody);
     byte[] responseBodyJsonBytes = responseBodyJson.getBytes(StandardCharsets.UTF_8);
 
     // Convert response body to DataBuffer

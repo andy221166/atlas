@@ -13,7 +13,7 @@ import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrd
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderInput;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderOutput;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -45,7 +45,7 @@ public class FrontOrderController {
 
   @Operation(summary = "List Orders", description = "Retrieves a paginated list of orders for the front-end.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<ListOrderResponse> listOrder(
+  public ApiResponseWrapper<ListOrderResponse> listOrder(
       @Parameter(name = "page", description = "The page number to retrieve (default is 1).", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "10")
@@ -57,12 +57,12 @@ public class FrontOrderController {
     ListOrderOutput output = frontListOrderUseCaseHandler.handle(input);
     ListOrderResponse response = ObjectMapperUtil.getInstance()
         .map(output, ListOrderResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Get Order Status", description = "Retrieves the status of a specific order by its ID.")
   @GetMapping(value = "/{orderId}/status", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<GetOrderStatusResponse> getOrderStatus(
+  public ApiResponseWrapper<GetOrderStatusResponse> getOrderStatus(
       @Parameter(name = "orderId", description = "ID of the order to retrieve the status for.", example = "123")
       @PathVariable("orderId") Integer orderId) throws Exception {
     GetOrderStatusInput input = GetOrderStatusInput.builder()
@@ -70,18 +70,18 @@ public class FrontOrderController {
         .build();
     GetOrderStatusOutput output = frontGetOrderStatusUseCaseHandler.handle(input);
     GetOrderStatusResponse response = ObjectMapperUtil.getInstance().map(output, GetOrderStatusResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Place Order", description = "Places a new order based on the provided order details.")
   @PostMapping(value = "/place", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public Response<PlaceOrderResponse> placeOrder(
+  public ApiResponseWrapper<PlaceOrderResponse> placeOrder(
       @Parameter(description = "Order details to create a new order.", required = true)
       @Valid @RequestBody PlaceOrderRequest request) throws Exception {
     PlaceOrderInput input = ObjectMapperUtil.getInstance().map(request, PlaceOrderInput.class);
     PlaceOrderOutput output = frontPlaceOrderUseCaseHandler.handle(input);
     PlaceOrderResponse response = ObjectMapperUtil.getInstance().map(output, PlaceOrderResponse.class);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 }

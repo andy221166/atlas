@@ -47,7 +47,7 @@ public class StopWatch {
     }
   }
 
-  public long getElapsedTimeMillis() {
+  public long getElapsedTimeMs() {
     lock.lock();
     try {
       if (running) {

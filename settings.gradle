@@ -9,29 +9,29 @@ project(':framework').projectDir = file('framework')
 // Domain
 // =================================================================================================
 
-include(':user-domain')
-project(':user-domain').projectDir = file('domain/user-domain')
-include(':user-domain-shared')
-project(':user-domain-shared').projectDir = file('domain/user-domain-shared')
+include(':domain.user')
+project(':domain.user').projectDir = file('domain/user-domain')
+include(':domain.user.shared')
+project(':domain.user.shared').projectDir = file('domain/user-domain-shared')
 
-include(':auth-domain')
-project(':auth-domain').projectDir = file('domain/auth-domain')
+include(':domain.auth')
+project(':domain.auth').projectDir = file('domain/auth-domain')
 
-include(':product-domain')
-project(':product-domain').projectDir = file('domain/product-domain')
-include(':product-domain-shared')
-project(':product-domain-shared').projectDir = file('domain/product-domain-shared')
+include(':domain.product')
+project(':domain.product').projectDir = file('domain/product-domain')
+include(':domain.product.shared')
+project(':domain.product.shared').projectDir = file('domain/product-domain-shared')
 
-include(':order-domain')
-project(':order-domain').projectDir = file('domain/order-domain')
-include(':order-domain-shared')
-project(':order-domain-shared').projectDir = file('domain/order-domain-shared')
+include(':domain.order')
+project(':domain.order').projectDir = file('domain/order-domain')
+include(':domain.order.shared')
+project(':domain.order.shared').projectDir = file('domain/order-domain-shared')
 
-include(':notification-domain')
-project(':notification-domain').projectDir = file('domain/notification-domain')
+include(':domain.notification')
+project(':domain.notification').projectDir = file('domain/notification-domain')
 
-include(':outbox-domain')
-project(':outbox-domain').projectDir = file('domain/outbox-domain')
+include(':domain.outbox')
+project(':domain.outbox').projectDir = file('domain/outbox-domain')
 
 // =================================================================================================
 // Infrastructure
@@ -41,296 +41,295 @@ project(':outbox-domain').projectDir = file('domain/outbox-domain')
 // Infrastructure::Spring Boot
 // -------------------------------------------------------------------------------------------------
 
-include(':infrastructure-spring-boot')
-project(':infrastructure-spring-boot').projectDir = file('infrastructure/spring-boot')
-
 // API client
-include(':infrastructure-spring-boot:api-client-grpc-netdevh')
-project(':infrastructure-spring-boot:api-client-grpc-netdevh').projectDir = file('infrastructure/spring-boot/api-client/api-client-grpc-netdevh')
-include(':infrastructure-spring-boot:api-client-rest-apachehttpclient')
-project(':infrastructure-spring-boot:api-client-rest-apachehttpclient').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-apachehttpclient')
-include(':infrastructure-spring-boot:api-client-rest-feign')
-project(':infrastructure-spring-boot:api-client-rest-feign').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-feign')
-include(':infrastructure-spring-boot:api-client-rest-model')
-project(':infrastructure-spring-boot:api-client-rest-model').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-model')
-include(':infrastructure-spring-boot:api-client-rest-resttemplate')
-project(':infrastructure-spring-boot:api-client-rest-resttemplate').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-resttemplate')
+include(':infrastructure.spring-boot.api-client.grpc.netdevh')
+project(':infrastructure.spring-boot.api-client.grpc.netdevh').projectDir = file('infrastructure/spring-boot/api-client/api-client-grpc-netdevh')
+include(':infrastructure.spring-boot.api-client.rest.apachehttpclient')
+project(':infrastructure.spring-boot.api-client.rest.apachehttpclient').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-apachehttpclient')
+include(':infrastructure.spring-boot.api-client.rest.feign')
+project(':infrastructure.spring-boot.api-client.rest.feign').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-feign')
+include(':infrastructure.spring-boot.api-client.rest.model')
+project(':infrastructure.spring-boot.api-client.rest.model').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-model')
+include(':infrastructure.spring-boot.api-client.rest.resttemplate')
+project(':infrastructure.spring-boot.api-client.rest.resttemplate').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-resttemplate')
 
 // API server
 
 // API server::gRPC
 
 // API server::gRPC::Protobuf
-include(':infrastructure-spring-boot:api-server-grpc-protobuf')
-project(':infrastructure-spring-boot:api-server-grpc-protobuf').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-protobuf')
+include(':infrastructure.spring-boot.api-server.grpc.protobuf')
+project(':infrastructure.spring-boot.api-server.grpc.protobuf').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-protobuf')
 
 // API server::gRPC::netdevh
-include(':infrastructure-spring-boot:api-server-grpc-netdevh-core')
-project(':infrastructure-spring-boot:api-server-grpc-netdevh-core').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-core')
-include(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-product')
-project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-product').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-adapter-product')
-include(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-user')
-project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-user').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-adapter-user')
+include(':infrastructure.spring-boot.api-server.grpc.netdevh.core')
+project(':infrastructure.spring-boot.api-server.grpc.netdevh.core').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-core')
+include(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.product')
+project(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.product').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-adapter-product')
+include(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.user')
+project(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.user').projectDir = file('infrastructure/spring-boot/api-server/api-server-grpc/api-server-grpc-netdevh/api-server-grpc-netdevh-adapter-user')
 
 // API server::REST
-include(':infrastructure-spring-boot:api-server-rest-core')
-project(':infrastructure-spring-boot:api-server-rest-core').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-core')
-include(':infrastructure-spring-boot:api-server-rest-adapter-auth')
-project(':infrastructure-spring-boot:api-server-rest-adapter-auth').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-auth')
-include(':infrastructure-spring-boot:api-server-rest-adapter-order')
-project(':infrastructure-spring-boot:api-server-rest-adapter-order').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-order')
-include(':infrastructure-spring-boot:api-server-rest-adapter-product')
-project(':infrastructure-spring-boot:api-server-rest-adapter-product').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-product')
-include(':infrastructure-spring-boot:api-server-rest-adapter-user')
-project(':infrastructure-spring-boot:api-server-rest-adapter-user').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-user')
+include(':infrastructure.spring-boot.api-server.rest.core')
+project(':infrastructure.spring-boot.api-server.rest.core').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-core')
+include(':infrastructure.spring-boot.api-server.rest.adapter.auth')
+project(':infrastructure.spring-boot.api-server.rest.adapter.auth').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-auth')
+include(':infrastructure.spring-boot.api-server.rest.adapter.order')
+project(':infrastructure.spring-boot.api-server.rest.adapter.order').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-order')
+include(':infrastructure.spring-boot.api-server.rest.adapter.product')
+project(':infrastructure.spring-boot.api-server.rest.adapter.product').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-product')
+include(':infrastructure.spring-boot.api-server.rest.adapter.user')
+project(':infrastructure.spring-boot.api-server.rest.adapter.user').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-user')
 
 // Auth client
-include(':infrastructure-spring-boot:auth-client-spring-security-jwt')
-project(':infrastructure-spring-boot:auth-client-spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-spring-security-jwt')
+include(':infrastructure.spring-boot.auth-client.spring-security-jwt')
+project(':infrastructure.spring-boot.auth-client.spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-spring-security-jwt')
 
 // Bean
-include(':infrastructure-spring-boot:bean')
-project(':infrastructure-spring-boot:bean').projectDir = file('infrastructure/spring-boot/bean')
+include(':infrastructure.spring-boot.bean')
+project(':infrastructure.spring-boot.bean').projectDir = file('infrastructure/spring-boot/bean')
 
 // Cache
-include(':infrastructure-spring-boot:cache-simple')
-project(':infrastructure-spring-boot:cache-simple').projectDir = file('infrastructure/spring-boot/cache/cache-simple')
-include(':infrastructure-spring-boot:cache-redis')
-project(':infrastructure-spring-boot:cache-redis').projectDir = file('infrastructure/spring-boot/cache/cache-redis')
+include(':infrastructure.spring-boot.cache.simple')
+project(':infrastructure.spring-boot.cache.simple').projectDir = file('infrastructure/spring-boot/cache/cache-simple')
+include(':infrastructure.spring-boot.cache.redis')
+project(':infrastructure.spring-boot.cache.redis').projectDir = file('infrastructure/spring-boot/cache/cache-redis')
 
 // Config
-include(':infrastructure-spring-boot:config')
-project(':infrastructure-spring-boot:config').projectDir = file('infrastructure/spring-boot/config')
+include(':infrastructure.spring-boot.config')
+project(':infrastructure.spring-boot.config').projectDir = file('infrastructure/spring-boot/config')
 
 // Datasource
 
 // Datasource::MySQL
-include(':infrastructure-spring-boot:datasource-mysql-core')
-project(':infrastructure-spring-boot:datasource-mysql-core').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-core')
-include(':infrastructure-spring-boot:datasource-mysql-adapter-auth')
-project(':infrastructure-spring-boot:datasource-mysql-adapter-auth').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-auth')
-include(':infrastructure-spring-boot:datasource-mysql-adapter-notification')
-project(':infrastructure-spring-boot:datasource-mysql-adapter-notification').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-notification')
-include(':infrastructure-spring-boot:datasource-mysql-adapter-order')
-project(':infrastructure-spring-boot:datasource-mysql-adapter-order').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-order')
-include(':infrastructure-spring-boot:datasource-mysql-adapter-product')
-project(':infrastructure-spring-boot:datasource-mysql-adapter-product').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-product')
-include(':infrastructure-spring-boot:datasource-mysql-adapter-user')
-project(':infrastructure-spring-boot:datasource-mysql-adapter-user').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-user')
+include(':infrastructure.spring-boot.datasource.mysql.core')
+project(':infrastructure.spring-boot.datasource.mysql.core').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-core')
+include(':infrastructure.spring-boot.datasource.mysql.adapter.auth')
+project(':infrastructure.spring-boot.datasource.mysql.adapter.auth').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-auth')
+include(':infrastructure.spring-boot.datasource.mysql.adapter.notification')
+project(':infrastructure.spring-boot.datasource.mysql.adapter.notification').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-notification')
+include(':infrastructure.spring-boot.datasource.mysql.adapter.order')
+project(':infrastructure.spring-boot.datasource.mysql.adapter.order').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-order')
+include(':infrastructure.spring-boot.datasource.mysql.adapter.product')
+project(':infrastructure.spring-boot.datasource.mysql.adapter.product').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-product')
+include(':infrastructure.spring-boot.datasource.mysql.adapter.user')
+project(':infrastructure.spring-boot.datasource.mysql.adapter.user').projectDir = file('infrastructure/spring-boot/datasource/datasource-mysql/datasource-mysql-adapter-user')
 
 // Discovery client
-include(':infrastructure-spring-boot:discovery-client-eureka')
-project(':infrastructure-spring-boot:discovery-client-eureka').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-eureka')
-include(':infrastructure-spring-boot:discovery-client-kubernetes')
-project(':infrastructure-spring-boot:discovery-client-kubernetes').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-kubernetes')
+include(':infrastructure.spring-boot.discovery-client.eureka')
+project(':infrastructure.spring-boot.discovery-client.eureka').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-eureka')
+include(':infrastructure.spring-boot.discovery-client.kubernetes')
+project(':infrastructure.spring-boot.discovery-client.kubernetes').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-kubernetes')
 
 // Event
 
 // Event::Event handler decorator
-include(':infrastructure-spring-boot:messaging-handler-decorator')
-project(':infrastructure-spring-boot:messaging-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
+include(':infrastructure.spring-boot.messaging-handler-decorator')
+project(':infrastructure.spring-boot.messaging-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
 
 // File
 
 // File::CSV
 
 // File::CSV::OpenCSV
-include(':infrastructure-spring-boot:csv-opencsv-core')
-project(':infrastructure-spring-boot:csv-opencsv-core').projectDir = file('infrastructure/spring-boot/file/csv/csv-opencsv/csv-opencsv-core')
-include(':infrastructure-spring-boot:csv-opencsv-adapter-product')
-project(':infrastructure-spring-boot:csv-opencsv-adapter-product').projectDir = file('infrastructure/spring-boot/file/csv/csv-opencsv/csv-opencsv-adapter-product')
+include(':infrastructure.spring-boot.csv.opencsv.core')
+project(':infrastructure.spring-boot.csv.opencsv.core').projectDir = file('infrastructure/spring-boot/file/csv/csv-opencsv/csv-opencsv-core')
+include(':infrastructure.spring-boot.csv.opencsv.adapter.product')
+project(':infrastructure.spring-boot.csv.opencsv.adapter.product').projectDir = file('infrastructure/spring-boot/file/csv/csv-opencsv/csv-opencsv-adapter-product')
 
 // File::Excel
 
 // File::Excel::Easyexcel
-include(':infrastructure-spring-boot:excel-easyexcel-core')
-project(':infrastructure-spring-boot:excel-easyexcel-core').projectDir = file('infrastructure/spring-boot/file/excel/excel-easyexcel/excel-easyexcel-core')
-include(':infrastructure-spring-boot:excel-easyexcel-adapter-product')
-project(':infrastructure-spring-boot:excel-easyexcel-adapter-product').projectDir = file('infrastructure/spring-boot/file/excel/excel-easyexcel/excel-easyexcel-adapter-product')
+include(':infrastructure.spring-boot.excel.easyexcel.core')
+project(':infrastructure.spring-boot.excel.easyexcel.core').projectDir = file('infrastructure/spring-boot/file/excel/excel-easyexcel/excel-easyexcel-core')
+include(':infrastructure.spring-boot.excel.easyexcel.adapter.product')
+project(':infrastructure.spring-boot.excel.easyexcel.adapter.product').projectDir = file('infrastructure/spring-boot/file/excel/excel-easyexcel/excel-easyexcel-adapter-product')
 
 // File::Excel::Poi
-include(':infrastructure-spring-boot:excel-poi-core')
-project(':infrastructure-spring-boot:excel-poi-core').projectDir = file('infrastructure/spring-boot/file/excel/excel-poi/excel-poi-core')
-include(':infrastructure-spring-boot:excel-poi-adapter-product')
-project(':infrastructure-spring-boot:excel-poi-adapter-product').projectDir = file('infrastructure/spring-boot/file/excel/excel-poi/excel-poi-adapter-product')
+include(':infrastructure.spring-boot.excel.poi.core')
+project(':infrastructure.spring-boot.excel.poi.core').projectDir = file('infrastructure/spring-boot/file/excel/excel-poi/excel-poi-core')
+include(':infrastructure.spring-boot.excel.poi.adapter.product')
+project(':infrastructure.spring-boot.excel.poi.adapter.product').projectDir = file('infrastructure/spring-boot/file/excel/excel-poi/excel-poi-adapter-product')
 
 // i18n
-include(':infrastructure-spring-boot:i18n')
-project(':infrastructure-spring-boot:i18n').projectDir = file('infrastructure/spring-boot/i18n')
+include(':infrastructure.spring-boot.i18n')
+project(':infrastructure.spring-boot.i18n').projectDir = file('infrastructure/spring-boot/i18n')
 
 // Internal API
 
 // Internal API::Product API
-include(':infrastructure-spring-boot:product-api-grpc-netdevh')
-project(':infrastructure-spring-boot:product-api-grpc-netdevh').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-grpc-netdevh')
-include(':infrastructure-spring-boot:product-api-rest-apachehttpclient')
-project(':infrastructure-spring-boot:product-api-rest-apachehttpclient').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-apachehttpclient')
-include(':infrastructure-spring-boot:product-api-rest-feign')
-project(':infrastructure-spring-boot:product-api-rest-feign').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-feign')
-include(':infrastructure-spring-boot:product-api-rest-model')
-project(':infrastructure-spring-boot:product-api-rest-model').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-model')
-include(':infrastructure-spring-boot:product-api-rest-resttemplate')
-project(':infrastructure-spring-boot:product-api-rest-resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-resttemplate')
+include(':infrastructure.spring-boot.internal-api.product.grpc.netdevh')
+project(':infrastructure.spring-boot.internal-api.product.grpc.netdevh').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-grpc-netdevh')
+include(':infrastructure.spring-boot.internal-api.product.rest.apachehttpclient')
+project(':infrastructure.spring-boot.internal-api.product.rest.apachehttpclient').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-apachehttpclient')
+include(':infrastructure.spring-boot.internal-api.product.rest.feign')
+project(':infrastructure.spring-boot.internal-api.product.rest.feign').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-feign')
+include(':infrastructure.spring-boot.internal-api.product.rest.model')
+project(':infrastructure.spring-boot.internal-api.product.rest.model').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-model')
+include(':infrastructure.spring-boot.internal-api.product.rest.resttemplate')
+project(':infrastructure.spring-boot.internal-api.product.rest.resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-resttemplate')
 
 // Internal API::User API
-include(':infrastructure-spring-boot:user-api-grpc-netdevh')
-project(':infrastructure-spring-boot:user-api-grpc-netdevh').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-grpc-netdevh')
-include(':infrastructure-spring-boot:user-api-rest-apachehttpclient')
-project(':infrastructure-spring-boot:user-api-rest-apachehttpclient').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-apachehttpclient')
-include(':infrastructure-spring-boot:user-api-rest-feign')
-project(':infrastructure-spring-boot:user-api-rest-feign').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-feign')
-include(':infrastructure-spring-boot:user-api-rest-model')
-project(':infrastructure-spring-boot:user-api-rest-model').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-model')
-include(':infrastructure-spring-boot:user-api-rest-resttemplate')
-project(':infrastructure-spring-boot:user-api-rest-resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
+include(':infrastructure.spring-boot.internal-api.user.grpc.netdevh')
+project(':infrastructure.spring-boot.internal-api.user.grpc.netdevh').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-grpc-netdevh')
+include(':infrastructure.spring-boot.internal-api.user.rest.apachehttpclient')
+project(':infrastructure.spring-boot.internal-api.user.rest.apachehttpclient').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-apachehttpclient')
+include(':infrastructure.spring-boot.internal-api.user.rest.feign')
+project(':infrastructure.spring-boot.internal-api.user.rest.feign').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-feign')
+include(':infrastructure.spring-boot.internal-api.user.rest.model')
+project(':infrastructure.spring-boot.internal-api.user.rest.model').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-model')
+include(':infrastructure.spring-boot.internal-api.user.rest.resttemplate')
+project(':infrastructure.spring-boot.internal-api.user.rest.resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
 
 // Lock
-include(':infrastructure-spring-boot:lock-redis')
-project(':infrastructure-spring-boot:lock-redis').projectDir = file('infrastructure/spring-boot/lock/lock-redis')
-include(':infrastructure-spring-boot:lock-util')
-project(':infrastructure-spring-boot:lock-util').projectDir = file('infrastructure/spring-boot/lock/lock-util')
+include(':infrastructure.spring-boot.lock.redis')
+project(':infrastructure.spring-boot.lock.redis').projectDir = file('infrastructure/spring-boot/lock/lock-redis')
+include(':infrastructure.spring-boot.lock.util')
+project(':infrastructure.spring-boot.lock.util').projectDir = file('infrastructure/spring-boot/lock/lock-util')
 
 // Messaging
 
 // Messaging::Kafka
-include(':infrastructure-spring-boot:messaging-kafka-core')
-project(':infrastructure-spring-boot:messaging-kafka-core').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-core')
-include(':infrastructure-spring-boot:messaging-kafka-adapter-notification')
-project(':infrastructure-spring-boot:messaging-kafka-adapter-notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-notification')
-include(':infrastructure-spring-boot:messaging-kafka-adapter-order')
-project(':infrastructure-spring-boot:messaging-kafka-adapter-order').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-order')
-include(':infrastructure-spring-boot:messaging-kafka-adapter-product')
-project(':infrastructure-spring-boot:messaging-kafka-adapter-product').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-product')
-include(':infrastructure-spring-boot:messaging-kafka-adapter-user')
-project(':infrastructure-spring-boot:messaging-kafka-adapter-user').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-user')
+include(':infrastructure.spring-boot.messaging.kafka.core')
+project(':infrastructure.spring-boot.messaging.kafka.core').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-core')
+include(':infrastructure.spring-boot.messaging.kafka.adapter.notification')
+project(':infrastructure.spring-boot.messaging.kafka.adapter.notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-notification')
+include(':infrastructure.spring-boot.messaging.kafka.adapter.order')
+project(':infrastructure.spring-boot.messaging.kafka.adapter.order').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-order')
+include(':infrastructure.spring-boot.messaging.kafka.adapter.product')
+project(':infrastructure.spring-boot.messaging.kafka.adapter.product').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-product')
+include(':infrastructure.spring-boot.messaging.kafka.adapter.user')
+project(':infrastructure.spring-boot.messaging.kafka.adapter.user').projectDir = file('infrastructure/spring-boot/messaging/messaging-kafka/messaging-kafka-adapter-user')
 
 // Messaging::SNS
-include(':infrastructure-spring-boot:messaging-sns-core')
-project(':infrastructure-spring-boot:messaging-sns-core').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-core')
-include(':infrastructure-spring-boot:messaging-sns-adapter-notification')
-project(':infrastructure-spring-boot:messaging-sns-adapter-notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-notification')
-include(':infrastructure-spring-boot:messaging-sns-adapter-order')
-project(':infrastructure-spring-boot:messaging-sns-adapter-order').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-order')
-include(':infrastructure-spring-boot:messaging-sns-adapter-product')
-project(':infrastructure-spring-boot:messaging-sns-adapter-product').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-product')
-include(':infrastructure-spring-boot:messaging-sns-adapter-user')
-project(':infrastructure-spring-boot:messaging-sns-adapter-user').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-user')
+include(':infrastructure.spring-boot.messaging.sns.core')
+project(':infrastructure.spring-boot.messaging.sns.core').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-core')
+include(':infrastructure.spring-boot.messaging.sns.adapter.notification')
+project(':infrastructure.spring-boot.messaging.sns.adapter.notification').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-notification')
+include(':infrastructure.spring-boot.messaging.sns.adapter.order')
+project(':infrastructure.spring-boot.messaging.sns.adapter.order').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-order')
+include(':infrastructure.spring-boot.messaging.sns.adapter.product')
+project(':infrastructure.spring-boot.messaging.sns.adapter.product').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-product')
+include(':infrastructure.spring-boot.messaging.sns.adapter.user')
+project(':infrastructure.spring-boot.messaging.sns.adapter.user').projectDir = file('infrastructure/spring-boot/messaging/messaging-sns/messaging-sns-adapter-user')
 
 // Notification
 
 // Notification::Email
-include(':infrastructure-spring-boot:email-spring')
-project(':infrastructure-spring-boot:email-spring').projectDir = file('infrastructure/spring-boot/notification/email/email-spring')
-include(':infrastructure-spring-boot:email-ses')
-project(':infrastructure-spring-boot:email-ses').projectDir = file('infrastructure/spring-boot/notification/email/email-ses')
-include(':infrastructure-spring-boot:email-sendgrid')
-project(':infrastructure-spring-boot:email-sendgrid').projectDir = file('infrastructure/spring-boot/notification/email/email-sendgrid')
+include(':infrastructure.spring-boot.notification.email.spring')
+project(':infrastructure.spring-boot.notification.email.spring').projectDir = file('infrastructure/spring-boot/notification/email/email-spring')
+include(':infrastructure.spring-boot.notification.email.ses')
+project(':infrastructure.spring-boot.notification.email.ses').projectDir = file('infrastructure/spring-boot/notification/email/email-ses')
+include(':infrastructure.spring-boot.notification.email.sendgrid')
+project(':infrastructure.spring-boot.notification.email.sendgrid').projectDir = file('infrastructure/spring-boot/notification/email/email-sendgrid')
 
 // Notification::SSE
-include(':infrastructure-spring-boot:sse')
-project(':infrastructure-spring-boot:sse').projectDir = file('infrastructure/spring-boot/notification/sse')
+include(':infrastructure.spring-boot.notification.sse')
+project(':infrastructure.spring-boot.notification.sse').projectDir = file('infrastructure/spring-boot/notification/sse')
 
 // Notification::WebSocket
-include(':infrastructure-spring-boot:websocket')
-project(':infrastructure-spring-boot:websocket').projectDir = file('infrastructure/spring-boot/notification/websocket')
+include(':infrastructure.spring-boot.notification.websocket')
+project(':infrastructure.spring-boot.notification.websocket').projectDir = file('infrastructure/spring-boot/notification/websocket')
 
 // Observability
 
 // Observability::Actuator
-include(':infrastructure-spring-boot:actuator')
-project(':infrastructure-spring-boot:actuator').projectDir = file('infrastructure/spring-boot/observability/actuator')
+include(':infrastructure.spring-boot.observability.actuator')
+project(':infrastructure.spring-boot.observability.actuator').projectDir = file('infrastructure/spring-boot/observability/actuator')
 
 // Observability::Logging
-include(':infrastructure-spring-boot:logging-logback')
-project(':infrastructure-spring-boot:logging-logback').projectDir = file('infrastructure/spring-boot/observability/logging/logging-logback')
+include(':infrastructure.spring-boot.observability.logging.logback')
+project(':infrastructure.spring-boot.observability.logging.logback').projectDir = file('infrastructure/spring-boot/observability/logging/logging-logback')
+
+// Observability::Metrics
+include(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+project(':infrastructure.spring-boot.observability.metrics.cloudwatch').projectDir = file('infrastructure/spring-boot/observability/metrics/metrics-cloudwatch')
+include(':infrastructure.spring-boot.observability.metrics.prometheus')
+project(':infrastructure.spring-boot.observability.metrics.prometheus').projectDir = file('infrastructure/spring-boot/observability/metrics/metrics-prometheus')
 
 // Observability::Tracing
-include(':infrastructure-spring-boot:tracing-simple')
-project(':infrastructure-spring-boot:tracing-simple').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-simple')
-include(':infrastructure-spring-boot:tracing-zipkin')
-project(':infrastructure-spring-boot:tracing-zipkin').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-zipkin')
+include(':infrastructure.spring-boot.observability.tracing.simple')
+project(':infrastructure.spring-boot.observability.tracing.simple').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-simple')
+include(':infrastructure.spring-boot.observability.tracing.zipkin')
+project(':infrastructure.spring-boot.observability.tracing.zipkin').projectDir = file('infrastructure/spring-boot/observability/tracing/tracing-zipkin')
 
 // Persistence
 
 // Persistence::JPA
-include(':infrastructure-spring-boot:persistence-jpa-core')
-project(':infrastructure-spring-boot:persistence-jpa-core').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-core')
-include(':infrastructure-spring-boot:persistence-jpa-adapter-auth')
-project(':infrastructure-spring-boot:persistence-jpa-adapter-auth').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-auth')
-include(':infrastructure-spring-boot:persistence-jpa-adapter-order')
-project(':infrastructure-spring-boot:persistence-jpa-adapter-order').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-order')
-include(':infrastructure-spring-boot:persistence-jpa-adapter-outbox')
-project(':infrastructure-spring-boot:persistence-jpa-adapter-outbox').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-outbox')
-include(':infrastructure-spring-boot:persistence-jpa-adapter-product')
-project(':infrastructure-spring-boot:persistence-jpa-adapter-product').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-product')
-include(':infrastructure-spring-boot:persistence-jpa-adapter-user')
-project(':infrastructure-spring-boot:persistence-jpa-adapter-user').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-user')
+include(':infrastructure.spring-boot.persistence.jpa.core')
+project(':infrastructure.spring-boot.persistence.jpa.core').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-core')
+include(':infrastructure.spring-boot.persistence.jpa.adapter.auth')
+project(':infrastructure.spring-boot.persistence.jpa.adapter.auth').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-auth')
+include(':infrastructure.spring-boot.persistence.jpa.adapter.order')
+project(':infrastructure.spring-boot.persistence.jpa.adapter.order').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-order')
+include(':infrastructure.spring-boot.persistence.jpa.adapter.outbox')
+project(':infrastructure.spring-boot.persistence.jpa.adapter.outbox').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-outbox')
+include(':infrastructure.spring-boot.persistence.jpa.adapter.product')
+project(':infrastructure.spring-boot.persistence.jpa.adapter.product').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-product')
+include(':infrastructure.spring-boot.persistence.jpa.adapter.user')
+project(':infrastructure.spring-boot.persistence.jpa.adapter.user').projectDir = file('infrastructure/spring-boot/persistence/persistence-jpa/persistence-jpa-adapter-user')
 
 // Redis
-include(':infrastructure-spring-boot:redis-core')
-project(':infrastructure-spring-boot:redis-core').projectDir = file('infrastructure/spring-boot/redis/redis-core')
-include(':infrastructure-spring-boot:redis-cluster')
-project(':infrastructure-spring-boot:redis-cluster').projectDir = file('infrastructure/spring-boot/redis/redis-cluster')
-include(':infrastructure-spring-boot:redis-standalone')
-project(':infrastructure-spring-boot:redis-standalone').projectDir = file('infrastructure/spring-boot/redis/redis-standalone')
+include(':infrastructure.spring-boot.redis.core')
+project(':infrastructure.spring-boot.redis.core').projectDir = file('infrastructure/spring-boot/redis/redis-core')
+include(':infrastructure.spring-boot.redis.cluster')
+project(':infrastructure.spring-boot.redis.cluster').projectDir = file('infrastructure/spring-boot/redis/redis-cluster')
+include(':infrastructure.spring-boot.redis.standalone')
+project(':infrastructure.spring-boot.redis.standalone').projectDir = file('infrastructure/spring-boot/redis/redis-standalone')
 
 // Resilience
-include(':infrastructure-spring-boot:resilience-resilience4j')
-project(':infrastructure-spring-boot:resilience-resilience4j').projectDir = file('infrastructure/spring-boot/resilience/resilience-resilience4j')
+include(':infrastructure.spring-boot.resilience.resilience4j')
+project(':infrastructure.spring-boot.resilience.resilience4j').projectDir = file('infrastructure/spring-boot/resilience/resilience-resilience4j')
 
 // Scheduler
 
 // Scheduler::Spring
-include(':infrastructure-spring-boot:scheduler-spring-core')
-project(':infrastructure-spring-boot:scheduler-spring-core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-core')
-include(':infrastructure-spring-boot:scheduler-spring-adapter-notification')
-project(':infrastructure-spring-boot:scheduler-spring-adapter-notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-notification')
-include(':infrastructure-spring-boot:scheduler-spring-adapter-order')
-project(':infrastructure-spring-boot:scheduler-spring-adapter-order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-order')
-include(':infrastructure-spring-boot:scheduler-spring-adapter-product')
-project(':infrastructure-spring-boot:scheduler-spring-adapter-product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-product')
-include(':infrastructure-spring-boot:scheduler-spring-adapter-user')
-project(':infrastructure-spring-boot:scheduler-spring-adapter-user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-user')
+include(':infrastructure.spring-boot.scheduler.spring.core')
+project(':infrastructure.spring-boot.scheduler.spring.core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-core')
+include(':infrastructure.spring-boot.scheduler.spring.adapter.notification')
+project(':infrastructure.spring-boot.scheduler.spring.adapter.notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-notification')
+include(':infrastructure.spring-boot.scheduler.spring.adapter.order')
+project(':infrastructure.spring-boot.scheduler.spring.adapter.order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-order')
+include(':infrastructure.spring-boot.scheduler.spring.adapter.product')
+project(':infrastructure.spring-boot.scheduler.spring.adapter.product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-product')
+include(':infrastructure.spring-boot.scheduler.spring.adapter.user')
+project(':infrastructure.spring-boot.scheduler.spring.adapter.user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-user')
 
 // Scheduler::Quartz
-include(':infrastructure-spring-boot:scheduler-quartz-core')
-project(':infrastructure-spring-boot:scheduler-quartz-core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-core')
-include(':infrastructure-spring-boot:scheduler-quartz-adapter-notification')
-project(':infrastructure-spring-boot:scheduler-quartz-adapter-notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-notification')
-include(':infrastructure-spring-boot:scheduler-quartz-adapter-order')
-project(':infrastructure-spring-boot:scheduler-quartz-adapter-order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-order')
-include(':infrastructure-spring-boot:scheduler-quartz-adapter-product')
-project(':infrastructure-spring-boot:scheduler-quartz-adapter-product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-product')
-include(':infrastructure-spring-boot:scheduler-quartz-adapter-user')
-project(':infrastructure-spring-boot:scheduler-quartz-adapter-user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-user')
+include(':infrastructure.spring-boot.scheduler.quartz.core')
+project(':infrastructure.spring-boot.scheduler.quartz.core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-core')
+include(':infrastructure.spring-boot.scheduler.quartz.adapter.notification')
+project(':infrastructure.spring-boot.scheduler.quartz.adapter.notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-notification')
+include(':infrastructure.spring-boot.scheduler.quartz.adapter.order')
+project(':infrastructure.spring-boot.scheduler.quartz.adapter.order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-order')
+include(':infrastructure.spring-boot.scheduler.quartz.adapter.product')
+project(':infrastructure.spring-boot.scheduler.quartz.adapter.product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-product')
+include(':infrastructure.spring-boot.scheduler.quartz.adapter.user')
+project(':infrastructure.spring-boot.scheduler.quartz.adapter.user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-user')
 
 // Sequence generator
-include(':infrastructure-spring-boot:sequence-generator')
-project(':infrastructure-spring-boot:sequence-generator').projectDir = file('infrastructure/spring-boot/sequence-generator')
+include(':infrastructure.spring-boot.sequence-generator')
+project(':infrastructure.spring-boot.sequence-generator').projectDir = file('infrastructure/spring-boot/sequence-generator')
 
 // Storage
-include(':infrastructure-spring-boot:storage-core')
-project(':infrastructure-spring-boot:storage-core').projectDir = file('infrastructure/spring-boot/storage/storage-core')
-include(':infrastructure-spring-boot:storage-filesystem')
-project(':infrastructure-spring-boot:storage-filesystem').projectDir = file('infrastructure/spring-boot/storage/storage-filesystem')
-include(':infrastructure-spring-boot:storage-s3')
-project(':infrastructure-spring-boot:storage-s3').projectDir = file('infrastructure/spring-boot/storage/storage-s3')
+include(':infrastructure.spring-boot.storage.filesystem')
+project(':infrastructure.spring-boot.storage.filesystem').projectDir = file('infrastructure/spring-boot/storage/storage-filesystem')
+include(':infrastructure.spring-boot.storage.s3')
+project(':infrastructure.spring-boot.storage.s3').projectDir = file('infrastructure/spring-boot/storage/storage-s3')
 
 // Template
-include(':infrastructure-spring-boot:template-core')
-project(':infrastructure-spring-boot:template-core').projectDir = file('infrastructure/spring-boot/template/template-core')
-include(':infrastructure-spring-boot:template-freemarker')
-project(':infrastructure-spring-boot:template-freemarker').projectDir = file('infrastructure/spring-boot/template/template-freemarker')
-include(':infrastructure-spring-boot:template-thymeleaf')
-project(':infrastructure-spring-boot:template-thymeleaf').projectDir = file('infrastructure/spring-boot/template/template-thymeleaf')
+include(':infrastructure.spring-boot.template.freemarker')
+project(':infrastructure.spring-boot.template.freemarker').projectDir = file('infrastructure/spring-boot/template/template-freemarker')
+include(':infrastructure.spring-boot.template.thymeleaf')
+project(':infrastructure.spring-boot.template.thymeleaf').projectDir = file('infrastructure/spring-boot/template/template-thymeleaf')
 
 // Transaction
-include(':infrastructure-spring-boot:transaction')
-project(':infrastructure-spring-boot:transaction').projectDir = file('infrastructure/spring-boot/transaction')
+include(':infrastructure.spring-boot.transaction')
+project(':infrastructure.spring-boot.transaction').projectDir = file('infrastructure/spring-boot/transaction')
 
 // Use case handler decorator
-include(':infrastructure-spring-boot:use-case-handler-decorator')
-project(':infrastructure-spring-boot:use-case-handler-decorator').projectDir = file('infrastructure/spring-boot/use-case-handler-decorator')
+include(':infrastructure.spring-boot.use-case-handler-decorator')
+project(':infrastructure.spring-boot.use-case-handler-decorator').projectDir = file('infrastructure/spring-boot/use-case-handler-decorator')
 
 // =================================================================================================
 // Application
@@ -340,37 +339,34 @@ project(':infrastructure-spring-boot:use-case-handler-decorator').projectDir = f
 // Application::Spring Boot
 // -------------------------------------------------------------------------------------------------
 
-include(':application-spring-boot')
-project(':application-spring-boot').projectDir = file('application/spring-boot')
+include(':application.spring-boot.user')
+project(':application.spring-boot.user').projectDir = file('application/spring-boot/user-application')
 
-include(':application-spring-boot:user-application')
-project(':application-spring-boot:user-application').projectDir = file('application/spring-boot/user-application')
+include(':application.spring-boot.product')
+project(':application.spring-boot.product').projectDir = file('application/spring-boot/product-application')
 
-include(':application-spring-boot:product-application')
-project(':application-spring-boot:product-application').projectDir = file('application/spring-boot/product-application')
+include(':application.spring-boot.order')
+project(':application.spring-boot.order').projectDir = file('application/spring-boot/order-application')
 
-include(':application-spring-boot:order-application')
-project(':application-spring-boot:order-application').projectDir = file('application/spring-boot/order-application')
-
-include(':application-spring-boot:notification-application')
-project(':application-spring-boot:notification-application').projectDir = file('application/spring-boot/notification-application')
+include(':application.spring-boot.notification')
+project(':application.spring-boot.notification').projectDir = file('application/spring-boot/notification-application')
 
 // =================================================================================================
 // Edge
 // =================================================================================================
 
 // API gateway
-include(':api-gateway-spring-cloud-gateway')
-project(':api-gateway-spring-cloud-gateway').projectDir = file('edge/api-gateway/api-gateway-spring-cloud-gateway')
+include(':api-gateway.spring-cloud-gateway')
+project(':api-gateway.spring-cloud-gateway').projectDir = file('edge/api-gateway/api-gateway-spring-cloud-gateway')
 
 // Auth server
-include(':auth-server-spring-security-jwt')
-project(':auth-server-spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
+include(':auth-server.spring-security-jwt')
+project(':auth-server.spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
 
 // Config server
-include(':config-server-spring-cloud-config')
-project(':config-server-spring-cloud-config').projectDir = file('edge/config-server/config-server-spring-cloud-config')
+include(':config-server.spring-cloud-config')
+project(':config-server.spring-cloud-config').projectDir = file('edge/config-server/config-server-spring-cloud-config')
 
 // Discover server
-include(':discovery-server-eureka')
-project(':discovery-server-eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')
+include(':discovery-server.eureka')
+project(':discovery-server.eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')

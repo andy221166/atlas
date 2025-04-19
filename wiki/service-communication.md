@@ -36,7 +36,7 @@ GraphQL offers a more flexible alternative to REST. Instead of fixed endpoints, 
 
 **Key Characteristics:**
 - Single Endpoint: All data fetching is done through one endpoint.
-- Declarative Data Fetching: Clients define the structure of the response by writing queries.
+- Declarative Data Fetching: Clients define the structure of the apiResponseWrapper by writing queries.
 - Strongly Typed Schema: The API exposes a schema that specifies the types of data and operations.
 
 **Advantages:**

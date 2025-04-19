@@ -11,7 +11,7 @@ import org.atlas.framework.paging.PagingResult;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "Response containing a paginated list of users.")
+@Schema(description = "ApiResponseWrapper containing a paginated list of users.")
 public class ListUserResponse extends PagingResult<ListUserResponse.User> {
 
   @Data

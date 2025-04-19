@@ -15,7 +15,7 @@ import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
 import org.atlas.edge.auth.springsecurityjwt.service.CookieService;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -35,50 +35,50 @@ public class AuthController {
 
   @Operation(summary = "User Login", description = "Authenticates a user and returns a login response.")
   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<LoginResponse> login(
+  public ApiResponseWrapper<LoginResponse> login(
       @Parameter(description = "Request object containing user credentials for login.", required = true)
       @Valid @RequestBody LoginRequest request,
       HttpServletResponse httpServletResponse) throws Exception {
     LoginResponse loginResponse = authService.login(request);
     addTokensToCookies(httpServletResponse, loginResponse);
-    return Response.success(loginResponse);
+    return ApiResponseWrapper.success(loginResponse);
   }
 
   @PostMapping("/ott/login")
-  public Response<LoginResponse> oneTimeTokenLogin(
+  public ApiResponseWrapper<LoginResponse> oneTimeTokenLogin(
       @Valid @RequestBody OneTimeTokenLoginRequest request,
       HttpServletResponse httpServletResponse) throws Exception {
     LoginResponse loginResponse = authService.oneTimeTokenLogin(request);
     addTokensToCookies(httpServletResponse, loginResponse);
-    return Response.success(loginResponse);
+    return ApiResponseWrapper.success(loginResponse);
   }
 
   @PostMapping("/ott/generate")
-  public Response<GenerateOneTimeTokenResponse> generateOneTimeToken(
+  public ApiResponseWrapper<GenerateOneTimeTokenResponse> generateOneTimeToken(
       @Valid @RequestBody GenerateOneTimeTokenRequest request) {
     GenerateOneTimeTokenResponse response = authService.generateOneTimeToke(request);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "Refresh Token", description = "Issues a new access token using a valid refresh token.")
   @PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<RefreshTokenResponse> refreshToken(
+  public ApiResponseWrapper<RefreshTokenResponse> refreshToken(
       @Parameter(description = "Refresh token sent in the request body", required = true)
       @Valid @RequestBody RefreshTokenRequest request) throws Exception {
     RefreshTokenResponse response = authService.refreshToken(request);
-    return Response.success(response);
+    return ApiResponseWrapper.success(response);
   }
 
   @Operation(summary = "User Logout", description = "Logs out a user using the provided authorization header.")
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Response<Void> logout(
+  public ApiResponseWrapper<Void> logout(
       @Parameter(description = "Logout request includes access token and refresh token", required = true)
       @Valid @RequestBody LogoutRequest request,
       HttpServletResponse httpServletResponse) throws Exception {
     authService.logout(request);
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.REFRESH_TOKEN_COOKIE);
-    return Response.success();
+    return ApiResponseWrapper.success();
   }
 
   private void addTokensToCookies(HttpServletResponse httpServletResponse,

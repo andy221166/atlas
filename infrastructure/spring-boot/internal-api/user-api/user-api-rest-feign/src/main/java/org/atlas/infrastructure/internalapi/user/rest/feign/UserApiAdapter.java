@@ -6,9 +6,9 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.shared.internal.ListUserInput;
 import org.atlas.domain.user.shared.internal.ListUserOutput;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.infrastructure.api.client.core.rest.model.Response;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserRequest;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserResponse;
 import org.springframework.stereotype.Component;
@@ -26,8 +26,8 @@ public class UserApiAdapter implements UserApiPort {
   public ListUserOutput call(ListUserInput input) {
     ListUserRequest request = ObjectMapperUtil.getInstance()
         .map(input, ListUserRequest.class);
-    Response<ListUserResponse> response = feignClient.listUser(request);
-    ListUserResponse responseData = response.getData();
+    ApiResponseWrapper<ListUserResponse> apiResponseWrapper = feignClient.listUser(request);
+    ListUserResponse responseData = apiResponseWrapper.getData();
     return ObjectMapperUtil.getInstance()
         .map(responseData, ListUserOutput.class);
   }

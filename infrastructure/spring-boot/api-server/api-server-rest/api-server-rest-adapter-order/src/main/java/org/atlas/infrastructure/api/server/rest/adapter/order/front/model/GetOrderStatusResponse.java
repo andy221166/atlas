@@ -11,7 +11,7 @@ import org.atlas.domain.order.shared.OrderStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object containing the status of an order.")
+@Schema(description = "ApiResponseWrapper object containing the status of an order.")
 public class GetOrderStatusResponse {
 
   @Schema(description = "Current status of the order.")

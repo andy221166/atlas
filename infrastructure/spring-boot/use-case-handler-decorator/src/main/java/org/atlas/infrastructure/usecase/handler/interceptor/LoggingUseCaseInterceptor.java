@@ -12,20 +12,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
 
-  private static final long ACCEPTED_MAX_EXECUTION_TIME_MS = 3000; // 3 seconds
-
   // ThreadLocal to store StopWatch per thread
   private static final ThreadLocal<StopWatch> STOP_WATCH_THREAD_LOCAL =
       ThreadLocal.withInitial(StopWatch::new);
 
   @Override
   public void preHandle(Class<?> useCaseClass, Object input) {
-    UserInfo userInfo = UserContext.get();
-    StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
-
     // Start the StopWatch
+    StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
     stopWatch.start();
 
+    UserInfo userInfo = UserContext.get();
     if (userInfo == null) {
       log.debug("Anonymous user started handling use case {}: {}",
           useCaseClass.getSimpleName(), input);
@@ -38,30 +35,19 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
   @Override
   public void postHandle(Class<?> useCaseClass, Object input) {
     UserInfo userInfo = UserContext.get();
+
+    // Stop the StopWatch and get elapsed time
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
-
-    // Stop the StopWatch
     stopWatch.stop();
-
-    long elapsedTimeMillis = stopWatch.getElapsedTimeMillis();
+    long elapsedTimeMs = stopWatch.getElapsedTimeMs();
 
     // Merge user info and performance check into one log statement
-    String message;
     if (userInfo == null) {
-      message = String.format("Anonymous user finished handling use case %s: %s in %d ms",
-          useCaseClass.getSimpleName(), input, elapsedTimeMillis);
+      log.debug("Anonymous user finished handling use case {}: {} in {} ms",
+          useCaseClass.getSimpleName(), input, elapsedTimeMs);
     } else {
-      message = String.format("User %s finished handling use case %s: %s in %d ms",
-          userInfo, useCaseClass.getSimpleName(), input, elapsedTimeMillis);
+      log.debug("User {} finished handling use case {}: {} in {} ms",
+          userInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
     }
-
-    if (elapsedTimeMillis > ACCEPTED_MAX_EXECUTION_TIME_MS) {
-      log.warn("{} ===> Exceeded max time, check performance!!!", message);
-    } else {
-      log.debug(message);
-    }
-
-    // Clean up: Reset the StopWatch and remove it from ThreadLocal
-    STOP_WATCH_THREAD_LOCAL.remove();
   }
 }

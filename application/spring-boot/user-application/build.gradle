@@ -1,29 +1,50 @@
 plugins {
-    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootPluginVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+}
+
+group = 'org.atlas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
     // Domain
-    api project(':user-domain')
+    api project(':domain.user')
 
     // Infrastructure
-    api project(':infrastructure-spring-boot:actuator')
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['api-server']) {
         case 'rest':
-            api project(':infrastructure-spring-boot:api-server-rest-adapter-user')
+            api project(':infrastructure.spring-boot.api-server.rest.adapter.user')
             break
         case 'grpc':
-            api project(':infrastructure-spring-boot:api-server-grpc-netdevh-adapter-user')
+            api project(':infrastructure.spring-boot.api-server.grpc.netdevh.adapter.user')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
-    api project(':infrastructure-spring-boot:auth-client-spring-security-jwt')
-    api project(':infrastructure-spring-boot:bean')
-    api project(':infrastructure-spring-boot:config')
+    api project(':infrastructure.spring-boot.auth-client.spring-security-jwt')
+    api project(':infrastructure.spring-boot.bean')
+    api project(':infrastructure.spring-boot.config')
     switch (stackConfig['datasource']) {
         case 'mysql':
-            api project(':infrastructure-spring-boot:datasource-mysql-adapter-user')
+            api project(':infrastructure.spring-boot.datasource.mysql.adapter.user')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
@@ -32,58 +53,86 @@ dependencies {
         case 'none':
             break
         case 'eureka':
-            api project(':infrastructure-spring-boot:discovery-client-eureka')
+            api project(':infrastructure.spring-boot.discovery-client.eureka')
             break
         case 'kubernetes':
-            api project(':infrastructure-spring-boot:discovery-client-kubernetes')
+            api project(':infrastructure.spring-boot.discovery-client.kubernetes')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
     switch (stackConfig['messaging']) {
         case 'kafka':
-            api project(':infrastructure-spring-boot:messaging-kafka-adapter-user')
+            api project(':infrastructure.spring-boot.messaging.kafka.adapter.user')
             break
         case 'sns':
-            api project(':infrastructure-spring-boot:messaging-sns-adapter-user')
+            api project(':infrastructure.spring-boot.messaging.sns.adapter.user')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['messaging']}")
     }
-    api project(':infrastructure-spring-boot:messaging-handler-decorator')
-    switch (stackConfig['logging']) {
+    api project(':infrastructure.spring-boot.messaging-handler-decorator')
+    switch (stackConfig['observability.logging']) {
         case 'logback':
-            api project(':infrastructure-spring-boot:logging-logback')
+            api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
     }
+    switch (stackConfig['observability.metrics']) {
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+            break
+        case 'prometheus':
+            api project(':infrastructure.spring-boot.observability.metrics.prometheus')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
+    switch (stackConfig['observability.tracing']) {
+        case 'simple':
+            api project(':infrastructure.spring-boot.observability.tracing.simple')
+            break
+        case 'zipkin':
+            api project(':infrastructure.spring-boot.observability.tracing.zipkin')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    }
     switch (stackConfig['persistence']) {
         case 'jpa':
-            api project(':infrastructure-spring-boot:persistence-jpa-adapter-user')
+            api project(':infrastructure.spring-boot.persistence.jpa.adapter.user')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
     }
     switch (stackConfig['scheduler']) {
         case 'spring':
-            api project(':infrastructure-spring-boot:scheduler-spring-adapter-user')
+            api project(':infrastructure.spring-boot.scheduler.spring.adapter.user')
             break
         case 'quartz':
-            api project(':infrastructure-spring-boot:scheduler-quartz-adapter-user')
+            api project(':infrastructure.spring-boot.scheduler.quartz.adapter.user')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")
     }
-    switch (stackConfig['tracing']) {
-        case 'simple':
-            api project(':infrastructure-spring-boot:tracing-simple')
-            break
-        case 'zipkin':
-            api project(':infrastructure-spring-boot:tracing-zipkin')
-            break
-        default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+    api project(':infrastructure.spring-boot.use-case-handler-decorator')
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
-    api project(':infrastructure-spring-boot:use-case-handler-decorator')
+}
+
+test {
+    useJUnitPlatform()
 }

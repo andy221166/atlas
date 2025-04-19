@@ -3,7 +3,7 @@ package org.atlas.edge.api.gateway.springcloudgateway.security;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.edge.api.gateway.springcloudgateway.util.SpringWebFluxUtil;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.error.AppError;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -41,9 +41,9 @@ public class RevokedTokenGatewayFilterFactory extends
       Boolean isBlacklisted = redisTemplate.hasKey(tokenBlacklistRedisKey);
 
       if (Boolean.TRUE.equals(isBlacklisted)) {
-        Response<Void> responseBody =
-            Response.error(AppError.UNAUTHORIZED.getErrorCode(), "Token has been revoked");
-        return SpringWebFluxUtil.respond(exchange, responseBody, HttpStatus.UNAUTHORIZED);
+        ApiResponseWrapper<Void> apiResponseWrapperBody =
+            ApiResponseWrapper.error(AppError.UNAUTHORIZED.getErrorCode(), "Token has been revoked");
+        return SpringWebFluxUtil.respond(exchange, apiResponseWrapperBody, HttpStatus.UNAUTHORIZED);
       }
 
       // Proceed with the request if not blacklisted

@@ -2,11 +2,10 @@ package org.atlas.infrastructure.api.server.rest.core.error;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.api.server.rest.response.Response;
+import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.i18n.I18nPort;
-import org.atlas.infrastructure.i18n.service.I18nService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,10 +24,10 @@ public class RestExceptionHandler {
   private final I18nPort i18nPort;
 
   @ExceptionHandler(BusinessException.class)
-  public ResponseEntity<Response<Void>> handle(BusinessException e) {
+  public ResponseEntity<ApiResponseWrapper<Void>> handle(BusinessException e) {
     String errorMessage = e.getMessage() != null ? e.getMessage() :
         i18nPort.getMessage(e.getMessageCode(), "Unknown error");
-    Response<Void> body = Response.error(e.getErrorCode(), errorMessage);
+    ApiResponseWrapper<Void> body = ApiResponseWrapper.error(e.getErrorCode(), errorMessage);
     int status = e.getErrorCode() < 1000 ? e.getErrorCode() :
         HttpStatus.INTERNAL_SERVER_ERROR.value();
     return ResponseEntity.status(status).body(body);
@@ -39,19 +38,19 @@ public class RestExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Response<Void> handle(MethodArgumentNotValidException e) {
+  public ApiResponseWrapper<Void> handle(MethodArgumentNotValidException e) {
     log.error("Invalid request", e);
     FieldError firstFieldError = e.getBindingResult().getFieldErrors().get(0);
     String message = String.format("[%s] %s", firstFieldError.getField(),
         firstFieldError.getDefaultMessage());
-    return Response.error(AppError.BAD_REQUEST.getErrorCode(), message);
+    return ApiResponseWrapper.error(AppError.BAD_REQUEST.getErrorCode(), message);
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public final Response<Void> handle(HttpMessageNotReadableException e) {
+  public final ApiResponseWrapper<Void> handle(HttpMessageNotReadableException e) {
     log.error("Invalid request", e);
-    return Response.error(AppError.BAD_REQUEST.getErrorCode(), e.getMessage());
+    return ApiResponseWrapper.error(AppError.BAD_REQUEST.getErrorCode(), e.getMessage());
   }
 
   /**
@@ -59,16 +58,16 @@ public class RestExceptionHandler {
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Response<Void> handle(MissingServletRequestParameterException e) {
+  public ApiResponseWrapper<Void> handle(MissingServletRequestParameterException e) {
     log.error("Invalid request", e);
-    return Response.error(AppError.BAD_REQUEST.getErrorCode(),
+    return ApiResponseWrapper.error(AppError.BAD_REQUEST.getErrorCode(),
         "Missing " + e.getParameterName());
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public Response<Void> handle(Exception e) {
+  public ApiResponseWrapper<Void> handle(Exception e) {
     log.error("Occurred exception", e);
-    return Response.error(AppError.DEFAULT.getErrorCode(), e.getMessage());
+    return ApiResponseWrapper.error(AppError.DEFAULT.getErrorCode(), e.getMessage());
   }
 }

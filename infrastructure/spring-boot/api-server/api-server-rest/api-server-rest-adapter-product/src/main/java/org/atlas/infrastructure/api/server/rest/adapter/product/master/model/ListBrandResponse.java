@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Response object containing the list of brands.")
+@Schema(description = "ApiResponseWrapper object containing the list of brands.")
 public class ListBrandResponse {
 
   @Schema(description = "List of brands retrieved from the request.", required = true)
