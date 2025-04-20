@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +24,8 @@ import org.yaml.snakeyaml.Yaml;
  */
 @Configuration
 @Slf4j
-public class YamlConfigLoader implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class YamlConfigLoader implements
+    ApplicationContextInitializer<ConfigurableApplicationContext> {
 
   private static final String YAML_PATTERN = "classpath*:/application.yaml";
   private static final String YML_PATTERN = "classpath*:/application.yml";
@@ -53,16 +56,22 @@ public class YamlConfigLoader implements ApplicationContextInitializer<Configura
 
     for (Resource resource : allResources) {
       String sourceName = resource.getURI().toString();
-      PropertySource<?> propertySource = parseYaml(resource, sourceName);
-      propertySources.addLast(propertySource);
-      log.info("Loaded config: {}", sourceName);
+      parseYaml(resource, sourceName)
+          .ifPresent(propertySource -> {
+            propertySources.addLast(propertySource);
+            log.info("Loaded config: {}", sourceName);
+          });
     }
   }
 
-  private PropertySource<?> parseYaml(Resource resource, String sourceName) throws IOException {
+  private Optional<PropertySource<?>> parseYaml(Resource resource, String sourceName)
+      throws IOException {
     try (InputStream inputStream = resource.getInputStream()) {
       Yaml yaml = new Yaml();
       Map<String, Object> yamlMap = yaml.load(inputStream);
+      if (MapUtils.isEmpty(yamlMap)) {
+        return Optional.empty();
+      }
 
       // Convert nested maps to flat structure with dot notation
       Map<String, Object> flatProperties = new LinkedHashMap<>();
@@ -73,7 +82,7 @@ public class YamlConfigLoader implements ApplicationContextInitializer<Configura
       flatProperties.forEach(
           (key, value) -> properties.put(key, value != null ? value.toString() : ""));
 
-      return new PropertiesPropertySource(sourceName, properties);
+      return Optional.of(new PropertiesPropertySource(sourceName, properties));
     }
   }
 

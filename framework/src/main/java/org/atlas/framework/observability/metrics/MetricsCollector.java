@@ -1,6 +1,6 @@
 package org.atlas.framework.observability.metrics;
 
-public interface MetricPublisher {
+public interface MetricsCollector {
 
   String metricName();
 }

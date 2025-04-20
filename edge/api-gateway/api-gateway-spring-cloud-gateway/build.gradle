@@ -31,7 +31,6 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.6'
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.observability.actuator')
     api project(':infrastructure.spring-boot.config')
     switch (stackConfig['discovery-client']) {
         case 'none':
@@ -45,6 +44,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
     }
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':
             api project(':infrastructure.spring-boot.observability.logging.logback')

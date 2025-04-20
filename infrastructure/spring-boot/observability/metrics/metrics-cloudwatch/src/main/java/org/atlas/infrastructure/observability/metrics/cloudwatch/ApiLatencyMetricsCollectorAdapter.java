@@ -2,7 +2,7 @@ package org.atlas.infrastructure.observability.metrics.cloudwatch;
 
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-import org.atlas.framework.observability.metrics.ApiLatencyPublisher;
+import org.atlas.framework.observability.metrics.ApiLatencyMetricsCollector;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.cloudwatch.model.Dimension;
@@ -12,12 +12,12 @@ import software.amazon.awssdk.services.cloudwatch.model.StandardUnit;
 
 @Component
 @RequiredArgsConstructor
-public class ApiLatencyPublisherAdapter implements ApiLatencyPublisher {
+public class ApiLatencyMetricsCollectorAdapter implements ApiLatencyMetricsCollector {
 
   private final CloudWatchClient cloudWatchClient;
 
   @Override
-  public void publish(String service, String endpoint, String method, int httpStatus, String channel,
+  public void collect(String service, String endpoint, String method, int httpStatus, String channel,
       long elapsedTimeMs) {
     MetricDatum datum = MetricDatum.builder()
         .metricName(metricName())

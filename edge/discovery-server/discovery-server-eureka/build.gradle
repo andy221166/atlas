@@ -28,14 +28,24 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.observability.actuator')
     api project(':infrastructure.spring-boot.config')
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':
             api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
+    }
+    switch (stackConfig['observability.metrics']) {
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+            break
+        case 'prometheus':
+            api project(':infrastructure.spring-boot.observability.metrics.prometheus')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
     }
 
     // Lombok

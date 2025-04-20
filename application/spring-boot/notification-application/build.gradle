@@ -28,7 +28,6 @@ dependencies {
     api project(':domain.notification')
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.observability.actuator')
     api project(':infrastructure.spring-boot.bean')
     api project(':infrastructure.spring-boot.config')
     switch (stackConfig['datasource']) {
@@ -62,6 +61,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['email']}")
     }
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':
             api project(':infrastructure.spring-boot.observability.logging.logback')

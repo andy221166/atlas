@@ -28,7 +28,6 @@ dependencies {
     api project(':domain.product')
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['api-server']) {
         case 'rest':
             api project(':infrastructure.spring-boot.api-server.rest.adapter.product')
@@ -95,6 +94,7 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${stackConfig['messaging']}")
     }
     api project(':infrastructure.spring-boot.messaging-handler-decorator')
+    api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':
             api project(':infrastructure.spring-boot.observability.logging.logback')

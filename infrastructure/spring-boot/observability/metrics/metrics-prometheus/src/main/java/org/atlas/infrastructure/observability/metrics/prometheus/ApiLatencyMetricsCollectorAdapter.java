@@ -4,20 +4,20 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.atlas.framework.observability.metrics.ApiLatencyPublisher;
+import org.atlas.framework.observability.metrics.ApiLatencyMetricsCollector;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ApiLatencyPublisherAdapter implements ApiLatencyPublisher {
+public class ApiLatencyMetricsCollectorAdapter implements ApiLatencyMetricsCollector {
 
   private final MeterRegistry meterRegistry;
 
   @Override
-  public void publish(String service, String endpoint, String method, int httpStatus, String channel,
+  public void collect(String service, String endpoint, String method, int httpStatus, String channel,
       long elapsedTimeMs) {
       Tags tags = Tags.of(
-          service, service,
+          "service", service,
           "endpoint", endpoint,
           "method", method,
           "http_status", String.valueOf(httpStatus),
