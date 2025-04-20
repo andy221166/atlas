@@ -83,8 +83,13 @@ public class ProductRepositoryAdapter implements ProductRepository {
   }
 
   @Override
+  public void decreaseQuantity(Integer id, Integer decrement) {
+
+  }
+
+  @Override
   public void decreaseQuantityWithConstraint(Integer id, Integer decrement) {
-    int updated = jpaProductRepository.decreaseQuantity(id, decrement);
+    int updated = jpaProductRepository.decreaseQuantityWithConstraint(id, decrement);
     if (updated == 0) {
       throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
     }

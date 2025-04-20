@@ -83,6 +83,13 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['file.excel']}")
     }
+    switch (stackConfig['lock']) {
+        case 'redis':
+            api project(':infrastructure.spring-boot.lock.redis')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['lock']}")
+    }
     switch (stackConfig['messaging']) {
         case 'kafka':
             api project(':infrastructure.spring-boot.messaging.kafka.adapter.product')

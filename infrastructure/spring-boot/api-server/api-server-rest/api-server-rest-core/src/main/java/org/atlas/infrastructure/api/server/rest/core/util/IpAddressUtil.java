@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.server.rest.core.logging;
+package org.atlas.infrastructure.api.server.rest.core.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;

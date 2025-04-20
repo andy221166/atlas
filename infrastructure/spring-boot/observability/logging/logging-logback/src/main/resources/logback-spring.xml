@@ -7,7 +7,7 @@
 
     <!-- Console Appender using default pattern -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <layout class="org.atlas.infrastructure.observability.logging.logback.MaskingPatternLayout">
             <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
         </layout>
     </appender>
@@ -15,9 +15,13 @@
     <!-- File Appender with Rolling Policy -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${SERVICE_NAME}.log</file>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.atlas.infrastructure.observability.logging.logback.MaskingPatternLayout">
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+            </layout>
         </encoder>
+
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- Rollover daily and when the file size reaches 100MB -->
             <fileNamePattern>${LOG_DIR}/${SERVICE_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>

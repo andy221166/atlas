@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS product
     `available_from` DATETIME      NOT NULL,
     `is_active`      TINYINT(1)    NOT NULL,
     `brand_id`       INT           NOT NULL,
+    `version`        BIGINT        DEFAULT 0,
     `created_at`     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`     DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = INNODB;

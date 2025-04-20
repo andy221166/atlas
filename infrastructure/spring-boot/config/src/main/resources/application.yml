@@ -2,7 +2,7 @@ app:
   product-service:
     cache:
       product: product
-    decrease-quantity-strategy: constraint
+    decrease-quantity-strategy: distributed_locking
     storage:
       bucket:
         product-import: product-import
