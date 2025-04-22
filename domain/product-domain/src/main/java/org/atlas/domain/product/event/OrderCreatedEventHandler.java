@@ -48,12 +48,13 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
     DecreaseQuantityStrategy decreaseQuantityStrategy =
         applicationConfigPort.getDecreaseQuantityStrategy();
     switch (decreaseQuantityStrategy) {
-      case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
-      case PESSIMISTIC_LOCKING ->
+      case CONSTRAINT ->
+          productRepository.decreaseQuantityWithConstraint(productId, quantity);
+      case PESSIMISTIC_LOCK ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
-      case OPTIMISTIC_LOCKING ->
+      case OPTIMISTIC_LOCK ->
           productRepository.decreaseQuantityWithOptimisticLock(productId, quantity);
-      case DISTRIBUTED_LOCKING -> {
+      case DISTRIBUTED_LOCK -> {
         final String lockKey = String.format("product:%d:decrease-quantity", productId);
         try {
           lockPort.acquireLock(lockKey, Duration.ofSeconds(5));
