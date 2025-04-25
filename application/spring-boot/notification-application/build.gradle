@@ -91,10 +91,10 @@ dependencies {
     }
     switch (stackConfig['scheduler']) {
         case 'spring':
-            api project(':infrastructure.spring-boot.scheduler.spring.outbox')
+            api project(':infrastructure.spring-boot.scheduler.spring.adapter.notification')
             break
         case 'quartz':
-            api project(':infrastructure.spring-boot.scheduler.quartz.outbox')
+            api project(':infrastructure.spring-boot.scheduler.quartz.adapter.notification')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")

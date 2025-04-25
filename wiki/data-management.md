@@ -4,6 +4,8 @@
 
 https://levelup.gitconnected.com/system-design-concepts-data-consistency-%EF%B8%8F-a7a3a0870275
 
+### Eventual consistency
+
 ---
 
 ## Database Per Microservice Pattern

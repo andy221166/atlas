@@ -30,7 +30,8 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort {
 
   @Override
   public String getProfile() {
-    return environment.getActiveProfiles()[0];
+    String[] profiles = environment.getActiveProfiles();
+    return profiles.length > 0 ? profiles[0] : "default";
   }
 
   @Override

@@ -56,8 +56,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
           productRepository.decreaseQuantityWithOptimisticLock(productId, quantity);
       case DISTRIBUTED_LOCK -> {
         final String lockKey = String.format("product:%d:decrease-quantity", productId);
-        try {
-          lockPort.acquireLock(lockKey, Duration.ofSeconds(5));
+        lockPort.doWithLock(() -> {
           ProductEntity productEntity = productRepository.findById(productId)
               .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
           if (productEntity.getQuantity() < quantity) {
@@ -65,9 +64,7 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
           }
           productEntity.setQuantity(productEntity.getQuantity() - quantity);
           productRepository.update(productEntity);
-        } finally {
-          lockPort.releaseLock(lockKey);
-        }
+        }, lockKey, Duration.ofSeconds(5));
       }
       default -> throw new UnsupportedOperationException(
           "Unsupported decrease quantity strategy: " + decreaseQuantityStrategy);
