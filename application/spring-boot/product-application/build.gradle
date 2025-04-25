@@ -84,8 +84,8 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${stackConfig['file.excel']}")
     }
     switch (stackConfig['lock']) {
-        case 'redis':
-            api project(':infrastructure.spring-boot.lock.redis')
+        case 'redisson':
+            api project(':infrastructure.spring-boot.lock.redisson')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['lock']}")
@@ -138,10 +138,10 @@ dependencies {
     }
     switch (stackConfig['scheduler']) {
         case 'spring':
-            api project(':infrastructure.spring-boot.scheduler.spring.adapter.product')
+            api project(':infrastructure.spring-boot.scheduler.spring.outbox')
             break
         case 'quartz':
-            api project(':infrastructure.spring-boot.scheduler.quartz.adapter.product')
+            api project(':infrastructure.spring-boot.scheduler.quartz.outbox')
             break
         default:
             throw new IllegalArgumentException("Unsupported ${stackConfig['scheduler']}")

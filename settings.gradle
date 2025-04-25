@@ -182,8 +182,8 @@ include(':infrastructure.spring-boot.internal-api.user.rest.resttemplate')
 project(':infrastructure.spring-boot.internal-api.user.rest.resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
 
 // Lock
-include(':infrastructure.spring-boot.lock.redis')
-project(':infrastructure.spring-boot.lock.redis').projectDir = file('infrastructure/spring-boot/lock/lock-redis')
+include(':infrastructure.spring-boot.lock.redisson')
+project(':infrastructure.spring-boot.lock.redisson').projectDir = file('infrastructure/spring-boot/lock/lock-redisson')
 include(':infrastructure.spring-boot.lock.util')
 project(':infrastructure.spring-boot.lock.util').projectDir = file('infrastructure/spring-boot/lock/lock-util')
 
@@ -286,26 +286,14 @@ project(':infrastructure.spring-boot.resilience.resilience4j').projectDir = file
 // Scheduler::Spring
 include(':infrastructure.spring-boot.scheduler.spring.core')
 project(':infrastructure.spring-boot.scheduler.spring.core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-core')
-include(':infrastructure.spring-boot.scheduler.spring.adapter.notification')
-project(':infrastructure.spring-boot.scheduler.spring.adapter.notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-notification')
-include(':infrastructure.spring-boot.scheduler.spring.adapter.order')
-project(':infrastructure.spring-boot.scheduler.spring.adapter.order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-order')
-include(':infrastructure.spring-boot.scheduler.spring.adapter.product')
-project(':infrastructure.spring-boot.scheduler.spring.adapter.product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-product')
-include(':infrastructure.spring-boot.scheduler.spring.adapter.user')
-project(':infrastructure.spring-boot.scheduler.spring.adapter.user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-adapter-user')
+include(':infrastructure.spring-boot.scheduler.spring.outbox')
+project(':infrastructure.spring-boot.scheduler.spring.outbox').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-spring/scheduler-spring-outbox')
 
 // Scheduler::Quartz
 include(':infrastructure.spring-boot.scheduler.quartz.core')
 project(':infrastructure.spring-boot.scheduler.quartz.core').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-core')
-include(':infrastructure.spring-boot.scheduler.quartz.adapter.notification')
-project(':infrastructure.spring-boot.scheduler.quartz.adapter.notification').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-notification')
-include(':infrastructure.spring-boot.scheduler.quartz.adapter.order')
-project(':infrastructure.spring-boot.scheduler.quartz.adapter.order').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-order')
-include(':infrastructure.spring-boot.scheduler.quartz.adapter.product')
-project(':infrastructure.spring-boot.scheduler.quartz.adapter.product').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-product')
-include(':infrastructure.spring-boot.scheduler.quartz.adapter.user')
-project(':infrastructure.spring-boot.scheduler.quartz.adapter.user').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-adapter-user')
+include(':infrastructure.spring-boot.scheduler.quartz.outbox')
+project(':infrastructure.spring-boot.scheduler.quartz.outbox').projectDir = file('infrastructure/spring-boot/scheduler/scheduler-quartz/scheduler-quartz-outbox')
 
 // Sequence generator
 include(':infrastructure.spring-boot.sequence-generator')

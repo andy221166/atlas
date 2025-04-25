@@ -41,10 +41,7 @@ dependencies {
     }
 
     // Lib
-    api 'org.springframework.boot:spring-boot-starter-aop'
-    // Distributed lock in case the schedulers run on multi-instance application
-    api 'net.javacrumbs.shedlock:shedlock-spring:6.4.0'
-    api 'net.javacrumbs.shedlock:shedlock-provider-redis-spring:6.4.0'
+    api 'org.redisson:redisson-spring-boot-starter:3.45.1'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

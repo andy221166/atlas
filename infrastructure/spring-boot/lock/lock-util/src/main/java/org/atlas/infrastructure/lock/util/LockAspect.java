@@ -18,23 +18,20 @@ public class LockAspect {
   private final LockPort lockPort;
 
   @Around("@annotation(lock)")
-  public Object applyLock(ProceedingJoinPoint joinPoint, Lock lock)
-      throws Throwable {
-    boolean acquired = false;
-    try {
-      acquired = lockPort.acquireLock(lock.key(), Duration.of(lock.timeout(),
-          lock.timeUnit().toChronoUnit()));
-      if (acquired) {
-        return joinPoint.proceed();
-      } else {
-        log.error("Failed to acquire lock {} for method {}",
-            lock.key(), joinPoint.getSignature().toLongString());
-        return null;
+  public Object applyLock(ProceedingJoinPoint joinPoint, Lock lock) throws Throwable {
+    String key = lock.key();
+    Duration timeout = Duration.of(lock.timeout(), lock.timeUnit().toChronoUnit());
+
+    final Object[] result = new Object[1];
+
+    lockPort.doWithLock(() -> {
+      try {
+        result[0] = joinPoint.proceed();
+      } catch (Throwable ex) {
+        throw new RuntimeException(ex); // will be unwrapped in AOP
       }
-    } finally {
-      if (acquired) {
-        lockPort.releaseLock(lock.key());
-      }
-    }
+    }, key, timeout);
+
+    return result[0];
   }
 }

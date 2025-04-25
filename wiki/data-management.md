@@ -1,6 +1,6 @@
 # Data management
 
-## Data concistency
+## Data consistency
 
 https://levelup.gitconnected.com/system-design-concepts-data-consistency-%EF%B8%8F-a7a3a0870275
 
@@ -82,3 +82,9 @@ Disadvantages:
 | **Failure Handling**   | Requires handling for lock expiration and ensuring atomicity using mechanisms like Lua scripts. | Requires handling for retries on conflict detection.                               | Straightforward, but needs to handle deadlocks and potentially long waits.        |
 | **Implementation Complexity** | Moderate; involves network calls and handling Redis-specific details.       | Moderate; involves adding version/timestamp checks in the code.                    | Simple to implement but can complicate transaction management.                    |
 | **Scalability**        | Highly scalable due to Redis' ability to handle high loads.               | Highly scalable; minimal contention and no centralized locking mechanism.           | Less scalable due to potential bottlenecks with high contention.                 |
+
+---
+
+## Idempotency
+
+https://levelup.gitconnected.com/how-to-avoid-double-payments-in-distributed-systems-bd15234e1d66
