@@ -12,11 +12,14 @@ import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
+import org.atlas.framework.resilience.RetryUtil;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaOptimisticProductEntity;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaProductEntity;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.CustomJpaProductRepository;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaOptimisticProductRepository;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaProductRepository;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
@@ -83,11 +86,6 @@ public class ProductRepositoryAdapter implements ProductRepository {
   }
 
   @Override
-  public void decreaseQuantity(Integer id, Integer decrement) {
-
-  }
-
-  @Override
   public void decreaseQuantityWithConstraint(Integer id, Integer decrement) {
     int updated = jpaProductRepository.decreaseQuantityWithConstraint(id, decrement);
     if (updated == 0) {
@@ -97,7 +95,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
   @Override
   public void decreaseQuantityWithPessimisticLock(Integer id, Integer decrement) {
-    try {
+    RetryUtil.retryOn(() -> {
       JpaProductEntity product = jpaProductRepository.findByIdWithLock(id)
           .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
       if (product.getQuantity() < decrement) {
@@ -105,16 +103,12 @@ public class ProductRepositoryAdapter implements ProductRepository {
       }
       product.setQuantity(product.getQuantity() - decrement);
       jpaProductRepository.save(product);
-    } catch (Exception e) {
-      throw new RuntimeException(
-          String.format("Error while decreasing quantity: id=%d, decrement=%d",
-              id, decrement), e);
-    }
+    }, DataAccessException.class);
   }
 
   @Override
   public void decreaseQuantityWithOptimisticLock(Integer id, Integer decrement) {
-    try {
+    RetryUtil.retryOn(() -> {
       JpaOptimisticProductEntity jpaOptimisticProductEntity = jpaOptimisticProductRepository.findById(id)
           .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
       if (jpaOptimisticProductEntity.getQuantity() < decrement) {
@@ -122,11 +116,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
       }
       jpaOptimisticProductEntity.setQuantity(jpaOptimisticProductEntity.getQuantity() - decrement);
       jpaOptimisticProductRepository.save(jpaOptimisticProductEntity);
-    } catch (OptimisticLockingFailureException e) {
-      throw new RuntimeException(
-          String.format("Error while decreasing quantity: id=%d, decrement=%d",
-              id, decrement), e);
-    }
+    }, OptimisticLockingFailureException.class);
   }
 
   @Override

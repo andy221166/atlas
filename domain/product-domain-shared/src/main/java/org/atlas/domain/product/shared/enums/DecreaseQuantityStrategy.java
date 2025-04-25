@@ -9,9 +9,9 @@ import lombok.Getter;
 public enum DecreaseQuantityStrategy {
 
   CONSTRAINT("constraint"),
-  OPTIMISTIC_LOCKING("optimistic_locking"),
-  PESSIMISTIC_LOCKING("pessimistic_locking"),
-  DISTRIBUTED_LOCKING("distributed_locking"),;
+  OPTIMISTIC_LOCK("optimistic_lock"),
+  PESSIMISTIC_LOCK("pessimistic_lock"),
+  DISTRIBUTED_LOCK("distributed_lock"),;
 
   private final String value;
 

@@ -8,9 +8,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ConcurrentUtil {
 
-  public static void sleep(long seconds) {
+  public static void sleep(long milliSeconds) {
     try {
-      TimeUnit.SECONDS.sleep(seconds);
+      TimeUnit.MILLISECONDS.sleep(milliSeconds);
     } catch (InterruptedException ignored) {
       Thread.currentThread().interrupt();
     }

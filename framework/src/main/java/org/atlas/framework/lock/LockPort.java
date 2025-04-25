@@ -4,7 +4,7 @@ import java.time.Duration;
 
 public interface LockPort {
 
-  boolean acquireLock(String key, Duration timeout);
+  void acquireLock(String key, Duration timeout) throws LockAcquisitionException;
 
   void releaseLock(String key);
 }
