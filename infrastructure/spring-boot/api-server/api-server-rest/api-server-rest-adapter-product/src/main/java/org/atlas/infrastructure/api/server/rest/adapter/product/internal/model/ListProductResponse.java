@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "ApiResponseWrapper object containing the list of products.")
+@Schema(description = "Response object containing the list of products.")
 public class ListProductResponse {
 
   @Schema(description = "List of products retrieved from the request.", required = true)

@@ -33,7 +33,10 @@ public class AuthController {
   private final AuthService authService;
   private final CookieService cookieService;
 
-  @Operation(summary = "User Login", description = "Authenticates a user and returns a login response.")
+  @Operation(
+      summary = "User Login",
+      description = "Authenticates a user using username, email, or phone number and returns a login response."
+  )
   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<LoginResponse> login(
       @Parameter(description = "Request object containing user credentials for login.", required = true)
@@ -44,6 +47,10 @@ public class AuthController {
     return ApiResponseWrapper.success(loginResponse);
   }
 
+  @Operation(
+      summary = "One-Time Token Login",
+      description = "Logs in a user using a valid one-time token and returns access and refresh tokens."
+  )
   @PostMapping("/ott/login")
   public ApiResponseWrapper<LoginResponse> oneTimeTokenLogin(
       @Valid @RequestBody OneTimeTokenLoginRequest request,
@@ -53,6 +60,10 @@ public class AuthController {
     return ApiResponseWrapper.success(loginResponse);
   }
 
+  @Operation(
+      summary = "Generate One-Time Token",
+      description = "Generates a new one-time token for temporary login."
+  )
   @PostMapping("/ott/generate")
   public ApiResponseWrapper<GenerateOneTimeTokenResponse> generateOneTimeToken(
       @Valid @RequestBody GenerateOneTimeTokenRequest request) {
@@ -60,7 +71,10 @@ public class AuthController {
     return ApiResponseWrapper.success(response);
   }
 
-  @Operation(summary = "Refresh Token", description = "Issues a new access token using a valid refresh token.")
+  @Operation(
+      summary = "Refresh Token",
+      description = "Issues a new access token using a valid refresh token."
+  )
   @PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<RefreshTokenResponse> refreshToken(
       @Parameter(description = "Refresh token sent in the request body", required = true)
@@ -69,7 +83,10 @@ public class AuthController {
     return ApiResponseWrapper.success(response);
   }
 
-  @Operation(summary = "User Logout", description = "Logs out a user using the provided authorization header.")
+  @Operation(
+      summary = "User Logout",
+      description = "Logs out the user and clears authentication cookies."
+  )
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<Void> logout(
       @Parameter(description = "Logout request includes access token and refresh token", required = true)

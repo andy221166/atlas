@@ -1,5 +1,6 @@
 package org.atlas.edge.auth.springsecurityjwt.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,10 @@ public class UserController {
 
   private final UserService userService;
 
+  @Operation(
+      summary = "Register User",
+      description = "Registers a new user using the provided information."
+  )
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<Void> createUser(
       @Parameter(description = "Request object containing registration data.", required = true)

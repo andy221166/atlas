@@ -8,6 +8,14 @@ spring:
     gateway:
       routes:
         # User service
+        - id: user-service-common
+          uri: lb://user-service
+          predicates:
+            - Path=/api/common/users/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - RevokedToken
+            - TokenRelay
         - id: user-service-admin
           uri: lb://user-service
           predicates:
@@ -60,10 +68,10 @@ spring:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - RevokedToken
             - TokenRelay
-        - id: product-service-master
+        - id: product-service-common
           uri: lb://product-service
           predicates:
-            - Path=/api/master/brands/**,/api/master/categories/**
+            - Path=/api/common/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - RevokedToken
@@ -138,7 +146,7 @@ app:
         - "/api-docs/**"
         - "/swagger-ui/**"
       secured-paths:
-        - path: "/api/master/**"
+        - path: "/api/common/**"
           roles: [ "USER", "ADMIN" ]
         - path: "/api/front/**"
           roles: [ "USER" ]
