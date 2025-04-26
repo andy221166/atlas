@@ -3,6 +3,6 @@ spring:
     redis:
       cluster:
         nodes: ${REDIS_CLUSTER_NODES:}
-      password: ${REDIS_PASSWORD:123456}
+      password: ${REDIS_PASSWORD:}
       ssl:
         enabled: true

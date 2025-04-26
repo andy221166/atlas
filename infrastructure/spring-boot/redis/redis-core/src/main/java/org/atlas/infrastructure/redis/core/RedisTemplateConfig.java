@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.redis.core.config;
+package org.atlas.infrastructure.redis.core;
 
 import org.atlas.framework.json.jackson.JacksonService;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfig {
+public class RedisTemplateConfig {
 
   @Bean
   public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
