@@ -8,6 +8,7 @@ public class UserInfo {
 
   private Integer userId;
   private Role role;
+  private String sessionId;
 
   public boolean isAdmin() {
     return Role.ADMIN.equals(role);

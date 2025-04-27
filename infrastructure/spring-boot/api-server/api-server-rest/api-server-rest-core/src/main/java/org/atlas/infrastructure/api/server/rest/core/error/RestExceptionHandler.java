@@ -25,6 +25,7 @@ public class RestExceptionHandler {
 
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<ApiResponseWrapper<Void>> handle(BusinessException e) {
+    log.error("Occurred business exception", e);
     String errorMessage = e.getMessage() != null ? e.getMessage() :
         i18nPort.getMessage(e.getMessageCode(), "Unknown error");
     ApiResponseWrapper<Void> body = ApiResponseWrapper.error(e.getErrorCode(), errorMessage);

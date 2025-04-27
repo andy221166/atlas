@@ -1,10 +1,12 @@
 package org.atlas.edge.auth.springsecurityjwt.security;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
 import org.atlas.domain.user.shared.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
@@ -15,6 +17,7 @@ public class UserDetailsImpl implements UserDetails {
   private String username;
   private String password;
   private Collection<? extends GrantedAuthority> authorities;
+  private String sessionId;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

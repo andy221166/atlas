@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS outbox_message
     retries         TINYINT               DEFAULT 0,
     created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = INNODB;
+) ENGINE = InnoDB;

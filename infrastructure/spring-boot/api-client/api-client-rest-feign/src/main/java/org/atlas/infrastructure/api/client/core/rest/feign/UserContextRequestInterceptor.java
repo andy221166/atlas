@@ -18,6 +18,8 @@ public class UserContextRequestInterceptor implements RequestInterceptor {
           String.valueOf(userInfo.getUserId()));
       requestTemplate.header(CustomClaim.USER_ROLE.getHeader(),
           userInfo.getRole().name());
+      requestTemplate.header(CustomClaim.SESSION_ID.getHeader(),
+          userInfo.getSessionId());
     }
   }
 }

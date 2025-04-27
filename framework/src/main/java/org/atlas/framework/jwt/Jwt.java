@@ -15,13 +15,13 @@ public class Jwt {
   private String issuer;
   // 'iat' claim
   private Date issuedAt;
-  // 'sub' claim
+  // 'sub' claim (userId)
   private String subject;
   // 'aud' claim
   private String audience;
   // 'exp' claim
-  private Date expiredAt;
+  private Date expiresAt;
   // Custom claims
-  private Integer userId;
   private Role userRole;
+  private String sessionId;
 }

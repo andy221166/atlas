@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS brand
     `name`       VARCHAR(255) NOT NULL,
     `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS category
 (
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS category
     `name`       VARCHAR(255) NOT NULL,
     `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS product
 (
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS product
     `version`        BIGINT        DEFAULT 0,
     `created_at`     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`     DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS product_detail
 (
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS product_detail
     `description` TEXT,
     `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  DATETIME          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS product_attribute
 (
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS product_attribute
     `updated_at` DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_product_id (product_id),
     UNIQUE INDEX idx_product_id_name (product_id, name)
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS product_category
 (
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS product_category
     `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  DATETIME          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`product_id`, `category_id`)
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 INSERT INTO brand (id, name)
 VALUES (1, 'Apple'),

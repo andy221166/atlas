@@ -19,6 +19,8 @@ public class UserContextInterceptor implements ClientInterceptor {
       Metadata.Key.of(CustomClaim.USER_ID.getHeader(), Metadata.ASCII_STRING_MARSHALLER);
   private static final Metadata.Key<String> USER_ROLE_HEADER =
       Metadata.Key.of(CustomClaim.USER_ROLE.getHeader(), Metadata.ASCII_STRING_MARSHALLER);
+  private static final Metadata.Key<String> SESSION_ID_HEADER =
+      Metadata.Key.of(CustomClaim.SESSION_ID.getHeader(), Metadata.ASCII_STRING_MARSHALLER);
 
   @Override
   public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method,
@@ -32,6 +34,7 @@ public class UserContextInterceptor implements ClientInterceptor {
         if (userInfo != null) {
           headers.put(USER_ID_HEADER, String.valueOf(userInfo.getUserId()));
           headers.put(USER_ROLE_HEADER, userInfo.getRole().name());
+          headers.put(SESSION_ID_HEADER, userInfo.getSessionId());
         }
         super.start(responseListener, headers);
       }

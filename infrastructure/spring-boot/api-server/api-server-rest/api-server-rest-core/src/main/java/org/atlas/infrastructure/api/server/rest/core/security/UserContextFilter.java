@@ -27,11 +27,13 @@ public class UserContextFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String userId = request.getHeader(CustomClaim.USER_ID.getHeader());
     String userRole = request.getHeader(CustomClaim.USER_ROLE.getHeader());
+    String sessionId = request.getHeader(CustomClaim.SESSION_ID.getHeader());
 
     if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userRole)) {
       UserInfo userInfo = new UserInfo();
       userInfo.setUserId(Integer.valueOf(userId));
       userInfo.setRole(Role.valueOf(userRole));
+      userInfo.setSessionId(sessionId);
       UserContext.set(userInfo);
     }
 

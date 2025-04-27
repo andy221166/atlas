@@ -9,7 +9,6 @@ import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginResponse;
-import org.atlas.edge.auth.springsecurityjwt.model.LogoutRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.OneTimeTokenLoginRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
@@ -17,10 +16,12 @@ import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
 import org.atlas.edge.auth.springsecurityjwt.service.CookieService;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,7 +68,7 @@ public class AuthController {
   @PostMapping("/ott/generate")
   public ApiResponseWrapper<GenerateOneTimeTokenResponse> generateOneTimeToken(
       @Valid @RequestBody GenerateOneTimeTokenRequest request) {
-    GenerateOneTimeTokenResponse response = authService.generateOneTimeToke(request);
+    GenerateOneTimeTokenResponse response = authService.generateOneTimeToken(request);
     return ApiResponseWrapper.success(response);
   }
 
@@ -89,12 +90,23 @@ public class AuthController {
   )
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<Void> logout(
-      @Parameter(description = "Logout request includes access token and refresh token", required = true)
-      @Valid @RequestBody LogoutRequest request,
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
       HttpServletResponse httpServletResponse) throws Exception {
-    authService.logout(request);
+    String accessToken = authorizationHeader.replace("Bearer ", "");
+    authService.logout(accessToken);
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
-    cookieService.deleteCookie(httpServletResponse, SecurityConstant.REFRESH_TOKEN_COOKIE);
+    return ApiResponseWrapper.success();
+  }
+
+  @Operation(
+      summary = "Force logout on all devices",
+      description = "Logs out the user and clears authentication cookies."
+  )
+  @PostMapping(value = "/logout/force", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ApiResponseWrapper<Void> forceLogoutOnAllDevices(HttpServletResponse httpServletResponse)
+      throws Exception {
+    authService.forceLogoutOnAllDevices();
+    cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     return ApiResponseWrapper.success();
   }
 
@@ -104,9 +116,5 @@ public class AuthController {
         SecurityConstant.ACCESS_TOKEN_COOKIE,
         loginResponse.getAccessToken(),
         SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
-    cookieService.addCookie(httpServletResponse,
-        SecurityConstant.REFRESH_TOKEN_COOKIE,
-        loginResponse.getRefreshToken(),
-        SecurityConstant.REFRESH_TOKEN_EXPIRATION_TIME);
   }
 }

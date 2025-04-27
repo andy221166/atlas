@@ -20,7 +20,7 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class JpaUserEntity extends JpaBaseEntity implements Serializable {
+public class JpaUserEntity extends JpaBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

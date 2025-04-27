@@ -20,6 +20,8 @@ public class UserContextRequestInterceptor implements ClientHttpRequestIntercept
           String.valueOf(userInfo.getUserId()));
       request.getHeaders().add(CustomClaim.USER_ROLE.getHeader(),
           userInfo.getRole().name());
+      request.getHeaders().add(CustomClaim.SESSION_ID.getHeader(),
+          userInfo.getSessionId());
     }
     return execution.execute(request, body);
   }

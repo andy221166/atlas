@@ -9,7 +9,9 @@ import lombok.Getter;
 public enum CustomClaim {
 
   USER_ID("user_id", "X-User-Id"),
-  USER_ROLE("user_role", "X-User-Role");
+  USER_ROLE("user_role", "X-User-Role"),
+  SESSION_ID("session_id", "X-Session-Id"),
+  ;
 
   private final String claim;
   private final String header;

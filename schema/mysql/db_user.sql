@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users
     UNIQUE INDEX idx_username (username),
     UNIQUE INDEX idx_email (email),
     UNIQUE INDEX idx_phone_number (phone_number)
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 -- Password: Aa@123456
 INSERT INTO users (id, username, first_name, last_name, email, phone_number, role)

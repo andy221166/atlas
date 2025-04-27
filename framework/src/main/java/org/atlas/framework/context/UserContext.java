@@ -36,6 +36,14 @@ public class UserContext {
     return userInfo.getRole();
   }
 
+  public static String getSessionId() {
+    UserInfo userInfo = get();
+    if (userInfo == null) {
+      throw new BusinessException(AppError.UNAUTHORIZED);
+    }
+    return userInfo.getSessionId();
+  }
+
   /**
    * Sets the user info for this thread.
    */

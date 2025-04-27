@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS orders
     updated_at      DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE INDEX idx_code (code),
     INDEX idx_user_id (user_id)
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS order_item
 (
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS order_item
     updated_at    DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_order_id (order_id),
     INDEX idx_product_id (product_id)
-) ENGINE = INNODB;
+) ENGINE = InnoDB;
 
 CREATE TABLE sequence_generator
 (

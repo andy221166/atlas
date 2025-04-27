@@ -31,7 +31,7 @@ data:
         updated_at   DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         UNIQUE INDEX idx_username (username),
         UNIQUE INDEX idx_email (email)
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     -- Password: Aa@123456
     INSERT INTO users (id, username, password, role, first_name, last_name, email, phone_number)
@@ -45,7 +45,7 @@ data:
         credit       DECIMAL(11, 2) NOT NULL DEFAULT 0,
         created_at   DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     INSERT INTO customer (user_id, credit)
     VALUES (2, 1000000);
@@ -60,7 +60,7 @@ data:
         retries      TINYINT                DEFAULT 0,
         created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
   02_db_product.sql: |
     CREATE DATABASE IF NOT EXISTS db_product;
@@ -85,7 +85,7 @@ data:
         `quantity`    INT           NOT NULL,
         `created_at`  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `updated_at`  DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     INSERT IGNORE INTO category (`id`, `name`)
     VALUES (1, 'ELECTRONICS'), (2, 'CLOTHING'), (3, 'FOOD'), (4, 'TOYS');
@@ -113,7 +113,7 @@ data:
         retries      TINYINT                DEFAULT 0,
         created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
   03_db_order.sql: |
     CREATE DATABASE IF NOT EXISTS db_order;
@@ -130,7 +130,7 @@ data:
         created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at      DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX idx_user_id (user_id)
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     CREATE TABLE IF NOT EXISTS order_item
     (
@@ -142,7 +142,7 @@ data:
         created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at      DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX idx_order_id (order_id)
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     CREATE TABLE IF NOT EXISTS outbox_message
     (
@@ -154,7 +154,7 @@ data:
         retries      TINYINT                DEFAULT 0,
         created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
   04_db_notification.sql: |
     CREATE DATABASE IF NOT EXISTS db_notification;
@@ -171,7 +171,7 @@ data:
         retries      TINYINT                DEFAULT 0,
         created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
   05_db_report.sql: |
     CREATE DATABASE IF NOT EXISTS db_report;
@@ -186,7 +186,7 @@ data:
         last_name    VARCHAR(255)   NOT NULL,
         amount       DECIMAL(11, 2) NOT NULL,
         created_at DATETIME         NOT NULL
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     CREATE TABLE IF NOT EXISTS order_item
     (
@@ -196,7 +196,7 @@ data:
         product_name  VARCHAR(255)  NOT NULL,
         product_price DECIMAL(9, 2) NOT NULL,
         quantity      INT           NOT NULL
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
     CREATE TABLE IF NOT EXISTS outbox_message
     (
@@ -208,7 +208,7 @@ data:
         retries      TINYINT                DEFAULT 0,
         created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at   DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = INNODB;
+    ) ENGINE = InnoDB;
 
   06_db_zipkin.sql: |
     CREATE DATABASE IF NOT EXISTS db_zipkin;

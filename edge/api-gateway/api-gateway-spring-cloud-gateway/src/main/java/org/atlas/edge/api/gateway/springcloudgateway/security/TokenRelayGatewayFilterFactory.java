@@ -3,7 +3,6 @@ package org.atlas.edge.api.gateway.springcloudgateway.security;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -27,17 +26,18 @@ public class TokenRelayGatewayFilterFactory extends
             auth != null && auth.isAuthenticated() && auth.getCredentials() instanceof Jwt)
         .map(auth -> (Jwt) auth.getCredentials())
         .flatMap(jwt -> {
-          // Extract claims with null checks
-          String userId = jwt.getClaimAsString(CustomClaim.USER_ID.getClaim());
+          // Extract custom headers from JWT
+          String userId = jwt.getSubject();
           String userRole = jwt.getClaimAsString(CustomClaim.USER_ROLE.getClaim());
+          String sessionId = jwt.getClaimAsString(CustomClaim.SESSION_ID.getClaim());
 
           // Mutate the request to add custom headers
           ServerHttpRequest mutatedRequest = exchange.getRequest()
               .mutate()
               .headers(httpHeaders -> {
-                httpHeaders.remove(HttpHeaders.AUTHORIZATION);
                 httpHeaders.set(CustomClaim.USER_ID.getHeader(), userId);
                 httpHeaders.set(CustomClaim.USER_ROLE.getHeader(), userRole);
+                httpHeaders.set(CustomClaim.SESSION_ID.getHeader(), sessionId);
               })
               .build();
           ServerWebExchange mutatedExchange = exchange.mutate()

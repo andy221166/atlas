@@ -19,6 +19,7 @@ public class UserContextRequestInterceptor implements HttpRequestInterceptor {
     if (userInfo != null) {
       httpRequest.addHeader(CustomClaim.USER_ID.getHeader(), userInfo.getUserId());
       httpRequest.addHeader(CustomClaim.USER_ROLE.getHeader(), userInfo.getRole());
+      httpRequest.addHeader(CustomClaim.SESSION_ID.getHeader(), userInfo.getSessionId());
     }
   }
 }

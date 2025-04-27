@@ -9,7 +9,7 @@ import org.atlas.framework.entity.DomainEntity;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class AuthUserEntity extends DomainEntity {
+public class UserEntity extends DomainEntity {
 
   @EqualsAndHashCode.Include
   private Integer userId;

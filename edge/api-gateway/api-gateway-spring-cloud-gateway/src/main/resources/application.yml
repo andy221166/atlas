@@ -14,7 +14,7 @@ spring:
             - Path=/api/common/users/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: user-service-admin
           uri: lb://user-service
@@ -22,7 +22,7 @@ spring:
             - Path=/api/admin/users/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: user-service-front
           uri: lb://user-service
@@ -30,7 +30,7 @@ spring:
             - Path=/api/front/users/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: user-service-api-docs
           uri: lb://user-service
@@ -58,7 +58,7 @@ spring:
             - Path=/api/admin/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: product-service-front
           uri: lb://product-service
@@ -66,7 +66,7 @@ spring:
             - Path=/api/front/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: product-service-common
           uri: lb://product-service
@@ -74,7 +74,7 @@ spring:
             - Path=/api/common/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: product-service-api-docs
           uri: lb://product-service
@@ -89,7 +89,7 @@ spring:
             - Path=/api/admin/orders/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: order-service-front
           uri: lb://order-service
@@ -97,7 +97,7 @@ spring:
             - Path=/api/front/orders/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - RevokedToken
+            - SessionValidation
             - TokenRelay
         - id: order-service-api-docs
           uri: lb://order-service
