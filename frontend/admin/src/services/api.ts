@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '../stores/auth.store'
+import Cookies from 'js-cookie'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -11,9 +12,9 @@ const api = axios.create({
 // Add request interceptor for authentication
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    const accessToken = Cookies.get('accessToken') // Retrieve token from cookies
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
     }
     return config
   },

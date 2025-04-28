@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.observability.metrics.ApiLatencyMetricsCollector;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,7 +25,7 @@ public class ApiLatencyFilter extends OncePerRequestFilter {
   private static final Pattern FILTERED_PATHS = Pattern.compile("^/api(?!/actuator).*");
 
   private final ApplicationConfigPort applicationConfigPort;
-  private final ApiLatencyMetricsCollector apiLatencyMetricsCollector;
+  private final @Nullable ApiLatencyMetricsCollector apiLatencyMetricsCollector;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -52,6 +53,7 @@ public class ApiLatencyFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    return !FILTERED_PATHS.matcher(request.getRequestURI()).matches();
+    return apiLatencyMetricsCollector == null ||
+        !FILTERED_PATHS.matcher(request.getRequestURI()).matches();
   }
 }

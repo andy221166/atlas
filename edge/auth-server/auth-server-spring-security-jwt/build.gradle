@@ -56,17 +56,19 @@ dependencies {
             api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['logging']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.logging']}")
     }
     switch (stackConfig['observability.metrics']) {
-        case 'cloudwatch':
-            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
-            break
+        case 'none':
+            break;
         case 'prometheus':
             api project(':infrastructure.spring-boot.observability.metrics.prometheus')
             break
+        case 'cloudwatch':
+            api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
+            break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.metrics']}")
     }
     switch (stackConfig['observability.tracing']) {
         case 'simple':
@@ -76,7 +78,7 @@ dependencies {
             api project(':infrastructure.spring-boot.observability.tracing.zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['tracing']}")
+            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.tracing']}")
     }
     switch (stackConfig['persistence']) {
         case 'jpa':

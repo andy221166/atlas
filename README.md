@@ -34,7 +34,7 @@ Step 2: Build project
 Step 3: Run applications
 
 ```bash
-./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :discovery-server.eureka:bootRun
+./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :discovery-server.eureka-server:bootRun
 ./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.user:bootRun
 ./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.product:bootRun
 ./gradlew -Dorg.gradle.java.home=/path/to/your-jdk-17-home :application.spring-boot.order:bootRun
@@ -77,7 +77,7 @@ You have multiple options to start the project locally.
 #### Using Docker Compose
 
 ```bash
-./script/docker-compose-start.sh
+./script/local-compose-fully-start.sh
 ```
 
 #### Using Kubernetes (Minikube)

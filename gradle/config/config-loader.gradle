@@ -1,4 +1,4 @@
-def stack = project.hasProperty('stack') ? project.getProperty('stack') : 'local-compose'
+def stack = project.hasProperty('stack') ? project.getProperty('stack') : 'local-compose-simple'
 
 // Define the loadStackConfig closure as a method
 def loadStackConfig = { ->

@@ -360,17 +360,17 @@ project(':application.spring-boot.notification').projectDir = file('application/
 // =================================================================================================
 
 // API gateway
-include(':api-gateway.spring-cloud-gateway')
-project(':api-gateway.spring-cloud-gateway').projectDir = file('edge/api-gateway/api-gateway-spring-cloud-gateway')
+include(':edge.api-gateway.spring-cloud-gateway')
+project(':edge.api-gateway.spring-cloud-gateway').projectDir = file('edge/api-gateway/api-gateway-spring-cloud-gateway')
 
 // Auth server
-include(':auth-server.spring-security-jwt')
-project(':auth-server.spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
+include(':edge.auth-server.spring-security-jwt')
+project(':edge.auth-server.spring-security-jwt').projectDir = file('edge/auth-server/auth-server-spring-security-jwt')
 
 // Config server
-include(':config-server.spring-cloud-config')
-project(':config-server.spring-cloud-config').projectDir = file('edge/config-server/config-server-spring-cloud-config')
+include(':edge.config-server.spring-cloud-config')
+project(':edge.config-server.spring-cloud-config').projectDir = file('edge/config-server/config-server-spring-cloud-config')
 
-// Discover server
-include(':discovery-server.eureka')
-project(':discovery-server.eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')
+// Discovery server
+include(':edge.discovery-server.eureka')
+project(':edge.discovery-server.eureka').projectDir = file('edge/discovery-server/discovery-server-eureka')
