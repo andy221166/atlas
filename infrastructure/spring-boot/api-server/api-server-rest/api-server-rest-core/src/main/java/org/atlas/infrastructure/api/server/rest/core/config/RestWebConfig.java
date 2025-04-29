@@ -1,6 +1,8 @@
 package org.atlas.infrastructure.api.server.rest.core.config;
 
 import lombok.RequiredArgsConstructor;
+import org.atlas.framework.config.Application;
+import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.infrastructure.api.server.rest.core.converter.StringToFileTypeConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -13,23 +15,26 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class RestWebConfig implements WebMvcConfigurer {
 
+  private final ApplicationConfigPort applicationConfigPort;
   private final StringToFileTypeConverter stringToFileTypeConverter;
-
-  // TODO: Consider to put it into config-server
-  private static final String[] ALLOWED_ORIGINS = {
-      "http://localhost:8080", // API Gateway
-      "http://localhost:9000" // Frontend
-  };
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     // Allow call APIs from API docs at gateway
     registry.addMapping("/**")
-        .allowedOrigins(ALLOWED_ORIGINS)
-        .allowedMethods("*")
-        .allowedHeaders("*")
-        .allowCredentials(true)
-        .maxAge(3600);
+        .allowedOrigins(
+            applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-origins")
+                .toArray(new String[0]))
+        .allowedMethods(
+            applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-methods")
+                .toArray(new String[0]))
+        .allowedHeaders(
+            applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-headers")
+                .toArray(new String[0]))
+        .allowCredentials(
+            applicationConfigPort.getConfigAsBoolean(Application.SYSTEM, "cors.allow-credentials"))
+        .maxAge(
+            applicationConfigPort.getConfigAsInteger(Application.SYSTEM, "cors.max-age"));
   }
 
   @Override

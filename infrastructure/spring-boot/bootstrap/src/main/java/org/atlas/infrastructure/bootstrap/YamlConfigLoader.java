@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.config;
+package org.atlas.infrastructure.bootstrap;
 
 import java.io.IOException;
 import java.io.InputStream;

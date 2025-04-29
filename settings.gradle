@@ -85,9 +85,9 @@ project(':infrastructure.spring-boot.api-server.rest.adapter.user').projectDir =
 include(':infrastructure.spring-boot.auth-client.spring-security-jwt')
 project(':infrastructure.spring-boot.auth-client.spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-spring-security-jwt')
 
-// Bean
-include(':infrastructure.spring-boot.bean')
-project(':infrastructure.spring-boot.bean').projectDir = file('infrastructure/spring-boot/bean')
+// Bootstrap
+include(':infrastructure.spring-boot.bootstrap')
+project(':infrastructure.spring-boot.bootstrap').projectDir = file('infrastructure/spring-boot/bootstrap')
 
 // Cache
 include(':infrastructure.spring-boot.cache.simple')
@@ -96,8 +96,8 @@ include(':infrastructure.spring-boot.cache.redis')
 project(':infrastructure.spring-boot.cache.redis').projectDir = file('infrastructure/spring-boot/cache/cache-redis')
 
 // Config
-include(':infrastructure.spring-boot.config')
-project(':infrastructure.spring-boot.config').projectDir = file('infrastructure/spring-boot/config')
+include(':infrastructure.spring-boot.config.yaml')
+project(':infrastructure.spring-boot.config.yaml').projectDir = file('infrastructure/spring-boot/config/config-yaml')
 
 // Datasource
 

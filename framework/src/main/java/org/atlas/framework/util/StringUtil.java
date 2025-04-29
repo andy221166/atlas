@@ -12,6 +12,10 @@ public class StringUtil {
 
   public static final String EMPTY = "";
 
+  public static String nvl(String value, String defaultValue) {
+    return value == null ? defaultValue : value;
+  }
+
   public static String limit(String input, int maxLength) {
     if (input == null) {
       return null;

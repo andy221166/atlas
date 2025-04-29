@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "app.api-gateway.auth-rules")
 @Data
-public class AuthRulesProperties {
+public class AuthRulesProps {
 
   private List<String> nonSecuredPaths = new ArrayList<>();
   private List<SecuredPath> securedPaths = new ArrayList<>();

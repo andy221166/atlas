@@ -1,5 +1,8 @@
 package org.atlas.infrastructure.notification.websocket.config;
 
+import lombok.RequiredArgsConstructor;
+import org.atlas.framework.config.Application;
+import org.atlas.framework.config.ApplicationConfigPort;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -11,14 +14,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketServerConfig implements WebSocketMessageBrokerConfigurer {
 
   public static final String DESTINATION_PREFIX = "/topic";
   private static final String STOMP_ENDPOINT = "/notification/ws";
-  // TODO: Consider to put it into config-server
-  private static final String[] ALLOWED_HOSTS = {
-      "http://localhost:9000" // Frontend
-  };
+
+  private final ApplicationConfigPort applicationConfigPort;
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -30,7 +32,9 @@ public class WebSocketServerConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     // Client connects to this endpoint
     registry.addEndpoint(STOMP_ENDPOINT)
-        .setAllowedOrigins(ALLOWED_HOSTS)
+        .setAllowedOrigins(
+            applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-origins")
+                .toArray(new String[0]))
         .withSockJS();
   }
 }

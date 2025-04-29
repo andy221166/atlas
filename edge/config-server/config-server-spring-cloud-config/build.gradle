@@ -28,7 +28,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.config')
+    api project(':infrastructure.spring-boot.bootstrap')
     api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':

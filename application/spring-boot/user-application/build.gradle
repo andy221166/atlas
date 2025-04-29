@@ -39,8 +39,14 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${stackConfig['api-server']}")
     }
     api project(':infrastructure.spring-boot.auth-client.spring-security-jwt')
-    api project(':infrastructure.spring-boot.bean')
-    api project(':infrastructure.spring-boot.config')
+    api project(':infrastructure.spring-boot.bootstrap')
+    switch (stackConfig['config']) {
+        case 'yaml':
+            api project(':infrastructure.spring-boot.config.yaml')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['config']}")
+    }
     switch (stackConfig['datasource']) {
         case 'mysql':
             api project(':infrastructure.spring-boot.datasource.mysql.adapter.user')

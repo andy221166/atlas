@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.bean;
+package org.atlas.infrastructure.bootstrap;
 
 import java.util.Set;
 import lombok.RequiredArgsConstructor;

@@ -33,7 +33,13 @@ dependencies {
     api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.config')
+    switch (stackConfig['config']) {
+        case 'yaml':
+            api project(':infrastructure.spring-boot.config.yaml')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['config']}")
+    }
     api project(':infrastructure.spring-boot.i18n')
 
     // Lombok

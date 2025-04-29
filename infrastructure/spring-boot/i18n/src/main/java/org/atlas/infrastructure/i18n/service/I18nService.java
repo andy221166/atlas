@@ -2,7 +2,6 @@ package org.atlas.infrastructure.i18n.service;
 
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.i18n.I18nPort;
 import org.atlas.framework.util.StringUtil;
 import org.springframework.context.MessageSource;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class I18nService implements I18nPort {
 
-  private final ApplicationConfigPort applicationConfigPort;
   private final MessageSource messageSource;
+  private final Locale locale;
 
   @Override
   public String getMessage(String code, Object... params) {
-    return getMessage(code, StringUtil.EMPTY, applicationConfigPort.getLocale(), params);
+    return getMessage(code, StringUtil.EMPTY, locale, params);
   }
 
   @Override
@@ -28,7 +27,7 @@ public class I18nService implements I18nPort {
 
   @Override
   public String getMessage(String code, String defaultValue, Object... params) {
-    return getMessage(code, defaultValue, applicationConfigPort.getLocale(), params);
+    return getMessage(code, defaultValue, locale, params);
   }
 
   @Override

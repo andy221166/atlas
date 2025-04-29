@@ -1,7 +1,8 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.atlas.framework.config.Application;
+import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,9 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  // TODO: Consider to put it into config-server
-  private static final String[] ALLOWED_ORIGINS = {
-      "http://localhost:9000" // Frontend
-  };
-
+  private final ApplicationConfigPort applicationConfigPort;
+  private final AuthRulesProps authRulesProps;
   private final CustomServerAuthenticationEntryPoint serverAuthenticationEntryPoint;
-  private final AuthRulesProperties authRules;
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -35,11 +32,16 @@ public class SecurityConfig {
         .cors(corsSpec ->
             corsSpec.configurationSource(exchange -> {
               CorsConfiguration corsConfig = new CorsConfiguration();
-              corsConfig.setAllowedOrigins(Arrays.stream(ALLOWED_ORIGINS).toList());
-              corsConfig.addAllowedMethod("*");
-              corsConfig.addAllowedHeader("*");
-              corsConfig.setAllowCredentials(true);
-              corsConfig.setMaxAge(3600L);
+              corsConfig.setAllowedOrigins(
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-origins"));
+              corsConfig.setAllowedMethods(
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-methods"));
+              corsConfig.setAllowedHeaders(
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-headers"));
+              corsConfig.setAllowCredentials(
+                  applicationConfigPort.getConfigAsBoolean(Application.SYSTEM, "cors.allow-credentials"));
+              corsConfig.setMaxAge(
+                  applicationConfigPort.getConfigAsLong(Application.SYSTEM, "cors.max-age"));
               return corsConfig;
             }))
         .oauth2ResourceServer(oauth2 ->
@@ -61,12 +63,12 @@ public class SecurityConfig {
           auth.pathMatchers(HttpMethod.OPTIONS).permitAll();
 
           // Non-secured paths
-          authRules.getNonSecuredPaths().forEach(path ->
+          authRulesProps.getNonSecuredPaths().forEach(path ->
               auth.pathMatchers(path).permitAll()
           );
 
           // Secured paths with role-based authorization
-          authRules.getSecuredPaths().forEach(rule ->
+          authRulesProps.getSecuredPaths().forEach(rule ->
               auth.pathMatchers(rule.getPath())
                   .hasAnyAuthority(rule.getRoles().toArray(String[]::new))
           );

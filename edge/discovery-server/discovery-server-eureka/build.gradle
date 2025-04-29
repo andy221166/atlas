@@ -28,7 +28,14 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
     // Infrastructure
-    api project(':infrastructure.spring-boot.config')
+    api project(':infrastructure.spring-boot.bootstrap')
+    switch (stackConfig['config']) {
+        case 'yaml':
+            api project(':infrastructure.spring-boot.config.yaml')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['config']}")
+    }
     api project(':infrastructure.spring-boot.observability.actuator')
     switch (stackConfig['observability.logging']) {
         case 'logback':

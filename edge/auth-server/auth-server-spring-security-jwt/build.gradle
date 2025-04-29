@@ -29,8 +29,15 @@ dependencies {
 
     // Infrastructure
     api project(':infrastructure.spring-boot.api-server.rest.core')
+    api project(':infrastructure.spring-boot.bootstrap')
     api project(':infrastructure.spring-boot.cache.simple')
-    api project(':infrastructure.spring-boot.config')
+    switch (stackConfig['config']) {
+        case 'yaml':
+            api project(':infrastructure.spring-boot.config.yaml')
+            break
+        default:
+            throw new IllegalArgumentException("Unsupported ${stackConfig['config']}")
+    }
     switch (stackConfig['datasource']) {
         case 'mysql':
             api project(':infrastructure.spring-boot.datasource.mysql.adapter.auth')
