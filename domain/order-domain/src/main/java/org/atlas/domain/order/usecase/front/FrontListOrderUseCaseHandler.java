@@ -25,7 +25,7 @@ import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrd
 import org.atlas.domain.product.shared.internal.ListProductInput;
 import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.product.shared.internal.ListProductOutput.Product;
-import org.atlas.framework.context.UserContext;
+import org.atlas.framework.security.session.SessionContext;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -43,7 +43,7 @@ public class FrontListOrderUseCaseHandler implements
   @Override
   public ListOrderOutput handle(ListOrderInput input) throws Exception {
     // Query order
-    Integer userId = UserContext.getUserId();
+    Integer userId = SessionContext.getUserId();
     input.getPagingRequest().setSortBy("createdAt");
     input.getPagingRequest().setSortOrder(SortOrder.DESC);
     PagingResult<OrderEntity> orderEntityPage = orderRepository.findByUserId(userId,

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetProductInput;
 import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetProductOutput;
 import org.atlas.framework.cache.CachePort;
+import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
@@ -34,13 +36,24 @@ public class FrontGetProductUseCaseHandler implements
 
   @Override
   public GetProductOutput handle(GetProductInput input) throws Exception {
-    ProductEntity productEntity = productRepository.findById(input.getId())
-        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
-    GetProductOutput output = map(productEntity);
-    cachePort.set(applicationConfigPort.getProductCacheName(),
-        String.valueOf(productEntity.getId()),
-        output, Duration.ofHours(1));
-    return output;
+    String cacheName = Optional.ofNullable(
+            applicationConfigPort.getConfig(Application.PRODUCT_SERVICE, "product-cache-name"))
+        .orElseThrow(() -> new IllegalStateException("product-cache-name is not configured"));
+    String cacheKey = String.valueOf(input.getId());
+
+    // Get from cache first
+    return cachePort.get(cacheName, cacheKey)
+        .map(GetProductOutput.class::cast)
+        .orElseGet(() -> {
+          // Get from DB
+          ProductEntity entity = productRepository.findById(input.getId())
+              .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+          GetProductOutput output = map(entity);
+
+          // Update cache
+          cachePort.set(cacheName, cacheKey, output, Duration.ofHours(1));
+          return output;
+        });
   }
 
   private GetProductOutput map(ProductEntity productEntity) {

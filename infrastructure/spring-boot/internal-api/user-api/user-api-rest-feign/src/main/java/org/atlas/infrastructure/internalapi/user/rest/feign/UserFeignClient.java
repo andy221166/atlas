@@ -1,7 +1,7 @@
 package org.atlas.infrastructure.internalapi.user.rest.feign;
 
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
-import org.atlas.infrastructure.api.client.core.rest.feign.FeignConfig;
+import org.atlas.infrastructure.api.client.rest.feign.FeignConfig;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserRequest;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;

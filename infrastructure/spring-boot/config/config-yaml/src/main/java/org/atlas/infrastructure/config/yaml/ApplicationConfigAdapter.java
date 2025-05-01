@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,12 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort, Initiali
   @Override
   public String getApplicationName() {
     return environment.getProperty("spring.application.name");
+  }
+
+  @Override
+  public String getActiveProfile() {
+    String[] profiles = environment.getActiveProfiles();
+    return profiles.length > 0 ? profiles[0] : "default";
   }
 
   @Override
@@ -62,20 +70,19 @@ public class ApplicationConfigAdapter implements ApplicationConfigPort, Initiali
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public List<String> getConfigAsList(Application application, String key) {
-    return environment.getProperty(toKey(application, key), List.class);
+    return Binder.get(environment)
+        .bind(toKey(application, key), Bindable.listOf(String.class))
+        .orElse(Collections.emptyList())
+        .stream()
+        .map(value -> value.replaceAll("^\\[|]$", "")) // remove leading '[' or trailing ']'
+        .toList();
   }
 
   @Override
   public <T> T getConfigAsClass(Application application, String key, Class<T> clazz,
       T defaultValue) {
     return environment.getProperty(toKey(application, key), clazz, defaultValue);
-  }
-
-  private String getActiveProfile() {
-    String[] profiles = environment.getActiveProfiles();
-    return profiles.length > 0 ? profiles[0] : "default";
   }
 
   private String toKey(Application application, String key) {

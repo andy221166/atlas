@@ -2,7 +2,7 @@ package org.atlas.infrastructure.auth.client.springsecurityjwt;
 
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.security.client.model.CreateUserRequest;
-import org.atlas.infrastructure.api.client.core.rest.feign.FeignConfig;
+import org.atlas.infrastructure.api.client.rest.feign.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

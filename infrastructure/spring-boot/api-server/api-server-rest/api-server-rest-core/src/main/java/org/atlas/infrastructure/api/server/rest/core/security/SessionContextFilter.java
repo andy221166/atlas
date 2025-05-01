@@ -5,11 +5,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.security.session.SessionInfo;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @Order(1)
-public class UserContextFilter extends OncePerRequestFilter {
+public class SessionContextFilter extends OncePerRequestFilter {
 
   private static final Pattern FILTERED_PATHS = Pattern.compile("^/api(/.*)?$");
 
@@ -28,19 +29,21 @@ public class UserContextFilter extends OncePerRequestFilter {
     String userId = request.getHeader(CustomClaim.USER_ID.getHeader());
     String userRole = request.getHeader(CustomClaim.USER_ROLE.getHeader());
     String sessionId = request.getHeader(CustomClaim.SESSION_ID.getHeader());
+    String expiresAt = request.getHeader(CustomClaim.EXPIRES_AT.getHeader());
 
     if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userRole)) {
-      UserInfo userInfo = new UserInfo();
-      userInfo.setUserId(Integer.valueOf(userId));
-      userInfo.setRole(Role.valueOf(userRole));
-      userInfo.setSessionId(sessionId);
-      UserContext.set(userInfo);
+      SessionInfo sessionInfo = new SessionInfo();
+      sessionInfo.setSessionId(sessionId);
+      sessionInfo.setUserId(Integer.valueOf(userId));
+      sessionInfo.setUserRole(Role.valueOf(userRole));
+      sessionInfo.setExpiresAt(new Date(Long.parseLong(expiresAt)));
+      SessionContext.set(sessionInfo);
     }
 
     try {
       filterChain.doFilter(request, response);
     } finally {
-      UserContext.clear();
+      SessionContext.clear();
     }
   }
 

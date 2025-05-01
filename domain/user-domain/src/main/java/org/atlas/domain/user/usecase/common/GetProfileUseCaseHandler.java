@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.usecase.common.GetProfileUseCaseHandler.GetProfileOutput;
-import org.atlas.framework.context.UserContext;
+import org.atlas.framework.security.session.SessionContext;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
@@ -21,7 +21,7 @@ public class GetProfileUseCaseHandler implements UseCaseHandler<Void, GetProfile
 
   @Override
   public GetProfileOutput handle(Void input) throws Exception {
-    Integer userId = UserContext.getUserId();
+    Integer userId = SessionContext.getUserId();
     UserEntity userEntity = userRepository.findById(userId)
         .orElseThrow(() -> new BusinessException(AppError.USER_NOT_FOUND));
     return ObjectMapperUtil.getInstance()

@@ -11,6 +11,7 @@ public enum CustomClaim {
   USER_ID("user_id", "X-User-Id"),
   USER_ROLE("user_role", "X-User-Role"),
   SESSION_ID("session_id", "X-Session-Id"),
+  EXPIRES_AT("expires_at", "X-Expires-At"),
   ;
 
   private final String claim;

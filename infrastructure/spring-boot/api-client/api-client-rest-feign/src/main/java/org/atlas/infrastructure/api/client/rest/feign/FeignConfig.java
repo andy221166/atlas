@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.feign;
+package org.atlas.infrastructure.api.client.rest.feign;
 
 import feign.Logger;
 import feign.Request;

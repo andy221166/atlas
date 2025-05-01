@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.apachehttpclient;
+package org.atlas.infrastructure.api.client.rest.apachehttpclient;
 
 import java.io.IOException;
 import org.apache.hc.core5.http.EntityDetails;
@@ -6,8 +6,8 @@ import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.protocol.HttpContext;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.security.session.SessionInfo;
 import org.atlas.framework.security.enums.CustomClaim;
 
 public class UserContextRequestInterceptor implements HttpRequestInterceptor {
@@ -15,11 +15,11 @@ public class UserContextRequestInterceptor implements HttpRequestInterceptor {
   @Override
   public void process(HttpRequest httpRequest, EntityDetails entityDetails, HttpContext httpContext)
       throws HttpException, IOException {
-    UserInfo userInfo = UserContext.get();
-    if (userInfo != null) {
-      httpRequest.addHeader(CustomClaim.USER_ID.getHeader(), userInfo.getUserId());
-      httpRequest.addHeader(CustomClaim.USER_ROLE.getHeader(), userInfo.getRole());
-      httpRequest.addHeader(CustomClaim.SESSION_ID.getHeader(), userInfo.getSessionId());
+    SessionInfo sessionInfo = SessionContext.get();
+    if (sessionInfo != null) {
+      httpRequest.addHeader(CustomClaim.SESSION_ID.getHeader(), sessionInfo.getSessionId());
+      httpRequest.addHeader(CustomClaim.USER_ID.getHeader(), sessionInfo.getUserId());
+      httpRequest.addHeader(CustomClaim.USER_ROLE.getHeader(), sessionInfo.getUserRole());
     }
   }
 }

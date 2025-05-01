@@ -1,8 +1,8 @@
 package org.atlas.infrastructure.usecase.handler.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.security.session.SessionInfo;
 import org.atlas.framework.util.StopWatch;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -22,19 +22,19 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
     stopWatch.start();
 
-    UserInfo userInfo = UserContext.get();
-    if (userInfo == null) {
+    SessionInfo sessionInfo = SessionContext.get();
+    if (sessionInfo == null) {
       log.debug("Anonymous user started handling use case {}: {}",
           useCaseClass.getSimpleName(), input);
     } else {
       log.debug("User {} started handling use case {}: {}",
-          userInfo, useCaseClass.getSimpleName(), input);
+          sessionInfo, useCaseClass.getSimpleName(), input);
     }
   }
 
   @Override
   public void postHandle(Class<?> useCaseClass, Object input) {
-    UserInfo userInfo = UserContext.get();
+    SessionInfo sessionInfo = SessionContext.get();
 
     // Stop the StopWatch and get elapsed time
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
@@ -42,12 +42,12 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     long elapsedTimeMs = stopWatch.getElapsedTimeMs();
 
     // Merge user info and performance check into one log statement
-    if (userInfo == null) {
+    if (sessionInfo == null) {
       log.debug("Anonymous user finished handling use case {}: {} in {} ms",
           useCaseClass.getSimpleName(), input, elapsedTimeMs);
     } else {
       log.debug("User {} finished handling use case {}: {} in {} ms",
-          userInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
+          sessionInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
     }
   }
 }

@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.resttemplate;
+package org.atlas.infrastructure.api.client.rest.resttemplate;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

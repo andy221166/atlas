@@ -42,7 +42,7 @@ dependencies {
 
     // Cryptography
     api 'org.springframework.security:spring-security-crypto:6.4.4'
-    api 'commons-codec:commons-codec:1.17.1'
+    api 'commons-codec:commons-codec:1.18.0'
 
     // JWT/JWKS
     api 'com.auth0:java-jwt:4.4.0'

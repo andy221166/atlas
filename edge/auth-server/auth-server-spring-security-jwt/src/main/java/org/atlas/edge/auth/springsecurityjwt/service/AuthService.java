@@ -5,10 +5,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.atlas.domain.auth.entity.UserEntity;
 import org.atlas.domain.auth.entity.SessionEntity;
-import org.atlas.domain.auth.repository.UserRepository;
+import org.atlas.domain.auth.entity.UserEntity;
 import org.atlas.domain.auth.repository.SessionRepository;
+import org.atlas.domain.auth.repository.UserRepository;
 import org.atlas.edge.auth.springsecurityjwt.exception.InvalidTokenException;
 import org.atlas.edge.auth.springsecurityjwt.mapper.AuthMapper;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
@@ -20,11 +20,10 @@ import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.security.session.SessionInfo;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.exception.BusinessException;
-import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.util.UUIDGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,7 +72,7 @@ public class AuthService {
   public RefreshTokenResponse refreshToken(RefreshTokenRequest request)
       throws IOException, InvalidKeySpecException {
     // Retrieve session from database
-    String sessionId = UserContext.getSessionId();
+    String sessionId = SessionContext.getSessionId();
     SessionEntity sessionEntity = sessionRepository.findById(sessionId)
         .orElseThrow(() -> new BusinessException(AppError.UNAUTHORIZED, "Session not found"));
 
@@ -118,29 +117,21 @@ public class AuthService {
   }
 
   @Transactional
-  public void logout(String accessToken) {
-    // Need to parse the access token to get expiredAt
-    Jwt jwt;
-    try {
-      jwt = tokenService.parseToken(accessToken);
-    } catch (InvalidTokenException e) {
-      throw new BusinessException(AppError.UNAUTHORIZED, "Invalid access token");
-    }
-
-    UserInfo currentUser = UserContext.get();
+  public void logout() {
+    SessionInfo sessionInfo = SessionContext.get();
 
     // Remove session from database
-    sessionRepository.deleteById(currentUser.getSessionId());
+    sessionRepository.deleteById(sessionInfo.getSessionId());
 
     // Revoke session
-    revokeSession(currentUser.getSessionId(), jwt.getExpiresAt());
+    revokeSession(sessionInfo.getSessionId(), sessionInfo.getExpiresAt());
 
     // Update last logout timestamp in Redis
-    updateLastLogoutTs(currentUser.getUserId());
+    updateLastLogoutTs(Integer.valueOf(sessionInfo.getUserId()));
   }
 
   public void forceLogoutOnAllDevices() {
-    Integer userId = UserContext.getUserId();
+    Integer userId = SessionContext.getUserId();
     updateLastLogoutTs(userId);
   }
 
@@ -175,7 +166,8 @@ public class AuthService {
   }
 
   private void revokeSession(String sessionId, Date expiresAt) {
-    String redisKey = String.format(SecurityConstant.SESSION_BLACKLISTED_REDIS_KEY_FORMAT, sessionId);
+    String redisKey = String.format(SecurityConstant.SESSION_BLACKLISTED_REDIS_KEY_FORMAT,
+        sessionId);
     long remainingMillis = expiresAt.getTime() - System.currentTimeMillis();
     if (remainingMillis > 0) {
       redisTemplate.opsForValue().set(redisKey, true, Duration.ofMillis(remainingMillis));

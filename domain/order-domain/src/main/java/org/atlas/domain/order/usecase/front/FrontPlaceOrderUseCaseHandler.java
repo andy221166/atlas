@@ -28,7 +28,7 @@ import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.user.shared.internal.ListUserInput;
 import org.atlas.domain.user.shared.internal.ListUserOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.context.UserContext;
+import org.atlas.framework.security.session.SessionContext;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.order.model.User;
@@ -91,7 +91,7 @@ public class FrontPlaceOrderUseCaseHandler implements
 
   private OrderEntity newOrder(PlaceOrderInput input) {
     OrderEntity orderEntity = new OrderEntity();
-    orderEntity.setUserId(UserContext.getUserId());
+    orderEntity.setUserId(SessionContext.getUserId());
     orderEntity.setStatus(OrderStatus.PROCESSING);
     orderEntity.setCreatedAt(new Date());
     for (PlaceOrderInput.OrderItem orderItemInput : input.getOrderItems()) {

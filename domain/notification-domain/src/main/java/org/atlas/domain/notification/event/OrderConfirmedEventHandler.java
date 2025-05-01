@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.order.OrderConfirmedEvent;
 import org.atlas.framework.event.handler.EventHandler;
@@ -92,8 +94,12 @@ public class OrderConfirmedEventHandler implements EventHandler<OrderConfirmedEv
     }
     attachment = new Attachment(attachmentFile.getName(), attachmentFile);
 
+    String sender = Optional.ofNullable(
+            applicationConfigPort.getConfig(Application.NOTIFICATION_SERVICE, "email.sender"))
+        .orElseThrow(() -> new IllegalStateException("email.sender is not configured"));
+
     EmailNotification notification = new EmailNotification.Builder()
-        .setSender(applicationConfigPort.getEmailSender())
+        .setSender(sender)
         .addRecipient(event.getUser().getEmail())
         .setSubject(subject)
         .setBody(body)

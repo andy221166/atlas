@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.apachehttpclient;
+package org.atlas.infrastructure.api.client.rest.apachehttpclient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

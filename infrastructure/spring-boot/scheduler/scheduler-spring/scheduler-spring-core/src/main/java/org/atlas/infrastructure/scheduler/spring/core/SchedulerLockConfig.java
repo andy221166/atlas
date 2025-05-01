@@ -24,7 +24,7 @@ public class SchedulerLockConfig {
 
     @Bean
     public LockProvider lockProvider(RedisConnectionFactory redisConnectionFactory) {
-        String environment = applicationConfigPort.getProfile();
+        String environment = applicationConfigPort.getActiveProfile();
         String prefix = applicationConfigPort.getApplicationName();
         return new RedisLockProvider(redisConnectionFactory, environment, prefix);
     }

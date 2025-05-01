@@ -35,9 +35,12 @@ public class TokenRelayGatewayFilterFactory extends
           ServerHttpRequest mutatedRequest = exchange.getRequest()
               .mutate()
               .headers(httpHeaders -> {
+                httpHeaders.set(CustomClaim.SESSION_ID.getHeader(), sessionId);
                 httpHeaders.set(CustomClaim.USER_ID.getHeader(), userId);
                 httpHeaders.set(CustomClaim.USER_ROLE.getHeader(), userRole);
-                httpHeaders.set(CustomClaim.SESSION_ID.getHeader(), sessionId);
+                assert jwt.getExpiresAt() != null;
+                httpHeaders.set(CustomClaim.EXPIRES_AT.getHeader(),
+                    String.valueOf(jwt.getExpiresAt().toEpochMilli()));
               })
               .build();
           ServerWebExchange mutatedExchange = exchange.mutate()

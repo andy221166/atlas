@@ -7,6 +7,7 @@ import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
+import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCreatedEvent;
@@ -46,10 +47,11 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
 
   private void decreaseQuantity(Integer productId, Integer quantity) {
     DecreaseQuantityStrategy decreaseQuantityStrategy =
-        applicationConfigPort.getDecreaseQuantityStrategy();
+        applicationConfigPort.getConfigAsClass(Application.PRODUCT_SERVICE,
+            "decrease-quantity-strategy",
+            DecreaseQuantityStrategy.class, DecreaseQuantityStrategy.CONSTRAINT);
     switch (decreaseQuantityStrategy) {
-      case CONSTRAINT ->
-          productRepository.decreaseQuantityWithConstraint(productId, quantity);
+      case CONSTRAINT -> productRepository.decreaseQuantityWithConstraint(productId, quantity);
       case PESSIMISTIC_LOCK ->
           productRepository.decreaseQuantityWithPessimisticLock(productId, quantity);
       case OPTIMISTIC_LOCK ->

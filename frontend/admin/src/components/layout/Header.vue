@@ -13,23 +13,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { authService } from '@/services/auth.service'
+import type { Profile } from '@/services/interfaces/user.interface'
+import { userService } from '@/services/user.service'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-interface Profile {
-  firstName: string
-  lastName: string
-}
 
 const router = useRouter()
 const profile = ref<Profile | null>(null)
 
 const fetchProfile = async () => {
   try {
-    const response = await axios.get('/api/common/users/profile')
-    if (response.data.success) {
-      profile.value = response.data.data
+    const response = await userService.fetchProfile()
+    if (response.success && response.data) {
+      profile.value = response.data;
     }
   } catch (error) {
     console.error('Failed to fetch profile:', error)
@@ -38,7 +35,7 @@ const fetchProfile = async () => {
 
 const handleLogout = async () => {
   try {
-    await axios.post('/api/auth/logout')
+    await authService.logout()
     // After successful logout, redirect to login page
     router.push('/login')
   } catch (error) {

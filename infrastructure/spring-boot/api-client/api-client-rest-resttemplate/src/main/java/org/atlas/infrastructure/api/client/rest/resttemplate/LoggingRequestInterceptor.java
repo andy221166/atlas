@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.resttemplate;
+package org.atlas.infrastructure.api.client.rest.resttemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;

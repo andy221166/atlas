@@ -7,6 +7,8 @@ public interface ApplicationConfigPort {
 
   String getApplicationName();
 
+  String getActiveProfile();
+
   default String getConfig(Application application, String key) {
     return getConfig(application, key, null);
   }

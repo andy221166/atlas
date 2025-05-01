@@ -9,7 +9,7 @@ import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.infrastructure.api.client.core.rest.resttemplate.RestTemplateService;
+import org.atlas.infrastructure.api.client.rest.resttemplate.RestTemplateService;
 import org.atlas.infrastructure.internalapi.product.rest.model.ListProductRequest;
 import org.atlas.infrastructure.internalapi.product.rest.model.ListProductResponse;
 import org.springframework.beans.factory.annotation.Value;

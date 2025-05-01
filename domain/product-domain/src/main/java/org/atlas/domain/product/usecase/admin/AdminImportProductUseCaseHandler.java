@@ -3,6 +3,8 @@ package org.atlas.domain.product.usecase.admin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ import org.atlas.domain.product.port.file.model.read.ProductRow;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler.ImportProductInput;
+import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.event.contract.product.ProductCreatedEvent;
 import org.atlas.framework.file.enums.FileType;
@@ -51,19 +54,20 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
 
   @Override
   public Void handle(ImportProductInput input) throws Exception {
-    String storageObjectKey = getObjectKey(input);
+    String bucket = Optional.ofNullable(applicationConfigPort.getConfig(Application.PRODUCT_SERVICE,
+            "product-import-bucket"))
+        .orElseThrow(() -> new IllegalStateException("product-import-bucket is not configured"));
+    String objectKey = getObjectKey(input);
 
     // Upload temp file
     storagePort.upload(
-        new UploadFileRequest(applicationConfigPort.getProductImportBucket(), storageObjectKey,
-            input.getFileContent()));
+        new UploadFileRequest(bucket, objectKey, input.getFileContent()));
 
     EXECUTOR.submit(() -> {
       try {
         // Download temporary file
         byte[] fileContent = storagePort.download(
-            new DownloadFileRequest(applicationConfigPort.getProductImportBucket(),
-                storageObjectKey));
+            new DownloadFileRequest(bucket, objectKey));
 
         // Read rows from file content
         List<ProductRow> rows;
@@ -95,15 +99,14 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
         });
         log.info("Inserted {} products", rows.size());
       } catch (Exception e) {
-        log.error("Occurred error while importing file {}", storageObjectKey, e);
+        log.error("Occurred error while importing file {}", objectKey, e);
       } finally {
         try {
           // Delete temporary file to clean
           storagePort.delete(
-              new DeleteFileRequest(applicationConfigPort.getProductImportBucket(),
-                  storageObjectKey));
+              new DeleteFileRequest(bucket, objectKey));
         } catch (Exception e) {
-          log.error("Failed to delete file {}", storageObjectKey, e);
+          log.error("Failed to delete file {}", objectKey, e);
         }
       }
     });

@@ -1,6 +1,6 @@
 package org.atlas.edge.config.server.springcloudconfig;
 
-import org.atlas.infrastructure.config.YamlConfigLoader;
+import org.atlas.infrastructure.bootstrap.YamlConfigLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.config.server.EnableConfigServer;

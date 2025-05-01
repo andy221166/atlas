@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.rest.apachehttpclient;
+package org.atlas.infrastructure.api.client.rest.apachehttpclient;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;

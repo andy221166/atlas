@@ -9,7 +9,7 @@ import org.atlas.domain.user.shared.internal.ListUserOutput;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.infrastructure.api.client.core.rest.apachehttpclient.HttpClientService;
+import org.atlas.infrastructure.api.client.rest.apachehttpclient.HttpClientService;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserRequest;
 import org.atlas.infrastructure.internalapi.user.rest.model.ListUserResponse;
 import org.springframework.beans.factory.annotation.Value;

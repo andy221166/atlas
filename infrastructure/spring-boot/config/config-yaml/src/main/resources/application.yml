@@ -3,23 +3,25 @@ app:
     default:
       system:
         locale: en-US
-        cors.allowed-origins:
-          - http://localhost:9000 # local storefront app
-          - http://localhost:9100 # local admin app
-        cors.allowed-methods:
-          - "GET"
-          - "POST"
-          - "PUT"
-          - "PATCH"
-          - "DELETE"
-          - "OPTIONS"
-        cors.allowed-headers:
-          - "*"
-        cors.allow-credentials: true
-        cors.max-age: 3600
+        cors:
+          allowed-origins:
+            - http://localhost:9000
+            - http://localhost:9100
+          allowed-methods:
+            - "GET"
+            - "POST"
+            - "PUT"
+            - "PATCH"
+            - "DELETE"
+            - "OPTIONS"
+          allowed-headers:
+            - "*"
+          allow-credentials: true
+          max-age: 0 # always fetch the latest data
       product-service:
         product-cache-name: product
         product-import-bucket: product
         decrease-quantity-strategy: DISTRIBUTED_LOCK
       notification-service:
-        email.sender: admin@atlas.org
+        email:
+          sender: admin@atlas.org

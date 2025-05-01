@@ -1,8 +1,8 @@
-package org.atlas.infrastructure.api.client.core.rest.resttemplate;
+package org.atlas.infrastructure.api.client.rest.resttemplate;
 
 import java.io.IOException;
-import org.atlas.framework.context.UserContext;
-import org.atlas.framework.context.UserInfo;
+import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.security.session.SessionInfo;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -14,14 +14,14 @@ public class UserContextRequestInterceptor implements ClientHttpRequestIntercept
   @Override
   public ClientHttpResponse intercept(HttpRequest request, byte[] body,
       ClientHttpRequestExecution execution) throws IOException {
-    UserInfo userInfo = UserContext.get();
-    if (userInfo != null) {
-      request.getHeaders().add(CustomClaim.USER_ID.getHeader(),
-          String.valueOf(userInfo.getUserId()));
-      request.getHeaders().add(CustomClaim.USER_ROLE.getHeader(),
-          userInfo.getRole().name());
+    SessionInfo sessionInfo = SessionContext.get();
+    if (sessionInfo != null) {
       request.getHeaders().add(CustomClaim.SESSION_ID.getHeader(),
-          userInfo.getSessionId());
+          sessionInfo.getSessionId());
+      request.getHeaders().add(CustomClaim.USER_ID.getHeader(),
+          String.valueOf(sessionInfo.getUserId()));
+      request.getHeaders().add(CustomClaim.USER_ROLE.getHeader(),
+          sessionInfo.getUserRole().name());
     }
     return execution.execute(request, body);
   }

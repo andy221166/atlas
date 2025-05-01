@@ -16,12 +16,10 @@ import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
 import org.atlas.edge.auth.springsecurityjwt.service.CookieService;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -89,11 +87,8 @@ public class AuthController {
       description = "Logs out the user and clears authentication cookies."
   )
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<Void> logout(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-      HttpServletResponse httpServletResponse) throws Exception {
-    String accessToken = authorizationHeader.replace("Bearer ", "");
-    authService.logout(accessToken);
+  public ApiResponseWrapper<Void> logout(HttpServletResponse httpServletResponse) throws Exception {
+    authService.logout();
     cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     return ApiResponseWrapper.success();
   }

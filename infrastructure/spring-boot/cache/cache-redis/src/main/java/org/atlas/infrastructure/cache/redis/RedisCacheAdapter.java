@@ -3,6 +3,7 @@ package org.atlas.infrastructure.cache.redis;
 import static org.atlas.infrastructure.cache.redis.config.RedisCacheConfig.DEFAULT_CACHE_NAME;
 
 import java.time.Duration;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.framework.cache.CachePort;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,14 +38,14 @@ public class RedisCacheAdapter implements CachePort {
   }
 
   @Override
-  public Object get(String key) {
+  public Optional<Object> get(String key) {
     return get(DEFAULT_CACHE_NAME, key);
   }
 
   @Override
-  public Object get(String cacheName, String key) {
-    return redisTemplate.opsForValue()
-        .get(buildKey(cacheName, key));
+  public Optional<Object> get(String cacheName, String key) {
+    return Optional.ofNullable(redisTemplate.opsForValue()
+        .get(buildKey(cacheName, key)));
   }
 
   @Override

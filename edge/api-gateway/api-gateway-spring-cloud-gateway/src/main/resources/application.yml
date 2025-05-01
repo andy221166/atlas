@@ -45,6 +45,8 @@ spring:
             - Path=/api/auth/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - SessionValidation
+            - TokenRelay
         - id: auth-server-api-docs
           uri: lb://auth-server
           predicates:

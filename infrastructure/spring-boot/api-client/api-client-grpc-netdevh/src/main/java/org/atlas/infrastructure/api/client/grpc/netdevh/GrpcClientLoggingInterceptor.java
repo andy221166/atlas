@@ -1,4 +1,4 @@
-package org.atlas.infrastructure.api.client.core.grpc.netdevh;
+package org.atlas.infrastructure.api.client.grpc.netdevh;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;
