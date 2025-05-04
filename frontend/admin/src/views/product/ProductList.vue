@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid p-4">
+  <div class="container-fluid p-2">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h2">Product Management</h1>
-      <button class="btn btn-primary">
+      <h2 class="h2">Product Management</h2>
+      <button class="btn btn-success">
         Add New Product
       </button>
     </div>
@@ -11,11 +11,16 @@
     <div class="card mb-4">
       <div class="card-body">
         <div class="row g-3">
-          <!-- Search and Price Range - First Row -->
+          <div class="col-md-6">
+            <label class="form-label">Product ID</label>
+            <input v-model="filters.id" type="text" placeholder="Enter product ID..." class="form-control" />
+          </div>
+
           <div class="col-md-6">
             <label class="form-label">Search</label>
             <input v-model="filters.keyword" type="text" placeholder="Search by product name..." class="form-control" />
           </div>
+
           <div class="col-md-6">
             <label class="form-label">Price Range</label>
             <div class="input-group">
@@ -25,7 +30,6 @@
             </div>
           </div>
 
-          <!-- Status and Date - Second Row -->
           <div class="col-md-6">
             <label class="form-label">Status</label>
             <select v-model="filters.status" class="form-select">
@@ -35,13 +39,13 @@
               </option>
             </select>
           </div>
+
           <div class="col-md-6">
             <label class="form-label">Available From</label>
             <input v-model="filters.availableFrom" type="date" class="form-control" />
           </div>
 
-          <!-- Active Status - Third Row -->
-          <div class="col-12">
+          <div class="col-md-6">
             <label class="form-label">Activity</label>
             <div class="border rounded p-2">
               <div class="d-flex gap-4">
@@ -59,7 +63,6 @@
             </div>
           </div>
 
-          <!-- Brand and Categories - Fourth Row -->
           <div class="col-md-6">
             <label class="form-label">Brand</label>
             <select v-model="filters.brandId" class="form-select" :disabled="!brands.length">
@@ -72,6 +75,7 @@
               Loading brands...
             </div>
           </div>
+
           <div class="col-md-6">
             <label class="form-label">Categories</label>
             <select v-model="filters.categoryIds" multiple class="form-select" :disabled="!categories.length" size="3">
@@ -86,7 +90,6 @@
           </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="d-flex justify-content-start mt-4 pt-2 border-top">
           <button @click="applyFilters" class="btn btn-primary me-2">
             <i class="bi bi-search me-1"></i> Search
@@ -97,29 +100,29 @@
         </div>
       </div>
     </div>
-
     <!-- Products Table -->
     <div class="card">
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-light">
             <tr>
-              <th>Image</th>
+              <th>ID</th>
               <th>Name</th>
+              <th>Image</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Status</th>
-              <th>Available From</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="product in products" :key="product.id">
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
               <td>
                 <img :src="product.imageUrl" :alt="product.name" class="img-thumbnail"
                   style="width: 48px; height: 48px; object-fit: cover;" />
               </td>
-              <td>{{ product.name }}</td>
               <td>${{ product.price.toFixed(2) }}</td>
               <td>{{ product.quantity }}</td>
               <td>
@@ -132,8 +135,10 @@
                   {{ product.status }}
                 </span>
               </td>
-              <td>{{ formatDate(product.availableFrom) }}</td>
               <td>
+                <button class="btn btn-sm btn-outline-secondary me-2" @click="router.push(`/products/${product.id}`)">
+                  View
+                </button>
                 <button class="btn btn-sm btn-outline-primary me-2">Edit</button>
                 <button class="btn btn-sm btn-outline-danger">Delete</button>
               </td>
@@ -166,12 +171,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
-import { formatDate } from '@/utils/date.util';
 import { listBrand, type Brand } from '@/services/product/brand.service';
 import { listCategory, type Category } from '@/services/product/category.service';
+import { listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
+import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const activeStates = reactive({
   active: true,
   inactive: true
@@ -187,6 +193,7 @@ const metadata = reactive({
 });
 
 const filters = reactive<ListProductFilters>({
+  id: '',
   keyword: '',
   minPrice: null,
   maxPrice: null,
@@ -258,6 +265,7 @@ const resetFilters = () => {
   activeStates.inactive = true;
 
   Object.assign(filters, {
+    id: '',
     keyword: '',
     minPrice: null,
     maxPrice: null,

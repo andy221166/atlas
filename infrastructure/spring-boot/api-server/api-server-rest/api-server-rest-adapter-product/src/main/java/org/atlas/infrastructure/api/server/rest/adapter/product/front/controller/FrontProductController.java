@@ -15,7 +15,7 @@ import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
-import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.DetailedProductResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.GetProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.ProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.front.model.SearchProductRequest;
 import org.springframework.http.MediaType;
@@ -53,13 +53,13 @@ public class FrontProductController {
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<DetailedProductResponse> getProduct(
+  public ApiResponseWrapper<GetProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1", required = true)
       @PathVariable("id") Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = frontGetProductUseCaseHandler.handle(input);
-    DetailedProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, DetailedProductResponse.class);
+    GetProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, GetProductResponse.class);
     return ApiResponseWrapper.success(response);
   }
 }

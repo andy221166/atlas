@@ -10,11 +10,11 @@ import lombok.Setter;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity
-@Table(name = "product_detail")
+@Table(name = "product_details")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
-public class JpaProductDetailEntity extends JpaBaseEntity {
+public class JpaProductDetailsEntity extends JpaBaseEntity {
 
   @Id
   @Column(name = "product_id")

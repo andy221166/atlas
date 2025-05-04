@@ -59,7 +59,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
 
     // SearchResponse detail
     ObjectMapperUtil.getInstance()
-        .merge(input.getDetail(), productEntity.getDetail());
+        .merge(input.getDetails(), productEntity.getDetails());
 
     // SearchResponse attributes
     if (CollectionUtils.isNotEmpty(input.getAttributes())) {
@@ -129,7 +129,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
 
     @NotNull
     @Valid
-    private ProductDetail detail;
+    private ProductDetail details;
 
     @Valid
     private List<ProductAttribute> attributes;

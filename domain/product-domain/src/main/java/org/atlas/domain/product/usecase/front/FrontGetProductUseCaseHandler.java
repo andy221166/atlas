@@ -62,8 +62,8 @@ public class FrontGetProductUseCaseHandler implements
     product.setName(productEntity.getName());
     product.setPrice(productEntity.getPrice());
     product.setImageUrl(productEntity.getImageUrl());
-    product.setDescription(productEntity.getDetail() != null ?
-        productEntity.getDetail().getDescription() : null);
+    product.setDescription(productEntity.getDetails() != null ?
+        productEntity.getDetails().getDescription() : null);
     if (CollectionUtils.isNotEmpty(productEntity.getAttributes())) {
       product.setAttributes(productEntity.getAttributes()
           .stream()

@@ -56,7 +56,7 @@ public class UpdateProductRequest {
   @NotNull
   @Valid
   @Schema(description = "Detailed information about the product.")
-  private ProductDetail detail;
+  private ProductDetails details;
 
   @Valid
   @Schema(description = "List of product attributes.")
@@ -68,7 +68,7 @@ public class UpdateProductRequest {
 
   @Data
   @Schema(description = "Detailed information about the product.")
-  public static class ProductDetail {
+  public static class ProductDetails {
 
     @NotBlank
     @Schema(description = "Description of the product.", example = "A comfortable cotton t-shirt.")

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Response object for retrieving product details.")
-public class DetailedProductResponse {
+public class GetProductResponse {
 
   @Schema(description = "Unique identifier of the product.", example = "123")
   private Integer id;

@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS product
     `updated_at`     DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS product_detail
+CREATE TABLE IF NOT EXISTS product_details
 (
     `product_id`  INT      NOT NULL PRIMARY KEY,
     `description` TEXT,
@@ -120,7 +120,7 @@ VALUES (1, 'MacBook Pro 14"', 1999.99, 'https://example.com/macbook_pro.jpg', 50
        (20, 'Alienware m15', 2099.99, 'https://example.com/alienware_m15.jpg', 40, 'IN_STOCK',
         NOW(), 1, 5);
 
-INSERT INTO product_detail (product_id, description)
+INSERT INTO product_details (product_id, description)
 VALUES (1, 'A powerful MacBook with M2 chip and Retina display.'),
        (2, 'Latest Samsung flagship phone with high-end specs.'),
        (3, 'Noise-canceling headphones with amazing sound quality.'),

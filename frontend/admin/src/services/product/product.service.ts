@@ -1,5 +1,7 @@
 import type { ApiResponse } from '../base/api.interface'
 import apiClient from '../base/apiClient'
+import type { Brand } from './brand.service'
+import type { Category } from './category.service'
 
 export interface Product {
   id: number
@@ -12,8 +14,25 @@ export interface Product {
   isActive: boolean
 }
 
+export interface GetProductResponse extends Product {
+  brand: Brand;
+  details: ProductDetails;
+  attributes: ProductAttribute[];
+  categories: Category[];
+}
+
+export interface ProductDetails {
+  description: string;
+};
+
+export interface ProductAttribute {
+  id: number;
+  name: string;
+  value: string;
+}
+
 export interface ListProductFilters {
-  id?: number
+  id?: string
   keyword?: string
   minPrice?: number | null
   maxPrice?: number | null
@@ -49,3 +68,8 @@ export const listProduct = async (filters: ListProductFilters): Promise<ApiRespo
   const response = await apiClient.get('/api/admin/products', { params: queryParams });
   return response.data;
 }
+
+export const getProduct = async (productId: number): Promise<ApiResponse<GetProductResponse>> => {
+  const response = await apiClient.get(`/api/admin/products/${productId}`);
+  return response.data;
+};

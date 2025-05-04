@@ -64,7 +64,5 @@ public class AdminListProductUseCaseHandler implements
     private BigDecimal price;
     private Integer quantity;
     private ProductStatus status;
-    private Date availableFrom;
-    private Boolean isActive;
   }
 }

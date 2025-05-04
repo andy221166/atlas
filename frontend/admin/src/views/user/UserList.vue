@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid p-2">
     <h2 class="h2 mb-4">User Management</h2>
 
     <!-- Search Form -->

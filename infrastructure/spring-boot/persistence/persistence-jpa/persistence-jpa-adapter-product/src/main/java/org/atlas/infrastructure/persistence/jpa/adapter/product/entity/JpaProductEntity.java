@@ -13,9 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -31,29 +28,6 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity
 @Table(name = "product")
-@NamedEntityGraphs(
-    {
-        @NamedEntityGraph(
-            name = "JpaProductEntity.findByCriteria",
-            attributeNodes = {
-                @NamedAttributeNode("id"),
-                @NamedAttributeNode("name"),
-                @NamedAttributeNode("price"),
-                @NamedAttributeNode("imageUrl"),
-                @NamedAttributeNode("detail"), // Fix N+1 issue
-            }
-        ),
-        @NamedEntityGraph(
-            name = "JpaProductEntity.findByIdWithAssociations",
-            attributeNodes = {
-                @NamedAttributeNode("detail"),
-                @NamedAttributeNode("attributes"),
-                @NamedAttributeNode("brand"),
-                @NamedAttributeNode("categories")
-            }
-        )
-    }
-)
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -88,7 +62,7 @@ public class JpaProductEntity extends JpaBaseEntity {
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "id", referencedColumnName = "product_id")
-  private JpaProductDetailEntity detail;
+  private JpaProductDetailsEntity details;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
   private Set<JpaProductAttributeEntity> attributes = new HashSet<>();

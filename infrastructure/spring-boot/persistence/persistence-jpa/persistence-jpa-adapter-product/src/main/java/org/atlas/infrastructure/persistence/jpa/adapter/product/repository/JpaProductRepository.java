@@ -16,7 +16,7 @@ public interface JpaProductRepository extends JpaBaseRepository<JpaProductEntity
   @Query("""
         select p
         from JpaProductEntity p
-        left join fetch p.detail
+        left join fetch p.details
         left join fetch p.attributes
         left join fetch p.brand
         left join fetch p.categories

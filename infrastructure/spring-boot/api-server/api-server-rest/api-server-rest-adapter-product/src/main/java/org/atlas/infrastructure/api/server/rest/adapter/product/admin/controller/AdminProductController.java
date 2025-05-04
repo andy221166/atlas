@@ -35,7 +35,7 @@ import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.util.DateUtil;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.DetailedProductResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.GetProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.ProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.UpdateProductRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -114,13 +114,13 @@ public class AdminProductController {
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<DetailedProductResponse> getProduct(
+  public ApiResponseWrapper<GetProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
       @PathVariable Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = adminGetProductUseCaseHandler.handle(input);
-    DetailedProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, DetailedProductResponse.class);
+    GetProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, GetProductResponse.class);
     return ApiResponseWrapper.success(response);
   }
 

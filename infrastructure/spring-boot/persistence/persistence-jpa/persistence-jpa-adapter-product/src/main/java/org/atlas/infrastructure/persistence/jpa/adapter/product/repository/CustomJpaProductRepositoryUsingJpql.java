@@ -1,6 +1,5 @@
 package org.atlas.infrastructure.persistence.jpa.adapter.product.repository;
 
-import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -23,11 +22,12 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
   private EntityManager entityManager;
 
   @Override
-  public List<JpaProductEntity> findByCriteria(FindProductCriteria criteria, PagingRequest pagingRequest) {
+  public List<JpaProductEntity> findByCriteria(FindProductCriteria criteria,
+      PagingRequest pagingRequest) {
     StringBuilder sqlBuilder = new StringBuilder("""
         select distinct p
         from JpaProductEntity p
-        left join p.detail d
+        left join p.details d
         left join p.attributes a
         left join p.brand b
         left join p.categories c
@@ -47,10 +47,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     String sql = sqlBuilder.toString();
     TypedQuery<JpaProductEntity> query = entityManager.createQuery(sql, JpaProductEntity.class);
 
-    // Apply Entity Graph to restrict selected attributes
-    EntityGraph<?> entityGraph = entityManager.getEntityGraph("JpaProductEntity.findByCriteria");
-    query.setHint("jakarta.persistence.loadgraph", entityGraph);
-
+    // Set parameters
     params.forEach(query::setParameter);
 
     // Paging
@@ -69,7 +66,7 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
     String countSql = """
         select count(distinct p.id)
         from JpaProductEntity p
-        left join p.detail d
+        left join p.details d
         left join p.brand b
         left join p.categories c
         left join JpaProductAttributeEntity a on p.id = a.product.id
@@ -115,9 +112,9 @@ public class CustomJpaProductRepositoryUsingJpql implements CustomJpaProductRepo
       whereClauseBuilder.append(" and p.isActive = :isActive ");
       params.put("isActive", criteria.getIsActive());
     }
-    if (CollectionUtils.isNotEmpty(criteria.getBrandIds())) {
-      whereClauseBuilder.append(" and b.id IN (:brandIds) ");
-      params.put("brandIds", criteria.getBrandIds());
+    if (criteria.getBrandId() != null) {
+      whereClauseBuilder.append(" and b.id = :brandId ");
+      params.put("brandId", criteria.getBrandId());
     }
     if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
       whereClauseBuilder.append(" and c.id IN (:categoryIds) ");

@@ -27,7 +27,7 @@ public class ProductEntity extends DomainEntity {
 
   // Associations
   // One-To-One
-  private ProductDetailEntity detail;
+  private ProductDetailsEntity details;
   // One-To-Many
   private List<ProductAttributeEntity> attributes;
   // Many-To-One

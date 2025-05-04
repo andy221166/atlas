@@ -15,7 +15,7 @@ import org.atlas.domain.product.shared.enums.ProductStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Response object for retrieving product details.")
-public class DetailedProductResponse {
+public class GetProductResponse {
 
   @Schema(description = "Unique identifier of the product.", example = "123")
   private Integer id;
@@ -45,7 +45,7 @@ public class DetailedProductResponse {
   private Brand brand;
 
   @Schema(description = "Detailed information about the product.")
-  private ProductDetail detail;
+  private ProductDetails details;
 
   @Schema(description = "List of attributes associated with the product.")
   private List<ProductAttribute> attributes;
@@ -72,7 +72,7 @@ public class DetailedProductResponse {
   @NoArgsConstructor
   @AllArgsConstructor
   @Schema(description = "Detailed information about the product.")
-  public static class ProductDetail {
+  public static class ProductDetails {
 
     @Schema(description = "Description of the product.", example = "A comfortable cotton t-shirt.")
     private String description;

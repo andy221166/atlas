@@ -18,7 +18,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.domain.product.entity.BrandEntity;
 import org.atlas.domain.product.entity.CategoryEntity;
 import org.atlas.domain.product.entity.ProductAttributeEntity;
-import org.atlas.domain.product.entity.ProductDetailEntity;
+import org.atlas.domain.product.entity.ProductDetailsEntity;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
@@ -57,9 +57,9 @@ public class AdminCreateProductUseCaseHandler implements
         .map(input, ProductEntity.class);
 
     // SearchResponse detail
-    ProductDetailEntity productDetailEntity = ObjectMapperUtil.getInstance()
-        .map(input.getDetail(), ProductDetailEntity.class);
-    productEntity.setDetail(productDetailEntity);
+    ProductDetailsEntity productDetailsEntity = ObjectMapperUtil.getInstance()
+        .map(input.getDetails(), ProductDetailsEntity.class);
+    productEntity.setDetails(productDetailsEntity);
 
     // SearchResponse attributes
     if (CollectionUtils.isNotEmpty(input.getAttributes())) {
@@ -127,7 +127,7 @@ public class AdminCreateProductUseCaseHandler implements
 
     @NotNull
     @Valid
-    private ProductDetail detail;
+    private ProductDetails details;
 
     @Valid
     private List<ProductAttribute> attributes;
@@ -136,7 +136,7 @@ public class AdminCreateProductUseCaseHandler implements
     private List<Integer> categoryIds;
 
     @Data
-    public static class ProductDetail {
+    public static class ProductDetails {
 
       @NotBlank
       private String description;

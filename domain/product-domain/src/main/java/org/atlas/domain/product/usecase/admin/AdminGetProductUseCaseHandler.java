@@ -55,7 +55,7 @@ public class AdminGetProductUseCaseHandler implements UseCaseHandler<GetProductI
     private Date availableFrom;
     private Boolean isActive;
     private Brand brand;
-    private ProductDetail detail;
+    private ProductDetails details;
     private List<ProductAttribute> attributes;
     private List<Category> categories;
 
@@ -73,7 +73,7 @@ public class AdminGetProductUseCaseHandler implements UseCaseHandler<GetProductI
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProductDetail {
+    public static class ProductDetails {
 
       private String description;
     }

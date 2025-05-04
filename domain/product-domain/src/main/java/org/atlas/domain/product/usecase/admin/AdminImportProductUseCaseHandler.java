@@ -3,7 +3,6 @@ package org.atlas.domain.product.usecase.admin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,7 +16,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.atlas.domain.product.entity.BrandEntity;
 import org.atlas.domain.product.entity.CategoryEntity;
 import org.atlas.domain.product.entity.ProductAttributeEntity;
-import org.atlas.domain.product.entity.ProductDetailEntity;
+import org.atlas.domain.product.entity.ProductDetailsEntity;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.port.file.csv.ProductCsvReaderPort;
 import org.atlas.domain.product.port.file.excel.ProductExcelReaderPort;
@@ -124,9 +123,9 @@ public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportPr
     ProductEntity productEntity = ObjectMapperUtil.getInstance().map(row, ProductEntity.class);
 
     // SearchResponse detail
-    ProductDetailEntity productDetailEntity = new ProductDetailEntity();
-    productDetailEntity.setDescription(row.getDescription());
-    productEntity.setDetail(productDetailEntity);
+    ProductDetailsEntity productDetailsEntity = new ProductDetailsEntity();
+    productDetailsEntity.setDescription(row.getDescription());
+    productEntity.setDetails(productDetailsEntity);
 
     // SearchResponse attributes
     ProductAttributeEntity productAttributeEntity1 = new ProductAttributeEntity();

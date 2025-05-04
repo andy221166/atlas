@@ -1,6 +1,5 @@
 package org.atlas.infrastructure.persistence.jpa.adapter.product.repository;
 
-import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -33,7 +32,7 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     CriteriaQuery<JpaProductEntity> criteriaQuery = criteriaBuilder.createQuery(JpaProductEntity.class);
     Root<JpaProductEntity> root = criteriaQuery.from(JpaProductEntity.class);
 
-    root.join("detail", JoinType.LEFT);
+    root.join("details", JoinType.LEFT);
     root.join("attributes", JoinType.LEFT);
     root.join("brand", JoinType.LEFT);
     root.join("categories", JoinType.LEFT);
@@ -53,10 +52,6 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
 
     TypedQuery<JpaProductEntity> query = entityManager.createQuery(criteriaQuery);
 
-    // Apply Entity Graph to restrict selected attributes
-    EntityGraph<?> entityGraph = entityManager.getEntityGraph("JpaProductEntity.findByCriteria");
-    query.setHint("jakarta.persistence.loadgraph", entityGraph);
-
     // Paging
     if (pagingRequest.hasPaging()) {
       query.setFirstResult(pagingRequest.getOffset());
@@ -72,7 +67,7 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
     Root<JpaProductEntity> root = query.from(JpaProductEntity.class);
 
-    root.join("detail", JoinType.LEFT);
+    root.join("details", JoinType.LEFT);
     root.join("attributes", JoinType.LEFT);
     root.join("brand", JoinType.LEFT);
     root.join("categories", JoinType.LEFT);
@@ -112,8 +107,8 @@ public class CustomJpaProductRepositoryUsingCriteria implements CustomJpaProduct
     if (criteria.getIsActive() != null) {
       spec.addFilter(QueryFilter.of("isActive", criteria.getIsActive(), QueryOperator.EQUAL));
     }
-    if (CollectionUtils.isNotEmpty(criteria.getBrandIds())) {
-      spec.addFilter(QueryFilter.of("brand.id", criteria.getCategoryIds(), QueryOperator.IN));
+    if (criteria.getBrandId() != null) {
+      spec.addFilter(QueryFilter.of("brand.id", criteria.getBrandId(), QueryOperator.EQUAL));
     }
     if (CollectionUtils.isNotEmpty(criteria.getCategoryIds())) {
       spec.addFilter(QueryFilter.of("categories.id", criteria.getCategoryIds(), QueryOperator.IN));
