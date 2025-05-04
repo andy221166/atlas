@@ -2,7 +2,6 @@ package org.atlas.edge.auth.springsecurityjwt.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
@@ -15,7 +14,6 @@ import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.service.AuthService;
 import org.atlas.edge.auth.springsecurityjwt.service.CookieService;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
-import org.atlas.framework.constant.SecurityConstant;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,10 +37,8 @@ public class AuthController {
   @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<LoginResponse> login(
       @Parameter(description = "Request object containing user credentials for login.", required = true)
-      @Valid @RequestBody LoginRequest request,
-      HttpServletResponse httpServletResponse) throws Exception {
+      @Valid @RequestBody LoginRequest request) throws Exception {
     LoginResponse loginResponse = authService.login(request);
-    addTokensToCookies(httpServletResponse, loginResponse);
     return ApiResponseWrapper.success(loginResponse);
   }
 
@@ -52,10 +48,8 @@ public class AuthController {
   )
   @PostMapping("/ott/login")
   public ApiResponseWrapper<LoginResponse> oneTimeTokenLogin(
-      @Valid @RequestBody OneTimeTokenLoginRequest request,
-      HttpServletResponse httpServletResponse) throws Exception {
+      @Valid @RequestBody OneTimeTokenLoginRequest request) throws Exception {
     LoginResponse loginResponse = authService.oneTimeTokenLogin(request);
-    addTokensToCookies(httpServletResponse, loginResponse);
     return ApiResponseWrapper.success(loginResponse);
   }
 
@@ -87,9 +81,8 @@ public class AuthController {
       description = "Logs out the user and clears authentication cookies."
   )
   @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<Void> logout(HttpServletResponse httpServletResponse) throws Exception {
+  public ApiResponseWrapper<Void> logout() throws Exception {
     authService.logout();
-    cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     return ApiResponseWrapper.success();
   }
 
@@ -98,18 +91,8 @@ public class AuthController {
       description = "Logs out the user and clears authentication cookies."
   )
   @PostMapping(value = "/logout/force", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<Void> forceLogoutOnAllDevices(HttpServletResponse httpServletResponse)
-      throws Exception {
+  public ApiResponseWrapper<Void> forceLogoutOnAllDevices() {
     authService.forceLogoutOnAllDevices();
-    cookieService.deleteCookie(httpServletResponse, SecurityConstant.ACCESS_TOKEN_COOKIE);
     return ApiResponseWrapper.success();
-  }
-
-  private void addTokensToCookies(HttpServletResponse httpServletResponse,
-      LoginResponse loginResponse) {
-    cookieService.addCookie(httpServletResponse,
-        SecurityConstant.ACCESS_TOKEN_COOKIE,
-        loginResponse.getAccessToken(),
-        SecurityConstant.ACCESS_TOKEN_EXPIRATION_TIME);
   }
 }

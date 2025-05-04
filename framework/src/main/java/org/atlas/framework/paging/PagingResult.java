@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagingResult<T> {
 
-  protected List<T> results;
+  protected List<T> data;
   protected Pagination pagination;
 
   public boolean checkEmpty() {
@@ -30,10 +30,10 @@ public class PagingResult<T> {
   }
 
   public <U> PagingResult<U> map(Function<? super T, ? extends U> mapper) {
-    List<U> mappedResults = results.stream()
+    List<U> mappedData = data.stream()
         .map(mapper)
         .collect(Collectors.toList());
-    return new PagingResult<>(mappedResults, pagination);
+    return new PagingResult<>(mappedData, pagination);
   }
 
   @Data

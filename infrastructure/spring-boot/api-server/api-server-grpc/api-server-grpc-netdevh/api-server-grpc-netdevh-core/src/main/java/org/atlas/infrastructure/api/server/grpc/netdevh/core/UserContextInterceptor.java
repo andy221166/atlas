@@ -4,13 +4,12 @@ import io.grpc.Metadata;
 import io.grpc.ServerCall;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.framework.security.session.SessionContext;
-import org.atlas.framework.security.session.SessionInfo;
+import org.atlas.framework.context.Contexts;
+import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.security.enums.CustomClaim;
 
 @GrpcGlobalServerInterceptor
@@ -32,11 +31,11 @@ public class UserContextInterceptor implements ServerInterceptor {
     String userId = metadata.get(USER_ID_HEADER);
     String userRole = metadata.get(USER_ROLE_HEADER);
     if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userRole)) {
-      SessionInfo sessionInfo = new SessionInfo();
-      sessionInfo.setSessionId(sessionId);
-      sessionInfo.setUserId(Integer.valueOf(userId));
-      sessionInfo.setUserRole(Role.valueOf(userRole));
-      SessionContext.set(sessionInfo);
+      ContextInfo contextInfo = new ContextInfo();
+      contextInfo.setSessionId(sessionId);
+      contextInfo.setUserId(Integer.valueOf(userId));
+      contextInfo.setUserRole(Role.valueOf(userRole));
+      Contexts.set(contextInfo);
     }
     return serverCallHandler.startCall(serverCall, metadata);
   }

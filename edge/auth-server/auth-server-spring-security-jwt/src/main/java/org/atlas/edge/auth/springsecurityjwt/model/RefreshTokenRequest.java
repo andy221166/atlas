@@ -11,10 +11,6 @@ import lombok.EqualsAndHashCode;
 public class RefreshTokenRequest {
 
   @NotBlank
-  @Schema(description = "Unique identifier for the device from which the user is logging in.", example = "device123")
-  private String deviceId;
-
-  @NotBlank
   @Schema(description = "The refresh token used to obtain a new access token.", example = "dGhpc0lzUmVmcmVzaFRva2Vu")
   private String refreshToken;
 }

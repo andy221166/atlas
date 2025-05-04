@@ -16,9 +16,9 @@ import org.atlas.infrastructure.api.server.grpc.protobuf.product.ProductServiceG
 import org.springframework.stereotype.Component;
 
 @Component
-@Retry(name = "default-internal-api")
-@CircuitBreaker(name = "default-internal-api")
-@Bulkhead(name = "default-internal-api")
+@Retry(name = "default")
+@CircuitBreaker(name = "default")
+@Bulkhead(name = "default")
 public class ProductApiAdapter implements ProductApiPort {
 
   @GrpcClient("product-service")

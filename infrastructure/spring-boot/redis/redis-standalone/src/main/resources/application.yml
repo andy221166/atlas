@@ -4,3 +4,22 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
+      # Connection timeout (in milliseconds)
+      connect-timeout: ${REDIS_TIMEOUT:30000}
+      # Read timeout (in milliseconds)
+      timeout: ${REDIS_TIMEOUT:30000}
+      # Enable SSL for secure connections (if applicable)
+      ssl:
+        enabled: ${REDIS_SSL_ENABLED:false}
+      lettuce:
+        pool:
+          # Maximum number of active connections in the pool
+          max-active: ${REDIS_POOL_MAX_ACTIVE:8}
+          # Maximum number of idle connections in the pool
+          max-idle: ${REDIS_POOL_MAX_IDLE:8}
+          # Minimum number of idle connections in the pool
+          min-idle: ${REDIS_POOL_MIN_IDLE:4}
+          # Maximum time to wait for a connection from the pool (in milliseconds)
+          max-wait: ${REDIS_POOL_MAX_WAIT:30000}
+        # Shutdown timeout for gracefully closing connections (in milliseconds)
+        shutdown-timeout: ${REDIS_SHUTDOWN_TIMEOUT:10000}

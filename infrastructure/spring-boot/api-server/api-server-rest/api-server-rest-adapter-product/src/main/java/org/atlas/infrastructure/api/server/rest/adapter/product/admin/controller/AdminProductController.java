@@ -23,7 +23,7 @@ import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler.ImportProductInput;
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductInput;
-import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductOutput;
+import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ProductOutput;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
@@ -31,12 +31,14 @@ import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.enums.FileType;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
+import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.util.DateUtil;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.GetProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.ListProductResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.DetailedProductResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.ProductResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.UpdateProductRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +70,7 @@ public class AdminProductController {
 
   @Operation(summary = "List products with optional filters and pagination.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<ListProductResponse> listProduct(
+  public ApiResponseWrapper<List<ProductResponse>> listProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
       @RequestParam(name = "id", required = false) Integer id,
       @Parameter(description = "Keyword for searching products.", example = "T-Shirt")
@@ -80,7 +82,8 @@ public class AdminProductController {
       @Parameter(description = "Status of the product.", example = "IN_STOCK")
       @RequestParam(name = "status", required = false) ProductStatus status,
       @Parameter(description = "Date from which the product is available (ISO 8601 format).", example = "2023-01-01T00:00:00Z")
-      @RequestParam(name = "available_from", required = false) Date availableFrom,
+      @RequestParam(name = "available_from", required = false)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date availableFrom,
       @Parameter(description = "Indicates if the product is active.", example = "true")
       @RequestParam(name = "is_active", required = false) Boolean isActive,
       @Parameter(description = "Brand ID for filtering products.", example = "1")
@@ -103,21 +106,21 @@ public class AdminProductController {
     input.setBrandId(brandId);
     input.setCategoryIds(categoryIds);
     input.setPagingRequest(PagingRequest.of(page - 1, size));
-    ListProductOutput output = adminListProductUseCaseHandler.handle(input);
-    ListProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, ListProductResponse.class);
-    return ApiResponseWrapper.success(response);
+    PagingResult<ProductOutput> output = adminListProductUseCaseHandler.handle(input);
+    PagingResult<ProductResponse> response = ObjectMapperUtil.getInstance()
+        .mapPage(output, ProductResponse.class);
+    return ApiResponseWrapper.successPage(response);
   }
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<GetProductResponse> getProduct(
+  public ApiResponseWrapper<DetailedProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
       @PathVariable Integer id) throws Exception {
     GetProductInput input = new GetProductInput(id);
     GetProductOutput output = adminGetProductUseCaseHandler.handle(input);
-    GetProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, GetProductResponse.class);
+    DetailedProductResponse response = ObjectMapperUtil.getInstance()
+        .map(output, DetailedProductResponse.class);
     return ApiResponseWrapper.success(response);
   }
 

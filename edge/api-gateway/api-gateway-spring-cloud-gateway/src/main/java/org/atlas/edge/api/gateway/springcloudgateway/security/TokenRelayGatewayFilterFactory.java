@@ -1,5 +1,6 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
+import org.apache.http.HttpHeaders;
 import org.atlas.framework.security.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -35,6 +36,7 @@ public class TokenRelayGatewayFilterFactory extends
           ServerHttpRequest mutatedRequest = exchange.getRequest()
               .mutate()
               .headers(httpHeaders -> {
+                httpHeaders.remove(HttpHeaders.AUTHORIZATION);
                 httpHeaders.set(CustomClaim.SESSION_ID.getHeader(), sessionId);
                 httpHeaders.set(CustomClaim.USER_ID.getHeader(), userId);
                 httpHeaders.set(CustomClaim.USER_ROLE.getHeader(), userRole);

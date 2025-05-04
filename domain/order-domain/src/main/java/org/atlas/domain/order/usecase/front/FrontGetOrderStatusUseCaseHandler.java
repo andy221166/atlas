@@ -11,7 +11,7 @@ import org.atlas.domain.order.shared.OrderStatus;
 import org.atlas.domain.order.usecase.front.FrontGetOrderStatusUseCaseHandler.GetOrderStatusInput;
 import org.atlas.domain.order.usecase.front.FrontGetOrderStatusUseCaseHandler.GetOrderStatusOutput;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class FrontGetOrderStatusUseCaseHandler implements
   @Override
   public GetOrderStatusOutput handle(GetOrderStatusInput input) throws Exception {
     OrderEntity orderEntity = orderRepository.findById(input.getOrderId())
-        .orElseThrow(() -> new BusinessException(AppError.ORDER_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.ORDER_NOT_FOUND));
     return GetOrderStatusOutput.builder()
         .status(orderEntity.getStatus())
         .canceledReason(orderEntity.getCanceledReason())

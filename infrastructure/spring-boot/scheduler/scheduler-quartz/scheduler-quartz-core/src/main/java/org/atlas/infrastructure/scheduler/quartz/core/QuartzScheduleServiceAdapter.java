@@ -98,6 +98,7 @@ public class QuartzScheduleServiceAdapter implements ScheduleService, Initializi
       } else {
         JobDetail job = JobBuilder.newJob(RunnableJob.class)
             .withIdentity(jobKey)
+            .storeDurably()
             .build();
         job.getJobDataMap().put(QuartzConstant.RUNNABLE_DATA_KEY, task);
         scheduler.scheduleJob(job, trigger);

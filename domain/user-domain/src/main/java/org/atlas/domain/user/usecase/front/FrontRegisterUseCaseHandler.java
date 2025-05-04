@@ -18,7 +18,7 @@ import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.user.UserRegisteredEvent;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.security.client.AuthApiPort;
 import org.atlas.framework.security.client.model.CreateUserRequest;
@@ -44,13 +44,13 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
 
   private void checkValidity(RegisterInput input) {
     if (userRepository.findByUsername(input.getUsername()).isPresent()) {
-      throw new BusinessException(AppError.USERNAME_ALREADY_EXISTS);
+      throw new DomainException(AppError.USERNAME_ALREADY_EXISTS);
     }
     if (userRepository.findByEmail(input.getEmail()).isPresent()) {
-      throw new BusinessException(AppError.EMAIL_ALREADY_EXISTS);
+      throw new DomainException(AppError.EMAIL_ALREADY_EXISTS);
     }
     if (userRepository.findByPhoneNumber(input.getPhoneNumber()).isPresent()) {
-      throw new BusinessException(AppError.PHONE_NUMBER_ALREADY_EXISTS);
+      throw new DomainException(AppError.PHONE_NUMBER_ALREADY_EXISTS);
     }
   }
 

@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@Retry(name = "default-internal-api")
-@CircuitBreaker(name = "default-internal-api")
-@Bulkhead(name = "default-internal-api")
+@Retry(name = "default")
+@CircuitBreaker(name = "default")
+@Bulkhead(name = "default")
 @RequiredArgsConstructor
 public class ProductApiAdapter implements ProductApiPort {
 

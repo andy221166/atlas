@@ -3,13 +3,14 @@ package org.atlas.infrastructure.api.server.rest.adapter.order.front.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.order.usecase.front.FrontGetOrderStatusUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontGetOrderStatusUseCaseHandler.GetOrderStatusInput;
 import org.atlas.domain.order.usecase.front.FrontGetOrderStatusUseCaseHandler.GetOrderStatusOutput;
 import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderInput;
-import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderOutput;
+import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.OrderOutput;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderInput;
 import org.atlas.domain.order.usecase.front.FrontPlaceOrderUseCaseHandler.PlaceOrderOutput;
@@ -17,8 +18,9 @@ import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
-import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.GetOrderStatusResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.ListOrderResponse;
+import org.atlas.framework.paging.PagingResult;
+import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.OrderStatusResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.OrderResponse;
 import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.PlaceOrderRequest;
 import org.atlas.infrastructure.api.server.rest.adapter.order.front.model.PlaceOrderResponse;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,7 @@ public class FrontOrderController {
 
   @Operation(summary = "List Orders", description = "Retrieves a paginated list of orders for the front-end.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<ListOrderResponse> listOrder(
+  public ApiResponseWrapper<List<OrderResponse>> listOrder(
       @Parameter(name = "page", description = "The page number to retrieve (default is 1).", example = "1")
       @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
       @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "10")
@@ -54,22 +56,23 @@ public class FrontOrderController {
     ListOrderInput input = ListOrderInput.builder()
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
-    ListOrderOutput output = frontListOrderUseCaseHandler.handle(input);
-    ListOrderResponse response = ObjectMapperUtil.getInstance()
-        .map(output, ListOrderResponse.class);
-    return ApiResponseWrapper.success(response);
+    PagingResult<OrderOutput> output = frontListOrderUseCaseHandler.handle(input);
+    PagingResult<OrderResponse> response = ObjectMapperUtil.getInstance()
+        .mapPage(output, OrderResponse.class);
+    return ApiResponseWrapper.successPage(response);
   }
 
   @Operation(summary = "Get Order Status", description = "Retrieves the status of a specific order by its ID.")
   @GetMapping(value = "/{orderId}/status", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<GetOrderStatusResponse> getOrderStatus(
+  public ApiResponseWrapper<OrderStatusResponse> getOrderStatus(
       @Parameter(name = "orderId", description = "ID of the order to retrieve the status for.", example = "123")
       @PathVariable("orderId") Integer orderId) throws Exception {
     GetOrderStatusInput input = GetOrderStatusInput.builder()
         .orderId(orderId)
         .build();
     GetOrderStatusOutput output = frontGetOrderStatusUseCaseHandler.handle(input);
-    GetOrderStatusResponse response = ObjectMapperUtil.getInstance().map(output, GetOrderStatusResponse.class);
+    OrderStatusResponse response = ObjectMapperUtil.getInstance()
+        .map(output, OrderStatusResponse.class);
     return ApiResponseWrapper.success(response);
   }
 
@@ -81,7 +84,8 @@ public class FrontOrderController {
       @Valid @RequestBody PlaceOrderRequest request) throws Exception {
     PlaceOrderInput input = ObjectMapperUtil.getInstance().map(request, PlaceOrderInput.class);
     PlaceOrderOutput output = frontPlaceOrderUseCaseHandler.handle(input);
-    PlaceOrderResponse response = ObjectMapperUtil.getInstance().map(output, PlaceOrderResponse.class);
+    PlaceOrderResponse response = ObjectMapperUtil.getInstance()
+        .map(output, PlaceOrderResponse.class);
     return ApiResponseWrapper.success(response);
   }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.i18n.I18nPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ public class RestExceptionHandler {
 
   private final I18nPort i18nPort;
 
-  @ExceptionHandler(BusinessException.class)
-  public ResponseEntity<ApiResponseWrapper<Void>> handle(BusinessException e) {
+  @ExceptionHandler(DomainException.class)
+  public ResponseEntity<ApiResponseWrapper<Void>> handle(DomainException e) {
     log.error("Occurred business exception", e);
     String errorMessage = e.getMessage() != null ? e.getMessage() :
         i18nPort.getMessage(e.getMessageCode(), "Unknown error");

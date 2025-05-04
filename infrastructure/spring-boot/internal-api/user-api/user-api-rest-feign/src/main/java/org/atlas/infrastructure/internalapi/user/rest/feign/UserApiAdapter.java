@@ -14,9 +14,9 @@ import org.atlas.infrastructure.internalapi.user.rest.model.ListUserResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-@Retry(name = "default-internal-api")
-@CircuitBreaker(name = "default-internal-api")
-@Bulkhead(name = "default-internal-api")
+@Retry(name = "default")
+@CircuitBreaker(name = "default")
+@Bulkhead(name = "default")
 @RequiredArgsConstructor
 public class UserApiAdapter implements UserApiPort {
 

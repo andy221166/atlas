@@ -12,7 +12,7 @@ import org.atlas.domain.product.usecase.admin.AdminDeleteProductUseCaseHandler.D
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductDeletedEvent;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class AdminDeleteProductUseCaseHandler implements UseCaseHandler<DeletePr
   @Override
   public Void handle(DeleteProductInput input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
-        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
     productRepository.delete(productEntity.getId());
     publishEvent(productEntity);
     return null;

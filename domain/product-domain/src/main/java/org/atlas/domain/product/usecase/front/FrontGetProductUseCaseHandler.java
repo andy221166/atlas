@@ -23,7 +23,7 @@ import org.atlas.framework.cache.CachePort;
 import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class FrontGetProductUseCaseHandler implements
         .orElseGet(() -> {
           // Get from DB
           ProductEntity entity = productRepository.findById(input.getId())
-              .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+              .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
           GetProductOutput output = map(entity);
 
           // Update cache

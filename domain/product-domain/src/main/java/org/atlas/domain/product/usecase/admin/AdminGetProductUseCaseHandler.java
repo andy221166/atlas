@@ -14,7 +14,7 @@ import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductInput;
 import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductOutput;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -26,7 +26,7 @@ public class AdminGetProductUseCaseHandler implements UseCaseHandler<GetProductI
   @Override
   public GetProductOutput handle(GetProductInput input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
-        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
     return ObjectMapperUtil.getInstance()
         .map(productEntity, GetProductOutput.class);
   }

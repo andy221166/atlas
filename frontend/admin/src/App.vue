@@ -1,18 +1,25 @@
 <template>
-  <router-view></router-view>
+  <div class="min-vh-100 d-flex flex-column">
+    <!-- Navbar -->
+    <NavBar v-if="userStore.isAuthenticated" />
+
+    <!-- Main content area with sidebar -->
+    <div class="flex-grow-1 d-flex">
+      <!-- Sidebar -->
+      <Sidebar v-if="userStore.isAuthenticated" />
+
+      <!-- Main content -->
+      <div class="flex-grow-1 p-4 bg-light">
+        <router-view />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-// Main app component
-</script>
+import { useUserStore } from './stores/user.store'
+import NavBar from './components/NavBar.vue';
+import Sidebar from './components/Sidebar.vue';
 
-<style>
-#app {
-  font-family: Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin: 0;
-  padding: 0;
-}
-</style>
+const userStore = useUserStore()
+</script>

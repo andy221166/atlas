@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.atlas.domain.user.shared.enums.Role;
 
 @Data
 @Builder
@@ -18,4 +19,7 @@ public class GetProfileResponse {
 
   @Schema(description = "User's last name.", example = "Doe")
   private String lastName;
+
+  @Schema(description = "User's role.", example = "USER")
+  private Role role;
 }

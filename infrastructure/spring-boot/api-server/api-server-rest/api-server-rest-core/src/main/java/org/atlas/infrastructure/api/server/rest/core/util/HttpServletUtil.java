@@ -1,15 +1,24 @@
 package org.atlas.infrastructure.api.server.rest.core.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.framework.json.JsonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @UtilityClass
 public class HttpServletUtil {
+
+  /**
+   * Helper method to read a header safely
+   */
+  public String getHeader(HttpServletRequest request, String headerName) {
+    return StringUtils.trimToNull(request.getHeader(headerName));
+  }
 
   public static void respondJson(HttpServletResponse response, Object payload,
       HttpStatus httpStatus) throws IOException {

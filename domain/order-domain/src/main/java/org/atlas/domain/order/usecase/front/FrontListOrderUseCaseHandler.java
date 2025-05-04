@@ -2,7 +2,6 @@ package org.atlas.domain.order.usecase.front;
 
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.order.entity.OrderEntity;
@@ -19,13 +17,11 @@ import org.atlas.domain.order.entity.OrderItemEntity;
 import org.atlas.domain.order.repository.OrderRepository;
 import org.atlas.domain.order.shared.OrderStatus;
 import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderInput;
-import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderOutput;
-import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderOutput.Order;
-import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.ListOrderOutput.OrderItem;
+import org.atlas.domain.order.usecase.front.FrontListOrderUseCaseHandler.OrderOutput;
 import org.atlas.domain.product.shared.internal.ListProductInput;
 import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.product.shared.internal.ListProductOutput.Product;
-import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.context.Contexts;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -35,50 +31,48 @@ import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
 public class FrontListOrderUseCaseHandler implements
-    UseCaseHandler<ListOrderInput, ListOrderOutput> {
+    UseCaseHandler<ListOrderInput, PagingResult<OrderOutput>> {
 
   private final OrderRepository orderRepository;
   private final ProductApiPort productApiPort;
 
   @Override
-  public ListOrderOutput handle(ListOrderInput input) throws Exception {
+  public PagingResult<OrderOutput> handle(ListOrderInput input) throws Exception {
     // Query order
-    Integer userId = SessionContext.getUserId();
+    Integer userId = Contexts.getUserId();
     input.getPagingRequest().setSortBy("createdAt");
     input.getPagingRequest().setSortOrder(SortOrder.DESC);
     PagingResult<OrderEntity> orderEntityPage = orderRepository.findByUserId(userId,
         input.getPagingRequest());
     if (orderEntityPage.checkEmpty()) {
-      return new ListOrderOutput();
+      return PagingResult.empty();
     }
 
     // Fetch products
-    Map<Integer, Product> products = fetchProducts(orderEntityPage.getResults());
+    Map<Integer, Product> products = fetchProducts(orderEntityPage.getData());
 
-    PagingResult<Order> orderPage = orderEntityPage.map(orderEntity -> {
-      Order order = ObjectMapperUtil.getInstance().map(orderEntity, Order.class);
+    return orderEntityPage.map(orderEntity -> {
+      OrderOutput orderOutput = ObjectMapperUtil.getInstance().map(orderEntity, OrderOutput.class);
 
-      List<OrderItem> orderItems = orderEntity.getOrderItems()
+      List<OrderItemOutput> orderItemOutputs = orderEntity.getOrderItems()
           .stream()
           .map(orderItemEntity -> {
-            OrderItem orderItem = ObjectMapperUtil.getInstance()
-                .map(orderItemEntity, OrderItem.class);
+            OrderItemOutput orderItemOutput = ObjectMapperUtil.getInstance()
+                .map(orderItemEntity, OrderItemOutput.class);
 
             Product product = products.get(orderItemEntity.getProductId());
             if (product != null) {
-              orderItem.setProduct(
-                  ObjectMapperUtil.getInstance().map(product, ListOrderOutput.Product.class));
+              orderItemOutput.setProduct(
+                  ObjectMapperUtil.getInstance().map(product, ProductOutput.class));
             }
 
-            return orderItem;
+            return orderItemOutput;
           })
           .toList();
-      order.setOrderItems(orderItems);
+      orderOutput.setOrderItems(orderItemOutputs);
 
-      return order;
+      return orderOutput;
     });
-
-    return new ListOrderOutput(orderPage.getResults(), orderPage.getPagination());
   }
 
   private Map<Integer, Product> fetchProducts(List<OrderEntity> orderEntities) {
@@ -106,52 +100,38 @@ public class FrontListOrderUseCaseHandler implements
   }
 
   @Data
-  @EqualsAndHashCode(callSuper = false)
-  public static class ListOrderOutput extends PagingResult<ListOrderOutput.Order> {
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class OrderOutput {
 
-    public ListOrderOutput() {
-      this.results = Collections.emptyList();
-      this.pagination = Pagination.empty();
-    }
+    private Integer id;
+    private String code;
+    private List<OrderItemOutput> orderItems;
+    private BigDecimal amount;
+    private OrderStatus status;
+    private String canceledReason;
+    private Date createdAt;
+  }
 
-    public ListOrderOutput(List<Order> results, Pagination pagination) {
-      super(results, pagination);
-    }
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class OrderItemOutput {
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Order {
+    private ProductOutput product;
+    private Integer quantity;
+  }
 
-      private Integer id;
-      private String code;
-      private List<OrderItem> orderItems;
-      private BigDecimal amount;
-      private OrderStatus status;
-      private String canceledReason;
-      private Date createdAt;
-    }
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class ProductOutput {
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class OrderItem {
-
-      private Product product;
-      private Integer quantity;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Product {
-
-      private Integer id;
-      private String name;
-      private BigDecimal price;
-    }
+    private Integer id;
+    private String name;
+    private BigDecimal price;
   }
 }

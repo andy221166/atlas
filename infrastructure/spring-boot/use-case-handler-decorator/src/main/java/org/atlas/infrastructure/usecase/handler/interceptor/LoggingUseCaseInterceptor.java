@@ -1,8 +1,8 @@
 package org.atlas.infrastructure.usecase.handler.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.security.session.SessionContext;
-import org.atlas.framework.security.session.SessionInfo;
+import org.atlas.framework.context.Contexts;
+import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.util.StopWatch;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -22,19 +22,19 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
     stopWatch.start();
 
-    SessionInfo sessionInfo = SessionContext.get();
-    if (sessionInfo == null) {
+    ContextInfo contextInfo = Contexts.get();
+    if (contextInfo == null) {
       log.debug("Anonymous user started handling use case {}: {}",
           useCaseClass.getSimpleName(), input);
     } else {
       log.debug("User {} started handling use case {}: {}",
-          sessionInfo, useCaseClass.getSimpleName(), input);
+          contextInfo, useCaseClass.getSimpleName(), input);
     }
   }
 
   @Override
   public void postHandle(Class<?> useCaseClass, Object input) {
-    SessionInfo sessionInfo = SessionContext.get();
+    ContextInfo contextInfo = Contexts.get();
 
     // Stop the StopWatch and get elapsed time
     StopWatch stopWatch = STOP_WATCH_THREAD_LOCAL.get();
@@ -42,12 +42,12 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
     long elapsedTimeMs = stopWatch.getElapsedTimeMs();
 
     // Merge user info and performance check into one log statement
-    if (sessionInfo == null) {
+    if (contextInfo == null) {
       log.debug("Anonymous user finished handling use case {}: {} in {} ms",
           useCaseClass.getSimpleName(), input, elapsedTimeMs);
     } else {
       log.debug("User {} finished handling use case {}: {} in {} ms",
-          sessionInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
+          contextInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
     }
   }
 }

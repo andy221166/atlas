@@ -20,10 +20,11 @@ import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.RefreshTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
-import org.atlas.framework.security.session.SessionContext;
-import org.atlas.framework.security.session.SessionInfo;
+import org.atlas.framework.context.ContextInfo;
+import org.atlas.framework.context.Contexts;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.util.UUIDGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,7 +51,7 @@ public class AuthService {
   public LoginResponse login(LoginRequest request) throws IOException, InvalidKeySpecException {
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword());
-    return doLogin(authentication, request.getDeviceId());
+    return doLogin(authentication);
   }
 
   @Transactional
@@ -58,7 +59,7 @@ public class AuthService {
       throws IOException, InvalidKeySpecException {
     OneTimeTokenAuthenticationToken authentication =
         new OneTimeTokenAuthenticationToken(request.getIdentifier(), request.getToken());
-    return doLogin(authentication, request.getDeviceId());
+    return doLogin(authentication);
   }
 
   public GenerateOneTimeTokenResponse generateOneTimeToken(GenerateOneTimeTokenRequest request) {
@@ -71,30 +72,33 @@ public class AuthService {
   @Transactional
   public RefreshTokenResponse refreshToken(RefreshTokenRequest request)
       throws IOException, InvalidKeySpecException {
-    // Retrieve session from database
-    String sessionId = SessionContext.getSessionId();
-    SessionEntity sessionEntity = sessionRepository.findById(sessionId)
-        .orElseThrow(() -> new BusinessException(AppError.UNAUTHORIZED, "Session not found"));
-
-    // Validate refresh token
-    if (!sessionEntity.getRefreshToken().equals(request.getRefreshToken())) {
-      throw new BusinessException(AppError.UNAUTHORIZED, "Invalid refresh token");
+    // Require deviceId
+    String deviceId = Contexts.getDeviceId();
+    if (deviceId == null) {
+      throw new DomainException(AppError.BAD_REQUEST, "Device ID is required");
     }
 
+    // Parse refresh token
+    Jwt refreshTokenJwt;
     try {
-      tokenService.parseToken(request.getRefreshToken());
+      refreshTokenJwt = tokenService.parseToken(request.getRefreshToken());
     } catch (InvalidTokenException e) {
-      throw new BusinessException(AppError.UNAUTHORIZED, "Invalid refresh token");
+      throw new DomainException(AppError.UNAUTHORIZED, "Invalid refresh token");
     }
 
-    // Validate device ID
-    if (!sessionEntity.getDeviceId().equals(request.getDeviceId())) {
-      throw new BusinessException(AppError.UNAUTHORIZED, "Invalid device ID");
+    // Retrieve session from database and validate request
+    SessionEntity sessionEntity = sessionRepository.findById(refreshTokenJwt.getSessionId())
+        .orElseThrow(() -> new DomainException(AppError.UNAUTHORIZED, "Session not found"));
+    if (!sessionEntity.getRefreshToken().equals(request.getRefreshToken())) {
+      throw new DomainException(AppError.UNAUTHORIZED, "Invalid refresh token");
+    }
+    if (!sessionEntity.getDeviceId().equals(deviceId)) {
+      throw new DomainException(AppError.UNAUTHORIZED, "Invalid device ID");
     }
 
     // Reissue tokens
     UserEntity userEntity = userRepository.findById(sessionEntity.getUserId())
-        .orElseThrow(() -> new BusinessException(AppError.USER_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.USER_NOT_FOUND));
     UserDetailsImpl userDetails = AuthMapper.map(userEntity);
 
     // Issue new access token
@@ -118,25 +122,31 @@ public class AuthService {
 
   @Transactional
   public void logout() {
-    SessionInfo sessionInfo = SessionContext.get();
+    ContextInfo contextInfo = Contexts.get();
 
     // Remove session from database
-    sessionRepository.deleteById(sessionInfo.getSessionId());
+    sessionRepository.deleteById(contextInfo.getSessionId());
 
     // Revoke session
-    revokeSession(sessionInfo.getSessionId(), sessionInfo.getExpiresAt());
+    revokeSession(contextInfo.getSessionId(), contextInfo.getExpiresAt());
 
     // Update last logout timestamp in Redis
-    updateLastLogoutTs(Integer.valueOf(sessionInfo.getUserId()));
+    updateLastLogoutTs(Integer.valueOf(contextInfo.getUserId()));
   }
 
   public void forceLogoutOnAllDevices() {
-    Integer userId = SessionContext.getUserId();
+    Integer userId = Contexts.getUserId();
     updateLastLogoutTs(userId);
   }
 
-  private LoginResponse doLogin(Authentication authenticationRequest, String deviceId)
+  private LoginResponse doLogin(Authentication authenticationRequest)
       throws IOException, InvalidKeySpecException {
+    // Require deviceId
+    String deviceId = Contexts.getDeviceId();
+    if (deviceId == null) {
+      throw new DomainException(AppError.BAD_REQUEST, "Device ID is required");
+    }
+
     Authentication authentication = authenticationManager.authenticate(authenticationRequest);
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 

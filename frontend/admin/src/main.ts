@@ -1,15 +1,20 @@
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
-import { createPinia } from 'pinia'
+import './assets/main.css'
+
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
 import App from './App.vue'
 import router from './router'
-import './style.css'
+import 'vue3-toastify/dist/index.css';
+import Vue3Toastify from 'vue3-toastify';
 
 const app = createApp(App)
-const pinia = createPinia()
 
-app.use(pinia)
+app.use(createPinia())
 app.use(router)
-app.use(ElementPlus)
+app.use(Vue3Toastify, {
+  autoClose: 3000,
+  position: 'bottom-right',
+});
+
 app.mount('#app')

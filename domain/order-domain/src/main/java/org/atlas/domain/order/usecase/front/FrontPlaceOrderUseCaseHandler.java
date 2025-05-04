@@ -28,11 +28,11 @@ import org.atlas.domain.product.shared.internal.ListProductOutput;
 import org.atlas.domain.user.shared.internal.ListUserInput;
 import org.atlas.domain.user.shared.internal.ListUserOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.security.session.SessionContext;
+import org.atlas.framework.context.Contexts;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.order.model.User;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.internalapi.ProductApiPort;
 import org.atlas.framework.internalapi.UserApiPort;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
@@ -68,7 +68,7 @@ public class FrontPlaceOrderUseCaseHandler implements
             ListProductOutput.Product product = products.get(orderItemEntity.getProductId());
             if (product == null) {
               log.error("SearchResponse not found: productId={}", orderItemEntity.getProductId());
-              throw new BusinessException(AppError.PRODUCT_NOT_FOUND);
+              throw new DomainException(AppError.PRODUCT_NOT_FOUND);
             }
             orderItemEntity.setProductPrice(product.getPrice());
           });
@@ -85,13 +85,13 @@ public class FrontPlaceOrderUseCaseHandler implements
       return new PlaceOrderOutput(orderEntity.getId());
     } catch (Exception e) {
       log.error("Failed to place order", e);
-      throw new BusinessException(AppError.FAILED_TO_PLACE_ORDER);
+      throw new DomainException(AppError.FAILED_TO_PLACE_ORDER);
     }
   }
 
   private OrderEntity newOrder(PlaceOrderInput input) {
     OrderEntity orderEntity = new OrderEntity();
-    orderEntity.setUserId(SessionContext.getUserId());
+    orderEntity.setUserId(Contexts.getUserId());
     orderEntity.setStatus(OrderStatus.PROCESSING);
     orderEntity.setCreatedAt(new Date());
     for (PlaceOrderInput.OrderItem orderItemInput : input.getOrderItems()) {

@@ -26,7 +26,7 @@ import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.U
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.product.ProductUpdatedEvent;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -40,7 +40,7 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
   @Override
   public Void handle(UpdateProductInput input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
-        .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
 
     // Update product into DB
     merge(input, productEntity);

@@ -17,9 +17,9 @@ import org.atlas.infrastructure.api.server.grpc.protobuf.user.UserServiceGrpc;
 import org.springframework.stereotype.Component;
 
 @Component
-@Retry(name = "default-internal-api")
-@CircuitBreaker(name = "default-internal-api")
-@Bulkhead(name = "default-internal-api")
+@Retry(name = "default")
+@CircuitBreaker(name = "default")
+@Bulkhead(name = "default")
 public class UserApiAdapter implements UserApiPort {
 
   @GrpcClient("user-service")

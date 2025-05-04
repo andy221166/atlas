@@ -20,7 +20,8 @@ public interface ObjectMapperService {
     if (source.checkEmpty()) {
       return PagingResult.empty();
     }
-    return new PagingResult<>(mapList(source.getResults(), destinationType), source.getPagination());
+    List<D> mappedData = mapList(source.getData(), destinationType);
+    return new PagingResult<>(mappedData, source.getPagination());
   }
 
   void merge(Object source, Object destination);

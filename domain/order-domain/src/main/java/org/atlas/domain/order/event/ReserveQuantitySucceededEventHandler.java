@@ -10,7 +10,7 @@ import org.atlas.framework.error.AppError;
 import org.atlas.framework.event.contract.order.OrderConfirmedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 
 @RequiredArgsConstructor
 public class ReserveQuantitySucceededEventHandler implements
@@ -24,9 +24,9 @@ public class ReserveQuantitySucceededEventHandler implements
   public void handle(ReserveQuantitySucceededEvent reserveQuantitySucceededEvent) {
     // Find order
     OrderEntity orderEntity = orderRepository.findById(reserveQuantitySucceededEvent.getOrderId())
-        .orElseThrow(() -> new BusinessException(AppError.ORDER_NOT_FOUND));
+        .orElseThrow(() -> new DomainException(AppError.ORDER_NOT_FOUND));
     if (orderEntity.getStatus() != OrderStatus.PROCESSING) {
-      throw new BusinessException(AppError.ORDER_INVALID_STATUS);
+      throw new DomainException(AppError.ORDER_INVALID_STATUS);
     }
 
     // Update order

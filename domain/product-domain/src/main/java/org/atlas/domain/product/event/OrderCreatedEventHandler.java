@@ -14,7 +14,7 @@ import org.atlas.framework.event.contract.order.OrderCreatedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
 import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.exception.BusinessException;
+import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.lock.LockPort;
 
 @RequiredArgsConstructor
@@ -60,9 +60,9 @@ public class OrderCreatedEventHandler implements EventHandler<OrderCreatedEvent>
         final String lockKey = String.format("product:%d:decrease-quantity", productId);
         lockPort.doWithLock(() -> {
           ProductEntity productEntity = productRepository.findById(productId)
-              .orElseThrow(() -> new BusinessException(AppError.PRODUCT_NOT_FOUND));
+              .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
           if (productEntity.getQuantity() < quantity) {
-            throw new BusinessException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
+            throw new DomainException(AppError.PRODUCT_INSUFFICIENT_QUANTITY);
           }
           productEntity.setQuantity(productEntity.getQuantity() - quantity);
           productRepository.update(productEntity);
