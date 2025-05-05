@@ -55,29 +55,33 @@ apiClient.interceptors.response.use(
       if (refreshToken && originalRequest) {
         try {
           // Call your refresh token endpoint
-          const response = await axios.post(`${API_URL}/api/auth/refresh-token`, {
+          const refreshTokenResponse = await axios.post(`${API_URL}/api/auth/refresh-token`, {
             refreshToken
+          }, {
+            headers: {
+              [DEVICE_ID_HEADER]: getOrCreateDeviceId()
+            }
           });
 
-          if (response.data.success) {
+          if (refreshTokenResponse.data.success) {
             // Update tokens
-            localStorage.setItem('accessToken', response.data.data.accessToken);
-            localStorage.setItem('refreshToken', response.data.data.refreshToken);
+            localStorage.setItem('accessToken', refreshTokenResponse.data.data.accessToken);
+            localStorage.setItem('refreshToken', refreshTokenResponse.data.data.refreshToken);
 
             // Retry original request
-            originalRequest.headers['Authorization'] = `Bearer ${response.data.data.accessToken}`;
+            originalRequest.headers['Authorization'] = `Bearer ${refreshTokenResponse.data.data.accessToken}`;
             return apiClient(originalRequest);
           }
         } catch (refreshError) {
           // If refresh fails, logout user
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
-          router.push('/login');
+          router.push({ name: 'login' });
           toast.error('Session expired. Please login again.');
         }
       } else {
         // No refresh token, redirect to login
-        router.push('/login');
+        router.push({ name: 'login' });
         toast.error('Please login to continue.');
       }
     }

@@ -30,8 +30,8 @@ public class UpdateProductRequest {
   @Schema(description = "Price of the product.", example = "19.99")
   private BigDecimal price = BigDecimal.ZERO;
 
-  @Schema(description = "URL of the product's image.", example = "https://example.com/product-image.jpg")
-  private String imageUrl;
+  @Schema(description = "Base64 string of the product's image.", example = "data:image/jpeg;base64,..")
+  private String image;
 
   @NotNull
   @PositiveOrZero

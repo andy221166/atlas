@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.repository.FindProductCriteria;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductInput;
 import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ProductOutput;
@@ -25,6 +26,7 @@ public class AdminListProductUseCaseHandler implements
     UseCaseHandler<ListProductInput, PagingResult<ProductOutput>> {
 
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
 
   @Override
   public PagingResult<ProductOutput> handle(ListProductInput input) throws Exception {
@@ -32,8 +34,22 @@ public class AdminListProductUseCaseHandler implements
         .map(input, FindProductCriteria.class);
     PagingResult<ProductEntity> productEntityPage = productRepository.findByCriteria(params,
         input.getPagingRequest());
-    return ObjectMapperUtil.getInstance()
-        .mapPage(productEntityPage, ProductOutput.class);
+
+    if (productEntityPage == null) {
+      return PagingResult.empty();
+    }
+
+    List<ProductOutput> productOutputs = productEntityPage.getData()
+        .stream()
+        .map(productEntity -> {
+          ProductOutput productOutput = ObjectMapperUtil.getInstance()
+              .map(productEntity, ProductOutput.class);
+          productOutput.setImage(productImageService.getImage(productEntity.getId()));
+          return productOutput;
+        })
+        .toList();
+
+    return PagingResult.of(productOutputs, productEntityPage.getPagination());
   }
 
   @Data
@@ -60,7 +76,7 @@ public class AdminListProductUseCaseHandler implements
 
     private Integer id;
     private String name;
-    private String imageUrl;
+    private String image;
     private BigDecimal price;
     private Integer quantity;
     private ProductStatus status;

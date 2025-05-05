@@ -34,10 +34,7 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
     @ExcelProperty(value = "Price")
     private BigDecimal price;
 
-    @ExcelProperty(value = "Image URL")
-    private String imageUrl;
-
-    @ExcelProperty(value = "ID")
+    @ExcelProperty(value = "Quantity")
     private Integer quantity;
 
     @ExcelProperty(value = "Status", converter = ProductStatusConverter.class)

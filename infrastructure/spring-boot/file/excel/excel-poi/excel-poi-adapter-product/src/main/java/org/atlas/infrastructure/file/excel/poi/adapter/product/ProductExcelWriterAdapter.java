@@ -55,58 +55,54 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
     headerCell.setCellStyle(headerStyle);
 
     headerCell = header.createCell(3);
-    headerCell.setCellValue("Image URL");
-    headerCell.setCellStyle(headerStyle);
-
-    headerCell = header.createCell(4);
     headerCell.setCellValue("Quantity");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(5);
+    headerCell = header.createCell(4);
     headerCell.setCellValue("Status");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(6);
+    headerCell = header.createCell(5);
     headerCell.setCellValue("Available From");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(7);
+    headerCell = header.createCell(6);
     headerCell.setCellValue("Active");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(8);
+    headerCell = header.createCell(7);
     headerCell.setCellValue("Description");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(9);
+    headerCell = header.createCell(8);
     headerCell.setCellValue("Attribute Name 1");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(10);
+    headerCell = header.createCell(9);
     headerCell.setCellValue("Attribute Value 1");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(11);
+    headerCell = header.createCell(10);
     headerCell.setCellValue("Attribute Name 2");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(12);
+    headerCell = header.createCell(11);
     headerCell.setCellValue("Attribute Value 2");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(13);
+    headerCell = header.createCell(12);
     headerCell.setCellValue("Attribute Name 3");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(14);
+    headerCell = header.createCell(13);
     headerCell.setCellValue("Attribute Value 3");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(15);
+    headerCell = header.createCell(14);
     headerCell.setCellValue("Brand ID");
     headerCell.setCellStyle(headerStyle);
 
-    headerCell = header.createCell(16);
+    headerCell = header.createCell(15);
     headerCell.setCellValue("Category IDs");
     headerCell.setCellStyle(headerStyle);
   }
@@ -132,58 +128,54 @@ public class ProductExcelWriterAdapter implements ProductExcelWriterPort {
       cell.setCellStyle(style);
 
       cell = row.createCell(3);
-      cell.setCellValue(productRow.getImageUrl());
-      cell.setCellStyle(style);
-
-      cell = row.createCell(4);
       cell.setCellValue(productRow.getQuantity());
       cell.setCellStyle(style);
 
-      cell = row.createCell(5);
+      cell = row.createCell(4);
       cell.setCellValue(productRow.getStatus().name());
       cell.setCellStyle(style);
 
-      cell = row.createCell(6);
+      cell = row.createCell(5);
       cell.setCellValue(DateUtil.format(productRow.getAvailableFrom(), CommonConstant.DATE_TIME_FORMAT));
       cell.setCellStyle(style);
 
-      cell = row.createCell(7);
+      cell = row.createCell(6);
       cell.setCellValue(productRow.getIsActive());
       cell.setCellStyle(style);
 
-      cell = row.createCell(8);
+      cell = row.createCell(7);
       cell.setCellValue(productRow.getDescription());
       cell.setCellStyle(style);
 
-      cell = row.createCell(9);
+      cell = row.createCell(8);
       cell.setCellValue(productRow.getAttributeName1());
       cell.setCellStyle(style);
 
-      cell = row.createCell(10);
+      cell = row.createCell(9);
       cell.setCellValue(productRow.getAttributeValue1());
       cell.setCellStyle(style);
 
-      cell = row.createCell(11);
+      cell = row.createCell(10);
       cell.setCellValue(productRow.getAttributeName2());
       cell.setCellStyle(style);
 
-      cell = row.createCell(12);
+      cell = row.createCell(11);
       cell.setCellValue(productRow.getAttributeValue2());
       cell.setCellStyle(style);
 
-      cell = row.createCell(13);
+      cell = row.createCell(12);
       cell.setCellValue(productRow.getAttributeName3());
       cell.setCellStyle(style);
 
-      cell = row.createCell(14);
+      cell = row.createCell(13);
       cell.setCellValue(productRow.getAttributeValue3());
       cell.setCellStyle(style);
 
-      cell = row.createCell(15);
+      cell = row.createCell(14);
       cell.setCellValue(productRow.getBrandId());
       cell.setCellStyle(style);
 
-      cell = row.createCell(16);
+      cell = row.createCell(15);
       cell.setCellValue(productRow.getCategoryIds()
           .stream()
           .map(String::valueOf)

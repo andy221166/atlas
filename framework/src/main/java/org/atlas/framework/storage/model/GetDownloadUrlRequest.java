@@ -9,4 +9,9 @@ import lombok.EqualsAndHashCode;
 public class GetDownloadUrlRequest extends BaseRequest {
 
   private Duration ttl;
+
+  public GetDownloadUrlRequest(String bucket, String objectKey, Duration ttl) {
+    super(bucket, objectKey);
+    this.ttl = ttl;
+  }
 }

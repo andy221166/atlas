@@ -10,11 +10,11 @@ import org.atlas.domain.product.shared.enums.DecreaseQuantityStrategy;
 import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.event.contract.order.OrderCreatedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
-import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.event.contract.order.OrderCreatedEvent;
+import org.atlas.framework.domain.event.contract.product.ReserveQuantityFailedEvent;
+import org.atlas.framework.domain.event.contract.product.ReserveQuantitySucceededEvent;
+import org.atlas.framework.domain.event.handler.EventHandler;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.lock.LockPort;
 
 @RequiredArgsConstructor

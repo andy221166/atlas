@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.domain.event.DomainEvent;
 import org.atlas.framework.transaction.TransactionPort;
 import org.atlas.infrastructure.event.handler.interceptor.EventHandlerInterceptor;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class EventHandlerAspect {
   private final List<EventHandlerInterceptor> interceptors;
   private final TransactionPort transactionPort;
 
-  @Around("execution(* org.atlas.framework.event.handler.EventHandler.handle(..))")
+  @Around("execution(* org.atlas.framework.domain.event.handler.EventHandler.handle(..))")
   public Object aroundHandle(ProceedingJoinPoint joinPoint) throws Throwable {
     // Retrieve input safely
     Object[] args = joinPoint.getArgs();

@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.framework.entity.DomainEntity;
+import org.atlas.framework.domain.entity.DomainEntity;
 
 @Getter
 @Setter

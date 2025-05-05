@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductInput;
 import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductOutput;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -22,13 +23,16 @@ import org.atlas.framework.usecase.handler.UseCaseHandler;
 public class AdminGetProductUseCaseHandler implements UseCaseHandler<GetProductInput, GetProductOutput> {
 
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
 
   @Override
   public GetProductOutput handle(GetProductInput input) throws Exception {
     ProductEntity productEntity = productRepository.findById(input.getId())
         .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
-    return ObjectMapperUtil.getInstance()
+    GetProductOutput productOutput = ObjectMapperUtil.getInstance()
         .map(productEntity, GetProductOutput.class);
+    productOutput.setImage(productImageService.getImage(productEntity.getId()));
+    return productOutput;
   }
 
   @Data
@@ -49,7 +53,7 @@ public class AdminGetProductUseCaseHandler implements UseCaseHandler<GetProductI
     private Integer id;
     private String name;
     private BigDecimal price;
-    private String imageUrl;
+    private String image;
     private Integer quantity;
     private ProductStatus status;
     private Date availableFrom;

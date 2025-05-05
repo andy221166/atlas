@@ -4,13 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PagingResult<T> {
 
   protected List<T> data;
@@ -22,6 +23,10 @@ public class PagingResult<T> {
 
   public static <T> PagingResult<T> empty() {
     return new PagingResult<>(Collections.emptyList(), Pagination.empty());
+  }
+
+  public static <T> PagingResult<T> of(List<T> data, Pagination pagination) {
+    return new PagingResult<>(data, pagination);
   }
 
   public static <T> PagingResult<T> of(List<T> data, long totalRecords,

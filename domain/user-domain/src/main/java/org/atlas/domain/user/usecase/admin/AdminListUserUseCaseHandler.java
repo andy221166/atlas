@@ -29,7 +29,7 @@ public class AdminListUserUseCaseHandler implements
   @Override
   public PagingResult<UserOutput> handle(ListUserInput input) throws Exception {
     PagingResult<UserEntity> userEntityPage = findSingleUser(input)
-        .map(user -> new PagingResult<>(List.of(user),
+        .map(user -> PagingResult.of(List.of(user),
             Pagination.of(1, input.getPagingRequest())))
         .orElseGet(() -> {
           if (isFilterPresent(input)) {

@@ -37,16 +37,6 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <!-- Persistence::JDBC -->
-    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-    <logger name="org.springframework.jdbc.core.StatementCreatorUtils" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>
-
     <!-- Resilience::resilience4j -->
     <logger name="io.github.resilience4j" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>

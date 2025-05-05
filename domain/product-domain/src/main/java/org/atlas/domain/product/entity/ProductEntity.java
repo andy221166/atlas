@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.atlas.domain.product.shared.enums.ProductStatus;
-import org.atlas.framework.entity.DomainEntity;
+import org.atlas.framework.domain.entity.DomainEntity;
 
 @Getter
 @Setter
@@ -18,7 +18,6 @@ public class ProductEntity extends DomainEntity {
   @EqualsAndHashCode.Include
   private Integer id;
   private String name;
-  private String imageUrl;
   private BigDecimal price;
   private Integer quantity;
   private ProductStatus status;

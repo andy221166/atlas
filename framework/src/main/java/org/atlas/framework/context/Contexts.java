@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.annotation.Nullable;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.exception.DomainException;
 
 /**
  * Manages session info context for the current thread.

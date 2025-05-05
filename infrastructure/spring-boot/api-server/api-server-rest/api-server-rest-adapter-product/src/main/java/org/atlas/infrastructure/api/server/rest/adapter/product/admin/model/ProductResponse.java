@@ -18,8 +18,8 @@ public class ProductResponse {
   @Schema(description = "Name of the product.", example = "T-Shirt")
   private String name;
 
-  @Schema(description = "URL of the product's image.", example = "https://example.com/product-image.jpg")
-  private String imageUrl;
+  @Schema(description = "Image of the product.", example = "https://example.com/product-image.jpg")
+  private String image;
 
   @Schema(description = "Price of the product.", example = "19.99")
   private BigDecimal price;

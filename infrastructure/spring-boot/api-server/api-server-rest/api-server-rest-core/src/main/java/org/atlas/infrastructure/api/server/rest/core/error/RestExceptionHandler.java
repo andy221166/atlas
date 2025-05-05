@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.i18n.I18nPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

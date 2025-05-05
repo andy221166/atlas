@@ -1,0 +1,4 @@
+app:
+  storage:
+    filesystem:
+      root: /tmp

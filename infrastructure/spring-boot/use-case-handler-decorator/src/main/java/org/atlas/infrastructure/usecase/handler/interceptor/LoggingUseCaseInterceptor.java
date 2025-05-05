@@ -24,11 +24,11 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
 
     ContextInfo contextInfo = Contexts.get();
     if (contextInfo == null) {
-      log.debug("Anonymous user started handling use case {}: {}",
-          useCaseClass.getSimpleName(), input);
+      log.debug("Anonymous user started handling use case {}",
+          useCaseClass.getSimpleName());
     } else {
-      log.debug("User {} started handling use case {}: {}",
-          contextInfo, useCaseClass.getSimpleName(), input);
+      log.debug("User {} started handling use case {}",
+          contextInfo, useCaseClass.getSimpleName());
     }
   }
 
@@ -43,11 +43,11 @@ public class LoggingUseCaseInterceptor implements UseCaseInterceptor {
 
     // Merge user info and performance check into one log statement
     if (contextInfo == null) {
-      log.debug("Anonymous user finished handling use case {}: {} in {} ms",
-          useCaseClass.getSimpleName(), input, elapsedTimeMs);
+      log.debug("Anonymous user finished handling use case {} in {} ms",
+          useCaseClass.getSimpleName(), elapsedTimeMs);
     } else {
-      log.debug("User {} finished handling use case {}: {} in {} ms",
-          contextInfo, useCaseClass.getSimpleName(), input, elapsedTimeMs);
+      log.debug("User {} finished handling use case {} in {} ms",
+          contextInfo, useCaseClass.getSimpleName(), elapsedTimeMs);
     }
   }
 }

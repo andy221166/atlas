@@ -16,26 +16,37 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/users',
-      name: 'users',
+      path: '/user',
+      name: 'userList',
       component: () => import('@/views/user/UserList.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/products',
-      name: 'products',
+      path: '/product',
+      name: 'productList',
       component: () => import('@/views/product/ProductList.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/products/:id',
-      name: 'product-info',
+      path: '/product/:id',
+      name: 'productInfo',
       component: () => import('@/views/product/ProductInfo.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/orders',
-      name: 'orders',
+      path: '/product/add',
+      name: 'productAdd',
+      component: () => import('@/views/product/ProductAdd.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/products/:id/edit',
+      name: 'productEdit',
+      component: () => import('@/views/product/ProductEdit.vue')
+    },
+    {
+      path: '/order',
+      name: 'orderList',
       component: () => import('@/views/order/OrderManagement.vue'),
       meta: { requiresAuth: true }
     },

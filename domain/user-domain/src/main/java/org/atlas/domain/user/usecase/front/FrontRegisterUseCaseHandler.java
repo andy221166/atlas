@@ -17,8 +17,8 @@ import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterI
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.event.contract.user.UserRegisteredEvent;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.event.contract.user.UserRegisteredEvent;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.security.client.AuthApiPort;
 import org.atlas.framework.security.client.model.CreateUserRequest;

@@ -2,8 +2,8 @@
   <div class="container-fluid p-2">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="h2">Product Management</h2>
-      <button class="btn btn-success">
-        Add New Product
+      <button class="btn btn-success" @click="router.push({ name: 'productAdd' })">
+        <i class="bi bi-plus-lg me-1"></i> Add New Product
       </button>
     </div>
 
@@ -120,7 +120,7 @@
               <td>{{ product.id }}</td>
               <td>{{ product.name }}</td>
               <td>
-                <img :src="product.imageUrl" :alt="product.name" class="img-thumbnail"
+                <img :src="getProductImage(product.image)" :alt="product.name" class="img-thumbnail"
                   style="width: 48px; height: 48px; object-fit: cover;" />
               </td>
               <td>${{ product.price.toFixed(2) }}</td>
@@ -136,11 +136,17 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-sm btn-outline-secondary me-2" @click="router.push(`/products/${product.id}`)">
+                <button class="btn btn-sm btn-outline-secondary me-2"
+                  @click="router.push({ name: 'productInfo', params: { id: product.id } })">
                   View
                 </button>
-                <button class="btn btn-sm btn-outline-primary me-2">Edit</button>
-                <button class="btn btn-sm btn-outline-danger">Delete</button>
+                <button class="btn btn-sm btn-outline-primary me-2"
+                  @click="router.push({ name: 'productEdit', params: { id: product.id } })">
+                  <i class="bi bi-pencil me-1"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger" @click="handleDelete(product.id)">
+                  <i class="bi bi-trash me-1"></i> Delete
+                </button>
               </td>
             </tr>
           </tbody>
@@ -173,9 +179,10 @@
 <script setup lang="ts">
 import { listBrand, type Brand } from '@/services/product/brand.service';
 import { listCategory, type Category } from '@/services/product/category.service';
-import { listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
+import { deleteProduct, listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
 
 const router = useRouter();
 const activeStates = reactive({
@@ -205,6 +212,16 @@ const filters = reactive<ListProductFilters>({
   page: 1,
   size: 20
 });
+
+const getProductImage = (image: string | null): string => {
+  if (!image) {
+    // Handle null/empty case
+    return new URL('@/assets/product-placeholder.jpg', import.meta.url).href;
+  }
+
+  // Handle both URL and base64 cases - they can be used directly in src
+  return image;
+};
 
 const formatStatusLabel = (status: ProductStatus): string => {
   return status.split('_')
@@ -278,6 +295,22 @@ const resetFilters = () => {
   });
   metadata.currentPage = 1;
   applyFilters();
+};
+
+const handleDelete = async (productId: number) => {
+  if (!confirm('Are you sure you want to delete this product?')) {
+    return;
+  }
+
+  const response = await deleteProduct(productId);
+  if (response.success) {
+    toast.success('Deleted product successfully');
+
+    // Refresh the product list
+    applyFilters();
+  } else {
+    toast.error('Failed to delete the product. Please try again.');
+  }
 };
 
 onMounted(async () => {

@@ -15,18 +15,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.product.entity.BrandEntity;
 import org.atlas.domain.product.entity.CategoryEntity;
 import org.atlas.domain.product.entity.ProductAttributeEntity;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.event.contract.product.ProductUpdatedEvent;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.event.contract.product.ProductUpdatedEvent;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -34,17 +36,24 @@ import org.atlas.framework.usecase.handler.UseCaseHandler;
 public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdateProductInput, Void> {
 
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
   private final ApplicationConfigPort applicationConfigPort;
   private final ProductMessagePublisherPort productMessagePublisherPort;
 
   @Override
   public Void handle(UpdateProductInput input) throws Exception {
+    // Find product
     ProductEntity productEntity = productRepository.findById(input.getId())
         .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
 
     // Update product into DB
     merge(input, productEntity);
     productRepository.update(productEntity);
+
+    // Upload image
+    if (StringUtils.isNotBlank(input.getImage())) {
+      productImageService.uploadImage(productEntity.getId(), input.getImage());
+    }
 
     // Publish event
     publishEvent(productEntity);
@@ -53,15 +62,19 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
   }
 
   private void merge(UpdateProductInput input, ProductEntity productEntity) {
-    // SearchResponse
-    ObjectMapperUtil.getInstance()
-        .merge(input, productEntity);
+    // Product
+    productEntity.setName(input.getName());
+    productEntity.setPrice(input.getPrice());
+    productEntity.setQuantity(input.getQuantity());
+    productEntity.setStatus(input.getStatus());
+    productEntity.setAvailableFrom(input.getAvailableFrom());
+    productEntity.setIsActive(input.getIsActive());
 
-    // SearchResponse detail
+    // Product detail
     ObjectMapperUtil.getInstance()
         .merge(input.getDetails(), productEntity.getDetails());
 
-    // SearchResponse attributes
+    // Product attributes
     if (CollectionUtils.isNotEmpty(input.getAttributes())) {
       List<ProductAttributeEntity> productAttributeEntities = ObjectMapperUtil.getInstance()
           .mapList(input.getAttributes(), ProductAttributeEntity.class);
@@ -110,7 +123,8 @@ public class AdminUpdateProductUseCaseHandler implements UseCaseHandler<UpdatePr
     @Builder.Default
     private BigDecimal price = BigDecimal.ZERO;
 
-    private String imageUrl;
+    // Base64 string
+    private String image;
 
     @NotNull
     @PositiveOrZero

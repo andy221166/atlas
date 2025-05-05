@@ -21,7 +21,7 @@ public interface ObjectMapperService {
       return PagingResult.empty();
     }
     List<D> mappedData = mapList(source.getData(), destinationType);
-    return new PagingResult<>(mappedData, source.getPagination());
+    return PagingResult.of(mappedData, source.getPagination());
   }
 
   void merge(Object source, Object destination);

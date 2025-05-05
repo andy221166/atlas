@@ -22,11 +22,12 @@ import org.atlas.domain.product.entity.ProductDetailsEntity;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductInput;
 import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductOutput;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.event.contract.product.ProductCreatedEvent;
+import org.atlas.framework.domain.event.contract.product.ProductCreatedEvent;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
@@ -35,6 +36,7 @@ public class AdminCreateProductUseCaseHandler implements
     UseCaseHandler<CreateProductInput, CreateProductOutput> {
 
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
   private final ApplicationConfigPort applicationConfigPort;
   private final ProductMessagePublisherPort productMessagePublisherPort;
 
@@ -44,6 +46,9 @@ public class AdminCreateProductUseCaseHandler implements
     ProductEntity productEntity = map(input);
     productRepository.insert(productEntity);
 
+    // Upload image
+    productImageService.uploadImage(productEntity.getId(), input.getImage());
+
     // Publish event
     publishEvent(productEntity);
 
@@ -52,16 +57,26 @@ public class AdminCreateProductUseCaseHandler implements
   }
 
   private ProductEntity map(CreateProductInput input) {
-    // SearchResponse
-    ProductEntity productEntity = ObjectMapperUtil.getInstance()
-        .map(input, ProductEntity.class);
+    // Product
+    ProductEntity productEntity = new ProductEntity();
+    productEntity.setName(input.getName());
+    productEntity.setPrice(input.getPrice());
+    productEntity.setQuantity(input.getQuantity());
+    productEntity.setStatus(input.getStatus());
+    productEntity.setAvailableFrom(input.getAvailableFrom());
+    productEntity.setIsActive(input.getIsActive());
 
-    // SearchResponse detail
+    // Brand
+    BrandEntity brandEntity = new BrandEntity();
+    brandEntity.setId(input.getBrandId());
+    productEntity.setBrand(brandEntity);
+
+    // Product details
     ProductDetailsEntity productDetailsEntity = ObjectMapperUtil.getInstance()
         .map(input.getDetails(), ProductDetailsEntity.class);
     productEntity.setDetails(productDetailsEntity);
 
-    // SearchResponse attributes
+    // Product attributes
     if (CollectionUtils.isNotEmpty(input.getAttributes())) {
       List<ProductAttributeEntity> productAttributeEntities = ObjectMapperUtil.getInstance()
           .mapList(input.getAttributes(), ProductAttributeEntity.class);
@@ -78,11 +93,6 @@ public class AdminCreateProductUseCaseHandler implements
         })
         .toList();
     productEntity.setCategories(categoryEntities);
-
-    // Brand
-    BrandEntity brandEntity = new BrandEntity();
-    brandEntity.setId(input.getBrandId());
-    productEntity.setBrand(brandEntity);
 
     return productEntity;
   }
@@ -108,7 +118,7 @@ public class AdminCreateProductUseCaseHandler implements
     @DecimalMin(value = "0.0")
     private BigDecimal price;
 
-    private String imageUrl;
+    private String image;
 
     @NotNull
     @PositiveOrZero
@@ -120,6 +130,7 @@ public class AdminCreateProductUseCaseHandler implements
     @NotNull
     private Date availableFrom;
 
+    @NotNull
     private Boolean isActive;
 
     @NotNull

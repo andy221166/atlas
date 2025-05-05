@@ -44,7 +44,7 @@ const handleLogin = async () => {
       if (profileResponse.success) {
         if (profileResponse.data.role === 'ADMIN') {
           userStore.setProfile(profileResponse.data); // Store profile data
-          router.push('/dashboard');
+          router.push({ name: 'dashboard' });
         } else {
           userStore.clearAuth(); // Clear everything if not admin
           toast.error('Access denied: You do not have the required permissions.');

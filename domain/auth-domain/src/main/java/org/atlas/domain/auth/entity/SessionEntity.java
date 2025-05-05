@@ -1,10 +1,9 @@
 package org.atlas.domain.auth.entity;
 
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.framework.entity.DomainEntity;
+import org.atlas.framework.domain.entity.DomainEntity;
 
 @Getter
 @Setter

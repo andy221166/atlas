@@ -1,7 +1,7 @@
 package org.atlas.infrastructure.event.handler.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.domain.event.DomainEvent;
 import org.atlas.framework.util.StopWatch;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

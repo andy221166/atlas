@@ -6,7 +6,7 @@ import type { Category } from './category.service'
 export interface Product {
   id: number
   name: string
-  imageUrl: string
+  image: string
   price: number
   quantity: number
   status: ProductStatus
@@ -51,6 +51,35 @@ export enum ProductStatus {
   DISCONTINUED = 'DISCONTINUED'
 }
 
+export interface CreateProductRequest {
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  status: ProductStatus;
+  availableFrom: string;
+  isActive: boolean;
+  brandId: number;
+  details: ProductDetails;
+  attributes: Omit<ProductAttribute, 'id'>[];
+  categoryIds: number[];
+}
+
+export interface UpdateProductRequest {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  status: ProductStatus;
+  availableFrom: string;
+  isActive: boolean;
+  brandId: number;
+  details: ProductDetails;
+  attributes: ProductAttribute[];
+  categoryIds: number[];
+}
+
 export const listProduct = async (filters: ListProductFilters): Promise<ApiResponse<Product[]>> => {
   const queryParams = new URLSearchParams();
   if (filters.id) queryParams.append('id', filters.id.toString());
@@ -71,5 +100,20 @@ export const listProduct = async (filters: ListProductFilters): Promise<ApiRespo
 
 export const getProduct = async (productId: number): Promise<ApiResponse<GetProductResponse>> => {
   const response = await apiClient.get(`/api/admin/products/${productId}`);
+  return response.data;
+};
+
+export const createProduct = async (data: CreateProductRequest): Promise<ApiResponse<Product>> => {
+  const response = await apiClient.post('/api/admin/products', data);
+  return response.data;
+};
+
+export const updateProduct = async (data: UpdateProductRequest): Promise<ApiResponse<Product>> => {
+  const response = await apiClient.put(`/api/admin/products/${data.id}`, data);
+  return response.data;
+};
+
+export const deleteProduct = async (productId: number): Promise<ApiResponse<void>> => {
+  const response = await apiClient.delete(`/api/admin/products/${productId}`);
   return response.data;
 };

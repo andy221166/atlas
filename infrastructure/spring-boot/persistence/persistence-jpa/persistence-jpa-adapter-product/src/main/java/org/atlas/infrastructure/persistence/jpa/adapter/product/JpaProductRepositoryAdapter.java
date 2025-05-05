@@ -7,14 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.repository.FindProductCriteria;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.resilience.RetryUtil;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaOptimisticProductEntity;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.entity.JpaProductEntity;
+import org.atlas.infrastructure.persistence.jpa.adapter.product.mapper.ProductEntityMapper;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.CustomJpaProductRepository;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaOptimisticProductRepository;
 import org.atlas.infrastructure.persistence.jpa.adapter.product.repository.JpaProductRepository;
@@ -41,19 +42,7 @@ public class JpaProductRepositoryAdapter implements ProductRepository {
     List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.findByCriteria(criteria,
         pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
-        .mapList(jpaProductEntities, jpaProductEntity -> {
-          // Just map selected columns
-          ProductEntity productEntity = new ProductEntity();
-          productEntity.setId(jpaProductEntity.getId());
-          productEntity.setName(jpaProductEntity.getName());
-          productEntity.setPrice(jpaProductEntity.getPrice());
-          productEntity.setImageUrl(jpaProductEntity.getImageUrl());
-          productEntity.setQuantity(jpaProductEntity.getQuantity());
-          productEntity.setStatus(jpaProductEntity.getStatus());
-          productEntity.setAvailableFrom(jpaProductEntity.getAvailableFrom());
-          productEntity.setIsActive(jpaProductEntity.getIsActive());
-          return productEntity;
-        });
+        .mapList(jpaProductEntities, ProductEntityMapper::map);
     return PagingResult.of(productEntities, totalCount, pagingRequest);
   }
 
@@ -61,31 +50,27 @@ public class JpaProductRepositoryAdapter implements ProductRepository {
   public List<ProductEntity> findByIdIn(List<Integer> ids) {
     return jpaProductRepository.findAllById(ids)
         .stream()
-        .map(jpaProduct -> ObjectMapperUtil.getInstance()
-            .map(jpaProduct, ProductEntity.class))
+        .map(ProductEntityMapper::map)
         .toList();
   }
 
   @Override
   public Optional<ProductEntity> findById(Integer id) {
     return jpaProductRepository.findByIdWithAssociations(id)
-        .map(jpaProduct -> ObjectMapperUtil.getInstance()
-            .map(jpaProduct, ProductEntity.class));
+        .map(ProductEntityMapper::mapFull);
   }
 
   @Override
   public void insert(ProductEntity productEntity) {
-    JpaProductEntity jpaProductEntity = ObjectMapperUtil.getInstance()
-        .map(productEntity, JpaProductEntity.class);
-    jpaProductRepository.save(jpaProductEntity);
+    JpaProductEntity jpaProductEntity = ProductEntityMapper.map(productEntity);
+    jpaProductRepository.saveAndFlush(jpaProductEntity);
     productEntity.setId(jpaProductEntity.getId());
   }
 
   @Override
   public void update(ProductEntity productEntity) {
-    JpaProductEntity jpaProductEntity = ObjectMapperUtil.getInstance()
-        .map(productEntity, JpaProductEntity.class);
-    jpaProductRepository.save(jpaProductEntity);
+    JpaProductEntity jpaProductEntity = ProductEntityMapper.map(productEntity);
+    jpaProductRepository.saveAndFlush(jpaProductEntity);
   }
 
   @Override

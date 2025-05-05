@@ -8,17 +8,17 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/users" class="nav-link text-white">
+          <router-link to="/user" class="nav-link text-white">
             <i class="bi bi-people me-2"></i>User Management
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/products" class="nav-link text-white">
+          <router-link to="/product" class="nav-link text-white">
             <i class="bi bi-box-seam me-2"></i>Product Management
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/orders" class="nav-link text-white">
+          <router-link to="/order" class="nav-link text-white">
             <i class="bi bi-cart-check me-2"></i>Order Management
           </router-link>
         </li>

@@ -2,7 +2,7 @@ package org.atlas.infrastructure.messaging.sns.adapter.notification.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.domain.notification.event.OrderCanceledEventHandler;
-import org.atlas.framework.event.contract.order.OrderCanceledEvent;
+import org.atlas.framework.domain.event.contract.order.OrderCanceledEvent;
 import org.atlas.infrastructure.messaging.sns.core.SnsMessageConsumer;
 import org.atlas.infrastructure.messaging.sns.core.SnsProps;
 import org.springframework.beans.factory.InitializingBean;

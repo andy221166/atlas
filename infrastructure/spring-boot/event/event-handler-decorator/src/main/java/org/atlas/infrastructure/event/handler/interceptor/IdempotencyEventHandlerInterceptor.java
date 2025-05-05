@@ -4,7 +4,7 @@ import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.event.DomainEvent;
+import org.atlas.framework.domain.event.DomainEvent;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

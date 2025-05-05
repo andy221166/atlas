@@ -17,13 +17,14 @@ import org.atlas.domain.product.entity.CategoryEntity;
 import org.atlas.domain.product.entity.ProductAttributeEntity;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetProductInput;
 import org.atlas.domain.product.usecase.front.FrontGetProductUseCaseHandler.GetProductOutput;
 import org.atlas.framework.cache.CachePort;
 import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class FrontGetProductUseCaseHandler implements
     UseCaseHandler<GetProductInput, GetProductOutput> {
 
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
   private final ApplicationConfigPort applicationConfigPort;
   private final CachePort cachePort;
 
@@ -61,7 +63,7 @@ public class FrontGetProductUseCaseHandler implements
     product.setId(productEntity.getId());
     product.setName(productEntity.getName());
     product.setPrice(productEntity.getPrice());
-    product.setImageUrl(productEntity.getImageUrl());
+    product.setImage(productImageService.getImage(productEntity.getId()));
     product.setDescription(productEntity.getDetails() != null ?
         productEntity.getDetails().getDescription() : null);
     if (CollectionUtils.isNotEmpty(productEntity.getAttributes())) {
@@ -102,7 +104,7 @@ public class FrontGetProductUseCaseHandler implements
     private Integer id;
     private String name;
     private BigDecimal price;
-    private String imageUrl;
+    private String image;
     private String description;
     private Map<String, String> attributes;
     private String brand;

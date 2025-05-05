@@ -7,7 +7,7 @@ import io.github.resilience4j.common.timelimiter.configuration.TimeLimiterConfig
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.exception.DomainException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +22,7 @@ public class Resilience4jConfig {
           .maxAttempts(4)
           .waitDuration(Duration.ofMillis(1000))
           .retryExceptions(IOException.class, TimeoutException.class)
-          .ignoreExceptions(org.atlas.framework.exception.DomainException.class);
+          .ignoreExceptions(DomainException.class);
     });
   }
 

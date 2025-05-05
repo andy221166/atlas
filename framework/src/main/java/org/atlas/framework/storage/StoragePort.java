@@ -1,17 +1,18 @@
 package org.atlas.framework.storage;
 
+import java.io.IOException;
 import org.atlas.framework.storage.model.DeleteFileRequest;
-import org.atlas.framework.storage.model.DownloadFileRequest;
 import org.atlas.framework.storage.model.GetDownloadUrlRequest;
+import org.atlas.framework.storage.model.GetFileRequest;
 import org.atlas.framework.storage.model.UploadFileRequest;
 
 public interface StoragePort {
 
-  void upload(UploadFileRequest request) throws Exception;
+  void uploadFile(UploadFileRequest request) throws IOException;
 
-  byte[] download(DownloadFileRequest request) throws Exception;
+  byte[] getFile(GetFileRequest request) throws IOException;
 
-  String getDownloadUrl(GetDownloadUrlRequest request) throws Exception;
+  String getDownloadUrl(GetDownloadUrlRequest request) throws IOException;
 
-  void delete(DeleteFileRequest request) throws Exception;
+  void deleteFile(DeleteFileRequest request) throws IOException;
 }

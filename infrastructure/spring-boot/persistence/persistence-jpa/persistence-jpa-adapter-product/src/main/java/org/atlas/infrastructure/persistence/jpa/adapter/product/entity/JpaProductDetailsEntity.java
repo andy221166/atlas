@@ -1,8 +1,10 @@
 package org.atlas.infrastructure.persistence.jpa.adapter.product.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,9 +19,12 @@ import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 public class JpaProductDetailsEntity extends JpaBaseEntity {
 
   @Id
-  @Column(name = "product_id")
-  @EqualsAndHashCode.Include
   private Integer productId;
+
+  @MapsId
+  @OneToOne
+  @JoinColumn(name = "product_id", referencedColumnName = "id")
+  private JpaProductEntity product;
 
   private String description;
 }

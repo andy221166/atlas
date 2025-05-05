@@ -24,8 +24,10 @@ public enum AppError {
   // Product-related errors
   PRODUCT_NOT_FOUND(2000, "error.product.not_found"),
   PRODUCT_INSUFFICIENT_QUANTITY(2001, "error.product.insufficient_quantity"),
-  BRAND_NOT_FOUND(2002, "error.brand.not_found"),
-  CATEGORY_NOT_FOUND(2003, "error.category.not_found"),
+  BRAND_NOT_FOUND(2002, "error.product.brand.not_found"),
+  CATEGORY_NOT_FOUND(2003, "error.product.category.not_found"),
+  NO_IMPORTED_PRODUCT(2004, "error.product.no_imported_product"),
+  FAILED_TO_IMPORT_PRODUCT(2004, "error.product.failed_to_import_product"),
 
   // Order-related errors
   ORDER_NOT_FOUND(3000, "error.order.not_found"),

@@ -35,9 +35,6 @@ public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
     @ExcelProperty(value = "Price")
     private BigDecimal price;
 
-    @ExcelProperty(value = "Image URL")
-    private String imageUrl;
-
     @ExcelProperty(value = "Quantity")
     private Integer quantity;
 

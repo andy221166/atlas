@@ -17,8 +17,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,9 +44,6 @@ public class JpaProductEntity extends JpaBaseEntity {
 
   private BigDecimal price;
 
-  @Column(name = "image_url")
-  private String imageUrl;
-
   private Integer quantity;
 
   @Enumerated(EnumType.STRING)
@@ -60,18 +59,32 @@ public class JpaProductEntity extends JpaBaseEntity {
   @JoinColumn(name = "brand_id")
   private JpaBrandEntity brand;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-  @JoinColumn(name = "id", referencedColumnName = "product_id")
+  @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private JpaProductDetailsEntity details;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
-  private Set<JpaProductAttributeEntity> attributes = new HashSet<>();
+  private List<JpaProductAttributeEntity> attributes = new ArrayList<>();
 
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany
   @JoinTable(
       name = "product_category",
       joinColumns = {@JoinColumn(name = "product_id")},
       inverseJoinColumns = {@JoinColumn(name = "category_id")}
   )
   private Set<JpaCategoryEntity> categories = new HashSet<>();
+
+  public void addAttribute(JpaProductAttributeEntity attribute) {
+    if (attributes == null) {
+      attributes = new ArrayList<>();
+    }
+    attribute.setProduct(this);
+    attributes.add(attribute);
+  }
+
+  public void addCategory(JpaCategoryEntity category) {
+    if (categories == null) {
+      categories = new HashSet<>();
+    }
+    categories.add(category);
+  }
 }

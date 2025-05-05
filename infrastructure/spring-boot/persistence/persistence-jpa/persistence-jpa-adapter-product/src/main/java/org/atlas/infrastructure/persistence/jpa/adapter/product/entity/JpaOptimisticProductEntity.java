@@ -43,9 +43,6 @@ public class JpaOptimisticProductEntity extends JpaBaseEntity {
 
   private BigDecimal price;
 
-  @Column(name = "image_url")
-  private String imageUrl;
-
   private Integer quantity;
 
   @Enumerated(EnumType.STRING)

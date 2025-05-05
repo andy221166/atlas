@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.repository.FindProductCriteria;
 import org.atlas.domain.product.repository.ProductRepository;
+import org.atlas.domain.product.service.ProductImageService;
 import org.atlas.domain.product.shared.enums.ProductStatus;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.ProductOutput;
 import org.atlas.domain.product.usecase.front.FrontSearchProductUseCaseHandler.SearchProductInput;
@@ -27,6 +28,7 @@ public class FrontSearchProductUseCaseHandler implements
 
   private final @Nullable SearchPort searchPort;
   private final ProductRepository productRepository;
+  private final ProductImageService productImageService;
 
   @Override
   public PagingResult<ProductOutput> handle(SearchProductInput input) throws Exception {
@@ -48,8 +50,18 @@ public class FrontSearchProductUseCaseHandler implements
     if (productEntityPage == null) {
       return PagingResult.empty();
     }
-    return ObjectMapperUtil.getInstance()
-        .mapPage(productEntityPage, ProductOutput.class);
+
+    List<ProductOutput> productOutputs = productEntityPage.getData()
+        .stream()
+        .map(productEntity -> {
+          ProductOutput productOutput = ObjectMapperUtil.getInstance()
+              .map(productEntity, ProductOutput.class);
+          productOutput.setImage(productImageService.getImage(productEntity.getId()));
+          return productOutput;
+        })
+        .toList();
+
+    return PagingResult.of(productOutputs, productEntityPage.getPagination());
   }
 
   @Data
@@ -76,6 +88,6 @@ public class FrontSearchProductUseCaseHandler implements
     private Integer id;
     private String name;
     private BigDecimal price;
-    private String imageUrl;
+    private String image;
   }
 }

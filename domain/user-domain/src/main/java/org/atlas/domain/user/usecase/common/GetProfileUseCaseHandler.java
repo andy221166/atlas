@@ -11,7 +11,7 @@ import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.common.GetProfileUseCaseHandler.GetProfileOutput;
 import org.atlas.framework.context.Contexts;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 

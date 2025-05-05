@@ -21,6 +21,6 @@ const router = useRouter()
 const handleLogout = async () => {
   await logout();
   userStore.clearAuth();
-  router.push('/login');
+  router.push({ name: 'login' });
 }
 </script>

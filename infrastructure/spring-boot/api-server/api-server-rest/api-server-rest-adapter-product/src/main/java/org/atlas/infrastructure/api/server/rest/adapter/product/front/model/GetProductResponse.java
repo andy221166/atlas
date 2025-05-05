@@ -25,8 +25,8 @@ public class GetProductResponse {
   @Schema(description = "Price of the product.", example = "19.99")
   private BigDecimal price;
 
-  @Schema(description = "URL of the product's image.", example = "https://example.com/product-image.jpg")
-  private String imageUrl;
+  @Schema(description = "The image of product", example = "https://example.com/product-image.jpg")
+  private String image;
 
   @Schema(description = "Description of the product.", example = "A comfortable cotton t-shirt.")
   private String description;

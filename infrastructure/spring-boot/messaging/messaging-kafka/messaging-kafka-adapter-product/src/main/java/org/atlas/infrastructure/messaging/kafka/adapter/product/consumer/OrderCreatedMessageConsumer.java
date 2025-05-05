@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.atlas.domain.product.event.OrderCreatedEventHandler;
-import org.atlas.framework.event.contract.order.OrderCreatedEvent;
+import org.atlas.framework.domain.event.contract.order.OrderCreatedEvent;
 import org.atlas.infrastructure.messaging.kafka.core.KafkaMessageConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;

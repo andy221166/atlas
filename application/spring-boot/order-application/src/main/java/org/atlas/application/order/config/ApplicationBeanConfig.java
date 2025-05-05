@@ -1,6 +1,6 @@
 package org.atlas.application.order.config;
 
-import org.atlas.framework.event.handler.EventHandler;
+import org.atlas.framework.domain.event.handler.EventHandler;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 import org.atlas.infrastructure.bootstrap.ApplicationBeanRegistrar;
 import org.springframework.context.annotation.Bean;

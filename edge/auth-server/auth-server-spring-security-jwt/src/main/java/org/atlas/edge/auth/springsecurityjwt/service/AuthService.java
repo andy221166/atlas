@@ -23,7 +23,7 @@ import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.context.Contexts;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.util.UUIDGenerator;
 import org.springframework.data.redis.core.RedisTemplate;

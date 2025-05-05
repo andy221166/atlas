@@ -1,8 +1,8 @@
 package org.atlas.domain.order.port.messaging;
 
-import org.atlas.framework.event.contract.order.OrderCanceledEvent;
-import org.atlas.framework.event.contract.order.OrderConfirmedEvent;
-import org.atlas.framework.event.contract.order.OrderCreatedEvent;
+import org.atlas.framework.domain.event.contract.order.OrderCanceledEvent;
+import org.atlas.framework.domain.event.contract.order.OrderConfirmedEvent;
+import org.atlas.framework.domain.event.contract.order.OrderCreatedEvent;
 
 public interface OrderMessagePublisherPort {
 

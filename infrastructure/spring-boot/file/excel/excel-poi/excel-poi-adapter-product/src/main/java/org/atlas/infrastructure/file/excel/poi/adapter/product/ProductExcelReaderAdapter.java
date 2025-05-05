@@ -50,21 +50,20 @@ public class ProductExcelReaderAdapter implements ProductExcelReaderPort {
     ProductRow productRow = new ProductRow();
     productRow.setName(row.getCell(0).getStringCellValue());
     productRow.setPrice(BigDecimal.valueOf(row.getCell(1).getNumericCellValue()));
-    productRow.setImageUrl(row.getCell(2).getStringCellValue());
-    productRow.setQuantity((int) row.getCell(3).getNumericCellValue());
-    productRow.setStatus(ProductStatus.valueOf(row.getCell(4).getStringCellValue()));
-    productRow.setAvailableFrom(DateUtil.parse(row.getCell(5).getStringCellValue(),
+    productRow.setQuantity((int) row.getCell(2).getNumericCellValue());
+    productRow.setStatus(ProductStatus.valueOf(row.getCell(3).getStringCellValue()));
+    productRow.setAvailableFrom(DateUtil.parse(row.getCell(4).getStringCellValue(),
         CommonConstant.DATE_TIME_FORMAT));
-    productRow.setIsActive(row.getCell(6).getBooleanCellValue());
-    productRow.setDescription(row.getCell(7).getStringCellValue());
-    productRow.setAttributeName1(row.getCell(8).getStringCellValue());
-    productRow.setAttributeValue1(row.getCell(9).getStringCellValue());
-    productRow.setAttributeName2(row.getCell(10).getStringCellValue());
-    productRow.setAttributeValue2(row.getCell(11).getStringCellValue());
-    productRow.setAttributeName3(row.getCell(12).getStringCellValue());
-    productRow.setAttributeValue3(row.getCell(13).getStringCellValue());
-    productRow.setBrandId((int) row.getCell(14).getNumericCellValue());
-    productRow.setCategoryIds(Arrays.stream(row.getCell(15).getStringCellValue().split(","))
+    productRow.setIsActive(row.getCell(5).getBooleanCellValue());
+    productRow.setDescription(row.getCell(6).getStringCellValue());
+    productRow.setAttributeName1(row.getCell(7).getStringCellValue());
+    productRow.setAttributeValue1(row.getCell(8).getStringCellValue());
+    productRow.setAttributeName2(row.getCell(9).getStringCellValue());
+    productRow.setAttributeValue2(row.getCell(10).getStringCellValue());
+    productRow.setAttributeName3(row.getCell(11).getStringCellValue());
+    productRow.setAttributeValue3(row.getCell(12).getStringCellValue());
+    productRow.setBrandId((int) row.getCell(13).getNumericCellValue());
+    productRow.setCategoryIds(Arrays.stream(row.getCell(14).getStringCellValue().split(","))
         .map(Integer::parseInt)
         .toList());
     return productRow;

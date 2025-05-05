@@ -3,9 +3,6 @@ package org.atlas.domain.product.usecase.admin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,98 +21,61 @@ import org.atlas.domain.product.port.file.model.read.ProductRow;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
 import org.atlas.domain.product.repository.ProductRepository;
 import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler.ImportProductInput;
-import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.event.contract.product.ProductCreatedEvent;
+import org.atlas.framework.error.AppError;
+import org.atlas.framework.domain.event.contract.product.ProductCreatedEvent;
+import org.atlas.framework.domain.exception.DomainException;
 import org.atlas.framework.file.enums.FileType;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
-import org.atlas.framework.storage.StoragePort;
-import org.atlas.framework.storage.model.DeleteFileRequest;
-import org.atlas.framework.storage.model.DownloadFileRequest;
-import org.atlas.framework.storage.model.UploadFileRequest;
 import org.atlas.framework.transaction.TransactionPort;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
-import org.atlas.framework.util.DateUtil;
 
 @RequiredArgsConstructor
 @Slf4j
 public class AdminImportProductUseCaseHandler implements UseCaseHandler<ImportProductInput, Void> {
-
-  private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
   private final ProductRepository productRepository;
   private final ApplicationConfigPort applicationConfigPort;
   private final ProductCsvReaderPort productCsvReaderPort;
   private final ProductExcelReaderPort productExcelReaderPort;
   private final ProductMessagePublisherPort productMessagePublisherPort;
-  private final StoragePort storagePort;
   private final TransactionPort transactionPort;
 
   @Override
   public Void handle(ImportProductInput input) throws Exception {
-    String bucket = Optional.ofNullable(applicationConfigPort.getConfig(Application.PRODUCT_SERVICE,
-            "product-import-bucket"))
-        .orElseThrow(() -> new IllegalStateException("product-import-bucket is not configured"));
-    String objectKey = getObjectKey(input);
+    // Read rows from file content
+    List<ProductRow> rows;
+    switch (input.getFileType()) {
+      case CSV -> rows = productCsvReaderPort.read(input.getFileContent());
+      case EXCEL -> rows = productExcelReaderPort.read(input.getFileContent());
+      default -> throw new UnsupportedOperationException(
+          "Unsupported file type: " + input.getFileType());
+    }
+    if (CollectionUtils.isEmpty(rows)) {
+      throw new DomainException(AppError.NO_IMPORTED_PRODUCT);
+    }
 
-    // Upload temp file
-    storagePort.upload(
-        new UploadFileRequest(bucket, objectKey, input.getFileContent()));
-
-    EXECUTOR.submit(() -> {
-      try {
-        // Download temporary file
-        byte[] fileContent = storagePort.download(
-            new DownloadFileRequest(bucket, objectKey));
-
-        // Read rows from file content
-        List<ProductRow> rows;
-        switch (input.getFileType()) {
-          case CSV -> rows = productCsvReaderPort.read(fileContent);
-          case EXCEL -> rows = productExcelReaderPort.read(fileContent);
-          default -> throw new UnsupportedOperationException(
-              "Unsupported file type: " + input.getFileType());
-        }
-        if (CollectionUtils.isEmpty(rows)) {
-          log.info("No product to do insert");
-          return;
-        }
-
-        // Sync into DB and publish events
-        transactionPort.execute(() -> {
-          List<ProductEntity> productEntities = rows.stream()
-              .map(this::newProductEntity)
-              .toList();
-          productRepository.insertBatch(productEntities);
-          productEntities.forEach(productEntity -> {
-            ProductCreatedEvent event = new ProductCreatedEvent(
-                applicationConfigPort.getApplicationName());
-            ObjectMapperUtil.getInstance()
-                .merge(productEntity, event);
-            event.setProductId(productEntity.getId());
-            productMessagePublisherPort.publish(event);
-          });
+    // Sync into DB and publish events
+    try {
+      transactionPort.execute(() -> {
+        List<ProductEntity> productEntities = rows.stream()
+            .map(this::newProductEntity)
+            .toList();
+        productRepository.insertBatch(productEntities);
+        productEntities.forEach(productEntity -> {
+          ProductCreatedEvent event = new ProductCreatedEvent(
+              applicationConfigPort.getApplicationName());
+          ObjectMapperUtil.getInstance()
+              .merge(productEntity, event);
+          event.setProductId(productEntity.getId());
+          productMessagePublisherPort.publish(event);
         });
-        log.info("Inserted {} products", rows.size());
-      } catch (Exception e) {
-        log.error("Occurred error while importing file {}", objectKey, e);
-      } finally {
-        try {
-          // Delete temporary file to clean
-          storagePort.delete(
-              new DeleteFileRequest(bucket, objectKey));
-        } catch (Exception e) {
-          log.error("Failed to delete file {}", objectKey, e);
-        }
-      }
-    });
-
-    return null;
-  }
-
-  private String getObjectKey(ImportProductInput input) {
-    String now = DateUtil.now("yyyyMMddHHmmss");
-    return String.format("%s.%s", now, input.getFileType().getExtension());
+      });
+      log.info("Imported {} products", rows.size());
+      return null;
+    } catch (Exception e) {
+      throw new DomainException(AppError.FAILED_TO_IMPORT_PRODUCT, e.getMessage());
+    }
   }
 
   private ProductEntity newProductEntity(ProductRow row) {

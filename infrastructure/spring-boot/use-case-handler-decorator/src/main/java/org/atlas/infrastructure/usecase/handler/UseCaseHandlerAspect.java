@@ -25,13 +25,12 @@ public class UseCaseHandlerAspect {
     // Extract class and method details
     Class<?> useCaseHandlerClass = joinPoint.getTarget().getClass();
 
-    // Retrieve input safely
+    // Retrieve input
     Object[] args = joinPoint.getArgs();
-    InternalInput input =
-        (args.length > 0 && args[0] instanceof InternalInput) ? (InternalInput) args[0] : null;
 
     // Execute pre-handle interceptors
-    interceptors.forEach(interceptor -> interceptor.preHandle(useCaseHandlerClass, input));
+    interceptors.forEach(interceptor ->
+        interceptor.preHandle(useCaseHandlerClass, args[0]));
 
     // Execute UseCaseHandler in a transaction manner
     transactionPort.begin();
@@ -44,7 +43,8 @@ public class UseCaseHandlerAspect {
       throw e;
     } finally {
       // Execute post-handle interceptors
-      interceptors.forEach(interceptor -> interceptor.postHandle(useCaseHandlerClass, input));
+      interceptors.forEach(interceptor ->
+          interceptor.postHandle(useCaseHandlerClass, args[0]));
     }
   }
 }

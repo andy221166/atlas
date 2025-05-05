@@ -7,10 +7,10 @@ import org.atlas.domain.order.repository.OrderRepository;
 import org.atlas.domain.order.shared.OrderStatus;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.event.contract.order.OrderConfirmedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
-import org.atlas.framework.event.handler.EventHandler;
-import org.atlas.framework.exception.DomainException;
+import org.atlas.framework.domain.event.contract.order.OrderConfirmedEvent;
+import org.atlas.framework.domain.event.contract.product.ReserveQuantitySucceededEvent;
+import org.atlas.framework.domain.event.handler.EventHandler;
+import org.atlas.framework.domain.exception.DomainException;
 
 @RequiredArgsConstructor
 public class ReserveQuantitySucceededEventHandler implements

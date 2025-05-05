@@ -11,7 +11,6 @@ public class ProductRow {
 
   private String name;
   private BigDecimal price;
-  private String imageUrl;
   private Integer quantity;
   private ProductStatus status;
   private Date availableFrom;

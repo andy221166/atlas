@@ -2,11 +2,11 @@ package org.atlas.infrastructure.messaging.kafka.adapter.product.publisher;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.product.port.messaging.ProductMessagePublisherPort;
-import org.atlas.framework.event.contract.product.ProductCreatedEvent;
-import org.atlas.framework.event.contract.product.ProductDeletedEvent;
-import org.atlas.framework.event.contract.product.ProductUpdatedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantityFailedEvent;
-import org.atlas.framework.event.contract.product.ReserveQuantitySucceededEvent;
+import org.atlas.framework.domain.event.contract.product.ProductCreatedEvent;
+import org.atlas.framework.domain.event.contract.product.ProductDeletedEvent;
+import org.atlas.framework.domain.event.contract.product.ProductUpdatedEvent;
+import org.atlas.framework.domain.event.contract.product.ReserveQuantityFailedEvent;
+import org.atlas.framework.domain.event.contract.product.ReserveQuantitySucceededEvent;
 import org.atlas.framework.messaging.MessageGateway;
 import org.atlas.infrastructure.messaging.kafka.core.KafkaProps;
 import org.springframework.stereotype.Component;

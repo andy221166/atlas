@@ -26,8 +26,8 @@ public class CreateProductRequest {
   @Schema(description = "Price of the product.", example = "19.99")
   private BigDecimal price;
 
-  @Schema(description = "URL of the product's image.", example = "https://example.com/product-image.jpg")
-  private String imageUrl;
+  @Schema(description = "Base64 string of the product's image.", example = "data:image/jpeg;base64,..")
+  private String image;
 
   @NotNull
   @PositiveOrZero
@@ -42,6 +42,7 @@ public class CreateProductRequest {
   @Schema(description = "Date and time the product becomes available in ISO 8601 format.", example = "2023-10-01T10:00:00Z")
   private Date availableFrom;
 
+  @NotNull
   @Schema(description = "Indicates if the product is active.", example = "true")
   private Boolean isActive;
 
