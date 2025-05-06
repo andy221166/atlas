@@ -18,7 +18,7 @@
 
           <div class="col-md-6">
             <label class="form-label">Search</label>
-            <input v-model="filters.keyword" type="text" placeholder="Search by product name..." class="form-control" />
+            <input v-model="filters.keyword" type="text" placeholder="Search by product name or description..." class="form-control" />
           </div>
 
           <div class="col-md-6">
@@ -65,26 +65,36 @@
 
           <div class="col-md-6">
             <label class="form-label">Brand</label>
-            <select v-model="filters.brandId" class="form-select" :disabled="!brands.length">
+            <div v-if="isLoadingBrands" class="text-center py-2">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading brands...</span>
+              </div>
+            </div>
+            <select v-else v-model="filters.brandId" class="form-select" :disabled="!brands.length">
               <option value="" selected>All brands</option>
               <option v-for="brand in brands" :key="brand.id" :value="brand.id">
                 {{ brand.name }}
               </option>
             </select>
-            <div v-if="!brands.length" class="text-muted small mt-1">
-              Loading brands...
+            <div v-if="!brands.length && !isLoadingBrands" class="text-muted small mt-1">
+              No brands available
             </div>
           </div>
 
           <div class="col-md-6">
             <label class="form-label">Categories</label>
-            <select v-model="filters.categoryIds" multiple class="form-select" :disabled="!categories.length" size="3">
+            <div v-if="isLoadingCategories" class="text-center py-2">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading categories...</span>
+              </div>
+            </div>
+            <select v-else v-model="filters.categoryIds" multiple class="form-select" :disabled="!categories.length" size="3">
               <option v-for="category in categories" :key="category.id" :value="category.id">
                 {{ category.name }}
               </option>
             </select>
-            <div v-if="!categories.length" class="text-muted small mt-1">
-              Loading categories...
+            <div v-if="!categories.length && !isLoadingCategories" class="text-muted small mt-1">
+              No categories available
             </div>
             <small class="text-muted">Hold Ctrl/Cmd to select multiple categories</small>
           </div>
@@ -100,75 +110,83 @@
         </div>
       </div>
     </div>
+
     <!-- Products Table -->
     <div class="card">
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="product in products" :key="product.id">
-              <td>{{ product.id }}</td>
-              <td>{{ product.name }}</td>
-              <td>
-                <img :src="getProductImage(product.image)" :alt="product.name" class="img-thumbnail"
-                  style="width: 48px; height: 48px; object-fit: cover;" />
-              </td>
-              <td>${{ product.price.toFixed(2) }}</td>
-              <td>{{ product.quantity }}</td>
-              <td>
-                <span :class="{
-                  'badge': true,
-                  'bg-success': product.status === 'IN_STOCK',
-                  'bg-danger': product.status === 'OUT_STOCK',
-                  'bg-secondary': product.status === 'DISCONTINUED'
-                }">
-                  {{ product.status }}
-                </span>
-              </td>
-              <td>
-                <button class="btn btn-sm btn-outline-secondary me-2"
-                  @click="router.push({ name: 'productInfo', params: { id: product.id } })">
-                  View
-                </button>
-                <button class="btn btn-sm btn-outline-primary me-2"
-                  @click="router.push({ name: 'productEdit', params: { id: product.id } })">
-                  <i class="bi bi-pencil me-1"></i> Edit
-                </button>
-                <button class="btn btn-sm btn-outline-danger" @click="handleDelete(product.id)">
-                  <i class="bi bi-trash me-1"></i> Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div v-if="isLoadingProducts" class="text-center py-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading products...</span>
+        </div>
       </div>
+      <div v-else class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="product in products" :key="product.id">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>
+                  <img :src="getProductImage(product.image)" :alt="product.name" class="img-thumbnail"
+                    style="width: 48px; height: 48px; object-fit: cover;" />
+                </td>
+                <td>${{ product.price.toFixed(2) }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>
+                  <span :class="{
+                    'badge': true,
+                    'bg-success': product.status === 'IN_STOCK',
+                    'bg-danger': product.status === 'OUT_STOCK',
+                    'bg-secondary': product.status === 'DISCONTINUED'
+                  }">
+                    {{ product.status }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-secondary me-2"
+                    @click="router.push({ name: 'productInfo', params: { id: product.id } })">
+                    View
+                  </button>
+                  <button class="btn btn-sm btn-outline-primary me-2"
+                    @click="router.push({ name: 'productEdit', params: { id: product.id } })">
+                    <i class="bi bi-pencil me-1"></i> Edit
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" @click="handleDelete(product.id)">
+                    <i class="bi bi-trash me-1"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- Pagination -->
-      <div class="card-footer bg-light">
-        <div class="d-flex justify-content-between align-items-center">
-          <span class="text-muted">
-            Showing page {{ metadata.currentPage }} of {{ metadata.totalPages }}
-            (Total: {{ metadata.totalRecords }} records)
-          </span>
-          <div class="btn-group">
-            <button @click="changePage(metadata.currentPage - 1)" :disabled="metadata.currentPage <= 1"
-              class="btn btn-outline-secondary">
-              Previous
-            </button>
-            <button @click="changePage(metadata.currentPage + 1)"
-              :disabled="metadata.currentPage >= metadata.totalPages" class="btn btn-outline-secondary">
-              Next
-            </button>
+        <!-- Pagination -->
+        <div class="card-footer bg-light">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">
+              Showing page {{ metadata.currentPage }} of {{ metadata.totalPages }}
+              (Total: {{ metadata.totalRecords }} records)
+            </span>
+            <div class="btn-group">
+              <button @click="changePage(metadata.currentPage - 1)" :disabled="metadata.currentPage <= 1"
+                class="btn btn-outline-secondary">
+                Previous
+              </button>
+              <button @click="changePage(metadata.currentPage + 1)"
+                :disabled="metadata.currentPage >= metadata.totalPages" class="btn btn-outline-secondary">
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -180,11 +198,14 @@
 import { listBrand, type Brand } from '@/services/product/brand.service';
 import { listCategory, type Category } from '@/services/product/category.service';
 import { deleteProduct, listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
+import { useFlashStore } from '@/stores/flash.store';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 
 const router = useRouter();
+const flashStore = useFlashStore();
+
 const activeStates = reactive({
   active: true,
   inactive: true
@@ -192,13 +213,16 @@ const activeStates = reactive({
 const brands = ref<Brand[]>([]);
 const categories = ref<Category[]>([]);
 const products = ref<Product[]>([]);
+const isLoadingBrands = ref(true);
+const isLoadingCategories = ref(true);
+const isLoadingProducts = ref(true);
+
 const metadata = reactive({
   currentPage: 1,
   pageSize: 20,
   totalPages: 1,
   totalRecords: 0
 });
-
 const filters = reactive<ListProductFilters>({
   id: '',
   keyword: '',
@@ -229,17 +253,25 @@ const formatStatusLabel = (status: ProductStatus): string => {
     .join(' ');
 };
 
-const loadBrandsAndCategories = async () => {
-  const [brandsResponse, categoriesResponse] = await Promise.all([
-    listBrand(),
-    listCategory()
-  ]);
-
-  if (brandsResponse.success) {
-    brands.value = brandsResponse.data;
+const loadBrands = async () => {
+  try {
+    const response = await listBrand();
+    if (response.success) {
+      brands.value = response.data;
+    }
+  } finally {
+    isLoadingBrands.value = false;
   }
-  if (categoriesResponse.success) {
-    categories.value = categoriesResponse.data;
+};
+
+const loadCategories = async () => {
+  try {
+    const response = await listCategory();
+    if (response.success) {
+      categories.value = response.data;
+    }
+  } finally {
+    isLoadingCategories.value = false;
   }
 };
 
@@ -260,12 +292,17 @@ const handleActiveStateChange = () => {
 };
 
 const applyFilters = async (event?: MouseEvent) => {
-  filters.page = metadata.currentPage;
-  const response = await listProduct(filters);
+  isLoadingProducts.value = true;
+  try {
+    filters.page = metadata.currentPage;
+    const response = await listProduct(filters);
 
-  if (response.success) {
-    products.value = response.data;
-    Object.assign(metadata, response.metadata);
+    if (response.success) {
+      products.value = response.data;
+      Object.assign(metadata, response.metadata);
+    }
+  } finally {
+    isLoadingProducts.value = false;
   }
 };
 
@@ -314,7 +351,18 @@ const handleDelete = async (productId: number) => {
 };
 
 onMounted(async () => {
-  await loadBrandsAndCategories();
-  applyFilters();
+  await Promise.all([
+    loadBrands(),
+    loadCategories(),
+    applyFilters(),
+  ]);
+
+  if (flashStore.successMessage) {
+    toast.success(flashStore.successMessage);
+  }
+
+  if (flashStore.errorMessage) {
+    toast.error(flashStore.errorMessage);
+  }
 });
 </script>

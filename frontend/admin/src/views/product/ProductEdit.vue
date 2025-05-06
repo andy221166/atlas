@@ -7,7 +7,7 @@
       </button>
     </div>
 
-    <div v-if="isLoading" class="text-center py-5">
+    <div v-if="isLoadingProduct" class="text-center py-5">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -68,6 +68,9 @@
                   {{ brand.name }}
                 </option>
               </select>
+              <div v-if="!brands.length && !isLoadingBrands" class="text-muted small mt-1">
+                No brands available
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -78,7 +81,10 @@
                   {{ category.name }}
                 </option>
               </select>
-              <small class="text-muted">Hold Ctrl/Cmd to select multiple categories</small>
+              <div v-if="!categories.length && !isLoadingCategories" class="text-muted small mt-1">
+                No categories available
+              </div>
+              <small v-if="categories.length && !isLoadingCategories" class="text-muted">Hold Ctrl/Cmd to select multiple categories</small>
             </div>
 
             <div class="col-12">
@@ -149,13 +155,18 @@ import {
   type UpdateProductRequest
 } from '@/services/product/product.service';
 import { toast } from 'vue3-toastify';
+import { useFlashStore } from '@/stores/flash.store';
 
 const router = useRouter();
 const route = useRoute();
+const flashStore = useFlashStore();
+
 const brands = ref<Brand[]>([]);
 const categories = ref<Category[]>([]);
 const isSubmitting = ref(false);
-const isLoading = ref(true);
+const isLoadingBrands = ref(true);
+const isLoadingCategories = ref(true);
+const isLoadingProduct = ref(true);
 const imagePreview = ref<string | null>(null);
 
 const form = reactive<UpdateProductRequest>({
@@ -179,6 +190,28 @@ const formatStatusLabel = (status: ProductStatus): string => {
   return status.split('_')
     .map(word => word.charAt(0) + word.slice(1).toLowerCase())
     .join(' ');
+};
+
+const loadBrands = async () => {
+  try {
+    const response = await listBrand();
+    if (response.success) {
+      brands.value = response.data;
+    }
+  } finally {
+    isLoadingBrands.value = false;
+  }
+};
+
+const loadCategories = async () => {
+  try {
+    const response = await listCategory();
+    if (response.success) {
+      categories.value = response.data;
+    }
+  } finally {
+    isLoadingCategories.value = false;
+  }
 };
 
 const handleImageUpload = (event: Event) => {
@@ -226,11 +259,11 @@ const loadProduct = async () => {
         categoryIds: product.categories.map(c => c.id)
       });
     }
-  } catch (error) {
-    toast.error('Failed to load product');
-    router.back();
+  } catch (err) {
+    flashStore.setError('Failed to load product');
+    router.push({ name: 'productList' });
   } finally {
-    isLoading.value = false;
+    isLoadingProduct.value = false;
   }
 };
 
@@ -260,32 +293,21 @@ const handleSubmit = async () => {
     const response = await updateProduct(formData);
 
     if (response.success) {
-      toast.success('Product updated successfully');
+      flashStore.setSuccess('Edited product successfully!');
       router.push({ name: 'productList' });
+    } else {
+      toast.error(response.errorMessage || 'Failed to edit product');
     }
   } finally {
     isSubmitting.value = false;
   }
 };
 
-const loadBrandsAndCategories = async () => {
-  const [brandsResponse, categoriesResponse] = await Promise.all([
-    listBrand(),
-    listCategory()
-  ]);
-
-  if (brandsResponse.success) {
-    brands.value = brandsResponse.data;
-  }
-  if (categoriesResponse.success) {
-    categories.value = categoriesResponse.data;
-  }
-};
-
 onMounted(async () => {
   await Promise.all([
-    loadBrandsAndCategories(),
-    loadProduct()
+    loadBrands(),
+    loadCategories(),
+    loadProduct(),
   ]);
 });
 </script>

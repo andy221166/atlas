@@ -86,31 +86,6 @@ apiClient.interceptors.response.use(
       }
     }
 
-    // Handle 403 Forbidden
-    if (error.response?.status === 403) {
-      toast.error('You do not have permission to perform this action.');
-    }
-
-    // Handle 404 Not Found
-    if (error.response?.status === 404) {
-      toast.error('The requested resource was not found.');
-    }
-
-    // Handle 500 Internal Server Error
-    if (error.response?.status === 500) {
-      toast.error('An internal server error occurred. Please try again later.');
-    }
-
-    // Handle network errors
-    if (error.message === 'Network Error') {
-      toast.error('Unable to connect to the server. Please check your internet connection.');
-    }
-
-    // Handle timeout
-    if (error.code === 'ECONNABORTED') {
-      toast.error('Request timed out. Please try again.');
-    }
-
     // Get error message from response if available
     const errorMessage = error.response?.data?.errorMessage || error.message;
     return Promise.reject({ ...error, message: errorMessage });

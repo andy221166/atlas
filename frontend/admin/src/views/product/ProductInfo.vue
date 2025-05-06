@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div v-if="loading" class="text-center py-5">
+    <div v-if="isLoadingProduct" class="text-center py-5">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -92,10 +92,14 @@
 import { deleteProduct, getProduct } from '@/services/product/product.service';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
+import { useFlashStore } from '@/stores/flash.store';
 
 const router = useRouter();
 const route = useRoute();
-const loading = ref(true);
+const flashStore = useFlashStore();
+
+const isLoadingProduct = ref(true);
 const product = ref<any>(null);
 
 const getProductImage = (image: string | null): string => {
@@ -116,11 +120,12 @@ const handleDelete = async () => {
   if (!product.value) return;
 
   if (confirm('Are you sure you want to delete this product?')) {
-    try {
-      await deleteProduct(product.value.id);
+    const response = await deleteProduct(product.value.id);
+    if (response.success) {
+      flashStore.setSuccess('Deleted product successfully!');
       router.push({ name: 'productList' });
-    } catch (error) {
-      console.error('Error deleting product:', error);
+    } else {
+      toast.error(response.errorMessage || 'Failed to delete product');
     }
   }
 };
@@ -131,9 +136,12 @@ onMounted(async () => {
     const response = await getProduct(parseInt(productId));
     if (response.success) {
       product.value = response.data;
+    } else {
+      flashStore.setError(response.errorMessage || 'Failed to load product');
+      router.push({ name: 'productList' });
     }
   } finally {
-    loading.value = false;
+    isLoadingProduct.value = false;
   }
 });
 </script>

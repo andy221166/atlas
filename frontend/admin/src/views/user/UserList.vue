@@ -29,7 +29,12 @@
 
     <!-- Users Table -->
     <div class="card">
-      <div class="card-body">
+      <div v-if="isLoadingUsers" class="text-center py-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading users...</span>
+        </div>
+      </div>
+      <div v-else class="card-body">
         <div class="table-responsive">
           <table class="table table-striped table-hover">
             <thead>
@@ -90,13 +95,14 @@ import { ref, reactive, onMounted } from 'vue';
 import { listUser, type ListUserFilters, type User } from '@/services/user/user.service';
 
 const users = ref<User[]>([]);
+const isLoadingUsers = ref(true);
+
 const metadata = reactive({
   currentPage: 1,
   pageSize: 20,
   totalPages: 1,
   totalRecords: 0
 });
-
 const filters = reactive<ListUserFilters>({
   id: null,
   username: '',
@@ -107,12 +113,16 @@ const filters = reactive<ListUserFilters>({
 });
 
 const applyFilters = async (event?: MouseEvent) => {
-  filters.page = metadata.currentPage;
-  const response = await listUser(filters);
-
-  if (response.success) {
-    users.value = response.data;
-    Object.assign(metadata, response.metadata);
+  isLoadingUsers.value = true;
+  try {
+    filters.page = metadata.currentPage;
+    const response = await listUser(filters);
+    if (response.success) {
+      users.value = response.data;
+      Object.assign(metadata, response.metadata);
+    }
+  } finally {
+    isLoadingUsers.value = false;
   }
 };
 
