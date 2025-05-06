@@ -9,7 +9,7 @@ import org.atlas.domain.auth.entity.SessionEntity;
 import org.atlas.domain.auth.entity.UserEntity;
 import org.atlas.domain.auth.repository.SessionRepository;
 import org.atlas.domain.auth.repository.UserRepository;
-import org.atlas.edge.auth.springsecurityjwt.exception.InvalidTokenException;
+import org.atlas.framework.jwt.InvalidJwtException;
 import org.atlas.edge.auth.springsecurityjwt.mapper.AuthMapper;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenResponse;
@@ -82,7 +82,7 @@ public class AuthService {
     Jwt refreshTokenJwt;
     try {
       refreshTokenJwt = tokenService.parseToken(request.getRefreshToken());
-    } catch (InvalidTokenException e) {
+    } catch (Exception e) {
       throw new DomainException(AppError.UNAUTHORIZED, "Invalid refresh token");
     }
 

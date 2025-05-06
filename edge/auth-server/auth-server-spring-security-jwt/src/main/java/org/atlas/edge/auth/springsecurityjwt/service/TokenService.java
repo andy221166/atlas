@@ -5,7 +5,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atlas.edge.auth.springsecurityjwt.exception.InvalidTokenException;
+import org.atlas.framework.jwt.InvalidJwtException;
 import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.jwt.DecodeJwtInput;
@@ -56,17 +56,12 @@ public class TokenService {
     return JwtUtil.getInstance().encodeJwt(input);
   }
 
-  public Jwt parseToken(String token) throws InvalidTokenException {
-    try {
-      DecodeJwtInput input = DecodeJwtInput.builder()
-          .jwt(token)
-          .issuer(SecurityConstant.TOKEN_ISSUER)
-          .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
-          .build();
-      return JwtUtil.getInstance().decodeJwt(input);
-    } catch (Exception e) {
-      log.error("Failed to parse token: {}", token, e);
-      throw new InvalidTokenException("Invalid token", e);
-    }
+  public Jwt parseToken(String token) throws Exception {
+    DecodeJwtInput input = DecodeJwtInput.builder()
+        .jwt(token)
+        .issuer(SecurityConstant.TOKEN_ISSUER)
+        .rsaPublicKey(RsaKeyLoader.loadPublicKey(SecurityConstant.RSA_PUBLIC_KEY_PATH))
+        .build();
+    return JwtUtil.getInstance().decodeJwt(input);
   }
 }

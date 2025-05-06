@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.framework.jwt.DecodeJwtInput;
 import org.atlas.framework.jwt.EncodeJwtInput;
+import org.atlas.framework.jwt.InvalidJwtException;
 import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.jwt.JwtService;
 import org.atlas.framework.security.enums.CustomClaim;
@@ -38,7 +39,7 @@ public class Auth0JwtService implements JwtService {
   }
 
   @Override
-  public Jwt decodeJwt(DecodeJwtInput input) {
+  public Jwt decodeJwt(DecodeJwtInput input) throws InvalidJwtException {
     String jwt = input.getJwt();
 
     // Strip prefix
@@ -53,7 +54,7 @@ public class Auth0JwtService implements JwtService {
           .build()
           .verify(jwt);
     } catch (JWTVerificationException e) {
-      throw new RuntimeException(e);
+      throw new InvalidJwtException(e);
     }
 
     Jwt.JwtBuilder builder = Jwt.builder()

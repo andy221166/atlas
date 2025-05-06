@@ -7,6 +7,17 @@ spring:
   cloud:
     gateway:
       routes:
+        # Global rate limiter
+        - id: global-api-rate-limiter
+          uri: no://op
+          predicates:
+            - Path=/api/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@roleBasedRateLimiter}"
+                key-resolver: "#{@roleBasedKeyResolver}"
+          order: -1000 # Set a lower order to apply the rate limiter first
         # User service
         - id: user-service-common
           uri: lb://user-service
@@ -146,11 +157,13 @@ app:
     auth-rules:
       non-secured-paths:
         - "/actuator/**"
-        - "/api/front/users/register"
         - "/api/auth/login"
         - "/api/auth/refresh-token"
         - "/api/auth/ott/generate"
         - "/api/auth/ott/login"
+        - "/api/front/users/register"
+        - "/api/common/products/**"
+        - "/api/front/products/**"
         - "/api-docs/**"
         - "/swagger-ui/**"
       secured-paths:
