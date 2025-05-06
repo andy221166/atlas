@@ -31,7 +31,7 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-cache'
 
     // Infrastructure
-    switch (stackConfig['redis']) {
+    switch (infraStack['redis']) {
         case 'standalone':
             api project(':infrastructure.spring-boot.redis.standalone')
             break
@@ -39,7 +39,7 @@ dependencies {
             api project(':infrastructure.spring-boot.redis.cluster')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['redis']}")
     }
 
     // Lombok

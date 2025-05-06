@@ -63,7 +63,7 @@ public class JpaProductEntity extends JpaBaseEntity {
   private JpaProductDetailsEntity details;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
-  private List<JpaProductAttributeEntity> attributes = new ArrayList<>();
+  private Set<JpaProductAttributeEntity> attributes = new HashSet<>();
 
   @ManyToMany
   @JoinTable(
@@ -75,7 +75,7 @@ public class JpaProductEntity extends JpaBaseEntity {
 
   public void addAttribute(JpaProductAttributeEntity attribute) {
     if (attributes == null) {
-      attributes = new ArrayList<>();
+      attributes = new HashSet<>();
     }
     attribute.setProduct(this);
     attributes.add(attribute);

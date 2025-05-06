@@ -42,7 +42,7 @@ public class JpaProductRepositoryAdapter implements ProductRepository {
     List<JpaProductEntity> jpaProductEntities = customJpaProductRepository.findByCriteria(criteria,
         pagingRequest);
     List<ProductEntity> productEntities = ObjectMapperUtil.getInstance()
-        .mapList(jpaProductEntities, ProductEntityMapper::map);
+        .mapList(jpaProductEntities, ProductEntityMapper::toProductEntity);
     return PagingResult.of(productEntities, totalCount, pagingRequest);
   }
 
@@ -50,27 +50,29 @@ public class JpaProductRepositoryAdapter implements ProductRepository {
   public List<ProductEntity> findByIdIn(List<Integer> ids) {
     return jpaProductRepository.findAllById(ids)
         .stream()
-        .map(ProductEntityMapper::map)
+        .map(ProductEntityMapper::toProductEntity)
         .toList();
   }
 
   @Override
   public Optional<ProductEntity> findById(Integer id) {
     return jpaProductRepository.findByIdWithAssociations(id)
-        .map(ProductEntityMapper::mapFull);
+        .map(ProductEntityMapper::toFullProductEntity);
   }
 
   @Override
   public void insert(ProductEntity productEntity) {
-    JpaProductEntity jpaProductEntity = ProductEntityMapper.map(productEntity);
-    jpaProductRepository.saveAndFlush(jpaProductEntity);
+    JpaProductEntity jpaProductEntity = ProductEntityMapper.toJpaProductEntity(productEntity);
+    jpaProductRepository.save(jpaProductEntity);
     productEntity.setId(jpaProductEntity.getId());
   }
 
   @Override
   public void update(ProductEntity productEntity) {
-    JpaProductEntity jpaProductEntity = ProductEntityMapper.map(productEntity);
-    jpaProductRepository.saveAndFlush(jpaProductEntity);
+    JpaProductEntity jpaProductEntity = jpaProductRepository.findByIdWithAssociations(productEntity.getId())
+            .orElseThrow(() -> new DomainException(AppError.PRODUCT_NOT_FOUND));
+    ProductEntityMapper.merge(productEntity, jpaProductEntity);
+    jpaProductRepository.save(jpaProductEntity);
   }
 
   @Override

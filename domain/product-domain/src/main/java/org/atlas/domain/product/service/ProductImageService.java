@@ -41,7 +41,6 @@ public class ProductImageService implements DomainService {
       byte[] fileContent = storagePort.getFile(storageRequest);
       return ImageUtil.toBase64(fileContent);
     } catch (IOException e) {
-      log.error("Failed to get image for product {}", productId, e);
       return StringUtil.EMPTY;
     }
   }

@@ -40,14 +40,14 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/products/:id/edit',
+      path: '/product/:id/edit',
       name: 'productEdit',
       component: () => import('@/views/product/ProductEdit.vue')
     },
     {
       path: '/order',
       name: 'orderList',
-      component: () => import('@/views/order/OrderManagement.vue'),
+      component: () => import('@/views/order/OrderList.vue'),
       meta: { requiresAuth: true }
     },
     {

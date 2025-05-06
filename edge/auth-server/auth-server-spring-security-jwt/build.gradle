@@ -31,21 +31,21 @@ dependencies {
     api project(':infrastructure.spring-boot.api-server.rest.core')
     api project(':infrastructure.spring-boot.bootstrap')
     api project(':infrastructure.spring-boot.cache.simple')
-    switch (stackConfig['config']) {
+    switch (infraStack['config']) {
         case 'yaml':
             api project(':infrastructure.spring-boot.config.yaml')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['config']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['config']}")
     }
-    switch (stackConfig['datasource']) {
+    switch (infraStack['datasource']) {
         case 'mysql':
             api project(':infrastructure.spring-boot.datasource.mysql.adapter.auth')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['datasource']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['datasource']}")
     }
-    switch (stackConfig['discovery-client']) {
+    switch (infraStack['discovery-client']) {
         case 'none':
             break
         case 'eureka':
@@ -55,17 +55,17 @@ dependencies {
             api project(':infrastructure.spring-boot.discovery-client.kubernetes')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['discovery-client']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['discovery-client']}")
     }
     api project(':infrastructure.spring-boot.observability.actuator')
-    switch (stackConfig['observability.logging']) {
+    switch (infraStack['observability.logging']) {
         case 'logback':
             api project(':infrastructure.spring-boot.observability.logging.logback')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.logging']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['observability.logging']}")
     }
-    switch (stackConfig['observability.metrics']) {
+    switch (infraStack['observability.metrics']) {
         case 'none':
             break;
         case 'prometheus':
@@ -75,9 +75,9 @@ dependencies {
             api project(':infrastructure.spring-boot.observability.metrics.cloudwatch')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.metrics']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['observability.metrics']}")
     }
-    switch (stackConfig['observability.tracing']) {
+    switch (infraStack['observability.tracing']) {
         case 'simple':
             api project(':infrastructure.spring-boot.observability.tracing.simple')
             break
@@ -85,16 +85,16 @@ dependencies {
             api project(':infrastructure.spring-boot.observability.tracing.zipkin')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['observability.tracing']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['observability.tracing']}")
     }
-    switch (stackConfig['persistence']) {
+    switch (infraStack['persistence']) {
         case 'jpa':
             api project(':infrastructure.spring-boot.persistence.jpa.adapter.auth')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['persistence']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['persistence']}")
     }
-    switch (stackConfig['redis']) {
+    switch (infraStack['redis']) {
         case 'standalone':
             api project(':infrastructure.spring-boot.redis.standalone')
             break
@@ -102,7 +102,7 @@ dependencies {
             api project(':infrastructure.spring-boot.redis.cluster')
             break
         default:
-            throw new IllegalArgumentException("Unsupported ${stackConfig['redis']}")
+            throw new IllegalArgumentException("Unsupported ${infraStack['redis']}")
     }
 
     // Lombok

@@ -13,9 +13,9 @@ public class RelayOutboxMessageTaskScheduler {
   private final RelayOutboxMessageTask relayOutboxMessageTask;
 
   /**
-   * Run every minute
+   * Run every 15 seconds
    */
-  @Scheduled(cron = "0 */1 * * * *")
+  @Scheduled(cron = "*/15 * * * * *")
   @SchedulerLock(
       name = "RelayOutboxMessageTask",
       // lock held for at least 50 seconds.

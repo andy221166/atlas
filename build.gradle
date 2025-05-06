@@ -1,4 +1,4 @@
-apply from: "$rootDir/gradle/config/config-loader.gradle"
+apply from: "$rootDir/gradle/infra-stack/infra-stack-loader.gradle"
 
 ext {
 	// Plugins
@@ -11,5 +11,5 @@ ext {
 	set('lombokVersion', '1.18.38')
 	set('junitPlatformVersion', '1.11.3')
 
-	stackConfig = loadStackConfig()
+	infraStack = loadInfraStack()
 }

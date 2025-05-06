@@ -47,13 +47,6 @@ public class RestExceptionHandler {
     return ApiResponseWrapper.error(AppError.BAD_REQUEST.getErrorCode(), message);
   }
 
-  @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public final ApiResponseWrapper<Void> handle(HttpMessageNotReadableException e) {
-    log.error("Invalid request", e);
-    return ApiResponseWrapper.error(AppError.BAD_REQUEST.getErrorCode(), e.getMessage());
-  }
-
   /**
    * Missing a required request parameter
    */

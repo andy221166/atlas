@@ -26,8 +26,8 @@ public class QuartzJobConfig {
     return TriggerBuilder.newTrigger()
         .forJob(relayOutboxMessageJobDetail)
         .withIdentity(RelayOutboxMessageJob.class.getSimpleName())
-        // Run every minute
-        .withSchedule(CronScheduleBuilder.cronSchedule("0 */1 * * * ?")
+        // Run every 15 seconds
+        .withSchedule(CronScheduleBuilder.cronSchedule("*/15 * * * * ?")
             .withMisfireHandlingInstructionFireAndProceed()) // Handle misfires
         .build();
   }

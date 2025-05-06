@@ -84,9 +84,8 @@ public class KafkaMessagePublisherConfig {
 
   @Bean
   @Primary
-  public MessageGateway outboxMessageGateway(OutboxMessageRepository outboxMessageRepository,
-      MessagePublisher messagePublisher) {
-    return new OutboxMessageGateway(outboxMessageRepository, messagePublisher);
+  public MessageGateway outboxMessageGateway(OutboxMessageRepository outboxMessageRepository) {
+    return new OutboxMessageGateway(outboxMessageRepository);
   }
 
   @Bean
