@@ -30,9 +30,9 @@ public class AdminListProductUseCaseHandler implements
 
   @Override
   public PagingResult<ProductOutput> handle(ListProductInput input) throws Exception {
-    FindProductCriteria params = ObjectMapperUtil.getInstance()
+    FindProductCriteria criteria = ObjectMapperUtil.getInstance()
         .map(input, FindProductCriteria.class);
-    PagingResult<ProductEntity> productEntityPage = productRepository.findByCriteria(params,
+    PagingResult<ProductEntity> productEntityPage = productRepository.findByCriteria(criteria,
         input.getPagingRequest());
 
     if (productEntityPage == null) {

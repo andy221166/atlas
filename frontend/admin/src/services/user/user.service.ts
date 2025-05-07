@@ -1,5 +1,5 @@
-import type { ApiResponse } from "../base/api.interface";
-import apiClient from "../base/apiClient";
+import type { ApiResponse } from "../api.interface.ts";
+import apiClient from "../apiClient.ts";
 
 export interface ListUserFilters {
   id?: string | null

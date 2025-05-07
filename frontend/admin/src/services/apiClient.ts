@@ -1,9 +1,9 @@
 // src/services/apiClient.ts
 import router from '@/router';
-import { generateDeviceId } from '@/utils/deviceIdGenerator';
+import { generateDeviceId } from '@/utils/deviceIdGenerator.ts';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'vue3-toastify';
-import type { ApiResponse } from './api.interface';
+import type { ApiResponse } from './api.interface.ts';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const DEVICE_ID_HEADER = 'X-Device-Id';

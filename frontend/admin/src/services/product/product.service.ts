@@ -1,5 +1,5 @@
-import type { ApiResponse } from '../base/api.interface'
-import apiClient from '../base/apiClient'
+import type { ApiResponse } from '../api.interface.ts'
+import apiClient from '../apiClient.ts'
 import type { Brand } from './brand.service'
 import type { Category } from './category.service'
 
@@ -32,15 +32,15 @@ export interface ProductAttribute {
 }
 
 export interface ListProductFilters {
-  id?: string
+  id?: number
   keyword?: string
   minPrice?: number | null
   maxPrice?: number | null
   status?: ProductStatus | ''
   availableFrom?: string
   isActive?: boolean | null
-  brandId?: string
-  categoryIds?: string[]
+  brandId?: number
+  categoryIds?: number[]
   page: number
   size: number
 }

@@ -11,6 +11,9 @@ spring:
           args:
             rate-limiter: "#{@userRateLimiter}"
             key-resolver: "#{@userKeyResolver}"
+      httpclient:
+        connect-timeout: 30000  # Connection timeout in milliseconds
+        response-timeout: 30s # Response timeout in ISO-8601 format or duration
       routes:
         # User service
         - id: user-service-common

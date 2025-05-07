@@ -11,15 +11,13 @@ public enum AppError {
   DEFAULT(500, "error.commons.default"),
   BAD_REQUEST(400, "error.commons.bad_request"),
   UNAUTHORIZED(401, "error.commons.unauthorized"),
-  PERMISSION_DENIED(403, "error.commons.permission_denied"),
+  FORBIDDEN(403, "error.commons.permission_denied"),
   NOT_FOUND(404, "error.commons.not_found"),
   CONFLICT(409, "error.commons.conflict"),
 
   // User-related errors
   USER_NOT_FOUND(1000, "error.user.not_found"),
-  USERNAME_ALREADY_EXISTS(1001, "error.user.username_already_exists"),
-  EMAIL_ALREADY_EXISTS(1002, "error.user.email_already_exists"),
-  PHONE_NUMBER_ALREADY_EXISTS(1003, "error.user.phone_number_already_exists"),
+  USER_ALREADY_EXISTS(1001, "error.user.user_already_exists"),
 
   // Product-related errors
   PRODUCT_NOT_FOUND(2000, "error.product.not_found"),

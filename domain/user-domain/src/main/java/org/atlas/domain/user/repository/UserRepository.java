@@ -8,17 +8,11 @@ import org.atlas.framework.paging.PagingResult;
 
 public interface UserRepository {
 
-  PagingResult<UserEntity> findAll(PagingRequest pagingRequest);
+  PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria, PagingRequest pagingRequest);
 
   List<UserEntity> findByIdIn(List<Integer> ids);
 
   Optional<UserEntity> findById(Integer id);
-
-  Optional<UserEntity> findByUsername(String username);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
   void insert(UserEntity userEntity);
 }

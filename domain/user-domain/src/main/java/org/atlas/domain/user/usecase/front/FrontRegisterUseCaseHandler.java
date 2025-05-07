@@ -11,15 +11,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.domain.user.entity.UserEntity;
 import org.atlas.domain.user.port.messaging.UserMessagePublisherPort;
+import org.atlas.domain.user.repository.FindUserCriteria;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.domain.user.usecase.front.FrontRegisterUseCaseHandler.RegisterInput;
 import org.atlas.framework.config.ApplicationConfigPort;
 import org.atlas.framework.constant.Patterns;
-import org.atlas.framework.error.AppError;
 import org.atlas.framework.domain.event.contract.user.UserRegisteredEvent;
 import org.atlas.framework.domain.exception.DomainException;
+import org.atlas.framework.error.AppError;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
+import org.atlas.framework.paging.PagingRequest;
+import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.security.client.AuthApiPort;
 import org.atlas.framework.security.client.model.CreateUserRequest;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
@@ -43,14 +46,15 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   }
 
   private void checkValidity(RegisterInput input) {
-    if (userRepository.findByUsername(input.getUsername()).isPresent()) {
-      throw new DomainException(AppError.USERNAME_ALREADY_EXISTS);
-    }
-    if (userRepository.findByEmail(input.getEmail()).isPresent()) {
-      throw new DomainException(AppError.EMAIL_ALREADY_EXISTS);
-    }
-    if (userRepository.findByPhoneNumber(input.getPhoneNumber()).isPresent()) {
-      throw new DomainException(AppError.PHONE_NUMBER_ALREADY_EXISTS);
+    FindUserCriteria criteria = FindUserCriteria.builder()
+        .username(input.getUsername())
+        .email(input.getEmail())
+        .phoneNumber(input.getPhoneNumber())
+        .build();
+    PagingRequest pagingRequest = PagingRequest.unpaged();
+    PagingResult<UserEntity> pagingResult = userRepository.findByCriteria(criteria, pagingRequest);
+    if (!pagingResult.checkEmpty()) {
+      throw new DomainException(AppError.USER_ALREADY_EXISTS);
     }
   }
 

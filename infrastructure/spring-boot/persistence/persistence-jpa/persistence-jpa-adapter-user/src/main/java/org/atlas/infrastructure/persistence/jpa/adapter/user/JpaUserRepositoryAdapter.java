@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.user.entity.UserEntity;
+import org.atlas.domain.user.repository.FindUserCriteria;
 import org.atlas.domain.user.repository.UserRepository;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
@@ -21,10 +22,10 @@ public class JpaUserRepositoryAdapter implements UserRepository {
   private final JpaUserRepository jpaUserRepository;
 
   @Override
-  public PagingResult<UserEntity> findAll(PagingRequest pagingRequest) {
+  public PagingResult<UserEntity> findByCriteria(FindUserCriteria criteria, PagingRequest pagingRequest) {
     Pageable pageable = PagingConverter.convert(pagingRequest);
     PagingResult<JpaUserEntity> jpaUserPage = PagingConverter.convert(
-        jpaUserRepository.findAll(pageable));
+        jpaUserRepository.findByCriteria(criteria, pageable));
     return ObjectMapperUtil.getInstance()
         .mapPage(jpaUserPage, UserEntity.class);
   }
@@ -40,24 +41,6 @@ public class JpaUserRepositoryAdapter implements UserRepository {
   @Override
   public Optional<UserEntity> findById(Integer id) {
     return jpaUserRepository.findById(id)
-        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
-  }
-
-  @Override
-  public Optional<UserEntity> findByUsername(String username) {
-    return jpaUserRepository.findByUsername(username)
-        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
-  }
-
-  @Override
-  public Optional<UserEntity> findByEmail(String email) {
-    return jpaUserRepository.findByEmail(email)
-        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
-  }
-
-  @Override
-  public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
-    return jpaUserRepository.findByPhoneNumber(phoneNumber)
         .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 

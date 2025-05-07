@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.order.entity.OrderEntity;
 import org.atlas.domain.order.entity.OrderItemEntity;
+import org.atlas.domain.order.repository.FindOrderCriteria;
 import org.atlas.domain.order.repository.OrderRepository;
 import org.atlas.domain.order.shared.OrderStatus;
 import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler.ListOrderInput;
@@ -42,7 +43,9 @@ public class AdminListOrderUseCaseHandler implements
   @Override
   public PagingResult<OrderOutput> handle(ListOrderInput input) throws Exception {
     // Query order
-    PagingResult<OrderEntity> orderEntityPage = orderRepository.findAll(input.getPagingRequest());
+    FindOrderCriteria criteria = ObjectMapperUtil.getInstance()
+        .map(input, FindOrderCriteria.class);
+    PagingResult<OrderEntity> orderEntityPage = orderRepository.findByCriteria(criteria, input.getPagingRequest());
     if (orderEntityPage.checkEmpty()) {
       return PagingResult.empty();
     }
@@ -112,6 +115,12 @@ public class AdminListOrderUseCaseHandler implements
   @NoArgsConstructor
   @AllArgsConstructor
   public static class ListOrderInput {
+
+    private Integer id;
+    private Integer userId;
+    private OrderStatus status;
+    private Date startDate;
+    private Date endDate;
 
     @Valid
     private PagingRequest pagingRequest;

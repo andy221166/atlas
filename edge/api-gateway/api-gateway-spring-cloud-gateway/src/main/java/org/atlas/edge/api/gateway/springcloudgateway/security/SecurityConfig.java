@@ -25,8 +25,7 @@ public class SecurityConfig {
   private final ApplicationConfigPort applicationConfigPort;
   private final AuthRulesProps authRulesProps;
   private final CustomServerAuthenticationEntryPoint serverAuthenticationEntryPoint;
-
-  private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+  private final CustomAccessDeniedHandler accessDeniedHandler;
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -64,6 +63,7 @@ public class SecurityConfig {
         )
         .exceptionHandling(exceptionHandlingSpec ->
             exceptionHandlingSpec.authenticationEntryPoint(serverAuthenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
         )
         .authorizeExchange(auth -> {
           // Permit preflight requests

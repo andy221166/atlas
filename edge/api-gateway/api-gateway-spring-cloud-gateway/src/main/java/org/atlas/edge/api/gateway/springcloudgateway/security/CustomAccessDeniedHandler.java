@@ -4,22 +4,19 @@ import org.atlas.edge.api.gateway.springcloudgateway.util.HttpUtil;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.error.AppError;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-/**
- * Used for Spring WebFlux
- */
 @Component
-public class CustomServerAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
+public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
 
   @Override
-  public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {
+  public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
     ApiResponseWrapper<Void> apiResponseWrapperBody = ApiResponseWrapper.error(
-        AppError.UNAUTHORIZED.getErrorCode(), ex.getMessage());
-    return HttpUtil.respond(exchange, apiResponseWrapperBody, HttpStatus.UNAUTHORIZED);
+        AppError.FORBIDDEN.getErrorCode(), denied.getMessage());
+    return HttpUtil.respond(exchange, apiResponseWrapperBody, HttpStatus.FORBIDDEN);
   }
 }
