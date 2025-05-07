@@ -1,7 +1,7 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
 import java.time.Instant;
-import org.atlas.edge.api.gateway.springcloudgateway.util.SpringWebFluxUtil;
+import org.atlas.edge.api.gateway.springcloudgateway.util.HttpUtil;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.error.AppError;
@@ -77,7 +77,7 @@ public class SessionValidationGatewayFilterFactory extends
           if (isInvalidIssuedAt || isSessionBlacklisted) {
             ApiResponseWrapper<Void> response = ApiResponseWrapper.error(
                 AppError.UNAUTHORIZED.getErrorCode(), "Session has been inactivated");
-            return SpringWebFluxUtil.respond(exchange, response, HttpStatus.UNAUTHORIZED);
+            return HttpUtil.respond(exchange, response, HttpStatus.UNAUTHORIZED);
           }
 
           // Otherwise, continue the request chain

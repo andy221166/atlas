@@ -12,9 +12,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @UtilityClass
-public class SpringWebFluxUtil {
+public class HttpUtil {
 
-  public <T> Mono<Void> respond(ServerWebExchange exchange, ApiResponseWrapper<T> apiResponseWrapperBody,
+  public <T> Mono<Void> respond(ServerWebExchange exchange,
+      ApiResponseWrapper<T> apiResponseWrapperBody,
       HttpStatus httpStatus) {
     ServerHttpResponse response = exchange.getResponse();
 

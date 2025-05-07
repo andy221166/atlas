@@ -76,7 +76,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['messaging']}")
     }
-    api project(':infrastructure.spring-boot.messaging-handler-decorator')
+    api project(':infrastructure.spring-boot.event-handler-decorator')
     api project(':infrastructure.spring-boot.observability.actuator')
     switch (infraStack['observability.logging']) {
         case 'logback':

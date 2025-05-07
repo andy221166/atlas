@@ -1,9 +1,10 @@
-package org.atlas.infrastructure.api.server.rest.core.util;
+package org.atlas.edge.api.gateway.springcloudgateway.util;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.net.InetSocketAddress;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 import org.atlas.framework.constant.HttpConstant;
-import org.springframework.util.StringUtils;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 @UtilityClass
 public class IpAddressUtil {
@@ -11,26 +12,26 @@ public class IpAddressUtil {
   /**
    * Extracts the client IP address from the request, prioritizing proxy headers.
    *
-   * @param request the HttpServletRequest
+   * @param request the ServerHttpRequest
    * @return the client IP address or "unknown" if not found
    */
-  public static String getIpAddress(HttpServletRequest request) {
+  public static String getIpAddress(ServerHttpRequest request) {
     if (request == null) {
       return "unknown";
     }
 
     // Check proxy headers
     for (String header : HttpConstant.IP_ADDRESS_HEADERS) {
-      String ipAddress = request.getHeader(header);
+      String ipAddress = request.getHeaders().getFirst(header);
       if (isValidIpAddress(ipAddress)) {
         return extractFirstIpAddress(ipAddress);
       }
     }
 
     // Fallback to remote address
-    String remoteAddr = request.getRemoteAddr();
-    if (remoteAddr != null) {
-      return remoteAddr;
+    InetSocketAddress remoteAddress = request.getRemoteAddress();
+    if (remoteAddress != null && remoteAddress.getAddress() != null) {
+      return remoteAddress.getAddress().getHostAddress();
     }
 
     return "unknown";
@@ -43,7 +44,7 @@ public class IpAddressUtil {
    * @return true if valid, false otherwise
    */
   private static boolean isValidIpAddress(String ipAddress) {
-    return StringUtils.hasText(ipAddress) && !"unknown".equalsIgnoreCase(ipAddress);
+    return StringUtils.isNotBlank(ipAddress) && !"unknown".equalsIgnoreCase(ipAddress);
   }
 
   /**

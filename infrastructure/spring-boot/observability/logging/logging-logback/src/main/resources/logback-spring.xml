@@ -69,6 +69,16 @@
         <appender-ref ref="FILE"/>
     </logger>
 
+    <!-- Spring Cloud Gateway -->
+    <logger name="org.springframework.cloud.gateway.filter.ratelimit" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="reactor.netty.http.client" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
     <!-- Spring Security -->
     <logger name="org.springframework.security" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>

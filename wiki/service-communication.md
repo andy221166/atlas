@@ -30,6 +30,14 @@ REST (Representational State Transfer) is the most widely adopted API style. It 
 - Public APIs: REST is ideal for APIs exposed to a broad audience where ease of use and simplicity are critical.
 - Web Applications: REST fits naturally with frontend-backend communication in single-page applications (SPAs) where resource-based interaction is common.
 
+| Feature               | RestTemplate     | WebClient            | RestClient 🚀                |
+|-----------------------|------------------|-----------------------|------------------------------|
+| Blocking/Synchronous  | ✅ Yes            | ❌ No (Fully Reactive)| ✅ Yes (Supports Both)       |
+| Non-Blocking/Async    | ❌ No             | ✅ Yes                | ✅ Yes                       |
+| Simplicity            | ✅ Very Simple    | ❌ Complex            | ✅ Simple                    |
+| Flexibility           | ❌ Limited        | ✅ Highly Flexible    | ✅ Flexible & Modern         |
+| Best For              | Legacy Apps      | Reactive Apps         | Modern Apps (Blocking + Async) |
+
 ### GraphQL 
 
 GraphQL offers a more flexible alternative to REST. Instead of fixed endpoints, GraphQL allows clients to specify exactly what data they need in a single request, preventing over-fetching and under-fetching.

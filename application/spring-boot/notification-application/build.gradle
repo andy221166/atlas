@@ -53,7 +53,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['messaging']}")
     }
-    api project(':infrastructure.spring-boot.messaging-handler-decorator')
+    api project(':infrastructure.spring-boot.event-handler-decorator')
     switch (infraStack['notification.email']) {
         case 'spring':
             api project(':infrastructure.spring-boot.notification.email.spring')

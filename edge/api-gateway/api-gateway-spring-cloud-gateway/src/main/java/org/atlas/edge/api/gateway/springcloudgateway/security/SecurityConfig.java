@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Flux;
 
@@ -25,6 +26,8 @@ public class SecurityConfig {
   private final AuthRulesProps authRulesProps;
   private final CustomServerAuthenticationEntryPoint serverAuthenticationEntryPoint;
 
+  private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     http
@@ -33,13 +36,17 @@ public class SecurityConfig {
             corsSpec.configurationSource(exchange -> {
               CorsConfiguration corsConfig = new CorsConfiguration();
               corsConfig.setAllowedOrigins(
-                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-origins"));
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM,
+                      "cors.allowed-origins"));
               corsConfig.setAllowedMethods(
-                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-methods"));
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM,
+                      "cors.allowed-methods"));
               corsConfig.setAllowedHeaders(
-                  applicationConfigPort.getConfigAsList(Application.SYSTEM, "cors.allowed-headers"));
+                  applicationConfigPort.getConfigAsList(Application.SYSTEM,
+                      "cors.allowed-headers"));
               corsConfig.setAllowCredentials(
-                  applicationConfigPort.getConfigAsBoolean(Application.SYSTEM, "cors.allow-credentials"));
+                  applicationConfigPort.getConfigAsBoolean(Application.SYSTEM,
+                      "cors.allow-credentials"));
               corsConfig.setMaxAge(
                   applicationConfigPort.getConfigAsLong(Application.SYSTEM, "cors.max-age"));
               return corsConfig;

@@ -11,7 +11,7 @@ import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.context.Contexts;
 import org.atlas.framework.security.enums.CustomClaim;
-import org.atlas.infrastructure.api.server.rest.core.util.HttpServletUtil;
+import org.atlas.infrastructure.api.server.rest.core.util.HttpUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,25 +32,25 @@ public class ContextFilter extends OncePerRequestFilter {
 
     // sessionId
     contextInfo.setSessionId(
-        HttpServletUtil.getHeader(request, CustomClaim.SESSION_ID.getHeader()));
+        HttpUtil.getHeader(request, CustomClaim.SESSION_ID.getHeader()));
 
     // userId
-    String userId = HttpServletUtil.getHeader(request, CustomClaim.USER_ID.getHeader());
+    String userId = HttpUtil.getHeader(request, CustomClaim.USER_ID.getHeader());
     if (userId != null) {
       contextInfo.setUserId(Integer.parseInt(userId));
     }
 
     // userRole
-    String userRole = HttpServletUtil.getHeader(request, CustomClaim.USER_ROLE.getHeader());
+    String userRole = HttpUtil.getHeader(request, CustomClaim.USER_ROLE.getHeader());
     if (userRole != null) {
       contextInfo.setUserRole(Role.valueOf(userRole));
     }
 
     // deviceId
-    contextInfo.setDeviceId(HttpServletUtil.getHeader(request, "X-Device-Id"));
+    contextInfo.setDeviceId(HttpUtil.getHeader(request, "X-Device-Id"));
 
     // expiresAt
-    String expiresAt = HttpServletUtil.getHeader(request, CustomClaim.EXPIRES_AT.getHeader());
+    String expiresAt = HttpUtil.getHeader(request, CustomClaim.EXPIRES_AT.getHeader());
     if (expiresAt != null) {
       contextInfo.setExpiresAt(new Date(Long.parseLong(expiresAt)));
     }

@@ -121,11 +121,9 @@ project(':infrastructure.spring-boot.discovery-client.eureka').projectDir = file
 include(':infrastructure.spring-boot.discovery-client.kubernetes')
 project(':infrastructure.spring-boot.discovery-client.kubernetes').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-kubernetes')
 
-// Event
-
-// Event::Event handler decorator
-include(':infrastructure.spring-boot.messaging-handler-decorator')
-project(':infrastructure.spring-boot.messaging-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
+// Event handler decorator
+include(':infrastructure.spring-boot.event-handler-decorator')
+project(':infrastructure.spring-boot.event-handler-decorator').projectDir = file('infrastructure/spring-boot/event-handler-decorator')
 
 // File
 

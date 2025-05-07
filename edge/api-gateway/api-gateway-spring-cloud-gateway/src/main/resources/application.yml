@@ -6,18 +6,12 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            rate-limiter: "#{@userRateLimiter}"
+            key-resolver: "#{@userKeyResolver}"
       routes:
-        # Global rate limiter
-        - id: global-api-rate-limiter
-          uri: no://op
-          predicates:
-            - Path=/api/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                rate-limiter: "#{@roleBasedRateLimiter}"
-                key-resolver: "#{@roleBasedKeyResolver}"
-          order: -1000 # Set a lower order to apply the rate limiter first
         # User service
         - id: user-service-common
           uri: lb://user-service
@@ -85,16 +79,12 @@ spring:
             - Path=/api/front/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - SessionValidation
-            - TokenRelay
         - id: product-service-common
           uri: lb://product-service
           predicates:
             - Path=/api/common/products/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-            - SessionValidation
-            - TokenRelay
         - id: product-service-api-docs
           uri: lb://product-service
           predicates:

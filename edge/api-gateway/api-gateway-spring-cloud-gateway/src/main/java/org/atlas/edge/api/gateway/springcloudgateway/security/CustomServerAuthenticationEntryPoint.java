@@ -1,6 +1,6 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
-import org.atlas.edge.api.gateway.springcloudgateway.util.SpringWebFluxUtil;
+import org.atlas.edge.api.gateway.springcloudgateway.util.HttpUtil;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.error.AppError;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,6 @@ public class CustomServerAuthenticationEntryPoint implements ServerAuthenticatio
   public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {
     ApiResponseWrapper<Void> apiResponseWrapperBody = ApiResponseWrapper.error(AppError.UNAUTHORIZED.getErrorCode(),
         ex.getMessage());
-    return SpringWebFluxUtil.respond(exchange, apiResponseWrapperBody, HttpStatus.UNAUTHORIZED);
+    return HttpUtil.respond(exchange, apiResponseWrapperBody, HttpStatus.UNAUTHORIZED);
   }
 }
