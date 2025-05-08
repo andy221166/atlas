@@ -43,7 +43,7 @@ public class FrontListOrderUseCaseHandler implements
     FindOrderCriteria criteria = ObjectMapperUtil.getInstance()
         .map(input, FindOrderCriteria.class);
     criteria.setUserId(Contexts.getUserId());
-    PagingResult<OrderEntity> orderEntityPage = orderRepository.findAll(criteria,
+    PagingResult<OrderEntity> orderEntityPage = orderRepository.findByCriteria(criteria,
         input.getPagingRequest());
     if (orderEntityPage.checkEmpty()) {
       return PagingResult.empty();

@@ -47,12 +47,6 @@ spring:
           filters:
             - RewritePath=/api-docs/user-service, /api-docs
         # Auth server
-        - id: auth-server
-          uri: lb://auth-server
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: auth-server-authorized
           uri: lb://auth-server
           predicates:
@@ -61,6 +55,12 @@ spring:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - SessionValidation
             - TokenRelay
+        - id: auth-server-unauthorized
+          uri: lb://auth-server
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: auth-server-api-docs
           uri: lb://auth-server
           predicates:
@@ -160,6 +160,8 @@ app:
         - "/api-docs/**"
         - "/swagger-ui/**"
       secured-paths:
+        - path: "/api/auth/logout"
+          roles: [ "USER", "ADMIN" ]
         - path: "/api/common/**"
           roles: [ "USER", "ADMIN" ]
         - path: "/api/front/**"
