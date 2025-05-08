@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 PROJECT_NAME="atlas-local-compose-simple"
-BACKEND_SERVICES=(mysql redis kafka)
+BACKEND_SERVICES=(mysql redis kafka keycloak)
 COMPOSE_FILE="$PROJECT_ROOT/deployment/local/compose/backend.yml"
 JAVA_HOME="C:/Users/R16108/.jdks/corretto-17.0.14"
 GRADLEW="$PROJECT_ROOT/gradlew"
@@ -37,13 +37,13 @@ start_microservice() {
 }
 
 (
-  start_microservice ":edge.discovery-server.eureka:bootRun" "$PID_DIR/edge.discovery-server.eureka.pid"
-  start_microservice ":application.spring-boot.user:bootRun" "$PID_DIR/application.spring-boot.user.pid"
+#  start_microservice ":edge.discovery-server.eureka:bootRun" "$PID_DIR/edge.discovery-server.eureka.pid"
+#  start_microservice ":application.spring-boot.user:bootRun" "$PID_DIR/application.spring-boot.user.pid"
   # start_microservice ":application.spring-boot.product:bootRun" "$PID_DIR/application.spring-boot.product.pid"
   # start_microservice ":application.spring-boot.order:bootRun" "$PID_DIR/application.spring-boot.order.pid"
   # start_microservice ":application.spring-boot.notification:bootRun" "$PID_DIR/application.spring-boot.notification.pid"
-  start_microservice ":edge.auth-server.spring-security-jwt:bootRun" "$PID_DIR/edge.auth-server.spring-security-jwt.pid"
-  start_microservice ":edge.api-gateway.spring-cloud-gateway:bootRun" "$PID_DIR/edge.api-gateway.spring-cloud-gateway.pid"
+#  start_microservice ":edge.auth-server.spring-security-jwt:bootRun" "$PID_DIR/edge.auth-server.spring-security-jwt.pid"
+#  start_microservice ":edge.api-gateway.spring-cloud-gateway:bootRun" "$PID_DIR/edge.api-gateway.spring-cloud-gateway.pid"
   wait
 )
 

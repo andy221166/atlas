@@ -5,7 +5,8 @@ import org.atlas.edge.api.gateway.springcloudgateway.util.HttpUtil;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.auth.enums.CustomClaim;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -22,6 +23,9 @@ import reactor.core.publisher.Mono;
 public class SessionValidationGatewayFilterFactory extends
     AbstractGatewayFilterFactory<SessionValidationGatewayFilterFactory.Config> {
 
+  @Value("${app.api-gateway.auth-server:spring-security-jwt}")
+  private String authServer;
+
   private final ReactiveStringRedisTemplate reactiveRedisTemplate;
 
   public SessionValidationGatewayFilterFactory(ReactiveStringRedisTemplate reactiveRedisTemplate) {
@@ -31,12 +35,17 @@ public class SessionValidationGatewayFilterFactory extends
 
   @Override
   public GatewayFilter apply(Config config) {
-    return (exchange, chain) -> ReactiveSecurityContextHolder.getContext()
-        .map(SecurityContext::getAuthentication)
-        .filter(
-            auth -> auth != null && auth.isAuthenticated() && auth.getCredentials() instanceof Jwt)
-        .map(auth -> (Jwt) auth.getCredentials())
-        .flatMap(jwt -> validateSession(jwt, exchange, chain));
+    return (exchange, chain) -> {
+      if ("keycloak".equalsIgnoreCase(authServer)) {
+        // Skip session validation
+        return chain.filter(exchange);
+      }
+      return ReactiveSecurityContextHolder.getContext()
+          .map(SecurityContext::getAuthentication)
+          .filter(auth -> auth != null && auth.isAuthenticated() && auth.getCredentials() instanceof Jwt)
+          .map(auth -> (Jwt) auth.getCredentials())
+          .flatMap(jwt -> validateSession(jwt, exchange, chain));
+    };
   }
 
   private Mono<Void> validateSession(Jwt jwt, ServerWebExchange exchange, GatewayFilterChain chain) {

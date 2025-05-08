@@ -3,7 +3,7 @@ package org.atlas.infrastructure.api.client.rest.resttemplate;
 import java.io.IOException;
 import org.atlas.framework.context.Contexts;
 import org.atlas.framework.context.ContextInfo;
-import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.auth.enums.CustomClaim;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

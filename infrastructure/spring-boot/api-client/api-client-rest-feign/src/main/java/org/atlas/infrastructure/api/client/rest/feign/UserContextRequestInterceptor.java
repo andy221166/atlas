@@ -4,7 +4,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.atlas.framework.context.Contexts;
 import org.atlas.framework.context.ContextInfo;
-import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.auth.enums.CustomClaim;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package org.atlas.framework.util;
 
 import lombok.experimental.UtilityClass;
-import org.atlas.framework.security.cryptography.Base64Util;
+import org.atlas.framework.cryptography.Base64Util;
 
 @UtilityClass
 public class ImageUtil {

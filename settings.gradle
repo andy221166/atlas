@@ -82,8 +82,12 @@ include(':infrastructure.spring-boot.api-server.rest.adapter.user')
 project(':infrastructure.spring-boot.api-server.rest.adapter.user').projectDir = file('infrastructure/spring-boot/api-server/api-server-rest/api-server-rest-adapter-user')
 
 // Auth client
+// Auth client::Spring Security JWT
 include(':infrastructure.spring-boot.auth-client.spring-security-jwt')
 project(':infrastructure.spring-boot.auth-client.spring-security-jwt').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-spring-security-jwt')
+// Auth client::Keycloak
+include(':infrastructure.spring-boot.auth-client.keycloak')
+project(':infrastructure.spring-boot.auth-client.keycloak').projectDir = file('infrastructure/spring-boot/auth-client/auth-client-keycloak')
 
 // Bootstrap
 include(':infrastructure.spring-boot.bootstrap')

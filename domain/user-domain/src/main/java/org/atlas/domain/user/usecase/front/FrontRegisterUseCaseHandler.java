@@ -23,8 +23,8 @@ import org.atlas.framework.error.AppError;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
-import org.atlas.framework.security.client.AuthApiPort;
-import org.atlas.framework.security.client.model.CreateUserRequest;
+import org.atlas.framework.auth.client.AuthClientPort;
+import org.atlas.framework.auth.client.model.CreateUserRequest;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ import org.atlas.framework.usecase.handler.UseCaseHandler;
 public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput, Void> {
 
   private final UserRepository userRepository;
-  private final AuthApiPort authApiPort;
+  private final AuthClientPort authClientPort;
   private final ApplicationConfigPort applicationConfigPort;
   private final UserMessagePublisherPort userMessagePublisherPort;
 
@@ -69,7 +69,7 @@ public class FrontRegisterUseCaseHandler implements UseCaseHandler<RegisterInput
   private void createAuthUser(UserEntity userEntity) {
     CreateUserRequest request = ObjectMapperUtil.getInstance()
         .map(userEntity, CreateUserRequest.class);
-    authApiPort.createUser(request);
+    authClientPort.createUser(request);
     log.info("Created auth user: userId={}, username={}",
         userEntity.getId(), userEntity.getUsername());
   }

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.atlas.domain.user.shared.enums.Role;
 import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.context.Contexts;
-import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.auth.enums.CustomClaim;
 import org.atlas.infrastructure.api.server.rest.core.util.HttpUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

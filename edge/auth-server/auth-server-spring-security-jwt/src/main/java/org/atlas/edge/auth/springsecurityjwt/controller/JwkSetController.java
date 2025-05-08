@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.jwks.JwkSetUtil;
-import org.atlas.framework.security.cryptography.RsaKeyLoader;
+import org.atlas.framework.cryptography.RsaKeyLoader;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

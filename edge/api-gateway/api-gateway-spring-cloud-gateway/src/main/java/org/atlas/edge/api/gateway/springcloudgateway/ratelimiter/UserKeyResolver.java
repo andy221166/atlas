@@ -3,7 +3,7 @@ package org.atlas.edge.api.gateway.springcloudgateway.ratelimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.edge.api.gateway.springcloudgateway.util.IpAddressUtil;
-import org.atlas.framework.security.enums.CustomClaim;
+import org.atlas.framework.auth.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;

@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' version "${springBootPluginVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementPluginVersion}"
+    id 'idea'
 }
 
 group = 'org.atlas'
@@ -46,4 +47,11 @@ jar {
 
 test {
     useJUnitPlatform()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
