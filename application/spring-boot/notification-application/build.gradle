@@ -54,7 +54,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['messaging']}")
     }
-    api project(':infrastructure.spring-boot.event-handler-decorator')
+    api project(':infrastructure.spring-boot.event.event-handler-decorator')
     switch (infraStack['notification.email']) {
         case 'spring':
             api project(':infrastructure.spring-boot.notification.email.spring')
@@ -119,7 +119,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['template']}")
     }
-    api project(':infrastructure.spring-boot.use-case-handler-decorator')
+    api project(':infrastructure.spring-boot.use-case.use-case-handler-decorator')
     api project(':infrastructure.spring-boot.notification.websocket')
 
     // Lombok

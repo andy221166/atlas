@@ -1,9 +1,10 @@
 package org.atlas.edge.api.gateway.springcloudgateway.ratelimiter;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.atlas.edge.api.gateway.springcloudgateway.security.jwt.JwtExtractor;
 import org.atlas.edge.api.gateway.springcloudgateway.util.IpAddressUtil;
-import org.atlas.framework.auth.enums.CustomClaim;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,10 +14,13 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class UserKeyResolver implements KeyResolver {
 
   private static final String ANONYMOUS_KEY = "anonymous";
+
+  private final JwtExtractor jwtExtractor;
 
   @Override
   public Mono<String> resolve(ServerWebExchange exchange) {
@@ -28,10 +32,9 @@ public class UserKeyResolver implements KeyResolver {
         .map(auth ->
             (Jwt) auth.getCredentials())
         .map(jwt -> {
-          String userRole = jwt.getClaimAsString(CustomClaim.USER_ROLE.getClaim());
-          String userId = jwt.getSubject();
-          if (StringUtils.isNotBlank(userRole) && StringUtils.isNotBlank(userId)) {
-            return userRole.toLowerCase() + ":" + userId;
+          String userId = jwtExtractor.extractUserId(jwt);
+          if (StringUtils.isNotBlank(userId)) {
+            return userId + ":" + ipAddress;
           }
           return ANONYMOUS_KEY + ":" + ipAddress;
         })

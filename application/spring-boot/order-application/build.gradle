@@ -42,6 +42,10 @@ dependencies {
             api project(':infrastructure.spring-boot.internal-api.product.rest.feign')
             api project(':infrastructure.spring-boot.internal-api.user.rest.feign')
             break
+        case 'rest-restclient':
+            api project(':infrastructure.spring-boot.internal-api.product.rest.restclient')
+            api project(':infrastructure.spring-boot.internal-api.user.rest.restclient')
+            break
         case 'rest-resttemplate':
             api project(':infrastructure.spring-boot.internal-api.product.rest.resttemplate')
             api project(':infrastructure.spring-boot.internal-api.user.rest.resttemplate')
@@ -96,7 +100,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['messaging']}")
     }
-    api project(':infrastructure.spring-boot.event-handler-decorator')
+    api project(':infrastructure.spring-boot.event.event-handler-decorator')
     api project(':infrastructure.spring-boot.observability.actuator')
     switch (infraStack['observability.logging']) {
         case 'logback':
@@ -145,7 +149,7 @@ dependencies {
             throw new IllegalArgumentException("Unsupported ${infraStack['scheduler']}")
     }
     api project(':infrastructure.spring-boot.sequence-generator')
-    api project(':infrastructure.spring-boot.use-case-handler-decorator')
+    api project(':infrastructure.spring-boot.use-case.use-case-handler-decorator')
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

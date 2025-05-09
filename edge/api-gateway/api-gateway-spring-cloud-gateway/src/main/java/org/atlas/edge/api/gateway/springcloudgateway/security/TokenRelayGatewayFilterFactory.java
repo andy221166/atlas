@@ -1,8 +1,8 @@
-package org.atlas.edge.api.gateway.springcloudgateway.security.tokenrelay;
+package org.atlas.edge.api.gateway.springcloudgateway.security;
 
 import org.apache.http.HttpHeaders;
+import org.atlas.edge.api.gateway.springcloudgateway.security.jwt.JwtExtractor;
 import org.atlas.framework.auth.enums.CustomClaim;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -13,12 +13,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 @Component
-@ConditionalOnProperty(name = "app.api-gateway.auth-server", havingValue = "keycloak")
-public class KeycloakTokenRelayGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<KeycloakTokenRelayGatewayFilterFactory.Config> {
+public class TokenRelayGatewayFilterFactory extends
+    AbstractGatewayFilterFactory<TokenRelayGatewayFilterFactory.Config> {
 
-  public KeycloakTokenRelayGatewayFilterFactory() {
+  private final JwtExtractor jwtExtractor;
+
+  public TokenRelayGatewayFilterFactory(JwtExtractor jwtExtractor) {
     super(Config.class);
+    this.jwtExtractor = jwtExtractor;
   }
 
   @Override
@@ -29,19 +31,17 @@ public class KeycloakTokenRelayGatewayFilterFactory extends
             auth != null && auth.isAuthenticated() && auth.getCredentials() instanceof Jwt)
         .map(auth -> (Jwt) auth.getCredentials())
         .flatMap(jwt -> {
-          // Extract custom headers from JWT
-          String userId = jwt.getSubject();
-          String userRole = jwt.getClaimAsString(CustomClaim.USER_ROLE.getClaim());
-          String sessionId = jwt.getClaimAsString("sid");
-
           // Mutate the request to add custom headers
           ServerHttpRequest mutatedRequest = exchange.getRequest()
               .mutate()
               .headers(httpHeaders -> {
                 httpHeaders.remove(HttpHeaders.AUTHORIZATION);
-                httpHeaders.set(CustomClaim.SESSION_ID.getHeader(), sessionId);
-                httpHeaders.set(CustomClaim.USER_ID.getHeader(), userId);
-                httpHeaders.set(CustomClaim.USER_ROLE.getHeader(), userRole);
+                httpHeaders.set(CustomClaim.SESSION_ID.getHeader(),
+                    jwtExtractor.extractSessionId(jwt));
+                httpHeaders.set(CustomClaim.USER_ID.getHeader(),
+                    jwtExtractor.extractUserId(jwt));
+                httpHeaders.set(CustomClaim.USER_ROLES.getHeader(),
+                    jwtExtractor.extractUserRoles(jwt));
                 assert jwt.getExpiresAt() != null;
                 httpHeaders.set(CustomClaim.EXPIRES_AT.getHeader(),
                     String.valueOf(jwt.getExpiresAt().toEpochMilli()));

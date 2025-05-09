@@ -27,8 +27,8 @@ public class TokenService {
         .subject(String.valueOf(userDetails.getUserId()))
         .audience(SecurityConstant.TOKEN_AUDIENCE)
         .expiresAt(expiresAt)
-        .userRole(userDetails.getRole())
         .sessionId(userDetails.getSessionId())
+        .userRoles(userDetails.getRoles())
         .build();
     EncodeJwtInput input = EncodeJwtInput.builder()
         .jwt(jwt)

@@ -9,8 +9,6 @@ import org.atlas.domain.auth.entity.SessionEntity;
 import org.atlas.domain.auth.entity.UserEntity;
 import org.atlas.domain.auth.repository.SessionRepository;
 import org.atlas.domain.auth.repository.UserRepository;
-import org.atlas.framework.jwt.InvalidJwtException;
-import org.atlas.edge.auth.springsecurityjwt.mapper.AuthMapper;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenRequest;
 import org.atlas.edge.auth.springsecurityjwt.model.GenerateOneTimeTokenResponse;
 import org.atlas.edge.auth.springsecurityjwt.model.LoginRequest;
@@ -22,8 +20,8 @@ import org.atlas.edge.auth.springsecurityjwt.security.UserDetailsImpl;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.context.ContextInfo;
 import org.atlas.framework.context.Contexts;
-import org.atlas.framework.error.AppError;
 import org.atlas.framework.domain.exception.DomainException;
+import org.atlas.framework.error.AppError;
 import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.util.UUIDGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -99,7 +97,7 @@ public class AuthService {
     // Reissue tokens
     UserEntity userEntity = userRepository.findById(sessionEntity.getUserId())
         .orElseThrow(() -> new DomainException(AppError.USER_NOT_FOUND));
-    UserDetailsImpl userDetails = AuthMapper.map(userEntity);
+    UserDetailsImpl userDetails = new UserDetailsImpl(userEntity);
 
     // Issue new access token
     Date now = new Date();

@@ -2,7 +2,6 @@ package org.atlas.edge.auth.springsecurityjwt.security;
 
 import lombok.RequiredArgsConstructor;
 import org.atlas.domain.auth.repository.UserRepository;
-import org.atlas.edge.auth.springsecurityjwt.mapper.AuthMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
     return userRepository.findByIdentifier(identifier)
-        .map(AuthMapper::map)
+        .map(UserDetailsImpl::new)
         .orElseThrow(() -> new UsernameNotFoundException(
             String.format("User with identifier %s not found", identifier)));
   }

@@ -24,3 +24,21 @@ To invalidate the JWT token upon logout, you can maintain a blacklist or a list 
 ## Authorization
 
 https://levelup.gitconnected.com/system-design-concepts-authorization-in-distributed-systems-1da48088ee83
+
+---
+
+## API Gateway
+
+Acts as the central entry point for requests and enforces security.
+
+---
+
+## Secure Communication
+
+---
+
+## Service Mesh
+
+---
+
+## Secret Management

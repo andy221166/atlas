@@ -50,6 +50,8 @@ include(':infrastructure.spring-boot.api-client.rest.feign')
 project(':infrastructure.spring-boot.api-client.rest.feign').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-feign')
 include(':infrastructure.spring-boot.api-client.rest.model')
 project(':infrastructure.spring-boot.api-client.rest.model').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-model')
+include(':infrastructure.spring-boot.api-client.rest.restclient')
+project(':infrastructure.spring-boot.api-client.rest.restclient').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-restclient')
 include(':infrastructure.spring-boot.api-client.rest.resttemplate')
 project(':infrastructure.spring-boot.api-client.rest.resttemplate').projectDir = file('infrastructure/spring-boot/api-client/api-client-rest-resttemplate')
 
@@ -126,8 +128,8 @@ include(':infrastructure.spring-boot.discovery-client.kubernetes')
 project(':infrastructure.spring-boot.discovery-client.kubernetes').projectDir = file('infrastructure/spring-boot/discovery-client/discovery-client-kubernetes')
 
 // Event handler decorator
-include(':infrastructure.spring-boot.event-handler-decorator')
-project(':infrastructure.spring-boot.event-handler-decorator').projectDir = file('infrastructure/spring-boot/event-handler-decorator')
+include(':infrastructure.spring-boot.event.event-handler-decorator')
+project(':infrastructure.spring-boot.event.event-handler-decorator').projectDir = file('infrastructure/spring-boot/event/event-handler-decorator')
 
 // File
 
@@ -168,6 +170,8 @@ include(':infrastructure.spring-boot.internal-api.product.rest.feign')
 project(':infrastructure.spring-boot.internal-api.product.rest.feign').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-feign')
 include(':infrastructure.spring-boot.internal-api.product.rest.model')
 project(':infrastructure.spring-boot.internal-api.product.rest.model').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-model')
+include(':infrastructure.spring-boot.internal-api.product.rest.restclient')
+project(':infrastructure.spring-boot.internal-api.product.rest.restclient').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-restclient')
 include(':infrastructure.spring-boot.internal-api.product.rest.resttemplate')
 project(':infrastructure.spring-boot.internal-api.product.rest.resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/product-api/product-api-rest-resttemplate')
 
@@ -180,6 +184,8 @@ include(':infrastructure.spring-boot.internal-api.user.rest.feign')
 project(':infrastructure.spring-boot.internal-api.user.rest.feign').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-feign')
 include(':infrastructure.spring-boot.internal-api.user.rest.model')
 project(':infrastructure.spring-boot.internal-api.user.rest.model').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-model')
+include(':infrastructure.spring-boot.internal-api.user.rest.restclient')
+project(':infrastructure.spring-boot.internal-api.user.rest.restclient').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-restclient')
 include(':infrastructure.spring-boot.internal-api.user.rest.resttemplate')
 project(':infrastructure.spring-boot.internal-api.user.rest.resttemplate').projectDir = file('infrastructure/spring-boot/internal-api/user-api/user-api-rest-resttemplate')
 
@@ -334,8 +340,8 @@ include(':infrastructure.spring-boot.transaction')
 project(':infrastructure.spring-boot.transaction').projectDir = file('infrastructure/spring-boot/transaction')
 
 // Use case handler decorator
-include(':infrastructure.spring-boot.use-case-handler-decorator')
-project(':infrastructure.spring-boot.use-case-handler-decorator').projectDir = file('infrastructure/spring-boot/use-case-handler-decorator')
+include(':infrastructure.spring-boot.use-case.use-case-handler-decorator')
+project(':infrastructure.spring-boot.use-case.use-case-handler-decorator').projectDir = file('infrastructure/spring-boot/use-case/use-case-handler-decorator')
 
 // =================================================================================================
 // Application

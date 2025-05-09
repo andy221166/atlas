@@ -1,15 +1,15 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.atlas.edge.api.gateway.springcloudgateway.security.jwt.JwtExtractor;
 import org.atlas.framework.config.Application;
 import org.atlas.framework.config.ApplicationConfigPort;
-import org.atlas.framework.auth.enums.CustomClaim;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -25,6 +25,7 @@ public class SecurityConfig {
   private final AuthRulesProps authRulesProps;
   private final CustomServerAuthenticationEntryPoint serverAuthenticationEntryPoint;
   private final CustomAccessDeniedHandler accessDeniedHandler;
+  private final JwtExtractor jwtExtractor;
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -90,10 +91,11 @@ public class SecurityConfig {
   public ReactiveJwtAuthenticationConverter jwtAuthenticationConverter() {
     ReactiveJwtAuthenticationConverter converter = new ReactiveJwtAuthenticationConverter();
     converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-      String role = jwt.getClaim(CustomClaim.USER_ROLE.getClaim());
-      if (role != null) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(role);
-        return Flux.just(authority);
+      String roles = jwtExtractor.extractUserRoles(jwt);
+      if (StringUtils.isNotBlank(roles)) {
+        return Flux.fromArray(roles.split(","))
+            .filter(StringUtils::isNotBlank)
+            .map(SimpleGrantedAuthority::new);
       }
       return Flux.empty();
     });

@@ -2,13 +2,14 @@ package org.atlas.edge.auth.springsecurityjwt.security;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
+import org.atlas.domain.auth.entity.UserEntity;
 import org.atlas.domain.user.shared.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
@@ -18,6 +19,14 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
   private Collection<? extends GrantedAuthority> authorities;
   private String sessionId;
+
+  public UserDetailsImpl(UserEntity userEntity) {
+    this.userId = userEntity.getUserId();
+    this.username = userEntity.getUsername();
+    this.password = userEntity.getPassword();
+    this.authorities = Collections.singletonList(
+        new SimpleGrantedAuthority(userEntity.getRole().name()));
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -54,13 +63,9 @@ public class UserDetailsImpl implements UserDetails {
     return true;
   }
 
-  public Role getRole() {
-    List<String> roles = authorities.stream()
-        .map(GrantedAuthority::getAuthority)
-        .toList();
-    if (CollectionUtils.isEmpty(roles)) {
-      return null;
-    }
-    return Role.valueOf(roles.get(0));
+  public Set<Role> getRoles() {
+    return authorities.stream()
+        .map(authority -> Role.valueOf(authority.getAuthority()))
+        .collect(Collectors.toSet());
   }
 }

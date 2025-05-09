@@ -147,7 +147,6 @@ springdoc:
 
 app:
   api-gateway:
-    auth-server: ${AUTH_SERVER:spring-security-jwt}
     auth-rules:
       non-secured-paths:
         - "/actuator/**"

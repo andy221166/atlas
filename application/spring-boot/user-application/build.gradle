@@ -77,7 +77,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['messaging']}")
     }
-    api project(':infrastructure.spring-boot.event-handler-decorator')
+    api project(':infrastructure.spring-boot.event.event-handler-decorator')
     api project(':infrastructure.spring-boot.observability.actuator')
     switch (infraStack['observability.logging']) {
         case 'logback':
@@ -125,7 +125,7 @@ dependencies {
         default:
             throw new IllegalArgumentException("Unsupported ${infraStack['scheduler']}")
     }
-    api project(':infrastructure.spring-boot.use-case-handler-decorator')
+    api project(':infrastructure.spring-boot.use-case.use-case-handler-decorator')
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

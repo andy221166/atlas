@@ -1,12 +1,11 @@
 package org.atlas.edge.api.gateway.springcloudgateway.security;
 
 import java.time.Instant;
+import org.atlas.edge.api.gateway.springcloudgateway.security.jwt.JwtExtractor;
 import org.atlas.edge.api.gateway.springcloudgateway.util.HttpUtil;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.SecurityConstant;
 import org.atlas.framework.error.AppError;
-import org.atlas.framework.auth.enums.CustomClaim;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -23,23 +22,19 @@ import reactor.core.publisher.Mono;
 public class SessionValidationGatewayFilterFactory extends
     AbstractGatewayFilterFactory<SessionValidationGatewayFilterFactory.Config> {
 
-  @Value("${app.api-gateway.auth-server:spring-security-jwt}")
-  private String authServer;
-
+  private final JwtExtractor jwtExtractor;
   private final ReactiveStringRedisTemplate reactiveRedisTemplate;
 
-  public SessionValidationGatewayFilterFactory(ReactiveStringRedisTemplate reactiveRedisTemplate) {
+  public SessionValidationGatewayFilterFactory(JwtExtractor jwtExtractor,
+      ReactiveStringRedisTemplate reactiveRedisTemplate) {
     super(Config.class);
+    this.jwtExtractor = jwtExtractor;
     this.reactiveRedisTemplate = reactiveRedisTemplate;
   }
 
   @Override
   public GatewayFilter apply(Config config) {
     return (exchange, chain) -> {
-      if ("keycloak".equalsIgnoreCase(authServer)) {
-        // Skip session validation
-        return chain.filter(exchange);
-      }
       return ReactiveSecurityContextHolder.getContext()
           .map(SecurityContext::getAuthentication)
           .filter(auth -> auth != null && auth.isAuthenticated() && auth.getCredentials() instanceof Jwt)
@@ -50,8 +45,8 @@ public class SessionValidationGatewayFilterFactory extends
 
   private Mono<Void> validateSession(Jwt jwt, ServerWebExchange exchange, GatewayFilterChain chain) {
     // Extract userId and sessionId from JWT claims
-    String userId = jwt.getSubject();
-    String sessionId = jwt.getClaimAsString(CustomClaim.SESSION_ID.getClaim());
+    String sessionId = jwtExtractor.extractSessionId(jwt);
+    String userId = jwtExtractor.extractUserId(jwt);
 
     // Build Redis keys for last logout timestamp and session blacklist
     String lastLogoutTsRedisKey = String.format(SecurityConstant.LAST_LOGOUT_TS_REDIS_KEY_FORMAT, userId);
@@ -64,6 +59,7 @@ public class SessionValidationGatewayFilterFactory extends
           try {
             long lastLogoutTs = Long.parseLong(lastLogoutTsStr);
             // If the token was issued before last logout, session is invalid
+            assert jwt.getIssuedAt() != null;
             return jwt.getIssuedAt().isBefore(Instant.ofEpochMilli(lastLogoutTs));
           } catch (NumberFormatException e) {
             // If parsing fails, treat session as valid

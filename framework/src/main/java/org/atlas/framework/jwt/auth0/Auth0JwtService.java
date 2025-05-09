@@ -5,14 +5,16 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.atlas.domain.user.shared.enums.Role;
+import org.atlas.framework.auth.enums.CustomClaim;
 import org.atlas.framework.jwt.DecodeJwtInput;
 import org.atlas.framework.jwt.EncodeJwtInput;
 import org.atlas.framework.jwt.InvalidJwtException;
 import org.atlas.framework.jwt.Jwt;
 import org.atlas.framework.jwt.JwtService;
-import org.atlas.framework.auth.enums.CustomClaim;
+import org.atlas.framework.util.RoleUtil;
 import org.atlas.framework.util.UUIDGenerator;
 
 public class Auth0JwtService implements JwtService {
@@ -28,11 +30,12 @@ public class Auth0JwtService implements JwtService {
         .withExpiresAt(input.getJwt().getExpiresAt());
 
     // Custom claims
-    if (input.getJwt().getUserRole() != null) {
-      builder.withClaim(CustomClaim.USER_ROLE.getClaim(), input.getJwt().getUserRole().name());
-    }
     if (StringUtils.isNotBlank(input.getJwt().getSessionId())) {
       builder.withClaim(CustomClaim.SESSION_ID.getClaim(), input.getJwt().getSessionId());
+    }
+    if (CollectionUtils.isNotEmpty(input.getJwt().getUserRoles())) {
+      builder.withClaim(CustomClaim.USER_ROLES.getClaim(),
+          RoleUtil.toRolesString(input.getJwt().getUserRoles()));
     }
 
     return builder.sign(Algorithm.RSA256(input.getRsaPublicKey(), input.getRsaPrivateKey()));
@@ -66,13 +69,13 @@ public class Auth0JwtService implements JwtService {
         .expiresAt(decodedJWT.getExpiresAt());
 
     // Custom claims
-    String userRole = decodedJWT.getClaim(CustomClaim.USER_ROLE.getClaim()).asString();
-    if (userRole != null) {
-      builder.userRole(Role.valueOf(userRole));
-    }
     String sessionId = decodedJWT.getClaim(CustomClaim.SESSION_ID.getClaim()).asString();
-    if (sessionId != null) {
+    if (StringUtils.isNotBlank(sessionId)) {
       builder.sessionId(sessionId);
+    }
+    String userRoles = decodedJWT.getClaim(CustomClaim.USER_ROLES.getClaim()).asString();
+    if (StringUtils.isNotBlank(userRoles)) {
+      builder.userRoles(RoleUtil.toRolesSet(userRoles));
     }
 
     return builder.build();
