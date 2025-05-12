@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.atlas.domain.user.shared.enums.Role;
 
 @Data
 @Builder
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class FindUserCriteria {
 
   private Integer id;
-  private String username;
-  private String email;
-  private String phoneNumber;
+  // username, email, phoneNumber
+  private String keyword;
+  private Role role;
 }

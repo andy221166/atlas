@@ -34,14 +34,37 @@ public class JpaUserRepositoryAdapter implements UserRepository {
   public List<UserEntity> findByIdIn(List<Integer> ids) {
     return jpaUserRepository.findAllById(ids)
         .stream()
-        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class))
+        .map(jpaUserEntity ->
+            ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class))
         .toList();
   }
 
   @Override
   public Optional<UserEntity> findById(Integer id) {
     return jpaUserRepository.findById(id)
-        .map(jpaUserEntity -> ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
+        .map(jpaUserEntity ->
+            ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
+  }
+
+  @Override
+  public Optional<UserEntity> findByUsername(String username) {
+    return jpaUserRepository.findByUsername(username)
+        .map(jpaUserEntity ->
+            ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
+  }
+
+  @Override
+  public Optional<UserEntity> findByEmail(String email) {
+    return jpaUserRepository.findByEmail(email)
+        .map(jpaUserEntity ->
+            ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
+  }
+
+  @Override
+  public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
+    return jpaUserRepository.findByPhoneNumber(phoneNumber)
+        .map(jpaUserEntity ->
+            ObjectMapperUtil.getInstance().map(jpaUserEntity, UserEntity.class));
   }
 
   @Override

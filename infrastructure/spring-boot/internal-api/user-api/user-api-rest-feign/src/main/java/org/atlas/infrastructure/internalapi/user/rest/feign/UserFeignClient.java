@@ -1,9 +1,10 @@
 package org.atlas.infrastructure.internalapi.user.rest.feign;
 
+import java.util.List;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
+import org.atlas.framework.internalapi.user.model.ListUserRequest;
+import org.atlas.framework.internalapi.user.model.UserResponse;
 import org.atlas.infrastructure.api.client.rest.feign.FeignConfig;
-import org.atlas.infrastructure.internalapi.user.rest.model.ListUserRequest;
-import org.atlas.infrastructure.internalapi.user.rest.model.ListUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,5 +17,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserFeignClient {
 
   @PostMapping("/api/internal/users/list")
-  ApiResponseWrapper<ListUserResponse> listUser(@RequestBody ListUserRequest input);
+  ApiResponseWrapper<List<UserResponse>> listUser(@RequestBody ListUserRequest input);
 }

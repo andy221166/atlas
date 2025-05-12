@@ -5,9 +5,9 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.atlas.domain.product.shared.internal.ListProductInput;
-import org.atlas.domain.product.shared.internal.ListProductOutput;
-import org.atlas.framework.internalapi.ProductApiPort;
+import org.atlas.framework.internalapi.product.ProductApiPort;
+import org.atlas.framework.internalapi.product.model.ListProductRequest;
+import org.atlas.framework.internalapi.product.model.ProductResponse;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.infrastructure.api.server.grpc.protobuf.product.ListProductRequestProto;
 import org.atlas.infrastructure.api.server.grpc.protobuf.product.ListProductResponseProto;
@@ -25,28 +25,27 @@ public class ProductApiAdapter implements ProductApiPort {
   private ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
 
   @Override
-  public ListProductOutput call(ListProductInput input) {
-    ListProductRequestProto requestProto = map(input);
+  public List<ProductResponse> call(ListProductRequest request) {
+    ListProductRequestProto requestProto = map(request);
     ListProductResponseProto responseProto = productServiceBlockingStub.listProduct(requestProto);
     return map(responseProto);
   }
 
-  private ListProductRequestProto map(ListProductInput input) {
+  private ListProductRequestProto map(ListProductRequest request) {
     return ListProductRequestProto.newBuilder()
-        .addAllId(input.getIds())
+        .addAllId(request.getIds())
         .build();
   }
 
-  private ListProductOutput map(ListProductResponseProto responseProto) {
-    List<ListProductOutput.Product> products = responseProto.getProductList()
+  private List<ProductResponse> map(ListProductResponseProto responseProto) {
+    return responseProto.getProductList()
         .stream()
         .map(this::map)
         .toList();
-    return new ListProductOutput(products);
   }
 
-  private ListProductOutput.Product map(ProductProto productProto) {
+  private ProductResponse map(ProductProto productProto) {
     return ObjectMapperUtil.getInstance()
-        .map(productProto, ListProductOutput.Product.class);
+        .map(productProto, ProductResponse.class);
   }
 }

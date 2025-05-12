@@ -15,7 +15,7 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.atlas.domain.order.shared.OrderStatus;
+import org.atlas.domain.order.shared.enums.OrderStatus;
 import org.atlas.infrastructure.persistence.jpa.core.entity.JpaBaseEntity;
 
 @Entity

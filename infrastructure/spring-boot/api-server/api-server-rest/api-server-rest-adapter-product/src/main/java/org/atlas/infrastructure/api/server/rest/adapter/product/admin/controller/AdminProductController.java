@@ -7,25 +7,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.atlas.domain.product.entity.ProductEntity;
 import org.atlas.domain.product.shared.enums.ProductStatus;
-import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductInput;
-import org.atlas.domain.product.usecase.admin.AdminCreateProductUseCaseHandler.CreateProductOutput;
-import org.atlas.domain.product.usecase.admin.AdminDeleteProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminDeleteProductUseCaseHandler.DeleteProductInput;
-import org.atlas.domain.product.usecase.admin.AdminExportProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminExportProductUseCaseHandler.ExportProductInput;
-import org.atlas.domain.product.usecase.admin.AdminExportProductUseCaseHandler.ExportProductOutput;
-import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductInput;
-import org.atlas.domain.product.usecase.admin.AdminGetProductUseCaseHandler.GetProductOutput;
-import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminImportProductUseCaseHandler.ImportProductInput;
-import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ListProductInput;
-import org.atlas.domain.product.usecase.admin.AdminListProductUseCaseHandler.ProductOutput;
-import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler;
-import org.atlas.domain.product.usecase.admin.AdminUpdateProductUseCaseHandler.UpdateProductInput;
+import org.atlas.domain.product.usecase.admin.handler.AdminCreateProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminDeleteProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminExportProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminGetProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminImportProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminListProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.handler.AdminUpdateProductUseCaseHandler;
+import org.atlas.domain.product.usecase.admin.model.AdminExportProductInput;
+import org.atlas.domain.product.usecase.admin.model.AdminImportProductInput;
+import org.atlas.domain.product.usecase.admin.model.AdminListProductInput;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.file.enums.FileType;
@@ -33,13 +26,13 @@ import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
 import org.atlas.framework.util.DateUtil;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductRequest;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.CreateProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.GetProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.ProductResponse;
-import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.UpdateProductRequest;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.mapper.AdminProductMapper;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.AdminCreateProductRequest;
+import org.atlas.infrastructure.api.server.rest.adapter.product.admin.model.AdminUpdateProductRequest;
+import org.atlas.infrastructure.api.server.rest.adapter.product.shared.ProductResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -51,6 +44,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -95,69 +89,65 @@ public class AdminProductController {
       @Parameter(description = "Number of items per page.", example = "20")
       @RequestParam(name = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
-    ListProductInput input = new ListProductInput();
-    input.setId(id);
-    input.setKeyword(keyword);
-    input.setMinPrice(minPrice);
-    input.setMaxPrice(maxPrice);
-    input.setStatus(status);
-    input.setAvailableFrom(availableFrom);
-    input.setIsActive(isActive);
-    input.setBrandId(brandId);
-    input.setCategoryIds(categoryIds);
-    input.setPagingRequest(PagingRequest.of(page - 1, size));
-    PagingResult<ProductOutput> output = adminListProductUseCaseHandler.handle(input);
-    PagingResult<ProductResponse> response = ObjectMapperUtil.getInstance()
-        .mapPage(output, ProductResponse.class);
-    return ApiResponseWrapper.successPage(response);
+    AdminListProductInput input = AdminListProductInput.builder()
+        .id(id)
+        .keyword(keyword)
+        .minPrice(minPrice)
+        .maxPrice(maxPrice)
+        .status(status)
+        .availableFrom(availableFrom)
+        .isActive(isActive)
+        .brandId(brandId)
+        .categoryIds(categoryIds)
+        .pagingRequest(PagingRequest.of(page - 1, size))
+        .build();
+    PagingResult<ProductEntity> productEntityPage = adminListProductUseCaseHandler.handle(input);
+    PagingResult<ProductResponse> productResponsePage = ObjectMapperUtil.getInstance()
+        .mapPage(productEntityPage, ProductResponse.class);
+    return ApiResponseWrapper.successPage(productResponsePage);
   }
 
   @Operation(summary = "Retrieve details of a specific product by ID.")
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<GetProductResponse> getProduct(
+  @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ApiResponseWrapper<ProductResponse> getProduct(
       @Parameter(description = "The unique identifier of the product.", example = "1")
-      @PathVariable Integer id) throws Exception {
-    GetProductInput input = new GetProductInput(id);
-    GetProductOutput output = adminGetProductUseCaseHandler.handle(input);
-    GetProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, GetProductResponse.class);
-    return ApiResponseWrapper.success(response);
+      @PathVariable("productId") Integer productId) throws Exception {
+    ProductEntity productEntity = adminGetProductUseCaseHandler.handle(productId);
+    ProductResponse productResponse = ObjectMapperUtil.getInstance()
+        .map(productEntity, ProductResponse.class);
+    return ApiResponseWrapper.success(productResponse);
   }
 
   @Operation(summary = "Create a new product.")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponseWrapper<CreateProductResponse> createProduct(
+  @ResponseStatus(HttpStatus.CREATED)
+  public ApiResponseWrapper<Integer> createProduct(
       @Parameter(description = "Request object containing the details of the product to create.", required = true)
-      @Valid @RequestBody CreateProductRequest request) throws Exception {
-    CreateProductInput input = ObjectMapperUtil.getInstance()
-        .map(request, CreateProductInput.class);
-    CreateProductOutput output = adminCreateProductUseCaseHandler.handle(input);
-    CreateProductResponse response = ObjectMapperUtil.getInstance()
-        .map(output, CreateProductResponse.class);
-    return ApiResponseWrapper.success(response);
+      @Valid @RequestBody AdminCreateProductRequest request) throws Exception {
+    ProductEntity productEntity = AdminProductMapper.toProductEntity(request);
+    Integer productId = adminCreateProductUseCaseHandler.handle(productEntity);
+    return ApiResponseWrapper.success(productId);
   }
 
   @Operation(summary = "Update an existing product by ID.")
-  @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<Void> updateProduct(
       @Parameter(description = "The unique identifier of the product to update.", example = "1")
-      @PathVariable("id") Integer id,
+      @PathVariable("productId") Integer productId,
       @Parameter(description = "Request object containing the new details for the product.", required = true)
-      @Valid @RequestBody UpdateProductRequest request) throws Exception {
-    UpdateProductInput input = ObjectMapperUtil.getInstance()
-        .map(request, UpdateProductInput.class);
-    input.setId(id);
-    adminUpdateProductUseCaseHandler.handle(input);
+      @Valid @RequestBody AdminUpdateProductRequest request) throws Exception {
+    ProductEntity productEntity = AdminProductMapper.toProductEntity(request);
+    productEntity.setId(productId);
+    adminUpdateProductUseCaseHandler.handle(productEntity);
     return ApiResponseWrapper.success();
   }
 
   @Operation(summary = "Delete a product by ID.")
-  @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @DeleteMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<Void> deleteProduct(
       @Parameter(description = "The unique identifier of the product to delete.", example = "1")
-      @PathVariable("id") Integer id) throws Exception {
-    DeleteProductInput input = new DeleteProductInput(id);
-    adminDeleteProductUseCaseHandler.handle(input);
+      @PathVariable("productId") Integer productId) throws Exception {
+    adminDeleteProductUseCaseHandler.handle(productId);
     return ApiResponseWrapper.success();
   }
 
@@ -169,7 +159,7 @@ public class AdminProductController {
       @Parameter(description = "The type of the file (e.g., csv, xlsx).", example = "csv")
       @RequestParam("fileType") FileType fileType) throws Exception {
     byte[] fileContent = file.getBytes();
-    ImportProductInput input = new ImportProductInput(fileType, fileContent);
+    AdminImportProductInput input = new AdminImportProductInput(fileType, fileContent);
     adminImportProductUseCaseHandler.handle(input);
     return ApiResponseWrapper.success();
   }
@@ -198,28 +188,31 @@ public class AdminProductController {
       @Parameter(description = "The type of the file to export to (e.g., csv, xlsx).", example = "csv")
       @RequestParam(name = "file_type") FileType fileType
   ) throws Exception {
-    ExportProductInput input = new ExportProductInput();
-    input.setId(id);
-    input.setKeyword(keyword);
-    input.setMinPrice(minPrice);
-    input.setMaxPrice(maxPrice);
-    input.setStatus(status);
-    input.setAvailableFrom(availableFrom);
-    input.setIsActive(isActive);
-    input.setBrandId(brandId);
-    input.setCategoryIds(categoryIds);
+    AdminListProductInput input = AdminListProductInput.builder()
+        .id(id)
+        .keyword(keyword)
+        .minPrice(minPrice)
+        .maxPrice(maxPrice)
+        .status(status)
+        .availableFrom(availableFrom)
+        .isActive(isActive)
+        .brandId(brandId)
+        .categoryIds(categoryIds)
+        .build();
+    ((AdminExportProductInput) input).setFileType(fileType);
+    byte[] fileContent = adminExportProductUseCaseHandler.handle((AdminExportProductInput) input);
 
-    ExportProductOutput output = adminExportProductUseCaseHandler.handle(input);
-
+    // Exported ile info
     HttpHeaders headers = new HttpHeaders();
     String fileName = "export-product-" +
         DateUtil.now("yyyyMMddHHmmss") +
         "." +
         fileType.getExtension();
     headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
     return ResponseEntity.ok()
         .headers(headers)
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
-        .body(output.getFileContent());
+        .body(fileContent);
   }
 }

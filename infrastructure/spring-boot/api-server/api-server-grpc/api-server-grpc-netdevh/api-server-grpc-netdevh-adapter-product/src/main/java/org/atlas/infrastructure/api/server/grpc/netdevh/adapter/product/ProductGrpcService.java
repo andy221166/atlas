@@ -1,12 +1,13 @@
 package org.atlas.infrastructure.api.server.grpc.netdevh.adapter.product;
 
 import io.grpc.stub.StreamObserver;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler;
-import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductInput;
-import org.atlas.domain.product.usecase.internal.InternalListProductUseCaseHandler.ListProductOutput;
+import org.atlas.domain.product.entity.ProductEntity;
+import org.atlas.domain.product.usecase.internal.handler.InternalListProductUseCaseHandler;
+import org.atlas.domain.product.usecase.internal.model.InternalListProductInput;
 import org.atlas.infrastructure.api.server.grpc.protobuf.product.ListProductRequestProto;
 import org.atlas.infrastructure.api.server.grpc.protobuf.product.ListProductResponseProto;
 import org.atlas.infrastructure.api.server.grpc.protobuf.product.ProductProto;
@@ -21,35 +22,35 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
   @Override
   public void listProduct(ListProductRequestProto requestProto,
       StreamObserver<ListProductResponseProto> responseObserver) {
-    ListProductInput input = map(requestProto);
+    InternalListProductInput input = map(requestProto);
     try {
-      ListProductOutput output = internalListProductUseCaseHandler.handle(input);
-      ListProductResponseProto responseProto = map(output);
-      responseObserver.onNext(responseProto);
+      List<ProductEntity> productEntities = internalListProductUseCaseHandler.handle(input);
+      ListProductResponseProto productResponseProtoList = map(productEntities);
+      responseObserver.onNext(productResponseProtoList);
       responseObserver.onCompleted();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  private ListProductInput map(ListProductRequestProto requestProto) {
-    return new ListProductInput(requestProto.getIdList());
+  private InternalListProductInput map(ListProductRequestProto requestProto) {
+    return new InternalListProductInput(requestProto.getIdList());
   }
 
-  private ListProductResponseProto map(ListProductOutput output) {
-    if (CollectionUtils.isEmpty(output.getProducts())) {
+  private ListProductResponseProto map(List<ProductEntity> productEntities) {
+    if (CollectionUtils.isEmpty(productEntities)) {
       return ListProductResponseProto.getDefaultInstance();
     }
     ListProductResponseProto.Builder builder = ListProductResponseProto.newBuilder();
-    output.getProducts().forEach(product -> builder.addProduct(map(product)));
+    productEntities.forEach(productEntity -> builder.addProduct(map(productEntity)));
     return builder.build();
   }
 
-  private ProductProto map(ListProductOutput.Product product) {
+  private ProductProto map(ProductEntity productEntity) {
     return ProductProto.newBuilder()
-        .setId(product.getId())
-        .setName(product.getName())
-        .setPrice(product.getPrice().doubleValue())
+        .setId(productEntity.getId())
+        .setName(productEntity.getName())
+        .setPrice(productEntity.getPrice().doubleValue())
         .build();
   }
 }

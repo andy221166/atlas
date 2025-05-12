@@ -5,16 +5,16 @@ import io.swagger.v3.oas.annotations.Parameter;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.atlas.domain.order.shared.OrderStatus;
-import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler;
-import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler.ListOrderInput;
-import org.atlas.domain.order.usecase.admin.AdminListOrderUseCaseHandler.OrderOutput;
+import org.atlas.domain.order.entity.OrderEntity;
+import org.atlas.domain.order.shared.enums.OrderStatus;
+import org.atlas.domain.order.usecase.admin.handler.AdminListOrderUseCaseHandler;
+import org.atlas.domain.order.usecase.admin.model.AdminListOrderInput;
 import org.atlas.framework.api.server.rest.response.ApiResponseWrapper;
 import org.atlas.framework.constant.CommonConstant;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.framework.paging.PagingRequest;
 import org.atlas.framework.paging.PagingResult;
-import org.atlas.infrastructure.api.server.rest.adapter.order.admin.model.OrderResponse;
+import org.atlas.infrastructure.api.server.rest.adapter.order.shared.OrderResponse;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,17 +48,17 @@ public class AdminOrderController {
       @Parameter(name = "size", description = "The number of orders per page (default is defined by the constant).", example = "20")
       @RequestParam(name = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
-    ListOrderInput input = ListOrderInput.builder()
-        .id(id)
+    AdminListOrderInput input = AdminListOrderInput.builder()
+        .orderId(id)
         .userId(userId)
         .status(status)
         .startDate(startDate)
         .endDate(endDate)
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
-    PagingResult<OrderOutput> output = adminListOrderUseCaseHandler.handle(input);
-    PagingResult<OrderResponse> response = ObjectMapperUtil.getInstance()
-        .mapPage(output, OrderResponse.class);
-    return ApiResponseWrapper.successPage(response);
+    PagingResult<OrderEntity> orderEntityPage = adminListOrderUseCaseHandler.handle(input);
+    PagingResult<OrderResponse> orderResponsePage = ObjectMapperUtil.getInstance()
+        .mapPage(orderEntityPage, OrderResponse.class);
+    return ApiResponseWrapper.successPage(orderResponsePage);
   }
 }

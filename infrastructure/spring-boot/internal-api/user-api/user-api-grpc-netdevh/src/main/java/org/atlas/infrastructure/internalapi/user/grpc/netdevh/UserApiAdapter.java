@@ -6,9 +6,9 @@ import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.atlas.domain.user.shared.enums.Role;
-import org.atlas.domain.user.shared.internal.ListUserInput;
-import org.atlas.domain.user.shared.internal.ListUserOutput;
-import org.atlas.framework.internalapi.UserApiPort;
+import org.atlas.framework.internalapi.user.UserApiPort;
+import org.atlas.framework.internalapi.user.model.ListUserRequest;
+import org.atlas.framework.internalapi.user.model.UserResponse;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 import org.atlas.infrastructure.api.server.grpc.protobuf.user.ListUserRequestProto;
 import org.atlas.infrastructure.api.server.grpc.protobuf.user.ListUserResponseProto;
@@ -26,30 +26,29 @@ public class UserApiAdapter implements UserApiPort {
   private UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
   @Override
-  public ListUserOutput call(ListUserInput input) {
-    ListUserRequestProto requestProto = map(input);
+  public List<UserResponse> call(ListUserRequest request) {
+    ListUserRequestProto requestProto = map(request);
     ListUserResponseProto responseProto = userServiceBlockingStub.listUser(requestProto);
     return map(responseProto);
   }
 
-  private ListUserRequestProto map(ListUserInput input) {
+  private ListUserRequestProto map(ListUserRequest request) {
     return ListUserRequestProto.newBuilder()
-        .addAllId(input.getIds())
+        .addAllId(request.getIds())
         .build();
   }
 
-  private ListUserOutput map(ListUserResponseProto responseProto) {
-    List<ListUserOutput.User> users = responseProto.getUserList()
+  private List<UserResponse> map(ListUserResponseProto responseProto) {
+    return responseProto.getUserList()
         .stream()
         .map(this::map)
         .toList();
-    return new ListUserOutput(users);
   }
 
-  private ListUserOutput.User map(UserProto userProto) {
-    ListUserOutput.User user = ObjectMapperUtil.getInstance()
-        .map(userProto, ListUserOutput.User.class);
-    user.setRole(Role.valueOf(userProto.getRole()));
-    return user;
+  private UserResponse map(UserProto userProto) {
+    UserResponse userResponse = ObjectMapperUtil.getInstance()
+        .map(userProto, UserResponse.class);
+    userResponse.setRole(Role.valueOf(userProto.getRole()));
+    return userResponse;
   }
 }

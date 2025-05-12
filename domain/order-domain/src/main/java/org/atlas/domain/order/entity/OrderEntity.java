@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.atlas.domain.order.shared.OrderStatus;
+import org.atlas.domain.order.shared.enums.OrderStatus;
 import org.atlas.framework.domain.entity.DomainEntity;
 
 @Getter
@@ -18,7 +18,7 @@ public class OrderEntity extends DomainEntity {
   @EqualsAndHashCode.Include
   private Integer id;
   private String code;
-  private Integer userId;
+  private UserEntity user;
   private List<OrderItemEntity> orderItems;
   private BigDecimal amount;
   private OrderStatus status;
@@ -38,7 +38,7 @@ public class OrderEntity extends DomainEntity {
     }
     for (OrderItemEntity orderItem : orderItems) {
       this.amount = this.amount.add(
-          orderItem.getProductPrice().multiply(new BigDecimal(orderItem.getQuantity())));
+          orderItem.getProduct().getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
     }
   }
 }

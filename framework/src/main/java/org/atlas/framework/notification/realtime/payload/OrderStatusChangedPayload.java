@@ -2,7 +2,7 @@ package org.atlas.framework.notification.realtime.payload;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.atlas.domain.order.shared.OrderStatus;
+import org.atlas.domain.order.shared.enums.OrderStatus;
 import org.atlas.framework.domain.event.contract.order.OrderCanceledEvent;
 import org.atlas.framework.domain.event.contract.order.OrderConfirmedEvent;
 
