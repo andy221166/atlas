@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { deleteProduct, getProduct } from '@/services/product/product.service';
+import { deleteProduct, getProduct } from '@/services/product/product.admin.service';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';

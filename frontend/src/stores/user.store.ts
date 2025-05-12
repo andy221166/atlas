@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Profile } from '@/services/user/user.interface';
+import type { Profile } from '@/services/user/user.common.interface';
 
 export const useUserStore = defineStore('user', {
   state: () => ({

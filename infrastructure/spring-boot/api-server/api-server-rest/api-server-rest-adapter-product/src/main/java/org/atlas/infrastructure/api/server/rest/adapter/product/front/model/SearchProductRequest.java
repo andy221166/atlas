@@ -22,7 +22,7 @@ public class SearchProductRequest extends PagingRequest {
   private BigDecimal maxPrice;
 
   @Schema(description = "List of brand IDs to filter products by.", example = "[1, 2, 3]")
-  private List<Integer> brandIds;
+  private Integer brandId;
 
   @Schema(description = "List of category IDs to filter products by.", example = "[1, 2, 3]")
   private List<Integer> categoryIds;

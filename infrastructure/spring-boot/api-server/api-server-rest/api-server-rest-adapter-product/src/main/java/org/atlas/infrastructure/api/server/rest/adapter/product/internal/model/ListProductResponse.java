@@ -1,6 +1,7 @@
 package org.atlas.infrastructure.api.server.rest.adapter.product.internal.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Response object containing the list of products.")
 public class ListProductResponse {
 
-  @Schema(description = "List of products retrieved from the request.", required = true)
+  @Schema(description = "List of products retrieved from the request.", requiredMode = RequiredMode.REQUIRED)
   private List<Product> products;
 
   @Data

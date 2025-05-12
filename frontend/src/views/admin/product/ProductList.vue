@@ -18,7 +18,8 @@
 
           <div class="col-md-6">
             <label class="form-label">Search</label>
-            <input v-model="filters.keyword" type="text" placeholder="Search by product name or description..." class="form-control" />
+            <input v-model="filters.keyword" type="text" placeholder="Search by product name or description..."
+              class="form-control" />
           </div>
 
           <div class="col-md-6">
@@ -88,7 +89,8 @@
                 <span class="visually-hidden">Loading categories...</span>
               </div>
             </div>
-            <select v-else v-model="filters.categoryIds" multiple class="form-select" :disabled="!categories.length" size="3">
+            <select v-else v-model="filters.categoryIds" multiple class="form-select" :disabled="!categories.length"
+              size="3">
               <option v-for="category in categories" :key="category.id" :value="category.id">
                 {{ category.name }}
               </option>
@@ -195,9 +197,11 @@
 </template>
 
 <script setup lang="ts">
-import { listBrand, type Brand } from '@/services/product/brand.service';
-import { listCategory, type Category } from '@/services/product/category.service';
-import { deleteProduct, listProduct, ProductStatus, type ListProductFilters, type Product } from '@/services/product/product.service';
+import type { ListProductFilters, Product } from '@/services/product/product.admin.interface';
+import { deleteProduct, listProduct } from '@/services/product/product.admin.service';
+import type { Brand, Category } from '@/services/product/product.common.interface';
+import { ProductStatus } from '@/services/product/product.common.interface';
+import { listBrand, listCategory } from '@/services/product/product.common.service';
 import { useFlashStore } from '@/stores/flash.store';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -216,6 +220,12 @@ const products = ref<Product[]>([]);
 const isLoadingBrands = ref<boolean>(true);
 const isLoadingCategories = ref<boolean>(true);
 const isLoadingProducts = ref<boolean>(true);
+const metadata = reactive({
+  currentPage: 1,
+  pageSize: 20,
+  totalPages: 1,
+  totalRecords: 0
+});
 const filters = reactive<ListProductFilters>({
   id: undefined,
   keyword: undefined,
@@ -226,15 +236,10 @@ const filters = reactive<ListProductFilters>({
   isActive: undefined,
   brandId: undefined,
   categoryIds: [],
-  page: 1,
-  size: 20
+  page: metadata.currentPage,
+  size: metadata.pageSize
 });
-const metadata = reactive({
-  currentPage: 1,
-  pageSize: 20,
-  totalPages: 1,
-  totalRecords: 0
-});
+
 
 const getProductImage = (image: string | null): string => {
   if (!image) {
@@ -254,10 +259,10 @@ const formatStatusLabel = (status: ProductStatus): string => {
 
 const loadBrands = async () => {
   try {
-    const response = await listBrand();
-    brands.value = response.data;
+    const { data } = await listBrand();
+    brands.value = data;
   } catch (error) {
-    toast.error('Failed to load brands. Please try again.');
+    toast.error('Failed to load brands');
   } finally {
     isLoadingBrands.value = false;
   }
@@ -265,10 +270,10 @@ const loadBrands = async () => {
 
 const loadCategories = async () => {
   try {
-    const response = await listCategory();
-    categories.value = response.data;
+    const { data } = await listCategory();
+    categories.value = data;
   } catch (error) {
-    toast.error('Failed to load categories. Please try again.');
+    toast.error('Failed to load categories');
   } finally {
     isLoadingCategories.value = false;
   }
@@ -293,12 +298,11 @@ const handleActiveStateChange = () => {
 const applyFilters = async (event?: MouseEvent) => {
   isLoadingProducts.value = true;
   try {
-    filters.page = metadata.currentPage;
     const response = await listProduct(filters);
     products.value = response.data;
     Object.assign(metadata, response.metadata);
   } catch (error) {
-    toast.error('Failed to load products. Please try again.');
+    toast.error('Failed to load products');
   } finally {
     isLoadingProducts.value = false;
   }
@@ -344,7 +348,7 @@ const handleDelete = async (productId: number) => {
     // Refresh the product list
     applyFilters();
   } catch (error) {
-    toast.error('Failed to delete the product. Please try again.');
+    toast.error('Failed to delete the product');
   }
 };
 

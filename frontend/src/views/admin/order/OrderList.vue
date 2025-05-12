@@ -165,7 +165,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { toast } from 'vue3-toastify';
-import { listOrder, OrderStatus, type ListOrderFilters, type Order } from '@/services/order/order.service';
+import { listOrder, OrderStatus, type ListOrderFilters, type Order } from '@/services/order/order.admin.service';
 
 const orders = ref<Order[]>([]);
 const isLoadingOrders = ref(true);

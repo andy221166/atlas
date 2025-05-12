@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { getProfile } from '@/services/user/user.service';
+import { getProfile } from '@/services/user/user.admin.service';
 import { useUserStore } from '@/stores/user.store';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';

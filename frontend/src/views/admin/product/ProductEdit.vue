@@ -146,14 +146,14 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { listBrand, type Brand } from '@/services/product/brand.service';
+import { listBrand, type Brand } from '@/services/product/product.common.service';
 import { listCategory, type Category } from '@/services/product/category.service';
 import {
   ProductStatus,
   getProduct,
   updateProduct,
   type UpdateProductRequest
-} from '@/services/product/product.service';
+} from '@/services/product/product.admin.service';
 import { toast } from 'vue3-toastify';
 import { useFlashStore } from '@/stores/flash.store';
 

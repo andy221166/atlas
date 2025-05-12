@@ -150,13 +150,13 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { listBrand, type Brand } from '@/services/product/brand.service';
+import { listBrand, type Brand } from '@/services/product/product.common.service';
 import { listCategory, type Category } from '@/services/product/category.service';
 import {
   ProductStatus,
   createProduct,
   type CreateProductRequest
-} from '@/services/product/product.service';
+} from '@/services/product/product.admin.service';
 import { toast } from 'vue3-toastify';
 import { useFlashStore } from '@/stores/flash.store';
 

@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { listUser, type ListUserFilters, type User } from '@/services/user/user.service';
+import { listUser, type ListUserFilters, type User } from '@/services/user/user.admin.service';
 import { toast } from 'vue3-toastify';
 
 const users = ref<User[]>([]);

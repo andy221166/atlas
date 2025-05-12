@@ -1,84 +1,6 @@
-import type { ApiResponse } from '../api.interface.ts'
-import apiClient from '../apiClient.ts'
-import type { Brand } from './brand.service'
-import type { Category } from './category.service'
-
-export interface Product {
-  id: number
-  name: string
-  image: string
-  price: number
-  quantity: number
-  status: ProductStatus
-  availableFrom: string
-  isActive: boolean
-}
-
-export interface GetProductResponse extends Product {
-  brand: Brand;
-  details: ProductDetails;
-  attributes: ProductAttribute[];
-  categories: Category[];
-}
-
-export interface ProductDetails {
-  description: string;
-};
-
-export interface ProductAttribute {
-  id: number;
-  name: string;
-  value: string;
-}
-
-export interface ListProductFilters {
-  id?: number
-  keyword?: string
-  minPrice?: number | null
-  maxPrice?: number | null
-  status?: ProductStatus | ''
-  availableFrom?: string
-  isActive?: boolean | null
-  brandId?: number
-  categoryIds?: number[]
-  page: number
-  size: number
-}
-
-export enum ProductStatus {
-  IN_STOCK = 'IN_STOCK',
-  OUT_STOCK = 'OUT_STOCK',
-  DISCONTINUED = 'DISCONTINUED'
-}
-
-export interface CreateProductRequest {
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-  status: ProductStatus;
-  availableFrom: string;
-  isActive: boolean;
-  brandId: number;
-  details: ProductDetails;
-  attributes: Omit<ProductAttribute, 'id'>[];
-  categoryIds: number[];
-}
-
-export interface UpdateProductRequest {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-  status: ProductStatus;
-  availableFrom: string;
-  isActive: boolean;
-  brandId: number;
-  details: ProductDetails;
-  attributes: ProductAttribute[];
-  categoryIds: number[];
-}
+import type { CreateProductRequest, ListProductFilters, Product, UpdateProductRequest } from '@/interfaces/product.interface.ts';
+import type { ApiResponse } from '../api.interface.ts';
+import apiClient from '../apiClient.ts';
 
 export const listProduct = async (filters: ListProductFilters): Promise<ApiResponse<Product[]>> => {
   const queryParams = new URLSearchParams();
@@ -98,7 +20,7 @@ export const listProduct = async (filters: ListProductFilters): Promise<ApiRespo
   return response.data;
 }
 
-export const getProduct = async (productId: number): Promise<ApiResponse<GetProductResponse>> => {
+export const getProduct = async (productId: number): Promise<ApiResponse<Product>> => {
   const response = await apiClient.get(`/api/admin/products/${productId}`);
   return response.data;
 };
