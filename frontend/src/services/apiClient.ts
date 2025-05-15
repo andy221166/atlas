@@ -1,5 +1,5 @@
 // src/services/apiClient.ts
-import router from '@/router';
+import router from '@/router/index.ts';
 import { generateDeviceId } from '@/utils/deviceIdGenerator.ts';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'vue3-toastify';

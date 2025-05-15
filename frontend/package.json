@@ -1,5 +1,5 @@
 {
-  "name": "atlas-admin",
+  "name": "atlas",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,9 +13,11 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.1.1",
     "axios": "^1.9.0",
     "npx": "^10.2.2",
     "pinia": "^3.0.1",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue3-toastify": "^0.2.8"
