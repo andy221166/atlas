@@ -10,6 +10,7 @@ import org.atlas.domain.order.entity.OrderEntity;
 import org.atlas.domain.order.entity.ProductEntity;
 import org.atlas.domain.order.entity.UserEntity;
 import org.atlas.framework.domain.exception.DomainException;
+import org.atlas.framework.domain.service.DomainService;
 import org.atlas.framework.error.AppError;
 import org.atlas.framework.internalapi.product.ProductApiPort;
 import org.atlas.framework.internalapi.product.model.ListProductRequest;
@@ -20,7 +21,7 @@ import org.atlas.framework.internalapi.user.model.UserResponse;
 import org.atlas.framework.objectmapper.ObjectMapperUtil;
 
 @RequiredArgsConstructor
-public class OrderAggregator {
+public class OrderAggregator implements DomainService {
 
   private final UserApiPort userApiPort;
   private final ProductApiPort productApiPort;

@@ -3,22 +3,22 @@
     <div class="p-3">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <router-link to="/dashboard" class="nav-link text-white">
+          <router-link to="/admin/dashboard" class="nav-link text-white">
             <i class="bi bi-speedometer2 me-2"></i>Dashboard
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/user" class="nav-link text-white">
+          <router-link to="/admin/user" class="nav-link text-white">
             <i class="bi bi-people me-2"></i>User Management
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/product" class="nav-link text-white">
+          <router-link to="/admin/product" class="nav-link text-white">
             <i class="bi bi-box-seam me-2"></i>Product Management
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/order" class="nav-link text-white">
+          <router-link to="/admin/order" class="nav-link text-white">
             <i class="bi bi-cart-check me-2"></i>Order Management
           </router-link>
         </li>

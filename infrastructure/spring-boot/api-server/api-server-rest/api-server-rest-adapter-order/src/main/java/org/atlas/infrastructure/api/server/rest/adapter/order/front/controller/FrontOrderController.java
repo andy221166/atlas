@@ -63,7 +63,9 @@ public class FrontOrderController {
         .endDate(endDate)
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
+
     PagingResult<OrderEntity> orderEntityPage = frontListOrderUseCaseHandler.handle(input);
+
     PagingResult<OrderResponse> orderResponsePage = ObjectMapperUtil.getInstance()
         .mapPage(orderEntityPage, OrderResponse.class);
     return ApiResponseWrapper.successPage(orderResponsePage);

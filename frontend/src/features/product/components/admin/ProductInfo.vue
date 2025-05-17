@@ -89,11 +89,13 @@
 </template>
 
 <script setup lang="ts">
-import { deleteProduct, getProduct } from '@/services/product/product.admin.service';
+import { useFlashStore } from '@/stores/flash.store';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
-import { useFlashStore } from '@/stores/flash.store';
+import { deleteProduct } from '../../services/product.admin.service';
+import { getProduct } from '../../services/product.front.service';
+import { getProductImageUrl } from '../../utils/product.util';
 
 const router = useRouter();
 const route = useRoute();

@@ -39,7 +39,7 @@ export interface SearchProductFilters {
   keyword?: string;
   minPrice?: number;
   maxPrice?: number;
-  brandId?: number;
+  brandId?: string;
   categoryIds?: number[];
   page: number;
   size: number;

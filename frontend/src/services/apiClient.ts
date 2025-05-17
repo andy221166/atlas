@@ -5,11 +5,11 @@ import axios, { AxiosError } from 'axios';
 import { toast } from 'vue3-toastify';
 import type { ApiResponse } from './api.interface.ts';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const DEVICE_ID_HEADER = 'X-Device-Id';
 
 const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
   timeout: 30000, // 30 seconds timeout
   headers: {
     'Content-Type': 'application/json'
@@ -21,7 +21,6 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    console.log('Request interceptor triggered');
     config.headers = config.headers || {};
 
     // Add deviceId header
@@ -55,7 +54,7 @@ apiClient.interceptors.response.use(
       if (refreshToken && originalRequest) {
         try {
           // Call your refresh token endpoint
-          const refreshTokenResponse = await axios.post(`${API_URL}/api/auth/refresh-token`, {
+          const refreshTokenResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh-token`, {
             refreshToken
           }, {
             headers: {

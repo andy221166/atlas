@@ -1,14 +1,12 @@
-import type { ApiResponse } from "../api.interface.ts";
-import apiClient from "../apiClient.ts";
-import type { ListUserFilters, User } from "./user.admin.interface.ts";
+import type { ApiResponse } from "@/services/api.interface";
+import apiClient from "@/services/apiClient";
+import type { ListUserFilters, User } from "../types/user.interface";
 
 export const listUser = async (filters: ListUserFilters): Promise<ApiResponse<User[]>> => {
   // Build query parameters
   const queryParams = new URLSearchParams()
   if (filters.id) queryParams.append('id', filters.id)
-  if (filters.username) queryParams.append('username', filters.username)
-  if (filters.email) queryParams.append('email', filters.email)
-  if (filters.phoneNumber) queryParams.append('phoneNumber', filters.phoneNumber)
+  if (filters.keyword) queryParams.append('keyword', filters.keyword)
   queryParams.append('page', filters.page.toString())
   queryParams.append('size', filters.size.toString())
 

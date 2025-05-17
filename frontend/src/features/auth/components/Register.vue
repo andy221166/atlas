@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import type { RegisterRequest } from '@/services/user/user.front.interface';
-import { register } from '@/services/user/user.front.service';
+import { register } from '@/features/user/services/user.front.service';
+import type { RegisterRequest } from '@/features/user/types/user.interface';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 

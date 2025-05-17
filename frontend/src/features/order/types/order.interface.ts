@@ -19,9 +19,8 @@ export interface OrderItem {
 
 export enum OrderStatus {
   PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
+  CONFIRMED = 'CONFIRMED',
+  CANCELED = 'CANCELED',
 }
 
 export interface PlaceOrderRequest {
@@ -29,11 +28,16 @@ export interface PlaceOrderRequest {
 }
 
 export interface ListOrderFilters {
-  id?: number;
+  orderId?: number;
   userId?: number;
   status: OrderStatus | '';
   startDate?: string;
   endDate?: string;
   page: number
   size: number
+}
+
+export interface GetOrderStatusResponse {
+  status: OrderStatus;
+  canceledReason: string;
 }

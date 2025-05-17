@@ -4,8 +4,13 @@
       <router-link class="navbar-brand" to="/">Atlas</router-link>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item">
+          <!-- Order History now only shown for non-admin users -->
+          <li v-if="userStore.isAuthenticated && userStore.userRole !== 'ADMIN'" class="nav-item">
             <router-link to="/order-history" class="nav-link">Order History</router-link>
+          </li>
+          <!-- Admin Dashboard menu item, only visible to admin users -->
+          <li v-if="userStore.isAuthenticated && userStore.userRole === 'ADMIN'" class="nav-item">
+            <router-link to="/admin" class="nav-link">Admin Dashboard</router-link>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto d-flex align-items-center">
@@ -13,10 +18,11 @@
             <span class="text-light me-3">Welcome, {{ userStore.fullName }}</span>
           </li>
           <li v-if="userStore.isAuthenticated" class="nav-item">
-            <button class="btn btn-sm btn-danger" @click="handleLogout">Logout</button>
+            <button class="btn btn-danger" @click="handleLogout">Logout</button>
           </li>
           <li v-else class="nav-item">
-            <router-link to="/register" class="btn btn-sm btn-primary">Register</router-link>
+            <router-link to="/login" class="btn btn-success me-3">Login</router-link>
+            <router-link to="/register" class="btn btn-light">Register</router-link>
           </li>
         </ul>
       </div>
@@ -35,6 +41,6 @@ const router = useRouter()
 const handleLogout = async () => {
   await logout();
   userStore.clearAuth();
-  router.push({ name: 'home' });
+  router.push({ name: 'storeFront' });
 }
 </script>

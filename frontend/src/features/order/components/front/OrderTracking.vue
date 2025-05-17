@@ -1,11 +1,11 @@
 <template>
-  <div v-if="orderId" class="order-tracking card shadow-sm mt-3">
+  <div v-if="currentOrderId" class="order-tracking card shadow-sm mt-3">
     <div class="card-body">
       <h6 class="card-title text-center text-primary mb-3">Order Tracking</h6>
 
       <div class="d-flex justify-content-between">
         <span class="text-muted">Order ID:</span>
-        <span class="fw-bold">{{ orderId }}</span>
+        <span class="fw-bold">{{ currentOrderId }}</span>
       </div>
 
       <!-- Short polling updates -->
@@ -13,7 +13,7 @@
         <h6 class="text-secondary">Short Polling Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(orderStatuses.shortPolling)">
+          <span :class="getOrderStatusBadgeClasses(orderStatuses.shortPolling)">
             {{ orderStatuses.shortPolling }}
           </span>
         </div>
@@ -28,7 +28,7 @@
         <h6 class="text-secondary">SSE Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(orderStatuses.sse)">
+          <span :class="getOrderStatusBadgeClasses(orderStatuses.sse)">
             {{ orderStatuses.sse }}
           </span>
         </div>
@@ -43,7 +43,7 @@
         <h6 class="text-secondary">WebSocket Updates</h6>
         <div class="d-flex justify-content-between mt-2">
           <span class="text-muted">Status:</span>
-          <span :class="applyBadgeClass(orderStatuses.ws)">
+          <span :class="getOrderStatusBadgeClasses(orderStatuses.ws)">
             {{ orderStatuses.ws }}
           </span>
         </div>
@@ -56,166 +56,167 @@
   </div>
 </template>
 
-<script>
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {Stomp} from "@stomp/stompjs";
-import SockJS from "sockjs-client";
-import {api} from "@/api";
-import {applyBadgeClass} from "@/utils/orderStatusBadgeClass";
-import {toast} from "vue3-toastify";
+<script setup lang="ts">
+import { useCartStore } from '@/stores/cart.store';
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { toast } from 'vue3-toastify';
+import { getOrderStatus } from '../../services/order.front.service';
+import { OrderStatus } from '../../types/order.interface';
+import { getOrderStatusBadgeClasses } from '../../utils/order.util';
 
-export default {
-  props: {
-    orderId: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    // Create reactive objects using ref
-    const orderStatuses = ref({
-      shortPolling: 'PROCESSING',
-      sse: 'PROCESSING',
-      ws: 'PROCESSING'
-    });
+interface OrderStatuses {
+  shortPolling: string;
+  sse: string;
+  ws: string;
+}
 
-    const canceledReasons = ref({
-      shortPolling: null,
-      sse: null,
-      ws: null
-    });
+interface CanceledReasons {
+  shortPolling: string | null;
+  sse: string | null;
+  ws: string | null;
+}
 
-    let pollingInterval = null;
-    let stompClient = null;
-    let eventSource = null;
+const cartStore = useCartStore();
+const currentOrderId = computed(() => cartStore.currentOrderId?.toString() || '');
 
-    const updateOrderStatus = (type, status, reason) => {
-      orderStatuses.value[type] = status;
-      canceledReasons.value[type] = reason || null;
-    };
+// Create reactive objects using ref
+const orderStatuses = ref<OrderStatuses>({
+  shortPolling: 'PROCESSING',
+  sse: 'PROCESSING',
+  ws: 'PROCESSING'
+});
 
-    const startShortPolling = (orderId) => {
-      const pollOrder = async () => {
-        try {
-          const { data } = await api.orders.getStatus(orderId);
-          if (data.success) {
-            const { status, canceledReason } = data.data;
-            updateOrderStatus('shortPolling', status, canceledReason);
-            if (status === "CONFIRMED" || status === "CANCELED") {
-              stopShortPolling();
-            }
-          } else {
-            toast.error(data.message);
-          }
-        } catch (error) {
-          toast.error("Error fetching order: " + error.message);
-        }
-      };
+const canceledReasons = ref<CanceledReasons>({
+  shortPolling: null,
+  sse: null,
+  ws: null
+});
 
-      pollingInterval = setInterval(pollOrder, 3000);
-    };
+let pollingInterval: ReturnType<typeof setInterval> | null = null;
+let stompClient: any = null;
+let eventSource: EventSource | null = null;
 
-    const stopShortPolling = () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        pollingInterval = null;
-      }
-    };
+const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATION_BASE_URL;
 
-    const connectSSE = (orderId) => {
-      if (eventSource) eventSource.close();
-
-      eventSource = new EventSource(api.notifications.getSSEUrl(orderId));
-
-      eventSource.addEventListener('open', (event) => {
-        console.log('SSE connection established', event);
-      });
-
-      // Listen specifically for ORDER_STATUS_CHANGED events
-      eventSource.addEventListener('ORDER_STATUS_CHANGED', (event) => {
-        console.log('SSE received ORDER_STATUS_CHANGED event:', event.data);
-        try {
-          const data = JSON.parse(event.data);
-          updateOrderStatus('sse', data.orderStatus, data.canceledReason);
-        } catch (error) {
-          console.error('SSE error parsing message: ' + error.message);
-        }
-      });
-
-      eventSource.addEventListener('error', (error) => {
-        console.error('SSE connection error:', error);
-        if (eventSource.readyState === EventSource.CLOSED) {
-          console.log('SSE connection closed');
-        }
-      });
-    };
-
-    const connectWebSocket = (orderId) => {
-      if (stompClient) stompClient.disconnect();
-
-      const socket = new SockJS(api.notifications.getWebSocketUrl());
-      stompClient = Stomp.over(socket);
-
-      stompClient.onStompError = (frame) => {
-        console.error('WebSocket connection error:', frame);
-      };
-
-      stompClient.connect({}, () => {
-        stompClient.subscribe(`/topic/orders/${orderId}/status`, (message) => {
-          const { orderStatus, canceledReason } = JSON.parse(message.body);
-          updateOrderStatus('ws', orderStatus, canceledReason);
-        });
-      });
-    };
-
-    const cleanup = () => {
-      stopShortPolling();
-      if (stompClient) {
-        stompClient.disconnect();
-        stompClient = null;
-      }
-      if (eventSource) {
-        eventSource.close();
-        eventSource = null;
-      }
-    };
-
-    const resetOrderTrackingInfo = () => {
-      Object.keys(orderStatuses.value).forEach(key => {
-        orderStatuses.value[key] = "PROCESSING";
-      });
-      Object.keys(canceledReasons.value).forEach(key => {
-        canceledReasons.value[key] = null;
-      });
-    };
-
-    watch(() => props.orderId, (newOrderId) => {
-      resetOrderTrackingInfo();
-      if (newOrderId) {
-        startShortPolling(newOrderId);
-        connectSSE(newOrderId);
-        connectWebSocket(newOrderId);
-      } else {
-        cleanup();
-      }
-    });
-
-    onMounted(() => {
-      if (props.orderId) {
-        startShortPolling(props.orderId);
-        connectSSE(props.orderId);
-        connectWebSocket(props.orderId);
-      }
-    });
-
-    onBeforeUnmount(cleanup);
-
-    return {
-      orderId: computed(() => props.orderId),
-      orderStatuses,
-      canceledReasons,
-      applyBadgeClass,
-    };
-  },
+const updateOrderStatus = (type: keyof OrderStatuses, status: string, reason: string | null = null): void => {
+  orderStatuses.value[type] = status;
+  canceledReasons.value[type] = reason;
 };
+
+const startShortPolling = (orderId: string): void => {
+  const pollOrder = async (): Promise<void> => {
+    try {
+      const response = await getOrderStatus(parseInt(orderId));
+      if (response.success && response.data) {
+        const { status, canceledReason } = response.data;
+        updateOrderStatus('shortPolling', status, canceledReason || null);
+        if (status == OrderStatus.CONFIRMED || status == OrderStatus.CANCELED) {
+          stopShortPolling();
+        }
+      } else {
+        toast.error(response.errorMessage || 'Failed to fetch order status');
+      }
+    } catch (error: any) {
+      console.error('Error in short polling:', error);
+      toast.error('Error fetching order status: ' + (error.message || 'Unknown error'));
+    }
+  };
+
+  // Initial poll
+  pollOrder();
+
+  // Set up interval for polling
+  pollingInterval = setInterval(pollOrder, 5000);
+};
+
+const stopShortPolling = (): void => {
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+    pollingInterval = null;
+  }
+};
+
+const connectSSE = (orderId: string): void => {
+  if (eventSource) eventSource.close();
+
+  eventSource = new EventSource(`${NOTIFICATION_BASE_URL}/notification/sse/orders/${orderId}/status`);
+
+  eventSource.addEventListener('open', (event: Event) => {
+    console.log('SSE connection established', event);
+  });
+
+  // Listen specifically for ORDER_STATUS_CHANGED events
+  eventSource.addEventListener('ORDER_STATUS_CHANGED', (event: MessageEvent) => {
+    console.log('SSE received ORDER_STATUS_CHANGED event:', event.data);
+    try {
+      const data = JSON.parse(event.data);
+      updateOrderStatus('sse', data.orderStatus, data.canceledReason || null);
+    } catch (error: any) {
+      console.error('SSE error parsing message: ' + error.message);
+    }
+  });
+
+  eventSource.addEventListener('error', (error: Event) => {
+    console.error('SSE connection error:', error);
+    if (eventSource?.readyState === EventSource.CLOSED) {
+      console.log('SSE connection closed');
+    }
+  });
+};
+
+const connectWebSocket = (orderId: string): void => {
+  if (stompClient) stompClient.disconnect();
+
+  const socket = new SockJS(`${NOTIFICATION_BASE_URL}/notification/ws`);
+  stompClient = Stomp.over(socket);
+
+  stompClient.onStompError = (frame: any): void => {
+    console.error('WebSocket connection error:', frame);
+  };
+
+  stompClient.connect({}, () => {
+    stompClient.subscribe(`/topic/orders/${orderId}/status`, (message: { body: string }) => {
+      const { orderStatus, canceledReason } = JSON.parse(message.body);
+      updateOrderStatus('ws', orderStatus, canceledReason || null);
+    });
+  });
+};
+
+const cleanup = (): void => {
+  stopShortPolling();
+  if (stompClient) {
+    stompClient.disconnect();
+    stompClient = null;
+  }
+  if (eventSource) {
+    eventSource.close();
+    eventSource = null;
+  }
+};
+
+const resetOrderTrackingInfo = (): void => {
+  (Object.keys(orderStatuses.value) as Array<keyof OrderStatuses>).forEach((key) => {
+    orderStatuses.value[key] = 'PROCESSING';
+  });
+  (Object.keys(canceledReasons.value) as Array<keyof CanceledReasons>).forEach((key) => {
+    canceledReasons.value[key] = null;
+  });
+};
+
+watch(() => currentOrderId.value, (newOrderId) => {
+  resetOrderTrackingInfo();
+  if (newOrderId) {
+    startShortPolling(newOrderId);
+    connectSSE(newOrderId);
+    connectWebSocket(newOrderId);
+  } else {
+    cleanup();
+  }
+}, { immediate: true });
+
+onBeforeUnmount(() => {
+  cleanup();
+});
 </script>

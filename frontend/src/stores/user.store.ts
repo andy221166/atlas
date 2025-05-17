@@ -1,10 +1,10 @@
+import type { User } from '@/features/user/types/user.interface';
 import { defineStore } from 'pinia';
-import type { Profile } from '@/services/user/user.common.interface';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     authenticated: false,
-    profile: null as Profile | null,
+    profile: null as User | null,
     accessToken: localStorage.getItem('accessToken'),
     refreshToken: localStorage.getItem('refreshToken')
   }),
@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
     getRefreshToken() {
       return this.refreshToken;
     },
-    setProfile(profile: Profile) {
+    setProfile(profile: User) {
       this.profile = profile;
     },
     clearAuth() {

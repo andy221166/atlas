@@ -144,18 +144,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { listBrand, type Brand } from '@/services/product/product.common.service';
-import { listCategory, type Category } from '@/services/product/category.service';
-import {
-  ProductStatus,
-  getProduct,
-  updateProduct,
-  type UpdateProductRequest
-} from '@/services/product/product.admin.service';
-import { toast } from 'vue3-toastify';
 import { useFlashStore } from '@/stores/flash.store';
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
+import { updateProduct } from '../../services/product.admin.service';
+import { listBrand, listCategory } from '../../services/product.common.service';
+import { getProduct } from '../../services/product.front.service';
+import { ProductStatus } from '../../types/product.enum';
+import type { Brand, Category, UpdateProductRequest } from '../../types/product.interface';
 
 const router = useRouter();
 const route = useRoute();

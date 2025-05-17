@@ -1,11 +1,11 @@
 import type { ApiResponse } from "@/services/api.interface";
 import apiClient from "@/services/apiClient";
-import type { ListOrderFilters, Order, PlaceOrderRequest } from "../types/order.interface";
+import type { GetOrderStatusResponse, ListOrderFilters, Order, PlaceOrderRequest } from "../types/order.interface";
 
 export const listOrder = async (filters: ListOrderFilters): Promise<ApiResponse<Order[]>> => {
   // Build query parameters
   const queryParams = new URLSearchParams()
-  if (filters.id) queryParams.append('id', filters.id.toString())
+  if (filters.orderId) queryParams.append('orderId', filters.orderId.toString())
   if (filters.status) queryParams.append('status', filters.status)
   if (filters.startDate) queryParams.append('startDate', filters.startDate)
   if (filters.endDate) queryParams.append('endDate', filters.endDate)
@@ -20,3 +20,8 @@ export const placeOrder = async (data: PlaceOrderRequest): Promise<ApiResponse<n
   const response = await apiClient.post('/api/front/orders/place', data);
   return response.data;
 };
+
+export const getOrderStatus = async (orderId: number): Promise<ApiResponse<GetOrderStatusResponse>> => {
+  const response = await apiClient.get(`/api/front/orders/${orderId}/status`);
+  return response.data;
+}

@@ -26,11 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { getProfile } from '@/services/user/user.admin.service';
+import { getProfile } from '@/features/user/services/user.common.service';
 import { useUserStore } from '@/stores/user.store';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '../../../services/auth/auth.service';
+import { login } from '../services/auth.service';
 
 const username = ref<string>('');
 const password = ref<string>('');
@@ -42,7 +42,9 @@ const router = useRouter();
 
 const handleLogin = async () => {
   try {
+    // Try login
     const loginResponse = await login(username.value, password.value);
+
     // Store tokens first
     userStore.setTokens(loginResponse.data.accessToken, loginResponse.data.refreshToken);
 
@@ -51,9 +53,17 @@ const handleLogin = async () => {
       const profileResponse = await getProfile();
       successMessage.value = 'You logged in successfully!';
       userStore.setProfile(profileResponse.data);
-      setTimeout(() => {
-        router.push({ name: 'home' });
+
+      // Redirect
+      if (profileResponse.data.role === 'ADMIN') {
+        setTimeout(() => {
+        router.push({ name: 'adminDashboard' });
       }, 1000);
+      } else {
+        setTimeout(() => {
+        router.push({ name: 'storeFront' });
+      }, 1000);
+      }
     } catch (error) {
       userStore.clearAuth();
       errorMessage.value = 'Failed to fetch profile. Please try again.';

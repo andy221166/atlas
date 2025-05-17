@@ -12,7 +12,7 @@ export const searchProduct = async (filters: SearchProductFilters): Promise<ApiR
   queryParams.append('page', filters.page.toString());
   queryParams.append('size', filters.size.toString());
   
-  const response = await apiClient.get('/api/front/products/search', { params: queryParams });
+  const response = await apiClient.get('/api/front/products', { params: queryParams });
   return response.data;
 };
 

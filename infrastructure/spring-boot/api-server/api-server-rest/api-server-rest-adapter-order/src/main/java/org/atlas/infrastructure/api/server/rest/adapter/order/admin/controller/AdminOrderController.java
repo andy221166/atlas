@@ -33,8 +33,8 @@ public class AdminOrderController {
   @Operation(summary = "List Orders", description = "Retrieves a paginated list of orders.")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponseWrapper<List<OrderResponse>> listOrder(
-      @Parameter(name = "id", description = "ID", example = "1")
-      @RequestParam(name = "id", required = false) Integer id,
+      @Parameter(name = "orderId", description = "Order ID", example = "1")
+      @RequestParam(name = "orderId", required = false) Integer orderId,
       @Parameter(name = "userId", description = "User ID", example = "1")
       @RequestParam(name = "userId", required = false) Integer userId,
       @Parameter(name = "status", description = "Order status")
@@ -49,14 +49,16 @@ public class AdminOrderController {
       @RequestParam(name = "size", required = false, defaultValue = CommonConstant.DEFAULT_PAGE_SIZE_STR) Integer size
   ) throws Exception {
     AdminListOrderInput input = AdminListOrderInput.builder()
-        .orderId(id)
+        .orderId(orderId)
         .userId(userId)
         .status(status)
         .startDate(startDate)
         .endDate(endDate)
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
+
     PagingResult<OrderEntity> orderEntityPage = adminListOrderUseCaseHandler.handle(input);
+
     PagingResult<OrderResponse> orderResponsePage = ObjectMapperUtil.getInstance()
         .mapPage(orderEntityPage, OrderResponse.class);
     return ApiResponseWrapper.successPage(orderResponsePage);

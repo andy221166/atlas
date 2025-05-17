@@ -5,9 +5,7 @@ export const login = async (identifier: string, password: string) => {
     identifier,
     password,
   });
-  const { data } = response.data;
-  localStorage.setItem('accessToken', data.accessToken);
-  localStorage.setItem('refreshToken', data.refreshToken);
+  return response.data;
 };
 
 export const logout = async () => {

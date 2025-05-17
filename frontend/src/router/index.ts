@@ -11,13 +11,13 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'StoreFront',
+        name: 'storeFront',
         component: () => import('@/pages/front/StoreFront.vue'),
       },
       {
         path: '/order-history',
-        name: 'OrderHistory',
-        component: () => import('@/features/order/components/front/OrderHistoy.vue'),
+        name: 'orderHistory',
+        component: () => import('@/features/order/components/front/OrderHistory.vue'),
         meta: { requiresAuth: true }
       },
     ],
@@ -27,42 +27,42 @@ const routes = [
     component: AdminLayout,
     children: [
       {
-        path: '',
-        name: 'Dashboard',
+        path: '/admin/dashboard',
+        name: 'adminDashboard',
         component: () => import('@/pages/admin/Dashboard.vue'),
       },
       {
-        path: '/user',
+        path: '/admin/user',
         name: 'adminUserList',
         component: () => import('@/features/user/components/admin/UserList.vue'),
         meta: { requiresAdmin: true }
       },
       {
-        path: '/product',
+        path: '/admin/product',
         name: 'adminProductList',
         component: () => import('@/features/product/components/admin/ProductList.vue'),
         meta: { requiresAdmin: true }
       },
       {
-        path: '/product/:id',
+        path: '/admin/product/:id',
         name: 'adminProductInfo',
         component: () => import('@/features/product/components/admin/ProductInfo.vue'),
         meta: { requiresAdmin: true }
       },
       {
-        path: '/product/add',
+        path: '/admin/product/add',
         name: 'adminProductAdd',
         component: () => import('@/features/product/components/admin/ProductAdd.vue'),
         meta: { requiresAdmin: true }
       },
       {
-        path: '/product/:id/edit',
+        path: '/admin/product/:id/edit',
         name: 'adminProductEdit',
         component: () => import('@/features/product/components/admin/ProductEdit.vue'),
         meta: { requiresAdmin: true }
       },
       {
-        path: '/order',
+        path: '/admin/order',
         name: 'adminOrderList',
         component: () => import('@/features/order/components/admin/OrderList.vue'),
         meta: { requiresAdmin: true }

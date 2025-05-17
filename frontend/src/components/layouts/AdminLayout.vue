@@ -10,4 +10,5 @@
 
 <script setup lang="ts">
 import NavBar from '../common/NavBar.vue';
+import Sidebar from '../common/Sidebar.vue';
 </script>

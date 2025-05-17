@@ -101,7 +101,9 @@ public class AdminProductController {
         .categoryIds(categoryIds)
         .pagingRequest(PagingRequest.of(page - 1, size))
         .build();
+
     PagingResult<ProductEntity> productEntityPage = adminListProductUseCaseHandler.handle(input);
+
     PagingResult<ProductResponse> productResponsePage = ObjectMapperUtil.getInstance()
         .mapPage(productEntityPage, ProductResponse.class);
     return ApiResponseWrapper.successPage(productResponsePage);

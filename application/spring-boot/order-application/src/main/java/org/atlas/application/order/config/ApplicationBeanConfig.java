@@ -1,6 +1,7 @@
 package org.atlas.application.order.config;
 
 import org.atlas.framework.domain.event.handler.EventHandler;
+import org.atlas.framework.domain.service.DomainService;
 import org.atlas.framework.usecase.handler.UseCaseHandler;
 import org.atlas.infrastructure.bootstrap.ApplicationBeanRegistrar;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +20,11 @@ public class ApplicationBeanConfig {
   public static ApplicationBeanRegistrar eventHandlerRegistrar() {
     return new ApplicationBeanRegistrar(
         EventHandler.class,"org.atlas.domain.order.event");
+  }
+
+  @Bean
+  public static ApplicationBeanRegistrar serviceHandlerRegistrar() {
+    return new ApplicationBeanRegistrar(
+        DomainService.class,"org.atlas.domain.order.service");
   }
 }
