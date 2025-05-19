@@ -1,6 +1,10 @@
-import type { CartItem } from '@/features/order/types/cart.interface';
-import type { Product } from '@/features/product/types/product.interface';
+import type { Product } from '@/types/product.interface';
 import { defineStore } from 'pinia';
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -44,6 +48,9 @@ export const useCartStore = defineStore('cart', {
       this.cart = [];
       localStorage.removeItem('cart');
     },
+    getItemTotal(item: CartItem): number {
+      return item ? item.product.price * item.quantity : 0;
+    },    
     getTotal(): number {
       return this.cart
         .reduce((total, item) => total + item.product.price * item.quantity, 0);

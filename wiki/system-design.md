@@ -1,5 +1,7 @@
 # System Design
 
+https://scalabrix.medium.com/list/system-design-concepts-for-interviews-7b12980141be
+
 ## Twelve-factor applications
 
 The twelve-factor app is a collection of patterns for cloud-native application architectures, originally developed by engineers at Heroku. The patterns describe an application archetype that optimizes
