@@ -1,3 +1,20 @@
+CREATE DATABASE IF NOT EXISTS db_notification;
+
+CREATE TABLE IF NOT EXISTS outbox_message
+(
+    id              BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    message_payload TEXT         NOT NULL,
+    message_class   VARCHAR(255) NOT NULL,
+    message_key     VARCHAR(255) NOT NULL,
+    destination     VARCHAR(255) NOT NULL,
+    status          VARCHAR(20)  NOT NULL,
+    processed_at    DATETIME,
+    error           TEXT,
+    retries         TINYINT               DEFAULT 0,
+    created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB;
+
 -- https://github.com/quartznet/quartznet/blob/main/database/tables/tables_mysql_innodb.sql
 
 CREATE TABLE QRTZ_JOB_DETAILS
@@ -170,5 +187,3 @@ CREATE INDEX IDX_QRTZ_FT_J_G ON QRTZ_FIRED_TRIGGERS (SCHED_NAME, JOB_NAME, JOB_G
 CREATE INDEX IDX_QRTZ_FT_JG ON QRTZ_FIRED_TRIGGERS (SCHED_NAME, JOB_GROUP);
 CREATE INDEX IDX_QRTZ_FT_T_G ON QRTZ_FIRED_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP);
 CREATE INDEX IDX_QRTZ_FT_TG ON QRTZ_FIRED_TRIGGERS (SCHED_NAME, TRIGGER_GROUP);
-
-commit;

@@ -1,71 +1,77 @@
 #!/bin/bash
 
-# Ensures that the script exits immediately if any command fails, or if you try to use an undefined variable.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/logger.sh" || { log "Error: logger.sh could not be sourced."; exit 1; }
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-log "Building Docker image for user-service..."
-if docker build -t user-service ./service/user-service/user-application; then
-    log "Built Docker image for user-service successfully."
-else
-    error "Failed to build Docker image for user-service." >&2
+# Service definitions with name and build context
+APP_SERVICES=(
+    "user-service:$PROJECT_ROOT/application/spring-boot/user-application"
+    "product-service:$PROJECT_ROOT/application/spring-boot/product-application"
+    "order-service:$PROJECT_ROOT/application/spring-boot/order-application"
+    "notification-service:$PROJECT_ROOT/application/spring-boot/notification-application"
+    "discovery-server:$PROJECT_ROOT/edge/discovery-server/discovery-server-eureka"
+    "auth-server:$PROJECT_ROOT/edge/auth-server/auth-server-spring-security-jwt"
+    "api-gateway:$PROJECT_ROOT/edge/api-gateway/api-gateway-spring-cloud-gateway"
+)
+INFRA_SERVICES=(
+    "rabbitmq:$PROJECT_ROOT/deployment/local/compose/rabbitmq"
+)
+
+# Check for logger script
+if [ ! -f "$PROJECT_ROOT/deployment/util/logger.sh" ]; then
+    echo "Error: logger.sh not found at $PROJECT_ROOT/deployment/util/logger.sh"
+    exit 1
+fi
+source "$PROJECT_ROOT/deployment/util/logger.sh"
+
+# Function to print usage
+usage() {
+    echo "Usage: $0 {app|infra|all}"
+    echo "  app: Build images for application services"
+    echo "  infra: Build images for infrastructure services"
+    echo "  all: Build all images"
+    exit 1
+}
+
+# Validate input
+if [ $# -ne 1 ]; then
+    error "Exactly one argument is required."
+    usage
+fi
+
+# Determine services to build based on input
+case "$1" in
+    app)
+        SERVICES=("${APP_SERVICES[@]}")
+        ;;
+    infra)
+        SERVICES=("${INFRA_SERVICES[@]}")
+        ;;
+    all)
+        SERVICES=("${APP_SERVICES[@]}" "${INFRA_SERVICES[@]}")
+        ;;
+    *)
+        error "Invalid argument: $1"
+        usage
+        ;;
+esac
+
+# Validate services
+if [ "${#SERVICES[@]}" -eq 0 ]; then
+    error "No services specified to build."
     exit 1
 fi
 
-log "Building Docker image for product-service..."
-if docker build -t product-service ./service/product-service/product-application; then
-    log "Built Docker image for product-service successfully."
-else
-    error "Failed to build Docker image for product-service." >&2
-    exit 1
-fi
-
-log "Building Docker image for order-service..."
-if docker build -t order-service ./service/order-service/order-application; then
-    log "Built Docker image for order-service successfully."
-else
-    error "Failed to build Docker image for order-service." >&2
-    exit 1
-fi
-
-log "Building Docker image for notification-service..."
-if docker build -t notification-service ./service/notification-service; then
-    log "Built Docker image for notification-service successfully."
-else
-    error "Failed to build Docker image for notification-service." >&2
-    exit 1
-fi
-
-log "Building Docker image for eureka-server..."
-if docker build -t eureka-server ../../edge/discovery-server/eureka-server; then
-    log "Built Docker image for eureka-server successfully."
-else
-    error "Failed to build Docker image for eureka-server." >&2
-    exit 1
-fi
-
-log "Building Docker image for auth-server..."
-if docker build -t eureka-server ../../edge/auth-server/auth-server-spring-security-jwt; then
-    log "Built Docker image for auth-server successfully."
-else
-    error "Failed to build Docker image for auth-server." >&2
-    exit 1
-fi
-
-log "Building Docker image for api-gateway..."
-if docker build -t api-gateway ../../edge/api-gateway/api-gateway-spring-cloud-gateway; then
-    log "Built Docker image for api-gateway successfully."
-else
-    error "Failed to build Docker image for api-gateway." >&2
-    exit 1
-fi
-
-log "Pruning unused Docker images..."
-if docker image prune -f; then
-    log "Pruned Unused Docker images successfully."
-else
-    error "Failed to prune Docker images." >&2
-    exit 1
-fi
+# Build images
+for service in "${SERVICES[@]}"; do
+    name="${service%%:*}"
+    context="${service#*:}"
+    log "Building Docker image for $name..."
+    if ! docker build -t "$name" "$context"; then
+        error "Failed to build Docker image for $name."
+        exit 1
+    fi
+    log "Built Docker image for $name successfully."
+done

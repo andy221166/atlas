@@ -10,6 +10,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
+      - ./mysql/initdb:/docker-entrypoint-initdb.d
       - mysql-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
 
@@ -117,8 +118,8 @@ services:
       - product-service-log:/var/log/product-service
       - order-service-log:/var/log/order-service
       - notification-service-log:/var/log/notification-service
-      - eureka-server-log:/var/log/eureka-server
-      - auth-server-log:/var/log/eureka-server
+      - discovery-server-log:/var/log/discovery-server
+      - auth-server-log:/var/log/discovery-server
       - api-gateway-log:/var/log/api-gateway
     depends_on:
       - loki
@@ -177,23 +178,23 @@ services:
     volumes:
       - smtp4dev-data:/smtp4dev
 
-  eureka-server:
-    container_name: eureka-server
-    image: eureka-server:latest
+  discovery-server:
+    container_name: discovery-server
+    image: discovery-server:latest
     build:
-      context: ../../edge/discovery-server/eureka-server
+      context: ../../../edge/discovery-server/discovery-server
     deploy:
       resources:
         limits:
           cpus: '0.50'
           memory: 512M
         reservations:
-          cpus: '0.25'
-          memory: 128M
+          cpus: '0.50'
+          memory: 256M
     ports:
       - "8761:8761"
     volumes:
-      - eureka-server-log:/var/log/eureka-server # Mount container log dir into host log dir
+      - discovery-server-log:/var/log/discovery-server # Mount container log dir into host log dir
 
   user-service:
     container_name: user-service
@@ -207,12 +208,12 @@ services:
           memory: 512M
         reservations:
           cpus: '0.25'
-          memory: 128M
+          memory: 256M
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
-      - EUREKA_DEFAULT_ZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=local-compose
+      - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_user?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
@@ -223,7 +224,7 @@ services:
     volumes:
       - user-service-log:/var/log/user-service
     depends_on:
-      - eureka-server
+      - discovery-server
 
   product-service:
     container_name: product-service
@@ -237,12 +238,12 @@ services:
           memory: 512M
         reservations:
           cpus: '0.25'
-          memory: 128M
+          memory: 256M
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
-      - EUREKA_DEFAULT_ZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=local-compose
+      - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
@@ -253,7 +254,7 @@ services:
     volumes:
       - product-service-log:/var/log/product-service
     depends_on:
-      - eureka-server
+      - discovery-server
 
   order-service:
     container_name: order-service
@@ -267,12 +268,12 @@ services:
           memory: 512M
         reservations:
           cpus: '0.25'
-          memory: 128M
+          memory: 256M
     ports:
       - "8083:8083"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
-      - EUREKA_DEFAULT_ZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=local-compose
+      - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - GRPC_CLIENT_USER_ADDRESS=static://user-service:50051
       - GRPC_CLIENT_PRODUCT_ADDRESS=static://product-service:50052
       - REST_USER_BASE_URL=http://user-service:8081
@@ -287,13 +288,13 @@ services:
     volumes:
       - order-service-log:/var/log/order-service
     depends_on:
-      - eureka-server
+      - discovery-server
 
   notification-service:
     container_name: notification-service
     image: notification-service:latest
     build:
-      context: ../../application/spring-boot/notification-service
+      context: ../../../application/spring-boot/notification-service
     deploy:
       resources:
         limits:
@@ -301,11 +302,11 @@ services:
           memory: 512M
         reservations:
           cpus: '0.25'
-          memory: 128M
+          memory: 256M
     ports:
       - "8084:8084"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
+      - SPRING_PROFILES_ACTIVE=local-compose
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_notification?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
@@ -329,12 +330,12 @@ services:
           memory: 512M
         reservations:
           cpus: '0.25'
-          memory: 128M
+          memory: 256M
     ports:
-      - "8081:8081"
+      - "8091:8091"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
-      - EUREKA_DEFAULT_ZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=local-compose
+      - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_auth?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
@@ -343,7 +344,7 @@ services:
     volumes:
       - auth-server-log:/var/log/auth-server
     depends_on:
-      - eureka-server
+      - discovery-server
 
   api-gateway:
     container_name: api-gateway
@@ -356,20 +357,20 @@ services:
           cpus: '0.50'
           memory: 512M
         reservations:
-          cpus: '0.25'
-          memory: 128M
+          cpus: '0.50'
+          memory: 256M
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker-compose
-      - EUREKA_DEFAULT_ZONE=http://eureka-server:8761/eureka
+      - SPRING_PROFILES_ACTIVE=local-compose
+      - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
     volumes:
       - api-gateway-log:/var/log/api-gateway
     depends_on:
-      - eureka-server
+      - discovery-server
 
 volumes:
   mysql-data:
@@ -381,10 +382,10 @@ volumes:
   grafana-data:
   keycloak-data:
   smtp4dev-data:
+  discovery-server-log:
   user-service-log:
   product-service-log:
   order-service-log:
   notification-service-log:
-  eureka-server-log:
   auth-server-log:
   api-gateway-log:
