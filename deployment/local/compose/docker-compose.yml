@@ -10,7 +10,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - ./mysql:/docker-entrypoint-initdb.d/
+#      - ./mysql:/docker-entrypoint-initdb.d/
       - mysql-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
 
@@ -212,7 +212,6 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_user?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
@@ -242,7 +241,6 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_product?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
@@ -272,7 +270,6 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - GRPC_CLIENT_USER_ADDRESS=static://user-service:50051
       - GRPC_CLIENT_PRODUCT_ADDRESS=static://product-service:50052
@@ -306,7 +303,6 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_notification?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
@@ -334,7 +330,6 @@ services:
     ports:
       - "8091:8091"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_auth?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
@@ -362,8 +357,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=local-compose
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
+      - JWK_SET_URI=http://auth-server:8091/.well-known/jwks.json
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans

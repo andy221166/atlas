@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS db_notification;
 
+USE db_notification;
+
 CREATE TABLE IF NOT EXISTS outbox_message
 (
     id              BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
