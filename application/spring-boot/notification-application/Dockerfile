@@ -15,8 +15,8 @@ EXPOSE 8084
 
 # Optimized JVM options with heap dump on OOM
 ENTRYPOINT ["java", \
-  "-Xms256m", \
-  "-Xmx512m", \
+  "-Xms512m", \
+  "-Xmx1g", \
   "-XX:+UseContainerSupport", \
   "-XX:MaxRAMPercentage=75.0", \
   "-XX:+UseG1GC", \
