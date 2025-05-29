@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Service definitions with name and build context
-APP_SERVICES=(
+BACKEND_SERVICES=(
     "user-service:$PROJECT_ROOT/application/spring-boot/user-application"
     "product-service:$PROJECT_ROOT/application/spring-boot/product-application"
     "order-service:$PROJECT_ROOT/application/spring-boot/order-application"
@@ -28,8 +28,8 @@ source "$PROJECT_ROOT/deployment/util/logger.sh"
 
 # Function to print usage
 usage() {
-    echo "Usage: $0 {app|infra|all}"
-    echo "  app: Build images for application services"
+    echo "Usage: $0 {backend|infra|all}"
+    echo "  backend: Build images for backend services"
     echo "  infra: Build images for infrastructure services"
     echo "  all: Build all images"
     exit 1
@@ -43,14 +43,14 @@ fi
 
 # Determine services to build based on input
 case "$1" in
-    app)
-        SERVICES=("${APP_SERVICES[@]}")
+    backend)
+        SERVICES=("${BACKEND_SERVICES[@]}")
         ;;
     infra)
         SERVICES=("${INFRA_SERVICES[@]}")
         ;;
     all)
-        SERVICES=("${APP_SERVICES[@]}" "${INFRA_SERVICES[@]}")
+        SERVICES=("${BACKEND_SERVICES[@]}" "${INFRA_SERVICES[@]}")
         ;;
     *)
         error "Invalid argument: $1"
