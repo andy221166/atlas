@@ -16,7 +16,7 @@ EXPOSE 8081
 # Optimized JVM options with heap dump on OOM
 ENTRYPOINT ["java", \
   "-Xms512m", \
-  "-Xmx1g", \
+  "-Xmx2g", \
   "-XX:+UseG1GC", \
   "-XX:MaxGCPauseMillis=200", \
   "-XX:+AlwaysPreTouch", \
