@@ -17,8 +17,6 @@ EXPOSE 8888
 ENTRYPOINT ["java", \
   "-Xms256m", \
   "-Xmx512m", \
-  "-XX:+UseContainerSupport", \
-  "-XX:MaxRAMPercentage=75.0", \
   "-XX:+UseG1GC", \
   "-XX:MaxGCPauseMillis=200", \
   "-XX:+AlwaysPreTouch", \

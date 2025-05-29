@@ -17,8 +17,6 @@ EXPOSE 8081
 ENTRYPOINT ["java", \
   "-Xms512m", \
   "-Xmx1g", \
-  "-XX:+UseContainerSupport", \
-  "-XX:MaxRAMPercentage=75.0", \
   "-XX:+UseG1GC", \
   "-XX:MaxGCPauseMillis=200", \
   "-XX:+AlwaysPreTouch", \

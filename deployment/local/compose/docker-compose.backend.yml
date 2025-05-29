@@ -1,5 +1,3 @@
-version: "3"
-
 services:
 
   discovery-server:
@@ -7,16 +5,10 @@ services:
     image: discovery-server:latest
     build:
       context: ../../../edge/discovery-server/discovery-server
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.50'
-          memory: 256M
     ports:
       - "8761:8761"
+    mem_limit: 500m
+    cpus: 0.5
     volumes:
       - discovery-server-log:/var/log/discovery-server # Mount container log dir into host log dir
 
@@ -25,14 +17,6 @@ services:
     image: user-service:latest
     build:
       context: ../../../application/spring-boot/user-application
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: 1G
-        reservations:
-          cpus: '0.50'
-          memory: 512M
     ports:
       - "8081:8081"
     environment:
@@ -44,6 +28,8 @@ services:
       - REDIS_PORT=6379
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - user-service-log:/var/log/user-service
     depends_on:
@@ -54,14 +40,6 @@ services:
     image: product-service:latest
     build:
       context: ../../../application/spring-boot/product-application
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: 1G
-        reservations:
-          cpus: '0.50'
-          memory: 512M
     ports:
       - "8082:8082"
     environment:
@@ -73,6 +51,8 @@ services:
       - REDIS_PORT=6379
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - product-service-log:/var/log/product-service
     depends_on:
@@ -83,14 +63,6 @@ services:
     image: order-service:latest
     build:
       context: ../../../application/spring-boot/order-application
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: 1G
-        reservations:
-          cpus: '0.50'
-          memory: 512M
     ports:
       - "8083:8083"
     environment:
@@ -106,6 +78,8 @@ services:
       - REDIS_PORT=6379
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - order-service-log:/var/log/order-service
     depends_on:
@@ -116,14 +90,6 @@ services:
     image: notification-service:latest
     build:
       context: ../../../application/spring-boot/notification-service
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: 1G
-        reservations:
-          cpus: '0.50'
-          memory: 512M
     ports:
       - "8084:8084"
     environment:
@@ -135,6 +101,8 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
       - MAIL_SERVER_HOST=smtp4dev
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - notification-service-log:/var/log/notification-service
 
@@ -143,14 +111,6 @@ services:
     image: auth-server:latest
     build:
       context: ../../../edge/auth-server/auth-server-spring-security-jwt
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
     ports:
       - "8091:8091"
     environment:
@@ -160,6 +120,8 @@ services:
       - MYSQL_PASSWORD=root
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - auth-server-log:/var/log/auth-server
     depends_on:
@@ -170,14 +132,6 @@ services:
     image: api-gateway:latest
     build:
       context: ../../../edge/api-gateway/api-gateway-spring-cloud-gateway
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.50'
-          memory: 256M
     ports:
       - "8080:8080"
     environment:
@@ -186,6 +140,8 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+    mem_limit: 1g
+    cpus: 0.5
     volumes:
       - api-gateway-log:/var/log/api-gateway
     depends_on:
