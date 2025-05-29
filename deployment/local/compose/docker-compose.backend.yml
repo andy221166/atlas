@@ -28,11 +28,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: '0.75'
+          memory: 1G
+        reservations:
           cpus: '0.50'
           memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
     ports:
       - "8081:8081"
     environment:
@@ -57,11 +57,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: '0.75'
+          memory: 1G
+        reservations:
           cpus: '0.50'
           memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
     ports:
       - "8082:8082"
     environment:
@@ -86,11 +86,11 @@ services:
     deploy:
       resources:
         limits:
+          cpus: '0.75'
+          memory: 1G
+        reservations:
           cpus: '0.50'
           memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
     ports:
       - "8083:8083"
     environment:
