@@ -23,9 +23,9 @@ spec:
               value: "dns:///user-service:50051"
             - name: GRPC_CLIENT_PRODUCT_ADDRESS
               value: "dns:///product-service:50052"
-            - name: REST_USER_BASE_URL
+            - name: API_CLIENT_REST_USER_SERVICE_BASE_URL
               value: "http://user-service:8081"
-            - name: REST_PRODUCT_BASE_URL
+            - name: API_CLIENT_REST_PRODUCT_SERVICE_BASE_URL
               value: "http://product-service:8082"
             - name: MYSQL_URL
               value: "jdbc:mysql://mysql:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"

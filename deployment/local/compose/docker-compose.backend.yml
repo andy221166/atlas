@@ -69,8 +69,8 @@ services:
       - EUREKA_DEFAULT_ZONE=http://discovery-server:8761/eureka
       - GRPC_CLIENT_USER_ADDRESS=static://user-service:50051
       - GRPC_CLIENT_PRODUCT_ADDRESS=static://product-service:50052
-      - REST_USER_BASE_URL=http://user-service:8081
-      - REST_PRODUCT_BASE_URL=http://product-service:8082
+      - API_CLIENT_REST_USER_SERVICE_BASE_URL=http://user-service:8081
+      - API_CLIENT_REST_PRODUCT_SERVICE_BASE_URL=http://product-service:8082
       - MYSQL_URL=jdbc:mysql://mysql:3306/db_order?useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root

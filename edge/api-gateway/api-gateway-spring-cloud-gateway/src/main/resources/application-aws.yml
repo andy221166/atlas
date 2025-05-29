@@ -28,7 +28,7 @@ spring:
             - Path=/api-docs/user-service
           filters:
             - RewritePath=/api-docs/user-service, /api-docs
-        # SearchResponse Service Routes
+        # Product Service Routes
         - id: product-service-admin
           uri: ${PRODUCT_SERVICE_DNS:http://user-service:8082}
           predicates:

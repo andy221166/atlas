@@ -87,7 +87,7 @@ import { useUserStore } from '@/stores/user.store';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { placeOrder } from '../../services/order.front.service';
-import type { OrderItem } from '@/types/order.interface';
+import type { OrderItem, PlaceOrderItemRequest } from '@/types/order.interface';
 
 const isProcessing = ref(false);
 const cartStore = useCartStore();
@@ -129,9 +129,9 @@ async function handlePlaceOrder() {
     isProcessing.value = true;
 
     const orderItems = cart.value.map((cartItem) => ({
-      product: cartItem.product,
+      productId: cartItem.product.id,
       quantity: cartItem.quantity,
-    } as OrderItem));
+    } as PlaceOrderItemRequest));
 
     await placeOrder({orderItems});
 

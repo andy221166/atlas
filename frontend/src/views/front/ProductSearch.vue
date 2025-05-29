@@ -168,6 +168,7 @@ import { toast } from 'vue3-toastify';
 import { useCartStore } from '@/stores/cart.store';
 import { listBrand, listCategory } from '../../services/product.common.service';
 import { searchProduct } from '../../services/product.front.service';
+import { getProduct } from '../../services/product.front.service'; // Import getProduct
 import type { Brand, Category, Product, SearchProductFilters } from '../../types/product.interface';
 import { getProductImageUrl } from '../../utils/productImage.util';
 import { formatCurrency } from '@/utils/formatter.util';
@@ -267,9 +268,18 @@ const resetFilters = () => {
   applyFilters(1);
 };
 
-const showProductDetails = (product: Product) => {
-  selectedProduct.value = product;
-  showModal.value = true;
+const showProductDetails = async (product: Product) => {
+  isLoadingProduct.value = true; // Set loading state
+  try {
+    const response = await getProduct(product.id); // Fetch product details
+    selectedProduct.value = response.data; // Set fetched product
+    showModal.value = true; // Open modal
+  } catch (error) {
+    toast.error('Failed to load product details');
+    console.error(error);
+  } finally {
+    isLoadingProduct.value = false; // Reset loading state
+  }
 };
 
 const handleAddToCart = (product: Product) => {

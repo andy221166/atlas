@@ -24,9 +24,13 @@ export enum OrderStatus {
 }
 
 export interface PlaceOrderRequest {
-  orderItems: OrderItem[];
+  orderItems: PlaceOrderItemRequest[];
 }
 
+export interface PlaceOrderItemRequest {
+  productId: number;
+  quantity: number;
+}
 export interface ListOrderFilters {
   orderId?: number;
   userId?: number;

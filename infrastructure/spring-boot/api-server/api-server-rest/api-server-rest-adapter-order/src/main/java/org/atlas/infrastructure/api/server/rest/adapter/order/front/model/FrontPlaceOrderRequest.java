@@ -20,7 +20,7 @@ public class FrontPlaceOrderRequest {
   @Schema(description = "Represents an item in the order.")
   public static class OrderItem {
 
-    @NotNull(message = "SearchResponse ID must not be null.")
+    @NotNull(message = "Product ID must not be null.")
     @Schema(description = "ID of the product to order.", example = "123", required = true)
     private Integer productId;
 

@@ -27,23 +27,24 @@
                 <p class="text-muted">{{ product.details.description || 'No description available.' }}</p>
               </div>
 
-              <div v-if="product.attributes" class="mb-1">
+              <div v-if="product.attributes?.length" class="mb-1">
                 <h6>Attributes</h6>
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm">
                     <tbody>
-                      <tr v-for="(value, key) in product.attributes" :key="key">
-                        <th class="text-muted">{{ key }}</th>
-                        <td>{{ value }}</td>
+                      <tr v-for="attribute in product.attributes" :key="attribute.id">
+                        <th class="text-muted">{{ attribute.name }}</th>
+                        <td>{{ attribute.value }}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
+              <p v-else class="text-muted">No attributes available.</p>
 
               <div class="mb-4">
                 <h6>Brand</h6>
-                <p>{{ product.brand || 'N/A' }}</p>
+                <p>{{ product.brand?.name || 'N/A' }}</p>
               </div>
 
               <div class="mb-4">

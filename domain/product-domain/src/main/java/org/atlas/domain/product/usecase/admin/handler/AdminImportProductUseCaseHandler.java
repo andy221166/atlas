@@ -73,15 +73,15 @@ public class AdminImportProductUseCaseHandler implements
   }
 
   private ProductEntity newProductEntity(ProductRow row) {
-    // SearchResponse
+    // Product
     ProductEntity productEntity = ObjectMapperUtil.getInstance().map(row, ProductEntity.class);
 
-    // SearchResponse detail
+    // Product detail
     ProductDetailsEntity productDetailsEntity = new ProductDetailsEntity();
     productDetailsEntity.setDescription(row.getDescription());
     productEntity.setDetails(productDetailsEntity);
 
-    // SearchResponse attributes
+    // Product attributes
     ProductAttributeEntity productAttributeEntity1 = new ProductAttributeEntity();
     productAttributeEntity1.setName(row.getAttributeName1());
     productAttributeEntity1.setValue(row.getAttributeValue1());

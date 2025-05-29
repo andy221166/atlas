@@ -17,7 +17,7 @@ public class ProductResponse {
   @Schema(description = "Unique identifier of the product", example = "1")
   private Integer id;
 
-  @Schema(description = "Name of the product", example = "SearchResponse Name")
+  @Schema(description = "Name of the product", example = "iPhone")
   private String name;
 
   @Schema(description = "Price of the product", example = "49.99")
