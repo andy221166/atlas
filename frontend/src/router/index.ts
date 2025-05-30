@@ -1,7 +1,7 @@
-import { useUserStore } from '@/stores/user.store'
-import AuthLayout from '@/views/layouts/AuthLayout.vue';
-import DefaultLayout from '@/views/layouts/DefaultLayout.vue';
-import { createRouter, createWebHistory } from 'vue-router'
+import AuthLayout from '@/layouts/AuthLayout.vue';
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import { useUserStore } from '@/stores/user.store';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
@@ -11,53 +11,53 @@ const routes = [
       {
         path: '',
         name: 'storeFront',
-        component: () => import('@/views/front/StoreFront.vue'),
+        component: () => import('@/pages/front/StoreFront.vue'),
       },
       {
         path: '/order-history',
         name: 'orderHistory',
-        component: () => import('@/views/front/OrderHistory.vue'),
+        component: () => import('@/pages/front/OrderHistory.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: '/admin/dashboard',
         name: 'adminDashboard',
-        component: () => import('@/views/admin/Dashboard.vue'),
+        component: () => import('@/pages/admin/Dashboard.vue'),
       },
       {
         path: '/admin/user',
         name: 'adminUserList',
-        component: () => import('@/views/admin/UserList.vue'),
+        component: () => import('@/pages/admin/UserList.vue'),
         meta: { requiresAdmin: true }
       },
       {
         path: '/admin/product',
         name: 'adminProductList',
-        component: () => import('@/views/admin/ProductList.vue'),
+        component: () => import('@/pages/admin/ProductList.vue'),
         meta: { requiresAdmin: true }
       },
       {
         path: '/admin/product/:id',
         name: 'adminProductInfo',
-        component: () => import('@/views/admin/ProductInfo.vue'),
+        component: () => import('@/pages/admin/ProductInfo.vue'),
         meta: { requiresAdmin: true }
       },
       {
         path: '/admin/product/add',
         name: 'adminProductAdd',
-        component: () => import('@/views/admin/ProductAdd.vue'),
+        component: () => import('@/pages/admin/ProductAdd.vue'),
         meta: { requiresAdmin: true }
       },
       {
         path: '/admin/product/:id/edit',
         name: 'adminProductEdit',
-        component: () => import('@/views/admin/ProductEdit.vue'),
+        component: () => import('@/pages/admin/ProductEdit.vue'),
         meta: { requiresAdmin: true }
       },
       {
         path: '/admin/order',
         name: 'adminOrderList',
-        component: () => import('@/views/admin/OrderList.vue'),
+        component: () => import('@/pages/admin/OrderList.vue'),
         meta: { requiresAdmin: true }
       },
     ],
@@ -69,12 +69,12 @@ const routes = [
       {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/auth/Login.vue'),
+        component: () => import('@/pages/auth/Login.vue'),
       },
       {
         path: '/register',
         name: 'register',
-        component: () => import('@/views/auth/Register.vue'),
+        component: () => import('@/pages/auth/Register.vue'),
       },
     ],
   },
@@ -86,16 +86,41 @@ const router = createRouter({
 })
 
 // Navigation guard
-router.beforeEach((to, from, next) => {
-    const userStore = useUserStore()
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
   
-    if ((to.meta.requiresAuth || to.meta.requiresAdmin) && !userStore.isAuthenticated) {
-      next('/login')  // Redirect to login if trying to access protected page while not authenticated
-    } else if (to.path === '/login' && userStore.isAuthenticated) {
-      next('/')  // Redirect to dashboard if trying to access login while authenticated
-    } else {
-      next()
+  // Handle authentication/authorization
+  try {
+    // If we have a token but no profile, fetch it
+    if (userStore.isAuthenticated && !userStore.profile) {
+      await userStore.fetchProfile()
     }
-  });
+
+    // Redirect unauthenticated users from protected routes
+    if ((to.meta.requiresAuth || to.meta.requiresAdmin) && !userStore.isAuthenticated) {
+      return next('/login')
+    }
+    
+    // Redirect non-admin users from admin routes
+    if (to.meta.requiresAdmin && userStore.profile?.role !== 'ADMIN') {
+      return next('/')
+    }
+    
+    // Redirect authenticated users from login
+    if (to.path === '/login' && userStore.isAuthenticated) {
+      return next('/')
+    }
+    
+    // Auto-redirect admin to dashboard from home
+    if (to.path === '/' && userStore.isAuthenticated && userStore.profile?.role === 'ADMIN') {
+      return next({ name: 'adminDashboard' })
+    }
+    
+    return next()
+  } catch (error) {
+    console.error('Navigation error:', error)
+    return next('/')
+  }
+})
 
 export default router

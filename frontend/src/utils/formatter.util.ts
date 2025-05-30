@@ -1,12 +1,15 @@
-import { OrderStatus } from "@/types/order.interface";
-import { ProductStatus } from "@/types/product.interface";
+import { OrderStatus } from "@/interfaces/order.interface";
+import { ProductStatus } from "@/interfaces/product.interface";
 
 export const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString()
 }
 
 export const formatCurrency = (value: number): string => {
-  return value.toFixed(2);
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 };
 
 export const getProductStatusBadgeClasses = (status: ProductStatus): string => {
@@ -15,11 +18,11 @@ export const getProductStatusBadgeClasses = (status: ProductStatus): string => {
   }
   switch (status) {
     case ProductStatus.IN_STOCK:
-      return ' bg-success';
+      return 'badge bg-success';
     case ProductStatus.OUT_STOCK:
-      return ' bg-danger';
+      return 'badge bg-danger';
     case ProductStatus.DISCONTINUED:
-      return ' bg-secondary';
+      return 'badge bg-warning text-dark';
     default:
       return 'badge bg-primary';
   }

@@ -1,46 +1,102 @@
-import type { User } from '@/types/user.interface';
-import { defineStore } from 'pinia';
+import type { ApiResponse } from '@/interfaces/api.interface'
+import type { LoginRequest } from '@/interfaces/auth.interface'
+import type { RegisterRequest, User } from '@/interfaces/user.interface'
+import { authService } from '@/services/api/auth.service'
+import { userService } from '@/services/api/user.service'
+import { defineStore } from 'pinia'
+
+interface UserState {
+  profile: User | null
+  accessToken: string | null
+  refreshToken: string | null
+  loading: boolean
+  error: string | null
+}
 
 export const useUserStore = defineStore('user', {
-  state: () => ({
-    authenticated: false,
-    profile: null as User | null,
+  state: (): UserState => ({
+    profile: null,
     accessToken: localStorage.getItem('accessToken'),
-    refreshToken: localStorage.getItem('refreshToken')
+    refreshToken: localStorage.getItem('refreshToken'),
+    loading: false,
+    error: null
   }),
+
   getters: {
-    // Now this getter name won't conflict with state
-    isAuthenticated(): boolean {
-      return this.accessToken !== null;
-    },
-    userRole: (state) => state.profile?.role,
-    fullName: (state) => state.profile ? `${state.profile.firstName} ${state.profile.lastName}` : ''
+    isAuthenticated: (state): boolean => !!state.accessToken,
+    isAdmin: (state): boolean => state.profile?.role === 'ADMIN',
+    fullName: (state): string => 
+      state.profile ? `${state.profile.firstName} ${state.profile.lastName}` : '',
+    hasRole: (state) => (role: string): boolean => state.profile?.role === role
   },
+
   actions: {
-    setTokens(accessToken: string, refreshToken: string) {
-      this.accessToken = accessToken;
-      this.refreshToken = refreshToken;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+    async login(credentials: LoginRequest): Promise<ApiResponse<any>> {
+      this.loading = true
+      this.error = null
+      
+      try {
+        const response = await authService.login(credentials)
+        
+        if (response.success && response.data) {
+          this.setTokens(response.data.accessToken, response.data.refreshToken)
+          await this.fetchProfile()
+        }
+        
+        return response
+      } catch (error) {
+        this.error = 'Login failed'
+        throw error
+      } finally {
+        this.loading = false
+      }
     },
-    clearTokens() {
-      this.accessToken = null;
-      this.refreshToken = null;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+
+    async register(userData: RegisterRequest): Promise<ApiResponse<any>> {
+      this.loading = true
+      this.error = null
+      
+      try {
+        return await userService.register(userData)
+      } catch (error) {
+        this.error = 'Registration failed'
+        throw error
+      } finally {
+        this.loading = false
+      }
     },
-    getAccessToken() {
-      return this.accessToken;
+
+    async fetchProfile(): Promise<void> {
+      if (!this.isAuthenticated) return
+
+      try {
+        const response = await userService.getProfile()
+        if (response.success && response.data) {
+          this.profile = response.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile:', error)
+      }
     },
-    getRefreshToken() {
-      return this.refreshToken;
+
+    setTokens(accessToken: string, refreshToken: string): void {
+      this.accessToken = accessToken
+      this.refreshToken = refreshToken
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
     },
-    setProfile(profile: User) {
-      this.profile = profile;
+
+    logout(): void {
+      this.profile = null
+      this.accessToken = null
+      this.refreshToken = null
+      this.error = null
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
     },
-    clearAuth() {
-      this.clearTokens();
-      this.profile = null;
+
+    clearError(): void {
+      this.error = null
     }
   }
-});
+})

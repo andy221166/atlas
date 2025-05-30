@@ -1,4 +1,4 @@
-import type { Product } from '@/types/product.interface';
+import type { Product } from '@/interfaces/product.interface';
 import { defineStore } from 'pinia';
 
 export interface CartItem {
@@ -15,11 +15,24 @@ export const useCartStore = defineStore('cart', {
     loadCart() {
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
-        this.cart = JSON.parse(savedCart);
+        try {
+          this.cart = JSON.parse(savedCart);
+        } catch (error) {
+          console.error('Failed to parse cart data:', error);
+          // Reset cart if data is corrupted
+          this.cart = [];
+          localStorage.removeItem('cart');
+        }
       }
     },
     saveCart() {
-      localStorage.setItem('cart', JSON.stringify(this.cart));
+      try {
+        // Create a deep copy of the cart to avoid any reactive issues
+        const cartCopy = JSON.parse(JSON.stringify(this.cart));
+        localStorage.setItem('cart', JSON.stringify(cartCopy));
+      } catch (error) {
+        console.error('Failed to save cart:', error);
+      }
     },
     addToCart(product: Product) {
       if (this.cart.length === 0) {
@@ -41,6 +54,8 @@ export const useCartStore = defineStore('cart', {
       const item = this.cart.find(item => item.product.id === productId);
       if (item) {
         item.quantity = newQuantity;
+        // Create a new array to ensure reactivity
+        this.cart = [...this.cart];
         this.saveCart();
       }
     },
